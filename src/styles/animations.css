@@ -1,0 +1,104 @@
+@keyframes energy-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes energy-pulse-ring {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.08);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.08);
+    opacity: 0;
+  }
+}
+
+@keyframes energy-shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes table-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.energy-hero__art {
+  animation: energy-float 4s ease-in-out infinite;
+}
+
+.energy-hero__art::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 26px;
+  border: 1px solid var(--phisio-border-glow);
+  animation: energy-pulse-ring 2.8s ease-out infinite;
+}
+
+.energy-empty__art svg {
+  animation: energy-float 5s ease-in-out infinite;
+}
+
+.auth-brand-icon {
+  animation: energy-float 4.5s ease-in-out infinite;
+}
+
+.app-table .ant-table-tbody > tr {
+  animation: table-row-in 0.35s ease-out both;
+}
+
+.app-table .ant-table-tbody > tr:nth-child(2) {
+  animation-delay: 0.04s;
+}
+
+.app-table .ant-table-tbody > tr:nth-child(3) {
+  animation-delay: 0.08s;
+}
+
+.app-table .ant-table-tbody > tr:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+.nav-card {
+  animation: table-row-in 0.3s ease-out both;
+}
+
+.action-card {
+  animation: table-row-in 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .energy-hero__art,
+  .energy-empty__art svg,
+  .auth-brand-icon,
+  .app-table .ant-table-tbody > tr,
+  .nav-card,
+  .action-card {
+    animation: none;
+  }
+
+  .energy-hero__art::before {
+    display: none;
+  }
+}

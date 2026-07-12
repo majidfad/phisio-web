@@ -1,0 +1,40 @@
+:root {
+  --phisio-primary: #2dd4bf;
+  --phisio-primary-hover: #14b8a6;
+  --phisio-primary-soft: rgba(45, 212, 191, 0.12);
+  --phisio-primary-muted: rgba(45, 212, 191, 0.24);
+  --phisio-coral: #f97316;
+  --phisio-coral-soft: rgba(249, 115, 22, 0.16);
+  --phisio-mint: #a7f3d0;
+  --phisio-bg: #0b1220;
+  --phisio-bg-elevated: #111827;
+  --phisio-surface: #1e293b;
+  --phisio-surface-hover: #243044;
+  --phisio-text: #f8fafc;
+  --phisio-text-secondary: #94a3b8;
+  --phisio-border: rgba(148, 163, 184, 0.18);
+  --phisio-border-glow: rgba(45, 212, 191, 0.45);
+  --phisio-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --phisio-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --phisio-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --phisio-shadow-glow-teal: 0 0 24px rgba(45, 212, 191, 0.25);
+  --phisio-shadow-glow-coral: 0 0 24px rgba(249, 115, 22, 0.22);
+  --phisio-radius: 14px;
+  --phisio-radius-lg: 18px;
+  --phisio-header-height: 64px;
+  --phisio-content-max: 1160px;
+  --phisio-content-padding: 20px;
+  --phisio-content-padding-desktop: 28px;
+  --phisio-gradient-auth:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(45, 212, 191, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(249, 115, 22, 0.12) 0%, transparent 55%),
+    linear-gradient(180deg, #0b1220 0%, #111827 100%);
+  --phisio-gradient-hero: linear-gradient(
+    135deg,
+    rgba(45, 212, 191, 0.14) 0%,
+    rgba(30, 41, 59, 0.95) 45%,
+    rgba(249, 115, 22, 0.1) 100%
+  );
+  --phisio-gradient-focus: linear-gradient(135deg, #1e293b 0%, rgba(249, 115, 22, 0.12) 100%);
+  --phisio-gradient-card: linear-gradient(145deg, #1e293b 0%, #1a2332 100%);
+}

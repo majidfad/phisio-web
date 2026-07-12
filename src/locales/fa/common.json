@@ -1,0 +1,638 @@
+{
+  "common": {
+    "loading": "در حال بارگذاری…"
+  },
+  "app": {
+    "name": "فیزیو",
+    "tagline": "مدیریت تمرینات فیزیوتراپی",
+    "authFooter": "چیدمان احراز هویت (موقت)"
+  },
+  "languages": {
+    "fa": "فارسی",
+    "en": "English"
+  },
+  "auth": {
+    "signIn": "ورود",
+    "signInDescription": "برای ادامه، شماره تلفن و رمز عبور خود را وارد کنید.",
+    "registerTitle": "ثبت نام",
+    "registerDescription": "برای ایجاد حساب کاربری، اطلاعات زیر را وارد کنید.",
+    "registerButton": "ثبت نام",
+    "registering": "در حال ثبت نام…",
+    "registerLink": "ثبت نام",
+    "signInLink": "ورود",
+    "registrationSuccess": "ثبت نام با موفقیت انجام شد.",
+    "unableToRegister": "ثبت نام انجام نشد.",
+    "fullName": "نام و نام خانوادگی",
+    "phoneNumber": "شماره تلفن",
+    "mobileNumber": "شماره موبایل",
+    "password": "رمز عبور",
+    "confirmPassword": "تکرار رمز عبور",
+    "phonePlaceholder": "09121234567",
+    "signInButton": "ورود",
+    "signingIn": "در حال ورود…",
+    "unableToSignIn": "ورود انجام نشد.",
+    "validation": {
+      "nameRequired": "نام و نام خانوادگی الزامی است.",
+      "phoneRequired": "شماره تلفن الزامی است.",
+      "phoneMaxLength": "شماره تلفن حداکثر ۲۰ کاراکتر باشد.",
+      "phoneInvalid": "فرمت شماره تلفن نامعتبر است.",
+      "mobileRequired": "شماره موبایل الزامی است.",
+      "mobileMaxLength": "شماره موبایل حداکثر ۲۰ کاراکتر باشد.",
+      "mobileInvalid": "فرمت شماره موبایل نامعتبر است.",
+      "passwordRequired": "رمز عبور الزامی است.",
+      "confirmPasswordRequired": "تکرار رمز عبور الزامی است.",
+      "passwordMismatch": "رمز عبور و تکرار آن یکسان نیستند."
+    }
+  },
+  "layout": {
+    "menu": "منو",
+    "signOut": "خروج",
+    "openNav": "باز کردن منوی ناوبری",
+    "closeNav": "بستن منوی ناوبری",
+    "defaultUser": "کاربر",
+    "roles": {
+      "admin": "مدیر",
+      "doctor": "پزشک",
+      "patient": "بیمار"
+    },
+    "navAria": {
+      "admin": "ناوبری مدیر",
+      "doctor": "ناوبری پزشک",
+      "patient": "ناوبری بیمار"
+    },
+    "nav": {
+      "dashboard": "داشبورد",
+      "overview": "نمای کلی",
+      "doctors": "پزشکان",
+      "users": "کاربران",
+      "patients": "بیماران",
+      "myPatients": "بیماران من",
+      "exercises": "تمرین‌ها",
+      "assignments": "گزارش تمرین‌ها",
+      "myExercises": "تمرین‌های من",
+      "progress": "پیشرفت"
+    }
+  },
+  "admin": {
+    "common": {
+      "inDevelopment": "در حال توسعه",
+      "emptyTable": "هنوز داده‌ای ثبت نشده است. این بخش به‌زودی تکمیل می‌شود.",
+      "tabs": {
+        "label": "فیلتر وضعیت",
+        "active": "فعال‌ها",
+        "inactive": "غیرفعال‌ها"
+      },
+      "status": {
+        "inactive": "غیرفعال"
+      },
+      "actions": {
+        "activate": "فعال‌سازی",
+        "activating": "در حال فعال‌سازی…"
+      }
+    },
+    "dashboard": {
+      "title": "داشبورد مدیر",
+      "overview": "نمای کلی",
+      "badge": "مدیریت",
+      "greeting": "خوش آمدید، {{name}}",
+      "heroDescription": "کلینیک، بیماران و تمرین‌ها را از یک فضای آرام مدیریت کنید.",
+      "summaryTitle": "خلاصه وضعیت",
+      "quickActions": "اقدامات سریع",
+      "managementAria": "مدیریت سیستم",
+      "summary": {
+        "doctors": "پزشکان",
+        "patients": "بیماران",
+        "exercises": "تمرین‌ها",
+        "assignments": "تکالیف"
+      },
+      "actions": {
+        "manageDoctors": "مدیریت پزشکان",
+        "managePatients": "مدیریت بیماران",
+        "manageExercises": "مدیریت تمرین‌ها",
+        "assignExercises": "اختصاص تمرین‌ها"
+      },
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "errors": {
+        "loadFailed": "بارگذاری آمار داشبورد ناموفق بود."
+      }
+    },
+    "patients": {
+      "title": "مدیریت بیماران",
+      "description": "مشاهده، افزودن، ویرایش و حذف بیماران",
+      "addButton": "افزودن بیمار",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "بیماری ثبت نشده است.",
+      "emptyInactive": "بیمار غیرفعالی ثبت نشده است.",
+      "noDoctors": "بدون پزشک",
+      "columns": {
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "doctors": "پزشکان",
+        "createdAt": "تاریخ ثبت",
+        "actions": "عملیات"
+      },
+      "actions": {
+        "edit": "ویرایش",
+        "delete": "حذف"
+      },
+      "form": {
+        "createTitle": "افزودن بیمار",
+        "editTitle": "ویرایش بیمار",
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "email": "ایمیل",
+        "optional": "(اختیاری)",
+        "create": "ثبت بیمار",
+        "save": "ذخیره تغییرات",
+        "saving": "در حال ذخیره…",
+        "cancel": "انصراف",
+        "close": "بستن"
+      },
+      "delete": {
+        "title": "حذف بیمار",
+        "message": "آیا از حذف «{{name}}» مطمئن هستید؟",
+        "confirm": "حذف",
+        "deleting": "در حال حذف…",
+        "cancel": "انصراف"
+      },
+      "validation": {
+        "nameRequired": "نام الزامی است.",
+        "nameMaxLength": "نام حداکثر ۲۰۰ کاراکتر باشد.",
+        "phoneRequired": "شماره تلفن الزامی است.",
+        "phoneMaxLength": "شماره تلفن حداکثر ۲۰ کاراکتر باشد.",
+        "phoneInvalid": "فرمت شماره تلفن نامعتبر است.",
+        "emailInvalid": "فرمت ایمیل نامعتبر است."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری فهرست بیماران ناموفق بود.",
+        "saveFailed": "ذخیره اطلاعات بیمار ناموفق بود."
+      }
+    },
+    "doctors": {
+      "title": "مدیریت پزشکان",
+      "description": "مشاهده، افزودن، ویرایش و حذف پزشکان",
+      "addButton": "افزودن پزشک",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "پزشکی ثبت نشده است.",
+      "emptyInactive": "پزشک غیرفعالی ثبت نشده است.",
+      "notSet": "—",
+      "columns": {
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "specialty": "تخصص",
+        "license": "شماره نظام پزشکی",
+        "address": "آدرس مطب",
+        "createdAt": "تاریخ ثبت",
+        "actions": "عملیات"
+      },
+      "actions": {
+        "edit": "ویرایش",
+        "delete": "حذف"
+      },
+      "form": {
+        "createTitle": "افزودن پزشک",
+        "editTitle": "ویرایش پزشک",
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "email": "ایمیل",
+        "specialty": "تخصص",
+        "license": "شماره نظام پزشکی",
+        "address": "آدرس مطب",
+        "optional": "(اختیاری)",
+        "create": "ثبت پزشک",
+        "save": "ذخیره تغییرات",
+        "saving": "در حال ذخیره…",
+        "cancel": "انصراف",
+        "close": "بستن"
+      },
+      "delete": {
+        "title": "حذف پزشک",
+        "message": "آیا از حذف «{{name}}» مطمئن هستید؟",
+        "confirm": "حذف",
+        "deleting": "در حال حذف…",
+        "cancel": "انصراف"
+      },
+      "validation": {
+        "nameRequired": "نام الزامی است.",
+        "nameMaxLength": "نام حداکثر ۲۰۰ کاراکتر باشد.",
+        "phoneRequired": "شماره تلفن الزامی است.",
+        "phoneMaxLength": "شماره تلفن حداکثر ۲۰ کاراکتر باشد.",
+        "phoneInvalid": "فرمت شماره تلفن نامعتبر است.",
+        "emailInvalid": "فرمت ایمیل نامعتبر است.",
+        "specialtyRequired": "تخصص الزامی است.",
+        "specialtyMaxLength": "تخصص حداکثر ۲۰۰ کاراکتر باشد.",
+        "licenseRequired": "شماره نظام پزشکی الزامی است.",
+        "licenseMaxLength": "شماره نظام پزشکی حداکثر ۵۰ کاراکتر باشد.",
+        "addressRequired": "آدرس مطب الزامی است.",
+        "addressMaxLength": "آدرس مطب حداکثر ۵۰۰ کاراکتر باشد."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری فهرست پزشکان ناموفق بود.",
+        "saveFailed": "ذخیره اطلاعات پزشک ناموفق بود."
+      }
+    },
+    "exercises": {
+      "title": "مدیریت تمرین‌ها",
+      "description": "مشاهده و افزودن تمرین‌های ثبت‌شده",
+      "addButton": "افزودن تمرین",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هیچ تمرینی ثبت نشده است",
+      "emptyInactive": "تمرین غیرفعالی ثبت نشده است",
+      "columns": {
+        "title": "عنوان تمرین",
+        "video": "ویدیو",
+        "createdAt": "تاریخ ثبت",
+        "status": "وضعیت"
+      },
+      "status": {
+        "active": "فعال"
+      },
+      "video": {
+        "play": "پخش ویدیوی «{{title}}»",
+        "none": "—",
+        "close": "بستن",
+        "unavailable": "ویدیویی برای این تمرین ثبت نشده است."
+      },
+      "form": {
+        "createTitle": "افزودن تمرین",
+        "name": "نام تمرین",
+        "video": "آپلود ویدیو",
+        "create": "ثبت تمرین",
+        "saving": "در حال آپلود و ثبت…",
+        "cancel": "انصراف",
+        "close": "بستن"
+      },
+      "success": {
+        "created": "تمرین با موفقیت ثبت شد."
+      },
+      "validation": {
+        "nameRequired": "نام تمرین الزامی است.",
+        "nameMaxLength": "نام تمرین حداکثر ۲۰۰ کاراکتر باشد.",
+        "videoRequired": "آپلود ویدیو الزامی است.",
+        "videoMp4Only": "فقط فایل MP4 مجاز است.",
+        "videoMaxSize": "حجم فایل نباید بیشتر از ۵۰ مگابایت باشد."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری فهرست تمرین‌ها ناموفق بود.",
+        "saveFailed": "ثبت تمرین ناموفق بود."
+      }
+    },
+    "assignments": {
+      "title": "گزارش تمرین‌ها",
+      "description": "گزارش تمرین‌های اختصاص‌داده‌شده به بیماران بر اساس پزشک",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هیچ اختصاص فعالی ثبت نشده است.",
+      "noExercises": "بدون تمرین",
+      "columns": {
+        "patient": "بیمار",
+        "doctor": "پزشک",
+        "exercises": "تمرین‌ها"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری گزارش تمرین‌ها ناموفق بود."
+      }
+    },
+    "pages": {
+      "doctors": {
+        "title": "مدیریت پزشکان",
+        "description": "فهرست پزشکان ثبت‌شده در سیستم",
+        "columns": {
+          "name": "نام",
+          "phone": "شماره تلفن",
+          "status": "وضعیت"
+        }
+      },
+      "patients": {
+        "title": "مدیریت بیماران",
+        "description": "فهرست بیماران ثبت‌شده در سیستم",
+        "columns": {
+          "name": "نام",
+          "phone": "شماره تلفن",
+          "status": "وضعیت"
+        }
+      },
+      "exercises": {
+        "title": "مدیریت تمرین‌ها",
+        "description": "فهرست تمرین‌های فیزیوتراپی",
+        "columns": {
+          "name": "نام تمرین",
+          "category": "دسته‌بندی",
+          "status": "وضعیت"
+        }
+      },
+      "assignments": {
+        "title": "اختصاص تمرین‌ها",
+        "description": "تکالیف تمرینی اختصاص‌داده‌شده به بیماران",
+        "columns": {
+          "patient": "بیمار",
+          "exercise": "تمرین",
+          "status": "وضعیت"
+        }
+      }
+    }
+  },
+  "doctor": {
+    "dashboard": {
+      "title": "داشبورد پزشک",
+      "overview": "نمای کلی",
+      "badge": "پزشک",
+      "greeting": "خوش آمدید، {{name}}",
+      "heroDescription": "بیماران و برنامه‌های تمرینی شما، مرتب و آماده مراقبت.",
+      "summaryTitle": "خلاصه وضعیت",
+      "quickActions": "اقدامات سریع",
+      "managementAria": "مدیریت بیماران و تمرین‌ها",
+      "summary": {
+        "patients": "تعداد بیماران من"
+      },
+      "actions": {
+        "myPatients": "بیماران من",
+        "exercises": "تمرین‌ها"
+      },
+      "recentPatients": {
+        "title": "آخرین بیماران",
+        "columns": {
+          "name": "نام بیمار",
+          "phone": "شماره موبایل"
+        }
+      },
+      "emptyPatients": "هنوز بیماری به شما اضافه نشده است",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "errors": {
+        "loadFailed": "بارگذاری داشبورد ناموفق بود."
+      }
+    },
+    "exercises": {
+      "title": "تمرین‌ها",
+      "description": "مرور کتابخانه تمرین‌های فیزیوتراپی",
+      "searchPlaceholder": "جستجوی تمرین…",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هیچ تمرینی در کتابخانه ثبت نشده است.",
+      "video": {
+        "play": "پخش ویدیوی «{{title}}»",
+        "none": "—",
+        "unavailable": "ویدیویی برای این تمرین ثبت نشده است."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری فهرست تمرین‌ها ناموفق بود."
+      }
+    },
+    "patients": {
+      "title": "بیماران من",
+      "description": "لیست بیماران شما",
+      "addButton": "افزودن بیمار",
+      "addTitle": "افزودن بیمار با شماره تلفن",
+      "phoneLabel": "شماره تلفن",
+      "addSubmit": "افزودن",
+      "adding": "در حال افزودن…",
+      "cancel": "انصراف",
+      "remove": "حذف",
+      "removing": "در حال حذف…",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز بیماری به لیست شما اضافه نشده است.",
+      "success": {
+        "added": "بیمار با موفقیت اضافه شد."
+      },
+      "columns": {
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "assignedAt": "تاریخ اختصاص",
+        "exercisePlan": "برنامه تمرین‌ها",
+        "exerciseHistory": "تاریخچه تمرین‌ها",
+        "actions": "عملیات"
+      },
+      "exercisePlan": {
+        "open": "📋 برنامه تمرین‌ها",
+        "title": "برنامه تمرین‌های {{name}}",
+        "close": "بستن",
+        "loading": "در حال بارگذاری…",
+        "retry": "تلاش مجدد",
+        "empty": "هنوز تمرینی برای این بیمار ثبت نشده است.",
+        "columns": {
+          "title": "نام تمرین",
+          "video": "ویدئو",
+          "assignedAt": "تاریخ تخصیص"
+        },
+        "video": {
+          "play": "پخش ویدیوی «{{title}}»",
+          "none": "—"
+        },
+        "errors": {
+          "loadFailed": "بارگذاری برنامه تمرین‌ها ناموفق بود."
+        },
+        "add": {
+          "open": "➕ افزودن تمرین",
+          "title": "افزودن تمرین به برنامه بیمار",
+          "hint": "{{count}} تمرین قابل انتخاب",
+          "loading": "در حال بارگذاری تمرین‌ها…",
+          "empty": "تمرینی در کتابخانه موجود نیست.",
+          "submit": "✔ ثبت تمرین‌ها",
+          "saving": "در حال ثبت…",
+          "cancel": "انصراف",
+          "success": "تمرین‌ها با موفقیت ثبت شدند.",
+          "alreadyAssigned": "ثبت‌شده",
+          "errors": {
+            "loadFailed": "بارگذاری فهرست تمرین‌ها ناموفق بود.",
+            "saveFailed": "ثبت تمرین‌ها ناموفق بود.",
+            "noneSelected": "حداقل یک تمرین را انتخاب کنید."
+          }
+        },
+        "wizard": {
+          "title": "ثبت برنامه تمرین",
+          "close": "بستن",
+          "cancel": "انصراف",
+          "back": "مرحله قبل",
+          "next": "مرحله بعد",
+          "confirm": "✔ تأیید و ثبت",
+          "saving": "در حال ثبت…",
+          "success": "برنامه تمرین با موفقیت ثبت شد.",
+          "progress": "مراحل ثبت برنامه",
+          "steps": {
+            "1": "انتخاب تاریخ",
+            "2": "انتخاب تمرین‌ها",
+            "3": "تأیید نهایی"
+          },
+          "dates": {
+            "calendar": "تقویم جلالی",
+            "selectedTitle": "تاریخ‌های انتخاب‌شده",
+            "empty": "هنوز تاریخی انتخاب نشده است.",
+            "previousMonth": "ماه قبل",
+            "nextMonth": "ماه بعد",
+            "removeDate": "حذف تاریخ"
+          },
+          "exercises": {
+            "loading": "در حال بارگذاری تمرین‌ها…",
+            "loadFailed": "بارگذاری فهرست تمرین‌ها ناموفق بود."
+          },
+          "confirmation": {
+            "title": "خلاصه برنامه",
+            "patient": "بیمار:",
+            "dates": "تاریخ‌ها:",
+            "exercises": "تمرین‌ها:",
+            "hint": "پس از تأیید، برنامه تمرین برای تاریخ‌های انتخاب‌شده ثبت می‌شود."
+          },
+          "errors": {
+            "noDatesSelected": "حداقل یک تاریخ را انتخاب کنید.",
+            "noExercisesSelected": "حداقل یک تمرین را انتخاب کنید.",
+            "saveFailed": "ثبت برنامه تمرین ناموفق بود."
+          }
+        }
+      },
+      "exerciseHistory": {
+        "open": "📈 تاریخچه تمرین‌ها",
+        "title": "تاریخچه انجام تمرین‌ها",
+        "close": "بستن",
+        "loading": "در حال بارگذاری…",
+        "retry": "تلاش مجدد",
+        "empty": "هنوز هیچ تمرینی توسط بیمار ثبت نشده است.",
+        "patientInfo": "اطلاعات بیمار",
+        "patientName": "نام بیمار:",
+        "patientPhone": "شماره موبایل:",
+        "summaryTitle": "خلاصه پایبندی",
+        "summary": {
+          "assignedExercises": "تعداد تمرین‌های تخصیص داده شده",
+          "completedDays": "تعداد روزهای انجام تمرین",
+          "missedDays": "تعداد روزهای عدم انجام تمرین",
+          "adherence": "درصد پایبندی",
+          "adherenceValue": "{{value}}٪"
+        },
+        "columns": {
+          "date": "تاریخ",
+          "completedCount": "تعداد تمرین‌های انجام شده",
+          "improvementScore": "امتیاز بهبود",
+          "patientComment": "نظر بیمار"
+        },
+        "feedbackSection": "بازخورد روزانه بیمار",
+        "detailFeedback": {
+          "score": "امتیاز بیمار:",
+          "comment": "نظر بیمار:"
+        },
+        "detailColumns": {
+          "title": "نام تمرین",
+          "status": "وضعیت"
+        },
+        "status": {
+          "completed": "✅ انجام شده",
+          "missed": "❌ انجام نشده"
+        },
+        "exerciseStatus": {
+          "completed": "✅",
+          "missed": "❌"
+        },
+        "errors": {
+          "loadFailed": "بارگذاری تاریخچه تمرین‌ها ناموفق بود."
+        }
+      },
+      "errors": {
+        "loadFailed": "بارگذاری بیماران ناموفق بود.",
+        "addFailed": "افزودن بیمار ناموفق بود.",
+        "phoneRequired": "شماره تلفن الزامی است."
+      }
+    }
+  },
+  "patient": {
+    "dashboard": {
+      "treatingDoctor": "پزشک معالج: {{doctorName}}",
+      "badge": "بهبودی شما",
+      "subtitle": "تمرین‌های روزانه فیزیوتراپی خود را پیگیری کنید",
+      "greetingMorning": "صبح بخیر",
+      "greetingAfternoon": "عصر بخیر",
+      "greetingEvening": "شب بخیر",
+      "greetingWithName": "{{greeting}}، {{name}}",
+      "todayOverview": "نمای کلی امروز",
+      "completedToday": "انجام‌شده امروز",
+      "remaining": "باقی‌مانده",
+      "keepGoing": "ادامه بده — عالی پیش می‌روی!",
+      "goodStart": "شروع خوبی بود — هر تمرین شما را به بهبودی نزدیک‌تر می‌کند.",
+      "noExercisesToday": "امروز تمرینی ندارید. استراحت کنید و فردا سر بزنید.",
+      "allDone": "عالی بود — همه تمرین‌های امروز را انجام دادید!",
+      "startExercises": "آماده تمرین‌های امروز هستید؟",
+      "startExercisesHint": "تمرین‌های اختصاص‌داده‌شده امروز را انجام دهید",
+      "goToExercises": "شروع"
+    },
+    "progress": {
+      "badge": "پیشرفت",
+      "title": "پیشرفت شما",
+      "subtitle": "{{name}}، اینجا وضعیت تمرین‌های امروز شما را می‌بینید.",
+      "todaySection": "پیشرفت امروز",
+      "emptyTitle": "هنوز پیشرفتی ثبت نشده",
+      "emptyDescription": "وقتی تمرین اختصاص داده شود، پیشرفت روزانه شما اینجا نمایش داده می‌شود.",
+      "encouragement": "هر جلسه تمرین، گامی به سوی بهبودی است."
+    },
+    "exercises": {
+      "todayTitle": "تمرین‌های امروز",
+      "title": "تمرین‌های من",
+      "description": "تمرین‌های اختصاص‌داده‌شده به شما",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز تمرینی برای شما ثبت نشده است.",
+      "emptyToday": "امروز تمرینی برای شما برنامه‌ریزی نشده است.",
+      "emptyTodayTitle": "روز استراحت",
+      "tabs": {
+        "label": "بخش‌های تمرین",
+        "today": "تمرین‌های امروز"
+      },
+      "assignedAt": "تاریخ ثبت: {{date}}",
+      "submitCompletions": "ثبت تمرین های انجام شده",
+      "submittingCompletions": "در حال ثبت…",
+      "completionsRecorded": "تمرین ها با موفقیت ثبت شدند.",
+      "completedToday": "امروز انجام شده",
+      "video": {
+        "play": "پخش ویدیوی «{{title}}»",
+        "watch": "مشاهده ویدیوی «{{title}}»",
+        "watchLabel": "مشاهده تمرین"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری تمرین‌ها ناموفق بود.",
+        "videoLoadFailed": "بارگذاری ویدیو ناموفق بود.",
+        "completionFailed": "ثبت انجام تمرین ناموفق بود."
+      }
+    },
+    "feedback": {
+      "title": "احساس شما بعد از انجام تمرین‌ها",
+      "question": "امروز چقدر احساس بهبود دارید؟",
+      "ratingAria": "امتیاز احساس بهبود از ۱ تا ۵",
+      "scoreLabels": {
+        "1": "خیلی بدتر",
+        "2": "کمی بدتر",
+        "3": "بدون تغییر",
+        "4": "بهتر",
+        "5": "خیلی بهتر"
+      },
+      "commentLabel": "نظر یا توضیحات شما",
+      "commentPlaceholder": "در صورت تمایل توضیحات خود را بنویسید…",
+      "commentHint": "{{count}} کاراکتر باقی‌مانده",
+      "submit": "ثبت نظر",
+      "submitting": "در حال ثبت…",
+      "skip": "بعداً",
+      "close": "بستن",
+      "success": "نظر شما با موفقیت ثبت شد.",
+      "errors": {
+        "scoreRequired": "لطفاً یکی از گزینه‌های امتیاز را انتخاب کنید.",
+        "submitFailed": "ثبت نظر ناموفق بود."
+      }
+    }
+  },
+  "errors": {
+    "unexpected": "خطای غیرمنتظره‌ای رخ داد.",
+    "timeout": "زمان درخواست به پایان رسید. لطفاً دوباره تلاش کنید.",
+    "network": "اتصال به سرور برقرار نشد. اتصال اینترنت خود را بررسی کنید.",
+    "requestFailed": "درخواست ناموفق بود.",
+    "somethingWentWrong": "مشکلی پیش آمد.",
+    "unauthorized": {
+      "title": "دسترسی مجاز نیست",
+      "message": "شما اجازه مشاهده این صفحه را ندارید."
+    }
+  },
+  "pwa": {
+    "installPrompt": "فیزیو را نصب کنید برای دسترسی سریع",
+    "install": "نصب"
+  }
+}

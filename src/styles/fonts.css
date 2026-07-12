@@ -1,0 +1,79 @@
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('/fonts/iransans/IRANSansWeb_UltraLight.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/iransans/IRANSansWeb_Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/iransans/IRANSansWeb.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/iransans/IRANSansWeb_Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: IRANSans;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/iransans/IRANSansWeb_Bold.woff2') format('woff2');
+}
+
+:root {
+  --font-family-base: IRANSans, Tahoma, sans-serif;
+}
+
+body {
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.ant-typography h1,
+.ant-typography h2,
+.ant-typography h3,
+.ant-typography h4,
+.ant-typography h5 {
+  font-weight: 700;
+}
+
+.ant-table-thead > tr > th {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+}
+
+.ant-modal-title,
+.ant-drawer-title {
+  font-family: var(--font-family-base);
+  font-weight: 700;
+}
+
+.ant-btn {
+  font-family: var(--font-family-base);
+}

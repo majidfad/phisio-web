@@ -1,0 +1,340 @@
+/* Energetic Dark — surfaces, heroes, nav cards, dock */
+
+.energy-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 26px 24px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-lg);
+  background: var(--phisio-gradient-hero);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  overflow: hidden;
+}
+
+.energy-hero__wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.energy-hero__content {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.energy-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--phisio-primary-soft);
+  border: 1px solid var(--phisio-border-glow);
+  color: var(--phisio-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.energy-hero__title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  color: var(--phisio-text);
+}
+
+.energy-hero__description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--phisio-text-secondary);
+}
+
+.energy-hero__art {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  background: var(--phisio-gradient-card);
+  border: 1px solid var(--phisio-border-glow);
+  box-shadow: var(--phisio-shadow-glow-teal);
+}
+
+.energy-stat-card.ant-card {
+  background: var(--phisio-gradient-card);
+  border: 1px solid var(--phisio-border);
+  box-shadow: var(--phisio-shadow-card);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.energy-stat-card.ant-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--phisio-border-glow);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+}
+
+.energy-stat-card--coral.ant-card {
+  border-inline-start: 3px solid var(--phisio-coral);
+}
+
+.energy-stat-card--teal.ant-card {
+  border-inline-start: 3px solid var(--phisio-primary);
+}
+
+.energy-focus-card.ant-card {
+  background: var(--phisio-gradient-focus);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-coral);
+  cursor: pointer;
+}
+
+.energy-progress-card.ant-card {
+  background: var(--phisio-gradient-card);
+  border: 1px solid var(--phisio-border-glow);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+}
+
+.energy-empty {
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.energy-empty__art {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.energy-empty__title {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--phisio-text);
+}
+
+.energy-empty__description {
+  color: var(--phisio-text-secondary);
+  font-size: 15px;
+}
+
+/* Sidebar nav cards */
+.nav-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius);
+  background: var(--phisio-gradient-card);
+  color: var(--phisio-text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-card:hover {
+  color: var(--phisio-text);
+  border-color: var(--phisio-border-glow);
+  transform: translateX(2px);
+}
+
+.nav-card--active {
+  color: var(--phisio-primary);
+  border-color: var(--phisio-border-glow);
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.14) 0%, #1e293b 100%);
+  box-shadow: var(--phisio-shadow-glow-teal);
+}
+
+.nav-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.nav-card--active .nav-card__icon {
+  background: rgba(45, 212, 191, 0.22);
+  box-shadow: var(--phisio-shadow-glow-teal);
+}
+
+.nav-card__label {
+  flex: 1;
+  text-align: start;
+}
+
+/* Mobile dock navigation */
+.dock-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 8px;
+  padding-bottom: calc(8px + var(--safe-area-bottom));
+  border: 1px solid var(--phisio-border);
+  border-radius: 20px;
+  background: rgba(17, 24, 39, 0.92);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-teal);
+}
+
+.dock-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 8px 4px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--phisio-text-secondary);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dock-nav__item:hover {
+  color: var(--phisio-text);
+  background: var(--phisio-primary-soft);
+}
+
+.dock-nav__item--active {
+  color: var(--phisio-primary);
+  background: var(--phisio-primary-soft);
+  box-shadow: var(--phisio-shadow-glow-teal);
+}
+
+.dock-nav__icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Dashboard action cards */
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  min-height: 120px;
+  padding: 20px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-lg);
+  background: var(--phisio-gradient-card);
+  color: var(--phisio-text);
+  text-decoration: none;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.action-card:hover {
+  color: var(--phisio-text);
+  border-color: var(--phisio-border-glow);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  transform: translateY(-3px);
+}
+
+.action-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
+  font-size: 20px;
+}
+
+.action-card__label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.auth-shell {
+  min-height: 100vh;
+  background: var(--phisio-gradient-auth);
+}
+
+.auth-panel {
+  width: 100%;
+  max-width: 440px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-lg);
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-teal);
+}
+
+.auth-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  border-radius: 20px;
+  background: var(--phisio-gradient-card);
+  border: 1px solid var(--phisio-border-glow);
+  box-shadow: var(--phisio-shadow-glow-teal);
+  color: var(--phisio-primary);
+  font-size: 32px;
+}
+
+@media (max-width: 576px) {
+  .energy-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .energy-hero__art {
+    justify-self: end;
+  }
+}

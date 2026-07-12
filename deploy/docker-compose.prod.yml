@@ -1,0 +1,20 @@
+services:
+  web:
+    image: ${PHISIO_WEB_IMAGE:?PHISIO_WEB_IMAGE is required}
+    container_name: phisio-web
+    restart: unless-stopped
+    ports:
+      - '${HTTP_PORT:-80}:80'
+    networks:
+      - phisio_internal
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost/']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  phisio_internal:
+    external: true
+    name: phisio_internal

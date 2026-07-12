@@ -1,0 +1,552 @@
+{
+  "common": {
+    "loading": "Loading…"
+  },
+  "app": {
+    "name": "Phisio",
+    "tagline": "Physiotherapy exercise management",
+    "authFooter": "Placeholder auth layout"
+  },
+  "languages": {
+    "fa": "Persian",
+    "en": "English"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signInDescription": "Enter your phone number and password to continue.",
+    "registerTitle": "Register",
+    "registerDescription": "Enter your details to create an account.",
+    "registerButton": "Register",
+    "registering": "Registering…",
+    "registerLink": "Register",
+    "signInLink": "Sign in",
+    "registrationSuccess": "Registration completed successfully.",
+    "unableToRegister": "Unable to register.",
+    "fullName": "Full name",
+    "phoneNumber": "Phone number",
+    "mobileNumber": "Mobile number",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "phonePlaceholder": "09121234567",
+    "signInButton": "Sign in",
+    "signingIn": "Signing in…",
+    "unableToSignIn": "Unable to sign in.",
+    "validation": {
+      "nameRequired": "Full name is required.",
+      "phoneRequired": "Phone number is required.",
+      "phoneMaxLength": "Phone number must be at most 20 characters.",
+      "phoneInvalid": "Phone number format is invalid.",
+      "mobileRequired": "Mobile number is required.",
+      "mobileMaxLength": "Mobile number must be at most 20 characters.",
+      "mobileInvalid": "Mobile number format is invalid.",
+      "passwordRequired": "Password is required.",
+      "confirmPasswordRequired": "Confirm password is required.",
+      "passwordMismatch": "Password and confirmation do not match."
+    }
+  },
+  "layout": {
+    "menu": "Menu",
+    "signOut": "Sign out",
+    "openNav": "Open navigation menu",
+    "closeNav": "Close navigation menu",
+    "defaultUser": "User",
+    "roles": {
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "patient": "Patient"
+    },
+    "navAria": {
+      "admin": "Admin navigation",
+      "doctor": "Doctor navigation",
+      "patient": "Patient navigation"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "overview": "Overview",
+      "doctors": "Doctors",
+      "users": "Users",
+      "patients": "Patients",
+      "myPatients": "My patients",
+      "exercises": "Exercises",
+      "assignments": "Exercise report",
+      "myExercises": "My exercises",
+      "progress": "Progress"
+    }
+  },
+  "admin": {
+    "common": {
+      "inDevelopment": "Under development",
+      "emptyTable": "No data yet. This section will be available soon.",
+      "tabs": {
+        "label": "Status filter",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "status": {
+        "inactive": "Inactive"
+      },
+      "actions": {
+        "activate": "Activate",
+        "activating": "Activating…"
+      }
+    },
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "overview": "Overview",
+      "badge": "Admin",
+      "greeting": "Welcome back, {{name}}",
+      "heroDescription": "Manage your clinic, patients, and exercises from one calm workspace.",
+      "summaryTitle": "At a glance",
+      "quickActions": "Quick actions",
+      "managementAria": "Admin management",
+      "summary": {
+        "doctors": "Doctors",
+        "patients": "Patients",
+        "exercises": "Exercises",
+        "assignments": "Assignments"
+      },
+      "actions": {
+        "manageDoctors": "Manage Doctors",
+        "managePatients": "Manage Patients",
+        "manageExercises": "Manage Exercises",
+        "assignExercises": "Assign Exercises"
+      },
+      "loading": "Loading…",
+      "retry": "Retry",
+      "errors": {
+        "loadFailed": "Failed to load dashboard statistics."
+      }
+    },
+    "patients": {
+      "title": "Manage Patients",
+      "description": "View, add, edit, and delete patients",
+      "addButton": "Add patient",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No patients registered yet.",
+      "emptyInactive": "No inactive patients found.",
+      "noDoctors": "No doctors",
+      "columns": {
+        "name": "Name",
+        "phone": "Phone number",
+        "doctors": "Doctors",
+        "createdAt": "Created at",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "form": {
+        "createTitle": "Add patient",
+        "editTitle": "Edit patient",
+        "name": "Name",
+        "phone": "Phone number",
+        "email": "Email",
+        "optional": "(optional)",
+        "create": "Create patient",
+        "save": "Save changes",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "delete": {
+        "title": "Delete patient",
+        "message": "Are you sure you want to delete \"{{name}}\"?",
+        "confirm": "Delete",
+        "deleting": "Deleting…",
+        "cancel": "Cancel"
+      },
+      "validation": {
+        "nameRequired": "Name is required.",
+        "nameMaxLength": "Name must be at most 200 characters.",
+        "phoneRequired": "Phone number is required.",
+        "phoneMaxLength": "Phone number must be at most 20 characters.",
+        "phoneInvalid": "Phone number format is invalid.",
+        "emailInvalid": "Email format is invalid."
+      },
+      "errors": {
+        "loadFailed": "Failed to load patients.",
+        "saveFailed": "Failed to save patient."
+      }
+    },
+    "doctors": {
+      "title": "Manage Doctors",
+      "description": "View, add, edit, and delete doctors",
+      "addButton": "Add doctor",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No doctors registered yet.",
+      "emptyInactive": "No inactive doctors found.",
+      "notSet": "—",
+      "columns": {
+        "name": "Name",
+        "phone": "Phone number",
+        "specialty": "Specialty",
+        "license": "Medical license",
+        "address": "Clinic address",
+        "createdAt": "Created at",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "form": {
+        "createTitle": "Add doctor",
+        "editTitle": "Edit doctor",
+        "name": "Name",
+        "phone": "Phone number",
+        "email": "Email",
+        "specialty": "Specialty",
+        "license": "Medical license number",
+        "address": "Clinic address",
+        "optional": "(optional)",
+        "create": "Create doctor",
+        "save": "Save changes",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "delete": {
+        "title": "Delete doctor",
+        "message": "Are you sure you want to delete \"{{name}}\"?",
+        "confirm": "Delete",
+        "deleting": "Deleting…",
+        "cancel": "Cancel"
+      },
+      "validation": {
+        "nameRequired": "Name is required.",
+        "nameMaxLength": "Name must be at most 200 characters.",
+        "phoneRequired": "Phone number is required.",
+        "phoneMaxLength": "Phone number must be at most 20 characters.",
+        "phoneInvalid": "Phone number format is invalid.",
+        "emailInvalid": "Email format is invalid.",
+        "specialtyRequired": "Specialty is required.",
+        "specialtyMaxLength": "Specialty must be at most 200 characters.",
+        "licenseRequired": "Medical license number is required.",
+        "licenseMaxLength": "Medical license number must be at most 50 characters.",
+        "addressRequired": "Clinic address is required.",
+        "addressMaxLength": "Clinic address must be at most 500 characters."
+      },
+      "errors": {
+        "loadFailed": "Failed to load doctors.",
+        "saveFailed": "Failed to save doctor."
+      }
+    },
+    "exercises": {
+      "title": "Manage Exercises",
+      "description": "View and add registered exercises",
+      "addButton": "Add exercise",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No exercises registered yet.",
+      "emptyInactive": "No inactive exercises found.",
+      "columns": {
+        "title": "Exercise title",
+        "video": "Video",
+        "createdAt": "Created at",
+        "status": "Status"
+      },
+      "status": {
+        "active": "Active"
+      },
+      "video": {
+        "play": "Play video for \"{{title}}\"",
+        "none": "—",
+        "close": "Close",
+        "unavailable": "No video is available for this exercise."
+      },
+      "form": {
+        "createTitle": "Add exercise",
+        "name": "Exercise name",
+        "video": "Upload video",
+        "create": "Create exercise",
+        "saving": "Uploading and saving…",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "success": {
+        "created": "Exercise created successfully."
+      },
+      "validation": {
+        "nameRequired": "Exercise name is required.",
+        "nameMaxLength": "Exercise name must be at most 200 characters.",
+        "videoRequired": "Video upload is required.",
+        "videoMp4Only": "Only MP4 files are allowed.",
+        "videoMaxSize": "File size must not exceed 50 MB."
+      },
+      "errors": {
+        "loadFailed": "Failed to load exercises.",
+        "saveFailed": "Failed to save exercise."
+      }
+    },
+    "assignments": {
+      "title": "Exercise report",
+      "description": "Assigned exercises grouped by patient and doctor",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No active assignments found.",
+      "noExercises": "No exercises",
+      "columns": {
+        "patient": "Patient",
+        "doctor": "Doctor",
+        "exercises": "Exercises"
+      },
+      "errors": {
+        "loadFailed": "Failed to load exercise report."
+      }
+    },
+    "pages": {
+      "doctors": {
+        "title": "Manage Doctors",
+        "description": "Registered doctors in the system",
+        "columns": {
+          "name": "Name",
+          "phone": "Phone number",
+          "status": "Status"
+        }
+      },
+      "patients": {
+        "title": "Manage Patients",
+        "description": "Registered patients in the system",
+        "columns": {
+          "name": "Name",
+          "phone": "Phone number",
+          "status": "Status"
+        }
+      },
+      "exercises": {
+        "title": "Manage Exercises",
+        "description": "Physiotherapy exercise library",
+        "columns": {
+          "name": "Exercise name",
+          "category": "Category",
+          "status": "Status"
+        }
+      },
+      "assignments": {
+        "title": "Assign Exercises",
+        "description": "Exercise assignments for patients",
+        "columns": {
+          "patient": "Patient",
+          "exercise": "Exercise",
+          "status": "Status"
+        }
+      }
+    }
+  },
+  "doctor": {
+    "dashboard": {
+      "title": "Doctor dashboard",
+      "overview": "Overview",
+      "badge": "Doctor",
+      "greeting": "Welcome back, {{name}}",
+      "heroDescription": "Your patients and exercise plans, organized for focused care.",
+      "summaryTitle": "At a glance",
+      "quickActions": "Quick actions",
+      "managementAria": "Patient and exercise management",
+      "summary": {
+        "patients": "My patients"
+      },
+      "actions": {
+        "myPatients": "My patients",
+        "exercises": "Exercises"
+      },
+      "loading": "Loading…",
+      "retry": "Retry",
+      "errors": {
+        "loadFailed": "Failed to load dashboard data."
+      },
+      "recentPatients": {
+        "title": "Recent patients",
+        "columns": {
+          "name": "Patient name",
+          "phone": "Mobile number"
+        }
+      },
+      "emptyPatients": "No patients have been added to you yet."
+    },
+    "exercises": {
+      "title": "Exercises",
+      "description": "Browse the physiotherapy exercise library",
+      "searchPlaceholder": "Search exercises…",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No exercises are available in the library yet.",
+      "video": {
+        "play": "Play video for “{{title}}”",
+        "none": "—",
+        "unavailable": "No video is available for this exercise."
+      },
+      "errors": {
+        "loadFailed": "Failed to load exercises."
+      }
+    },
+    "patients": {
+      "title": "My patients",
+      "description": "Patients assigned to you",
+      "addButton": "Add patient",
+      "addTitle": "Add patient by phone number",
+      "phoneLabel": "Phone number",
+      "addSubmit": "Add",
+      "adding": "Adding…",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "removing": "Removing…",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No patients have been added to your list yet.",
+      "success": {
+        "added": "Patient added successfully."
+      },
+      "columns": {
+        "name": "Name",
+        "phone": "Phone number",
+        "assignedAt": "Assigned at",
+        "exercisePlan": "Exercise plan",
+        "actions": "Actions"
+      },
+      "exercisePlan": {
+        "open": "📋 Exercise plan",
+        "title": "Exercise plan for {{name}}",
+        "close": "Close",
+        "loading": "Loading…",
+        "retry": "Retry",
+        "empty": "No exercises have been assigned to this patient yet.",
+        "columns": {
+          "title": "Exercise name",
+          "video": "Video",
+          "assignedAt": "Assigned at"
+        },
+        "video": {
+          "play": "Play video for “{{title}}”",
+          "none": "—"
+        },
+        "errors": {
+          "loadFailed": "Failed to load exercise plan."
+        },
+        "add": {
+          "open": "➕ Add exercise",
+          "title": "Add exercises to patient plan",
+          "hint": "{{count}} exercises available to assign",
+          "loading": "Loading exercises…",
+          "empty": "No exercises are available in the library.",
+          "submit": "✔ Assign exercises",
+          "saving": "Saving…",
+          "cancel": "Cancel",
+          "success": "Exercises assigned successfully.",
+          "alreadyAssigned": "Assigned",
+          "errors": {
+            "loadFailed": "Failed to load exercise library.",
+            "saveFailed": "Failed to assign exercises.",
+            "noneSelected": "Select at least one exercise."
+          }
+        }
+      },
+      "errors": {
+        "loadFailed": "Failed to load patients.",
+        "addFailed": "Failed to add patient.",
+        "phoneRequired": "Phone number is required."
+      }
+    }
+  },
+  "patient": {
+    "dashboard": {
+      "treatingDoctor": "Treating doctor: {{doctorName}}",
+      "badge": "Your recovery",
+      "subtitle": "Track your daily physiotherapy exercises",
+      "greetingMorning": "Good morning",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "greetingWithName": "{{greeting}}, {{name}}",
+      "todayOverview": "Today's overview",
+      "completedToday": "Completed today",
+      "remaining": "Remaining",
+      "keepGoing": "Keep going — you're doing great!",
+      "goodStart": "Nice start — every rep brings you closer to recovery.",
+      "noExercisesToday": "No exercises today. Rest well and check back tomorrow.",
+      "allDone": "Amazing work today — you completed all your exercises!",
+      "startExercises": "Ready for today's exercises?",
+      "startExercisesHint": "Complete your assigned exercises for today",
+      "goToExercises": "Start"
+    },
+    "progress": {
+      "badge": "Progress",
+      "title": "Your progress",
+      "subtitle": "{{name}}, here's how you're doing with today's exercises.",
+      "todaySection": "Today's progress",
+      "emptyTitle": "No progress yet",
+      "emptyDescription": "When exercises are assigned, your daily progress will appear here.",
+      "encouragement": "Every session counts toward your recovery."
+    },
+    "exercises": {
+      "todayTitle": "Today's exercises",
+      "title": "My exercises",
+      "description": "Exercises assigned to you",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No exercises have been assigned to you yet.",
+      "emptyToday": "No exercises scheduled for today.",
+      "emptyTodayTitle": "Rest day",
+      "tabs": {
+        "label": "Exercise sections",
+        "today": "Today's exercises"
+      },
+      "assignedAt": "Assigned: {{date}}",
+      "submitCompletions": "Save completed exercises",
+      "submittingCompletions": "Saving…",
+      "completionsRecorded": "Exercises saved successfully.",
+      "completedToday": "Completed today",
+      "video": {
+        "play": "Play video for \"{{title}}\"",
+        "watch": "Watch video for \"{{title}}\"",
+        "watchLabel": "Watch exercise"
+      },
+      "errors": {
+        "loadFailed": "Failed to load exercises.",
+        "videoLoadFailed": "Failed to load video.",
+        "completionFailed": "Failed to record exercise completion."
+      }
+    },
+    "feedback": {
+      "title": "How do you feel after exercising?",
+      "question": "How much improvement do you feel today?",
+      "ratingAria": "Improvement score from 1 to 5",
+      "scoreLabels": {
+        "1": "Much worse",
+        "2": "Slightly worse",
+        "3": "No change",
+        "4": "Better",
+        "5": "Much better"
+      },
+      "commentLabel": "Your comments",
+      "commentPlaceholder": "Optional notes about how you feel…",
+      "commentHint": "{{count}} characters remaining",
+      "submit": "Submit feedback",
+      "submitting": "Submitting…",
+      "skip": "Skip",
+      "close": "Close",
+      "success": "Your feedback was saved successfully.",
+      "errors": {
+        "scoreRequired": "Please select an improvement score.",
+        "submitFailed": "Failed to submit feedback."
+      }
+    }
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred.",
+    "timeout": "The request timed out. Please try again.",
+    "network": "Unable to reach the server. Check your connection and try again.",
+    "requestFailed": "The request failed.",
+    "somethingWentWrong": "Something went wrong.",
+    "unauthorized": {
+      "title": "Access denied",
+      "message": "You do not have permission to view this page."
+    }
+  },
+  "pwa": {
+    "installPrompt": "Install Phisio for quick access",
+    "install": "Install"
+  }
+}

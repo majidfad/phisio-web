@@ -1,6 +1,9 @@
 # Phisio Web (Frontend)
 
-React 19 + Vite PWA for the Phisio physiotherapy platform.
+Standalone frontend repository for the Phisio physiotherapy platform.
+
+**Location:** `c:\Users\Mahboubeh\source\repos\phisio-web`  
+**Backend repo:** [phisio-api](https://github.com/majidfad/phisio-api)
 
 ## Local development
 

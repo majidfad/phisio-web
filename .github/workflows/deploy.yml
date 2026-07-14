@@ -102,12 +102,23 @@ jobs:
 
             export PHISIO_WEB_IMAGE="${REGISTRY}/${IMAGE_OWNER}/phisio-web:${IMAGE_TAG}"
 
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d --remove-orphans
-            docker compose -f docker-compose.prod.yml ps
+            HTTP_PORT="$(grep -E '^HTTP_PORT=' .env 2>/dev/null | cut -d= -f2- || true)"
+            HTTP_PORT="${HTTP_PORT:-8080}"
+
+            echo "Removing old Web image(s) before deploy..."
+            docker compose -f docker-compose.prod.yml --env-file .env stop web || true
+            docker compose -f docker-compose.prod.yml --env-file .env rm -f web || true
+            docker images "${REGISTRY}/${IMAGE_OWNER}/phisio-web" -q | sort -u | xargs -r docker rmi -f || true
+
+            docker compose -f docker-compose.prod.yml --env-file .env pull
+            docker compose -f docker-compose.prod.yml --env-file .env up -d --remove-orphans
+            docker compose -f docker-compose.prod.yml --env-file .env ps
+
+            docker image prune -f || true
 
             for i in $(seq 1 30); do
-              if curl -fsS http://localhost/ > /dev/null && curl -fsS http://localhost/api/health > /dev/null; then
+              if curl -fsS "http://localhost:${HTTP_PORT}/" > /dev/null \
+                && curl -fsS "http://localhost:${HTTP_PORT}/api/health" > /dev/null; then
                 echo "Frontend health check passed"
                 exit 0
               fi
@@ -115,5 +126,5 @@ jobs:
             done
 
             echo "Frontend health check failed"
-            docker compose -f docker-compose.prod.yml logs --tail=100
+            docker compose -f docker-compose.prod.yml --env-file .env logs --tail=100
             exit 1

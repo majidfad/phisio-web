@@ -7,7 +7,7 @@
 | `DEPLOY_SSH_KEY` | Private SSH key |
 | `GHCR_PULL_TOKEN` | PAT with `read:packages` for server image pull |
 
-Optional: `HTTP_PORT` (default `80`)
+Optional: `HTTP_PORT` (default `8080`)
 
 Deploy path on server: `/opt/phisio-web`
 

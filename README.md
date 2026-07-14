@@ -20,7 +20,7 @@ docker build -t phisio-web:local .
 
 ## Production deploy
 
-Deploys nginx + static app to `/opt/phisio-web` on the VPS (port 80).
+Deploys nginx + static app to `/opt/phisio-web` on the VPS (port 8080).
 
 **Deploy after the backend repo** — requires Docker network `phisio_internal` from the API stack.
 

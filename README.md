@@ -20,8 +20,9 @@ docker build -t phisio-web:local .
 
 ## Production deploy
 
-Deploys nginx + static app to `/opt/phisio-web` on the VPS (port 8080).
+Runs in the unified stack at `/opt/phisio` (compose owned by phisio-api).
 
-**Deploy after the backend repo** — requires Docker network `phisio_internal` from the API stack.
+Push API to `main` first (CI bootstraps + migrates + starts postgres/api), then push web — CI updates only the `web` service.
 
 See [deploy/GITHUB_SECRETS.md](deploy/GITHUB_SECRETS.md) for CI/CD secrets.
+

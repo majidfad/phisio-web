@@ -10,4 +10,4 @@ git push -u origin main
 
 Or create an empty repo at https://github.com/new named `phisio-web`, then `git push -u origin main`.
 
-Deploy **backend first**, then frontend (shared Docker network `phisio_internal`).
+Deploy **API first** (owns `/opt/phisio` compose), then frontend (updates `web` only).

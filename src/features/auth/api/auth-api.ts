@@ -1,6 +1,8 @@
 import { httpClient } from '@/api/http-client';
 import type {
   AuthResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
   LoginRequest,
   MeResponse,
   RegisterRequest,
@@ -21,6 +23,17 @@ export async function registerApi(request: RegisterRequest): Promise<RegisterRes
   const { data } = await httpClient.post<RegisterResponse>(`${AUTH_BASE}/register`, request, {
     skipAuth: true,
   });
+
+  return data;
+}
+
+export async function changePasswordApi(
+  request: ChangePasswordRequest,
+): Promise<ChangePasswordResponse> {
+  const { data } = await httpClient.post<ChangePasswordResponse>(
+    `${AUTH_BASE}/change-password`,
+    request,
+  );
 
   return data;
 }

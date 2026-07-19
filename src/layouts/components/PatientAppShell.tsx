@@ -1,18 +1,20 @@
 import {
   HomeOutlined,
   LineChartOutlined,
+  LockOutlined,
   LogoutOutlined,
   MedicineBoxOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Dropdown, Grid, Layout, Typography } from 'antd';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { DockNav } from '@/components/navigation';
 import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand } from '@/components/ui';
+import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { patientLayoutConfig } from '@/layouts/config/role-layout-config';
 import { routes } from '@/routes/routes';
@@ -26,6 +28,7 @@ export function PatientAppShell() {
   const location = useLocation();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.lg;
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   const displayName =
     user?.name ??
@@ -57,6 +60,12 @@ export function PatientAppShell() {
         : routes.patient.root);
 
   const userMenuItems = [
+    {
+      key: 'change-password',
+      icon: <LockOutlined />,
+      label: t('layout.changePassword'),
+      onClick: () => setChangePasswordOpen(true),
+    },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
@@ -134,6 +143,11 @@ export function PatientAppShell() {
           ariaLabel={t(patientLayoutConfig.navAriaLabelKey)}
         />
       ) : null}
+
+      <ChangePasswordModal
+        open={changePasswordOpen}
+        onClose={() => setChangePasswordOpen(false)}
+      />
     </Layout>
   );
 }

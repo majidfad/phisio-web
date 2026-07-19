@@ -25,6 +25,25 @@
     "registrationSuccessDoctor": "Registration submitted successfully and is waiting for administrator approval.",
     "accountNotApproved": "Your account has not been approved yet.",
     "unableToRegister": "Unable to register.",
+    "changePassword": {
+      "title": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "submit": "Change password",
+      "submitting": "Saving...",
+      "cancel": "Cancel",
+      "close": "Close",
+      "success": "Password changed successfully.",
+      "error": "Unable to change password.",
+      "validation": {
+        "currentRequired": "Current password is required.",
+        "newRequired": "New password is required.",
+        "confirmRequired": "Confirm new password is required.",
+        "mismatch": "New password and its confirmation do not match.",
+        "sameAsCurrent": "New password must be different from the current password."
+      }
+    },
     "selectRoleDescription": "Choose your account type.",
     "rolePatient": "Patient",
     "roleDoctor": "Doctor",
@@ -62,6 +81,7 @@
   "layout": {
     "menu": "Menu",
     "signOut": "Sign out",
+    "changePassword": "Change password",
     "openNav": "Open navigation menu",
     "closeNav": "Close navigation menu",
     "defaultUser": "User",

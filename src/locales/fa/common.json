@@ -25,6 +25,25 @@
     "registrationSuccessDoctor": "ثبت نام شما با موفقیت انجام شد و در انتظار تأیید مدیر است.",
     "accountNotApproved": "حساب کاربری شما هنوز تأیید نشده است.",
     "unableToRegister": "ثبت نام انجام نشد.",
+    "changePassword": {
+      "title": "تغییر رمز عبور",
+      "currentPassword": "رمز عبور فعلی",
+      "newPassword": "رمز عبور جدید",
+      "confirmNewPassword": "تکرار رمز عبور جدید",
+      "submit": "تغییر رمز عبور",
+      "submitting": "در حال ثبت...",
+      "cancel": "انصراف",
+      "close": "بستن",
+      "success": "رمز عبور با موفقیت تغییر کرد.",
+      "error": "تغییر رمز عبور انجام نشد.",
+      "validation": {
+        "currentRequired": "رمز عبور فعلی الزامی است.",
+        "newRequired": "رمز عبور جدید الزامی است.",
+        "confirmRequired": "تکرار رمز عبور جدید الزامی است.",
+        "mismatch": "رمز عبور جدید و تکرار آن یکسان نیستند.",
+        "sameAsCurrent": "رمز عبور جدید نباید با رمز عبور فعلی یکسان باشد."
+      }
+    },
     "selectRoleDescription": "نوع حساب کاربری خود را انتخاب کنید.",
     "rolePatient": "بیمار",
     "roleDoctor": "پزشک",
@@ -62,6 +81,7 @@
   "layout": {
     "menu": "منو",
     "signOut": "خروج",
+    "changePassword": "تغییر رمز عبور",
     "openNav": "باز کردن منوی ناوبری",
     "closeNav": "بستن منوی ناوبری",
     "defaultUser": "کاربر",

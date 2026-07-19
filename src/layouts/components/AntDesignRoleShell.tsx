@@ -1,6 +1,7 @@
 import {
   DashboardOutlined,
   FileTextOutlined,
+  LockOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -14,6 +15,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand } from '@/components/ui';
+import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { convertToPersianDigits } from '@/utils/persian-format';
 
@@ -43,6 +45,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
   const isMobile = !screens.lg;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   const displayName =
     user?.name ??
@@ -67,6 +70,12 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
     navItems[0]?.key;
 
   const userMenuItems = [
+    {
+      key: 'change-password',
+      icon: <LockOutlined />,
+      label: t('layout.changePassword'),
+      onClick: () => setChangePasswordOpen(true),
+    },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
@@ -192,6 +201,11 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
         <AppBrand />
         {navCards}
       </Drawer>
+
+      <ChangePasswordModal
+        open={changePasswordOpen}
+        onClose={() => setChangePasswordOpen(false)}
+      />
     </Layout>
   );
 }

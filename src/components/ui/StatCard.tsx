@@ -13,9 +13,9 @@ interface StatCardProps {
 export function StatCard({ label, value, to, suffix, accent = 'default' }: StatCardProps) {
   const accentClass =
     accent === 'mint' || accent === 'default'
-      ? 'energy-stat-card--teal'
+      ? 'energy-stat-card--primary'
       : accent === 'peach'
-        ? 'energy-stat-card--coral'
+        ? 'energy-stat-card--accent'
         : '';
 
   const card = (

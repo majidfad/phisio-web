@@ -11,12 +11,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/phisio-icon.svg'],
+      includeAssets: ['favicon.svg', 'icons/zivan-icon.svg', 'icons/apple-touch-icon.png'],
       manifest: {
-        name: 'Phisio',
-        short_name: 'Phisio',
-        description: 'Physiotherapy exercise management',
-        theme_color: '#0d9488',
+        name: 'Zivan',
+        short_name: 'Zivan',
+        description: 'Zivan — Move Better, Live Better.',
+        theme_color: '#2563eb',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
@@ -24,15 +24,27 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: 'icons/phisio-icon.svg',
+            src: 'icons/zivan-icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any',
           },
           {
-            src: 'icons/phisio-icon.svg',
+            src: 'icons/zivan-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: 'icons/zivan-512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: 'icons/zivan-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
             purpose: 'maskable',
           },
         ],

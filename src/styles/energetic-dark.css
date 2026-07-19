@@ -11,7 +11,7 @@
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-gradient-hero);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
   overflow: hidden;
 }
 
@@ -73,7 +73,7 @@
   border-radius: 22px;
   background: var(--phisio-gradient-card);
   border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .energy-stat-card.ant-card {
@@ -89,28 +89,28 @@
 .energy-stat-card.ant-card:hover {
   transform: translateY(-3px);
   border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
 }
 
-.energy-stat-card--coral.ant-card {
-  border-inline-start: 3px solid var(--phisio-coral);
+.energy-stat-card--accent.ant-card {
+  border-inline-start: 3px solid var(--phisio-accent);
 }
 
-.energy-stat-card--teal.ant-card {
+.energy-stat-card--primary.ant-card {
   border-inline-start: 3px solid var(--phisio-primary);
 }
 
 .energy-focus-card.ant-card {
   background: var(--phisio-gradient-focus);
-  border: 1px solid rgba(249, 115, 22, 0.35);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-coral);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-accent);
   cursor: pointer;
 }
 
 .energy-progress-card.ant-card {
   background: var(--phisio-gradient-card);
   border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
 }
 
 .energy-empty {
@@ -170,7 +170,7 @@
   color: var(--phisio-primary);
   border-color: var(--phisio-border-glow);
   background: var(--phisio-gradient-nav-active);
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .nav-card__icon {
@@ -188,7 +188,7 @@
 
 .nav-card--active .nav-card__icon {
   background: var(--phisio-primary-muted);
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .nav-card__label {
@@ -212,7 +212,7 @@
   border-radius: 20px;
   background: var(--phisio-header-bg);
   backdrop-filter: blur(16px);
-  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-primary);
 }
 
 .dock-nav__item {
@@ -246,7 +246,7 @@
 .dock-nav__item--active {
   color: var(--phisio-primary);
   background: var(--phisio-primary-soft);
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .dock-nav__icon {
@@ -277,7 +277,7 @@
 .action-card:hover {
   color: var(--phisio-text);
   border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
   transform: translateY(-3px);
 }
 
@@ -311,7 +311,7 @@
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-panel-bg);
   backdrop-filter: blur(20px);
-  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-primary);
 }
 
 .auth-brand-icon {
@@ -324,7 +324,7 @@
   border-radius: 20px;
   background: var(--phisio-gradient-card);
   border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
   color: var(--phisio-primary);
   font-size: 32px;
 }

@@ -46,12 +46,12 @@
 .ant-btn-primary {
   background: var(--phisio-btn-gradient) !important;
   border: none !important;
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .ant-btn-primary:not(:disabled):hover {
   background: var(--phisio-btn-gradient-hover) !important;
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .ant-card {

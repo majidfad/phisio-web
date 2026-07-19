@@ -7,9 +7,9 @@ interface PhisioPalette {
   primaryHover: string;
   primarySoft: string;
   primaryMuted: string;
-  coral: string;
-  coralSoft: string;
-  mint: string;
+  accent: string;
+  accentSoft: string;
+  teal: string;
   success: string;
   warning: string;
   error: string;
@@ -31,45 +31,45 @@ interface PhisioShadows {
   md: string;
   lg: string;
   card: string;
-  glowTeal: string;
-  glowCoral: string;
+  glowPrimary: string;
+  glowAccent: string;
 }
 
-/** Energetic Dark — bold rehab coach on deep navy surfaces */
+/** Zivan dark — brand blue and green on deep navy (#0D1B2A) surfaces */
 export const PHISIO_COLORS: PhisioPalette = {
-  primary: '#2dd4bf',
-  primaryHover: '#14b8a6',
-  primarySoft: 'rgba(45, 212, 191, 0.12)',
-  primaryMuted: 'rgba(45, 212, 191, 0.24)',
-  coral: '#f97316',
-  coralSoft: 'rgba(249, 115, 22, 0.16)',
-  mint: '#a7f3d0',
-  success: '#34d399',
+  primary: '#3b82f6',
+  primaryHover: '#60a5fa',
+  primarySoft: 'rgba(59, 130, 246, 0.14)',
+  primaryMuted: 'rgba(59, 130, 246, 0.28)',
+  accent: '#22c55e',
+  accentSoft: 'rgba(34, 197, 94, 0.16)',
+  teal: '#2dd4bf',
+  success: '#22c55e',
   warning: '#fbbf24',
   error: '#f87171',
   info: '#38bdf8',
-  background: '#0b1220',
-  backgroundElevated: '#111827',
-  surface: '#1e293b',
-  surfaceHover: '#243044',
-  surfaceElevated: '#1a2332',
-  text: '#f8fafc',
+  background: '#0d1b2a',
+  backgroundElevated: '#12233a',
+  surface: '#1a2c44',
+  surfaceHover: '#213650',
+  surfaceElevated: '#16283f',
+  text: '#f1f5f9',
   textSecondary: '#94a3b8',
   textMuted: '#64748b',
   border: 'rgba(148, 163, 184, 0.18)',
-  borderGlow: 'rgba(45, 212, 191, 0.45)',
+  borderGlow: 'rgba(59, 130, 246, 0.45)',
 };
 
-/** Light theme — same brand teal on clean white surfaces */
+/** Zivan light — brand blue (#2563EB) on clean white surfaces */
 export const PHISIO_LIGHT_COLORS: PhisioPalette = {
-  primary: '#0d9488',
-  primaryHover: '#0f766e',
-  primarySoft: 'rgba(13, 148, 136, 0.1)',
-  primaryMuted: 'rgba(13, 148, 136, 0.22)',
-  coral: '#ea580c',
-  coralSoft: 'rgba(234, 88, 12, 0.12)',
-  mint: '#059669',
-  success: '#059669',
+  primary: '#2563eb',
+  primaryHover: '#1d4ed8',
+  primarySoft: 'rgba(37, 99, 235, 0.08)',
+  primaryMuted: 'rgba(37, 99, 235, 0.2)',
+  accent: '#16a34a',
+  accentSoft: 'rgba(34, 197, 94, 0.12)',
+  teal: '#0d9488',
+  success: '#16a34a',
   warning: '#d97706',
   error: '#dc2626',
   info: '#0284c7',
@@ -82,7 +82,7 @@ export const PHISIO_LIGHT_COLORS: PhisioPalette = {
   textSecondary: '#475569',
   textMuted: '#64748b',
   border: '#e2e8f0',
-  borderGlow: 'rgba(13, 148, 136, 0.4)',
+  borderGlow: 'rgba(37, 99, 235, 0.35)',
 };
 
 export const PHISIO_SHADOWS: PhisioShadows = {
@@ -90,8 +90,8 @@ export const PHISIO_SHADOWS: PhisioShadows = {
   md: '0 8px 24px rgba(0, 0, 0, 0.45)',
   lg: '0 16px 48px rgba(0, 0, 0, 0.55)',
   card: '0 4px 20px rgba(0, 0, 0, 0.4)',
-  glowTeal: '0 0 24px rgba(45, 212, 191, 0.25)',
-  glowCoral: '0 0 24px rgba(249, 115, 22, 0.22)',
+  glowPrimary: '0 0 24px rgba(59, 130, 246, 0.25)',
+  glowAccent: '0 0 24px rgba(34, 197, 94, 0.2)',
 };
 
 export const PHISIO_LIGHT_SHADOWS: PhisioShadows = {
@@ -99,8 +99,8 @@ export const PHISIO_LIGHT_SHADOWS: PhisioShadows = {
   md: '0 8px 24px rgba(15, 23, 42, 0.1)',
   lg: '0 16px 48px rgba(15, 23, 42, 0.14)',
   card: '0 4px 20px rgba(15, 23, 42, 0.07)',
-  glowTeal: '0 0 24px rgba(13, 148, 136, 0.14)',
-  glowCoral: '0 0 24px rgba(234, 88, 12, 0.12)',
+  glowPrimary: '0 0 24px rgba(37, 99, 235, 0.14)',
+  glowAccent: '0 0 24px rgba(34, 197, 94, 0.12)',
 };
 
 export function createPhisioTheme(mode: ThemeMode): ThemeConfig {
@@ -165,7 +165,7 @@ export function createPhisioTheme(mode: ThemeMode): ThemeConfig {
         controlHeightLG: 50,
         borderRadius: 14,
         borderRadiusLG: 16,
-        primaryShadow: s.glowTeal,
+        primaryShadow: s.glowPrimary,
         fontWeight: 600,
       },
       Input: {

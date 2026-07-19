@@ -5,9 +5,9 @@ interface RecoveryPulseSvgProps {
 
 export function RecoveryPulseSvg({ variant = 'recovery', size = 88 }: RecoveryPulseSvgProps) {
   const uid = variant;
-  const accent = variant === 'progress' ? '#f97316' : '#2dd4bf';
-  const accentMid = variant === 'progress' ? '#fb923c' : '#5eead4';
-  const accentSoft = variant === 'progress' ? 'rgba(249,115,22,0.22)' : 'rgba(45,212,191,0.22)';
+  const accent = variant === 'progress' ? '#22c55e' : '#3b82f6';
+  const accentMid = variant === 'progress' ? '#4ade80' : '#60a5fa';
+  const accentSoft = variant === 'progress' ? 'rgba(34,197,94,0.22)' : 'rgba(59,130,246,0.22)';
 
   return (
     <svg
@@ -61,7 +61,7 @@ export function RecoveryPulseSvg({ variant = 'recovery', size = 88 }: RecoveryPu
             fill={`url(#pulse-ring-${uid})`}
             fillOpacity="0.9"
           />
-          <path d="M48 34 V54 M40 44 H56" stroke="#0b1220" strokeWidth="0" fill="none" />
+          <path d="M48 34 V54 M40 44 H56" stroke="#0d1b2a" strokeWidth="0" fill="none" />
         </>
       ) : null}
 
@@ -75,7 +75,7 @@ export function RecoveryPulseSvg({ variant = 'recovery', size = 88 }: RecoveryPu
             rx="10"
             stroke={`url(#pulse-ring-${uid})`}
             strokeWidth="2.5"
-            fill="rgba(45,212,191,0.08)"
+            fill="rgba(59,130,246,0.08)"
           />
           <path
             d="M38 48 H58 M48 38 V58"
@@ -83,7 +83,7 @@ export function RecoveryPulseSvg({ variant = 'recovery', size = 88 }: RecoveryPu
             strokeWidth="2.5"
             strokeLinecap="round"
           />
-          <circle cx="68" cy="28" r="6" fill="#f97316" fillOpacity="0.85" />
+          <circle cx="68" cy="28" r="6" fill="#22c55e" fillOpacity="0.85" />
         </>
       ) : null}
 

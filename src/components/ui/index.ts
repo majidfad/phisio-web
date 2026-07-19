@@ -9,3 +9,4 @@ export { StatCard } from './StatCard';
 export { TableIconActions } from './TableIconActions';
 export { ThemeToggleButton } from './ThemeToggleButton';
 export { WarmEmptyState } from './WarmEmptyState';
+export { ZivanLogo } from './ZivanLogo';

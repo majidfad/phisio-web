@@ -3,9 +3,9 @@
     "loading": "Loading…"
   },
   "app": {
-    "name": "Phisio",
-    "tagline": "Physiotherapy exercise management",
-    "authFooter": "Placeholder auth layout"
+    "name": "Zivan",
+    "tagline": "Move Better, Live Better.",
+    "authFooter": "Zivan — Move Better, Live Better."
   },
   "languages": {
     "fa": "Persian",
@@ -587,7 +587,7 @@
     }
   },
   "pwa": {
-    "installPrompt": "Install Phisio for quick access",
+    "installPrompt": "Install Zivan for quick access",
     "install": "Install"
   }
 }

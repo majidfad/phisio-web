@@ -77,7 +77,7 @@ export function PatientProgressView() {
                   format={(p) => `${formatPersianNumber(p ?? 0)}%`}
                   strokeColor={{
                     '0%': PHISIO_COLORS.primary,
-                    '100%': PHISIO_COLORS.coral,
+                    '100%': PHISIO_COLORS.teal,
                   }}
                   size={140}
                 />

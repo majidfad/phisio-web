@@ -1,6 +1,8 @@
 import { Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
+import { ZivanLogo } from './ZivanLogo';
+
 const { Text } = Typography;
 
 interface AppBrandProps {
@@ -13,7 +15,11 @@ export function AppBrand({ collapsed = false, showLogo = true }: AppBrandProps) 
 
   return (
     <div className="app-sider__brand">
-      {showLogo ? <span className="app-sider__logo">P</span> : null}
+      {showLogo ? (
+        <span className="app-sider__logo">
+          <ZivanLogo size={26} />
+        </span>
+      ) : null}
       {!collapsed ? (
         <Text strong className="app-header__brand">
           {t('app.name')}

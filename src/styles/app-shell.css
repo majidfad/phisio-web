@@ -59,7 +59,7 @@
   color: var(--phisio-primary);
   font-weight: 800;
   font-size: 17px;
-  box-shadow: var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-glow-primary);
 }
 
 .app-page {
@@ -108,15 +108,15 @@
 
 .exercise-card.ant-card:hover {
   border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-teal);
+  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
 }
 
 .exercise-card--completed.ant-card {
-  border-color: rgba(52, 211, 153, 0.45);
+  border-color: rgba(34, 197, 94, 0.45);
   background: var(--phisio-gradient-success-card);
   box-shadow:
     var(--phisio-shadow-card),
-    0 0 20px rgba(52, 211, 153, 0.15);
+    0 0 20px rgba(34, 197, 94, 0.15);
 }
 
 .page-header {
@@ -146,14 +146,14 @@
 }
 
 .role-layout--admin .nav-card--active .nav-card__icon {
-  color: var(--phisio-coral);
-  background: var(--phisio-coral-soft);
+  color: var(--phisio-accent);
+  background: var(--phisio-accent-soft);
 }
 
 .role-layout--doctor .nav-card--active {
-  border-color: rgba(56, 189, 248, 0.4);
+  border-color: rgba(20, 184, 166, 0.45);
 }
 
 .role-layout--patient .dock-nav__item--active {
-  color: var(--phisio-mint);
+  color: var(--phisio-teal);
 }

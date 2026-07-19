@@ -82,6 +82,8 @@
     "menu": "منو",
     "signOut": "خروج",
     "changePassword": "تغییر رمز عبور",
+    "switchToLight": "تغییر به حالت روشن",
+    "switchToDark": "تغییر به حالت تاریک",
     "openNav": "باز کردن منوی ناوبری",
     "closeNav": "بستن منوی ناوبری",
     "defaultUser": "کاربر",

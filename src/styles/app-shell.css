@@ -7,7 +7,7 @@
   justify-content: space-between;
   height: var(--phisio-header-height);
   padding: 0 var(--phisio-content-padding);
-  background: rgba(17, 24, 39, 0.92);
+  background: var(--phisio-header-bg);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-sm);
@@ -113,7 +113,7 @@
 
 .exercise-card--completed.ant-card {
   border-color: rgba(52, 211, 153, 0.45);
-  background: linear-gradient(135deg, #1e293b 0%, rgba(52, 211, 153, 0.12) 100%);
+  background: var(--phisio-gradient-success-card);
   box-shadow:
     var(--phisio-shadow-card),
     0 0 20px rgba(52, 211, 153, 0.15);

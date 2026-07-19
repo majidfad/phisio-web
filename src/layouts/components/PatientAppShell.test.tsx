@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { AntdProvider } from '@/components/providers/AntdProvider';
 import { PatientAppShell } from '@/layouts/components/PatientAppShell';
 import { routes } from '@/routes/routes';
+import { ThemeProvider } from '@/theme/ThemeProvider';
 
 vi.mock('antd', async (importOriginal) => {
   const actual = await importOriginal<typeof import('antd')>();
@@ -41,11 +42,13 @@ function renderPatientShell(initialRoute = routes.patient.root) {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <AntdProvider>
-        <MemoryRouter initialEntries={[initialRoute]}>
-          <PatientAppShell />
-        </MemoryRouter>
-      </AntdProvider>
+      <ThemeProvider>
+        <AntdProvider>
+          <MemoryRouter initialEntries={[initialRoute]}>
+            <PatientAppShell />
+          </MemoryRouter>
+        </AntdProvider>
+      </ThemeProvider>
     </QueryClientProvider>,
   );
 }

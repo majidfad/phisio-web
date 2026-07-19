@@ -5,15 +5,18 @@ import { queryClient } from '@/api';
 import { AntdProvider } from '@/components/providers/AntdProvider';
 import { AuthProvider } from '@/features/auth';
 import { router } from '@/routes';
+import { ThemeProvider } from '@/theme/ThemeProvider';
 
 export function AppProviders() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AntdProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </AntdProvider>
+      <ThemeProvider>
+        <AntdProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </AntdProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

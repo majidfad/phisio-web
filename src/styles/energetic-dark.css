@@ -169,7 +169,7 @@
 .nav-card--active {
   color: var(--phisio-primary);
   border-color: var(--phisio-border-glow);
-  background: linear-gradient(135deg, rgba(45, 212, 191, 0.14) 0%, #1e293b 100%);
+  background: var(--phisio-gradient-nav-active);
   box-shadow: var(--phisio-shadow-glow-teal);
 }
 
@@ -187,7 +187,7 @@
 }
 
 .nav-card--active .nav-card__icon {
-  background: rgba(45, 212, 191, 0.22);
+  background: var(--phisio-primary-muted);
   box-shadow: var(--phisio-shadow-glow-teal);
 }
 
@@ -210,7 +210,7 @@
   padding-bottom: calc(8px + var(--safe-area-bottom));
   border: 1px solid var(--phisio-border);
   border-radius: 20px;
-  background: rgba(17, 24, 39, 0.92);
+  background: var(--phisio-header-bg);
   backdrop-filter: blur(16px);
   box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-teal);
 }
@@ -309,7 +309,7 @@
   max-width: 440px;
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
-  background: rgba(30, 41, 59, 0.85);
+  background: var(--phisio-panel-bg);
   backdrop-filter: blur(20px);
   box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-teal);
 }

@@ -79,7 +79,6 @@ export function PatientProgressView() {
                     '0%': PHISIO_COLORS.primary,
                     '100%': PHISIO_COLORS.coral,
                   }}
-                  trailColor={PHISIO_COLORS.backgroundElevated}
                   size={140}
                 />
               </div>

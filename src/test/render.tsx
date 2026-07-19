@@ -4,6 +4,7 @@ import { type ReactElement, type ReactNode } from 'react';
 import { MemoryRouter, type MemoryRouterProps } from 'react-router-dom';
 
 import { AntdProvider } from '@/components/providers/AntdProvider';
+import { ThemeProvider } from '@/theme/ThemeProvider';
 import type { AuthenticatedUser } from '@/types/auth';
 
 interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
@@ -27,9 +28,11 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
   function Wrapper({ children }: { children: ReactNode }) {
     return (
       <QueryClientProvider client={queryClient}>
-        <AntdProvider>
-          <MemoryRouter {...routerProps}>{children}</MemoryRouter>
-        </AntdProvider>
+        <ThemeProvider>
+          <AntdProvider>
+            <MemoryRouter {...routerProps}>{children}</MemoryRouter>
+          </AntdProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     );
   }

@@ -14,7 +14,6 @@ import {
   shiftJalaliMonth,
   sortIsoDatesAsc,
 } from '@/utils/jalali-calendar';
-import { PHISIO_COLORS } from '@/theme/phisio-theme';
 import {
   formatPersianCalendarDateLong,
   formatPersianNumber,
@@ -147,7 +146,7 @@ export function JalaliCalendarPicker({ selectedDates, onChange }: JalaliCalendar
                 style={{
                   height: 36,
                   padding: 0,
-                  border: isToday ? `1px solid ${PHISIO_COLORS.primary}` : undefined,
+                  border: isToday ? '1px solid var(--phisio-primary)' : undefined,
                 }}
               >
                 {formatPersianNumber(day)}

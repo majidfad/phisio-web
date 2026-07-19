@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { DoctorPatientExerciseDto } from '@/features/doctor/patients/types/patient-exercise-plan';
-import { PHISIO_COLORS } from '@/theme/phisio-theme';
-
 const { Text } = Typography;
 
 interface PatientExercisePlanTableProps {
@@ -48,7 +46,7 @@ export function PatientExercisePlanTable({ exercises }: PatientExercisePlanTable
         return hasVideo ? (
           <Button
             type="text"
-            icon={<PlayCircleOutlined style={{ fontSize: 20, color: PHISIO_COLORS.primary }} />}
+            icon={<PlayCircleOutlined style={{ fontSize: 20, color: 'var(--phisio-primary)' }} />}
             aria-label={t('doctor.patients.exercisePlan.video.play', {
               title: exercise.exerciseName,
             })}

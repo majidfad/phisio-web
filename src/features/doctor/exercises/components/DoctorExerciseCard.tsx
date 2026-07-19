@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
-import { PHISIO_COLORS } from '@/theme/phisio-theme';
-
 const { Text, Paragraph } = Typography;
 
 interface DoctorExerciseCardProps {
@@ -26,12 +24,7 @@ export function DoctorExerciseCard({ exercise, onPlay }: DoctorExerciseCardProps
         hasVideo ? (
           <Button
             type="text"
-            icon={
-              <PlayCircleOutlined
-                className="phisio-icon-primary"
-                style={{ fontSize: 22, color: PHISIO_COLORS.primary }}
-              />
-            }
+            icon={<PlayCircleOutlined className="phisio-icon-primary" style={{ fontSize: 22 }} />}
             aria-label={t('doctor.exercises.video.play', { title: exercise.title })}
             onClick={() => onPlay(exercise)}
           />

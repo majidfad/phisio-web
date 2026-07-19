@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Alert, Button, Form, Input, Modal, Space } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -40,13 +40,11 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
     defaultValues: EMPTY_VALUES,
   });
 
-  useEffect(() => {
-    if (open) {
-      reset(EMPTY_VALUES);
-      setSubmitError(null);
-      setIsSuccess(false);
-    }
-  }, [open, reset]);
+  const handleAfterClose = () => {
+    reset(EMPTY_VALUES);
+    setSubmitError(null);
+    setIsSuccess(false);
+  };
 
   const onSubmit = async (values: ChangePasswordFormValues) => {
     setIsSubmitting(true);
@@ -72,6 +70,7 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
       title={t('auth.changePassword.title')}
       open={open}
       onCancel={onClose}
+      afterClose={handleAfterClose}
       footer={null}
       destroyOnHidden
       centered
@@ -104,9 +103,7 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
             <Controller
               name="currentPassword"
               control={control}
-              render={({ field }) => (
-                <Input.Password {...field} autoComplete="current-password" />
-              )}
+              render={({ field }) => <Input.Password {...field} autoComplete="current-password" />}
             />
           </Form.Item>
 

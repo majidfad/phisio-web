@@ -44,13 +44,13 @@
 }
 
 .ant-btn-primary {
-  background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%) !important;
+  background: var(--phisio-btn-gradient) !important;
   border: none !important;
   box-shadow: var(--phisio-shadow-glow-teal);
 }
 
 .ant-btn-primary:not(:disabled):hover {
-  background: linear-gradient(135deg, #5eead4 0%, #2dd4bf 100%) !important;
+  background: var(--phisio-btn-gradient-hover) !important;
   box-shadow: var(--phisio-shadow-glow-teal);
 }
 

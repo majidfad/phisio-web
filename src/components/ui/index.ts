@@ -7,4 +7,5 @@ export { PageContainer } from './PageContainer';
 export { PageSection } from './PageSection';
 export { StatCard } from './StatCard';
 export { TableIconActions } from './TableIconActions';
+export { ThemeToggleButton } from './ThemeToggleButton';
 export { WarmEmptyState } from './WarmEmptyState';

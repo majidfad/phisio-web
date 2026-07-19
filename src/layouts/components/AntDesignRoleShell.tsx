@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { NavCard } from '@/components/navigation/NavCard';
-import { AppBrand } from '@/components/ui';
+import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -156,31 +156,34 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
             </Tag>
           </div>
 
-          <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
-            <Button
-              type="text"
-              style={{
-                height: 46,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                color: 'var(--phisio-text)',
-              }}
-            >
-              <Avatar
-                size={34}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <ThemeToggleButton />
+            <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
+              <Button
+                type="text"
                 style={{
-                  background: 'var(--phisio-primary-soft)',
-                  color: 'var(--phisio-primary)',
-                  border: '1px solid var(--phisio-border-glow)',
+                  height: 46,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  color: 'var(--phisio-text)',
                 }}
-                icon={<UserOutlined />}
-              />
-              <Typography.Text ellipsis style={{ maxWidth: 140, color: 'inherit' }}>
-                {displayName}
-              </Typography.Text>
-            </Button>
-          </Dropdown>
+              >
+                <Avatar
+                  size={34}
+                  style={{
+                    background: 'var(--phisio-primary-soft)',
+                    color: 'var(--phisio-primary)',
+                    border: '1px solid var(--phisio-border-glow)',
+                  }}
+                  icon={<UserOutlined />}
+                />
+                <Typography.Text ellipsis style={{ maxWidth: 140, color: 'inherit' }}>
+                  {displayName}
+                </Typography.Text>
+              </Button>
+            </Dropdown>
+          </div>
         </Header>
 
         <Content>
@@ -202,10 +205,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
         {navCards}
       </Drawer>
 
-      <ChangePasswordModal
-        open={changePasswordOpen}
-        onClose={() => setChangePasswordOpen(false)}
-      />
+      <ChangePasswordModal open={changePasswordOpen} onClose={() => setChangePasswordOpen(false)} />
     </Layout>
   );
 }

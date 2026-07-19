@@ -1,0 +1,68 @@
+/*
+ * Theme switching.
+ * Dark is the default (tokens in design-tokens.css); this file overrides them
+ * for the light theme and exposes the generic aliases used across the app.
+ */
+
+:root {
+  --bg: var(--phisio-bg);
+  --surface: var(--phisio-surface);
+  --surface-hover: var(--phisio-surface-hover);
+  --border: var(--phisio-border);
+  --text-primary: var(--phisio-text);
+  --text-secondary: var(--phisio-text-secondary);
+  --primary: var(--phisio-primary);
+  --primary-hover: var(--phisio-primary-hover);
+  --danger: var(--phisio-danger);
+  --success: var(--phisio-success);
+}
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --phisio-primary: #0d9488;
+  --phisio-primary-hover: #0f766e;
+  --phisio-primary-soft: rgba(13, 148, 136, 0.1);
+  --phisio-primary-muted: rgba(13, 148, 136, 0.22);
+  --phisio-coral: #ea580c;
+  --phisio-coral-soft: rgba(234, 88, 12, 0.12);
+  --phisio-mint: #059669;
+  --phisio-danger: #dc2626;
+  --phisio-success: #059669;
+  --phisio-bg: #ffffff;
+  --phisio-bg-elevated: #f8fafc;
+  --phisio-surface: #f8fafc;
+  --phisio-surface-hover: #f1f5f9;
+  --phisio-text: #0f172a;
+  --phisio-text-secondary: #475569;
+  --phisio-border: #e2e8f0;
+  --phisio-border-glow: rgba(13, 148, 136, 0.4);
+  --phisio-header-bg: rgba(255, 255, 255, 0.92);
+  --phisio-panel-bg: rgba(255, 255, 255, 0.9);
+  --phisio-shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --phisio-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.1);
+  --phisio-shadow-card: 0 4px 20px rgba(15, 23, 42, 0.07);
+  --phisio-shadow-glow-teal: 0 0 24px rgba(13, 148, 136, 0.14);
+  --phisio-shadow-glow-coral: 0 0 24px rgba(234, 88, 12, 0.12);
+  --phisio-btn-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  --phisio-btn-gradient-hover: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  --phisio-gradient-auth:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(13, 148, 136, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(234, 88, 12, 0.06) 0%, transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  --phisio-gradient-hero: linear-gradient(
+    135deg,
+    rgba(13, 148, 136, 0.08) 0%,
+    rgba(248, 250, 252, 0.95) 45%,
+    rgba(234, 88, 12, 0.06) 100%
+  );
+  --phisio-gradient-focus: linear-gradient(135deg, #f8fafc 0%, rgba(234, 88, 12, 0.08) 100%);
+  --phisio-gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  --phisio-gradient-nav-active: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, #ffffff 100%);
+  --phisio-gradient-success-card: linear-gradient(135deg, #ffffff 0%, rgba(5, 150, 105, 0.08) 100%);
+}

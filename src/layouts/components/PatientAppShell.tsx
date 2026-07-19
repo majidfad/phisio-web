@@ -13,7 +13,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { DockNav } from '@/components/navigation';
 import { NavCard } from '@/components/navigation/NavCard';
-import { AppBrand } from '@/components/ui';
+import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { patientLayoutConfig } from '@/layouts/config/role-layout-config';
@@ -79,36 +79,42 @@ export function PatientAppShell() {
     <Layout className={patientLayoutConfig.layoutClassName} style={{ minHeight: '100vh' }}>
       <Header className="app-header safe-area-top">
         <AppBrand showLogo={false} />
-        <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
-          <button
-            type="button"
-            className="touch-target touch-active"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              padding: '4px 8px',
-              color: 'var(--phisio-text)',
-            }}
-            aria-label={displayName}
-          >
-            <Avatar
-              size={38}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <ThemeToggleButton />
+          <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
+            <button
+              type="button"
+              className="touch-target touch-active"
               style={{
-                background: 'var(--phisio-primary-soft)',
-                color: 'var(--phisio-primary)',
-                border: '1px solid var(--phisio-border-glow)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                padding: '4px 8px',
+                color: 'var(--phisio-text)',
               }}
-              icon={<UserOutlined />}
-            />
-            <Typography.Text ellipsis style={{ maxWidth: 120, fontWeight: 600, color: 'inherit' }}>
-              {displayName}
-            </Typography.Text>
-          </button>
-        </Dropdown>
+              aria-label={displayName}
+            >
+              <Avatar
+                size={38}
+                style={{
+                  background: 'var(--phisio-primary-soft)',
+                  color: 'var(--phisio-primary)',
+                  border: '1px solid var(--phisio-border-glow)',
+                }}
+                icon={<UserOutlined />}
+              />
+              <Typography.Text
+                ellipsis
+                style={{ maxWidth: 120, fontWeight: 600, color: 'inherit' }}
+              >
+                {displayName}
+              </Typography.Text>
+            </button>
+          </Dropdown>
+        </div>
       </Header>
 
       <Layout>
@@ -144,10 +150,7 @@ export function PatientAppShell() {
         />
       ) : null}
 
-      <ChangePasswordModal
-        open={changePasswordOpen}
-        onClose={() => setChangePasswordOpen(false)}
-      />
+      <ChangePasswordModal open={changePasswordOpen} onClose={() => setChangePasswordOpen(false)} />
     </Layout>
   );
 }

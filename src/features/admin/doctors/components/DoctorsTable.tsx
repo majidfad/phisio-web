@@ -1,4 +1,4 @@
-import { Button, Empty, Tag } from 'antd';
+import { Button, Empty, Space, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
@@ -13,9 +13,12 @@ interface DoctorsTableProps {
   showInactiveView: boolean;
   isActivating?: boolean;
   activatingDoctorId?: string | null;
+  isDeactivating?: boolean;
+  deactivatingDoctorId?: string | null;
   onEdit: (doctor: DoctorDto) => void;
   onDelete: (doctor: DoctorDto) => void;
   onActivate: (doctor: DoctorDto) => void;
+  onDeactivate: (doctor: DoctorDto) => void;
 }
 
 export function DoctorsTable({
@@ -23,9 +26,12 @@ export function DoctorsTable({
   showInactiveView,
   isActivating = false,
   activatingDoctorId = null,
+  isDeactivating = false,
+  deactivatingDoctorId = null,
   onEdit,
   onDelete,
   onActivate,
+  onDeactivate,
 }: DoctorsTableProps) {
   const { t } = useTranslation();
 
@@ -75,15 +81,15 @@ export function DoctorsTable({
           {
             title: t('admin.exercises.columns.status'),
             key: 'status',
-            width: 110,
-            render: () => <Tag>{t('admin.common.status.inactive')}</Tag>,
+            width: 130,
+            render: () => <Tag color="warning">{t('admin.common.status.pending')}</Tag>,
           } as ColumnsType<DoctorDto>[number],
         ]
       : []),
     {
       title: t('admin.doctors.columns.actions'),
       key: 'actions',
-      width: 110,
+      width: 170,
       align: 'center',
       render: (_, doctor) =>
         showInactiveView ? (
@@ -95,12 +101,23 @@ export function DoctorsTable({
             {t('admin.common.actions.activate')}
           </Button>
         ) : (
-          <TableIconActions
-            editLabel={t('admin.doctors.actions.edit')}
-            deleteLabel={t('admin.doctors.actions.delete')}
-            onEdit={() => onEdit(doctor)}
-            onDelete={() => onDelete(doctor)}
-          />
+          <Space size={0}>
+            <Button
+              type="link"
+              danger
+              size="small"
+              loading={isDeactivating && deactivatingDoctorId === doctor.id}
+              onClick={() => onDeactivate(doctor)}
+            >
+              {t('admin.common.actions.deactivate')}
+            </Button>
+            <TableIconActions
+              editLabel={t('admin.doctors.actions.edit')}
+              deleteLabel={t('admin.doctors.actions.delete')}
+              onEdit={() => onEdit(doctor)}
+              onDelete={() => onDelete(doctor)}
+            />
+          </Space>
         ),
     },
   ];

@@ -6,19 +6,26 @@ import { LoginForm } from '@/features/auth/components/LoginForm';
 
 type LoginLocationState = {
   registrationSuccess?: boolean;
+  registeredRole?: 'patient' | 'doctor';
 };
 
 export function LoginPage() {
   const { t } = useTranslation();
   const location = useLocation();
-  const registrationSuccess = (location.state as LoginLocationState | null)?.registrationSuccess;
+  const state = location.state as LoginLocationState | null;
+  const registrationSuccess = state?.registrationSuccess;
+  const isDoctorRegistration = state?.registeredRole === 'doctor';
 
   return (
     <div>
       {registrationSuccess ? (
         <Alert
-          type="success"
-          message={t('auth.registrationSuccess')}
+          type={isDoctorRegistration ? 'info' : 'success'}
+          message={
+            isDoctorRegistration
+              ? t('auth.registrationSuccessDoctor')
+              : t('auth.registrationSuccessPatient')
+          }
           showIcon
           style={{ marginBottom: 16 }}
         />

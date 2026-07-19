@@ -21,7 +21,18 @@
     "registerLink": "Register",
     "signInLink": "Sign in",
     "registrationSuccess": "Registration completed successfully.",
+    "registrationSuccessPatient": "Registration completed successfully. You can now login.",
+    "registrationSuccessDoctor": "Registration submitted successfully and is waiting for administrator approval.",
+    "accountNotApproved": "Your account has not been approved yet.",
     "unableToRegister": "Unable to register.",
+    "selectRoleDescription": "Choose your account type.",
+    "rolePatient": "Patient",
+    "roleDoctor": "Doctor",
+    "registerPatientTitle": "Patient registration",
+    "registerDoctorTitle": "Doctor registration",
+    "backToRoleSelect": "Back to account type selection",
+    "medicalLicenseNumber": "Medical license number",
+    "specialty": "Specialty",
     "fullName": "Full name",
     "phoneNumber": "Phone number",
     "mobileNumber": "Mobile number",
@@ -41,7 +52,11 @@
       "mobileInvalid": "Mobile number format is invalid.",
       "passwordRequired": "Password is required.",
       "confirmPasswordRequired": "Confirm password is required.",
-      "passwordMismatch": "Password and confirmation do not match."
+      "passwordMismatch": "Password and confirmation do not match.",
+      "licenseRequired": "Medical license number is required.",
+      "licenseMaxLength": "Medical license number must be at most 50 characters.",
+      "specialtyRequired": "Specialty is required.",
+      "specialtyMaxLength": "Specialty must be at most 200 characters."
     }
   },
   "layout": {
@@ -80,14 +95,18 @@
       "tabs": {
         "label": "Status filter",
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "pendingApproval": "Pending approval"
       },
       "status": {
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "pending": "Pending approval"
       },
       "actions": {
         "activate": "Activate",
-        "activating": "Activating…"
+        "activating": "Activating…",
+        "deactivate": "Deactivate",
+        "deactivating": "Deactivating…"
       }
     },
     "dashboard": {
@@ -177,7 +196,7 @@
       "loading": "Loading…",
       "retry": "Retry",
       "empty": "No doctors registered yet.",
-      "emptyInactive": "No inactive doctors found.",
+      "emptyInactive": "No doctors pending approval.",
       "notSet": "—",
       "columns": {
         "name": "Name",

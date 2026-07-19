@@ -11,6 +11,7 @@ import { DoctorsTable } from '@/features/admin/doctors/components/DoctorsTable';
 import {
   useActivateDoctor,
   useCreateDoctor,
+  useDeactivateDoctor,
   useDeleteDoctor,
   useDoctors,
   useUpdateDoctor,
@@ -32,11 +33,13 @@ export function DoctorsPage() {
   const updateDoctor = useUpdateDoctor();
   const deleteDoctor = useDeleteDoctor();
   const activateDoctor = useActivateDoctor();
+  const deactivateDoctor = useDeactivateDoctor();
 
   const [formMode, setFormMode] = useState<FormMode | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<DoctorDto | null>(null);
   const [doctorToDelete, setDoctorToDelete] = useState<DoctorDto | null>(null);
   const [activatingDoctorId, setActivatingDoctorId] = useState<string | null>(null);
+  const [deactivatingDoctorId, setDeactivatingDoctorId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
   const openCreateForm = () => {
@@ -107,6 +110,18 @@ export function DoctorsPage() {
     }
   };
 
+  const handleDeactivate = async (doctor: DoctorDto) => {
+    setDeactivatingDoctorId(doctor.id);
+
+    try {
+      await deactivateDoctor.mutateAsync(doctor.id);
+    } catch {
+      // Error surfaced via query refetch
+    } finally {
+      setDeactivatingDoctorId(null);
+    }
+  };
+
   const isFormSubmitting = createDoctor.isPending || updateDoctor.isPending;
 
   return (
@@ -121,7 +136,11 @@ export function DoctorsPage() {
         }
       />
 
-      <AdminStatusTabs value={listFilter} onChange={setListFilter} />
+      <AdminStatusTabs
+        value={listFilter}
+        onChange={setListFilter}
+        labels={{ inactive: t('admin.common.tabs.pendingApproval') }}
+      />
 
       {isLoading ? <LoadingState tip={t('admin.doctors.loading')} /> : null}
 
@@ -143,9 +162,12 @@ export function DoctorsPage() {
           showInactiveView={showInactiveView}
           isActivating={activateDoctor.isPending}
           activatingDoctorId={activatingDoctorId}
+          isDeactivating={deactivateDoctor.isPending}
+          deactivatingDoctorId={deactivatingDoctorId}
           onEdit={openEditForm}
           onDelete={(doctor) => setDoctorToDelete(doctor)}
           onActivate={(doctor) => void handleActivate(doctor)}
+          onDeactivate={(doctor) => void handleDeactivate(doctor)}
         />
       ) : null}
 

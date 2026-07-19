@@ -21,7 +21,18 @@
     "registerLink": "ثبت نام",
     "signInLink": "ورود",
     "registrationSuccess": "ثبت نام با موفقیت انجام شد.",
+    "registrationSuccessPatient": "ثبت نام با موفقیت انجام شد. اکنون می‌توانید وارد شوید.",
+    "registrationSuccessDoctor": "ثبت نام شما با موفقیت انجام شد و در انتظار تأیید مدیر است.",
+    "accountNotApproved": "حساب کاربری شما هنوز تأیید نشده است.",
     "unableToRegister": "ثبت نام انجام نشد.",
+    "selectRoleDescription": "نوع حساب کاربری خود را انتخاب کنید.",
+    "rolePatient": "بیمار",
+    "roleDoctor": "پزشک",
+    "registerPatientTitle": "ثبت نام بیمار",
+    "registerDoctorTitle": "ثبت نام پزشک",
+    "backToRoleSelect": "بازگشت به انتخاب نوع حساب",
+    "medicalLicenseNumber": "شماره نظام پزشکی",
+    "specialty": "تخصص",
     "fullName": "نام و نام خانوادگی",
     "phoneNumber": "شماره تلفن",
     "mobileNumber": "شماره موبایل",
@@ -41,7 +52,11 @@
       "mobileInvalid": "فرمت شماره موبایل نامعتبر است.",
       "passwordRequired": "رمز عبور الزامی است.",
       "confirmPasswordRequired": "تکرار رمز عبور الزامی است.",
-      "passwordMismatch": "رمز عبور و تکرار آن یکسان نیستند."
+      "passwordMismatch": "رمز عبور و تکرار آن یکسان نیستند.",
+      "licenseRequired": "شماره نظام پزشکی الزامی است.",
+      "licenseMaxLength": "شماره نظام پزشکی حداکثر ۵۰ کاراکتر باشد.",
+      "specialtyRequired": "تخصص الزامی است.",
+      "specialtyMaxLength": "تخصص حداکثر ۲۰۰ کاراکتر باشد."
     }
   },
   "layout": {
@@ -80,14 +95,18 @@
       "tabs": {
         "label": "فیلتر وضعیت",
         "active": "فعال‌ها",
-        "inactive": "غیرفعال‌ها"
+        "inactive": "غیرفعال‌ها",
+        "pendingApproval": "در انتظار تأیید"
       },
       "status": {
-        "inactive": "غیرفعال"
+        "inactive": "غیرفعال",
+        "pending": "در انتظار تأیید"
       },
       "actions": {
         "activate": "فعال‌سازی",
-        "activating": "در حال فعال‌سازی…"
+        "activating": "در حال فعال‌سازی…",
+        "deactivate": "غیرفعال‌سازی",
+        "deactivating": "در حال غیرفعال‌سازی…"
       }
     },
     "dashboard": {
@@ -177,7 +196,7 @@
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
       "empty": "پزشکی ثبت نشده است.",
-      "emptyInactive": "پزشک غیرفعالی ثبت نشده است.",
+      "emptyInactive": "پزشکی در انتظار تأیید وجود ندارد.",
       "notSet": "—",
       "columns": {
         "name": "نام",

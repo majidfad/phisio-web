@@ -11,11 +11,21 @@ export interface LoginRequest {
   password: string;
 }
 
+/** API serializes UserRole enum as number. */
+export const UserRoleCode = {
+  Doctor: 1,
+  Patient: 2,
+  Admin: 3,
+} as const satisfies Record<UserRole, number>;
+
 export interface RegisterRequest {
   name: string;
   phoneNumber: string;
   password: string;
   confirmPassword: string;
+  role: number;
+  medicalLicenseNumber?: string;
+  specialty?: string;
 }
 
 export interface RegisterResponse {
@@ -23,6 +33,7 @@ export interface RegisterResponse {
   phoneNumber: string;
   name: string;
   role: UserRole | number;
+  message?: string;
 }
 
 export interface AuthResponse {

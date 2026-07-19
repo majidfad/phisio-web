@@ -43,7 +43,12 @@ export function LoginForm() {
 
       navigate(getHomeRouteForUser(user), { replace: true });
     } catch (error) {
-      setSubmitError(getErrorMessage(error, t('auth.unableToSignIn')));
+      const message = getErrorMessage(error, t('auth.unableToSignIn'));
+      setSubmitError(
+        message === 'Your account has not been approved yet.'
+          ? t('auth.accountNotApproved')
+          : message,
+      );
     }
   });
 

@@ -6,9 +6,11 @@ import type { AdminListFilter } from '@/features/admin/types/admin-list-filter';
 interface AdminStatusTabsProps {
   value: AdminListFilter;
   onChange: (value: AdminListFilter) => void;
+  /** Optional label overrides, e.g. showing "pending approval" instead of "inactive". */
+  labels?: Partial<Record<AdminListFilter, string>>;
 }
 
-export function AdminStatusTabs({ value, onChange }: AdminStatusTabsProps) {
+export function AdminStatusTabs({ value, onChange, labels }: AdminStatusTabsProps) {
   const { t } = useTranslation();
 
   return (
@@ -19,8 +21,8 @@ export function AdminStatusTabs({ value, onChange }: AdminStatusTabsProps) {
         value={value}
         onChange={(v) => onChange(v as AdminListFilter)}
         options={[
-          { label: t('admin.common.tabs.active'), value: 'active' },
-          { label: t('admin.common.tabs.inactive'), value: 'inactive' },
+          { label: labels?.active ?? t('admin.common.tabs.active'), value: 'active' },
+          { label: labels?.inactive ?? t('admin.common.tabs.inactive'), value: 'inactive' },
         ]}
       />
     </div>

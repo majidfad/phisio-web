@@ -9,17 +9,25 @@ import { registerApi } from '@/features/auth/api/auth-api';
 import {
   createRegisterSchema,
   type RegisterFormValues,
+  type RegistrationRole,
 } from '@/features/auth/schemas/register-schema';
 import { routes } from '@/routes/routes';
+import { UserRoleCode } from '@/types/auth';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 const { Title, Text } = Typography;
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  role: RegistrationRole;
+  onBack: () => void;
+}
+
+export function RegisterForm({ role, onBack }: RegisterFormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const registerSchema = useMemo(() => createRegisterSchema(t), [t]);
+  const registerSchema = useMemo(() => createRegisterSchema(t, role), [t, role]);
+  const isDoctor = role === 'doctor';
 
   const {
     control,
@@ -32,6 +40,8 @@ export function RegisterForm() {
       phoneNumber: '',
       password: '',
       confirmPassword: '',
+      medicalLicenseNumber: '',
+      specialty: '',
     },
   });
 
@@ -44,11 +54,18 @@ export function RegisterForm() {
         phoneNumber: values.phoneNumber.trim(),
         password: values.password,
         confirmPassword: values.confirmPassword,
+        role: isDoctor ? UserRoleCode.Doctor : UserRoleCode.Patient,
+        ...(isDoctor
+          ? {
+              medicalLicenseNumber: values.medicalLicenseNumber?.trim(),
+              specialty: values.specialty?.trim(),
+            }
+          : {}),
       });
 
       navigate(routes.login, {
         replace: true,
-        state: { registrationSuccess: true },
+        state: { registrationSuccess: true, registeredRole: role },
       });
     } catch (error) {
       setSubmitError(getErrorMessage(error, t('auth.unableToRegister')));
@@ -58,7 +75,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={onSubmit} noValidate style={{ width: '100%' }}>
       <Title level={4} className="auth-form__title">
-        {t('auth.registerButton')}
+        {isDoctor ? t('auth.registerDoctorTitle') : t('auth.registerPatientTitle')}
       </Title>
 
       {submitError ? (
@@ -126,10 +143,42 @@ export function RegisterForm() {
             )}
           />
         </Form.Item>
+
+        {isDoctor ? (
+          <>
+            <Form.Item
+              label={t('auth.medicalLicenseNumber')}
+              validateStatus={errors.medicalLicenseNumber ? 'error' : undefined}
+              help={errors.medicalLicenseNumber?.message}
+            >
+              <Controller
+                name="medicalLicenseNumber"
+                control={control}
+                render={({ field }) => <Input {...field} dir="ltr" size="large" />}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label={t('auth.specialty')}
+              validateStatus={errors.specialty ? 'error' : undefined}
+              help={errors.specialty?.message}
+            >
+              <Controller
+                name="specialty"
+                control={control}
+                render={({ field }) => <Input {...field} size="large" />}
+              />
+            </Form.Item>
+          </>
+        ) : null}
       </Form>
 
       <Button type="primary" htmlType="submit" block size="large" loading={isSubmitting}>
         {isSubmitting ? t('auth.registering') : t('auth.registerButton')}
+      </Button>
+
+      <Button type="text" block size="large" style={{ marginTop: 8 }} onClick={onBack}>
+        {t('auth.backToRoleSelect')}
       </Button>
 
       <div className="auth-form__footer">

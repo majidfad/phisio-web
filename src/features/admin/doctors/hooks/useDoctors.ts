@@ -81,3 +81,15 @@ export function useActivateDoctor() {
     },
   });
 }
+
+export function useDeactivateDoctor() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => doctorService.deactivate(id),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.lists() });
+    },
+  });
+}

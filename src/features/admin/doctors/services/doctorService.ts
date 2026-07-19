@@ -38,4 +38,8 @@ export const doctorService = {
   async activate(id: string): Promise<void> {
     await httpClient.patch(`${DOCTORS_BASE}/${id}/activate`);
   },
+
+  async deactivate(id: string): Promise<void> {
+    await httpClient.patch(`${DOCTORS_BASE}/${id}/deactivate`);
+  },
 };

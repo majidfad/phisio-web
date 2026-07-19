@@ -120,7 +120,9 @@ jobs:
             docker images "${REGISTRY}/${IMAGE_OWNER}/phisio-web" -q | sort -u | xargs -r docker rmi -f || true
 
             docker compose -f docker-compose.prod.yml --env-file .env --profile web pull web
-            docker compose -f docker-compose.prod.yml --env-file .env --profile web up -d --no-deps web
+            docker compose -f docker-compose.prod.yml --env-file .env --profile web up -d --no-deps web proxy
+            # Reload proxy config in case proxy.conf changed but the container was reused.
+            docker exec phisio-proxy nginx -t && docker exec phisio-proxy nginx -s reload || true
             docker compose -f docker-compose.prod.yml --env-file .env --profile web ps
 
             docker image prune -f || true

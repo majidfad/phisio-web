@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Lock file intentionally untracked
+package-lock.json
 .env
 .env.local
 

@@ -87,7 +87,7 @@ export function PatientAppShell() {
 
   const primaryKeys = useMemo(
     () =>
-      new Set([
+      new Set<string>([
         routes.patient.root,
         routes.patient.exercises,
         routes.patient.doctors,

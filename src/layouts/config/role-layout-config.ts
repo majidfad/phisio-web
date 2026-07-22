@@ -13,6 +13,7 @@ export const adminLayoutConfig: RoleLayoutConfig = {
     { id: 'doctors', labelKey: 'layout.nav.doctors', to: routes.admin.doctors },
     { id: 'patients', labelKey: 'layout.nav.patients', to: routes.admin.patients },
     { id: 'exercises', labelKey: 'layout.nav.exercises', to: routes.admin.exercises },
+    { id: 'articles', labelKey: 'layout.nav.articles', to: routes.admin.articles },
     { id: 'assignments', labelKey: 'layout.nav.assignments', to: routes.admin.assignments },
   ],
 };
@@ -34,6 +35,9 @@ export const patientLayoutConfig: RoleLayoutConfig = {
   navAriaLabelKey: 'layout.navAria.patient',
   navItems: [
     { id: 'dashboard', labelKey: 'layout.nav.dashboard', to: routes.patient.root, end: true },
+    { id: 'doctors', labelKey: 'layout.nav.myDoctors', to: routes.patient.doctors },
+    { id: 'library', labelKey: 'layout.nav.library', to: routes.patient.library },
+    { id: 'articles', labelKey: 'layout.nav.articles', to: routes.patient.articles },
     { id: 'exercises', labelKey: 'layout.nav.myExercises', to: routes.patient.exercises },
     { id: 'progress', labelKey: 'layout.nav.progress', to: routes.patient.progress },
   ],

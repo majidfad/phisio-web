@@ -120,7 +120,7 @@ export function PatientExercisesList({
         {submitError ? <Alert type="error" message={submitError} showIcon /> : null}
 
         {doctorGroups.map((group) => (
-          <section key={group.doctorName}>
+          <section key={group.doctorId}>
             <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>
               {t('patient.dashboard.treatingDoctor', { doctorName: group.doctorName })}
             </Text>

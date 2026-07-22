@@ -8,6 +8,7 @@ export const routes = {
     doctors: '/admin/doctors',
     patients: '/admin/patients',
     exercises: '/admin/exercises',
+    articles: '/admin/articles',
     assignments: '/admin/assignments',
   },
   doctor: {
@@ -19,6 +20,9 @@ export const routes = {
     root: '/patient',
     exercises: '/patient/exercises',
     progress: '/patient/progress',
+    doctors: '/patient/doctors',
+    library: '/patient/library',
+    articles: '/patient/articles',
   },
 } as const;
 
@@ -31,10 +35,14 @@ export type AppRoutePath =
   | typeof routes.admin.doctors
   | typeof routes.admin.patients
   | typeof routes.admin.exercises
+  | typeof routes.admin.articles
   | typeof routes.admin.assignments
   | typeof routes.doctor.root
   | typeof routes.doctor.patients
   | typeof routes.doctor.exercises
   | typeof routes.patient.root
   | typeof routes.patient.exercises
-  | typeof routes.patient.progress;
+  | typeof routes.patient.progress
+  | typeof routes.patient.doctors
+  | typeof routes.patient.library
+  | typeof routes.patient.articles;

@@ -8,9 +8,9 @@ import {
 
 describe('role-layout-config', () => {
   it.each([
-    ['layout.roles.admin', adminLayoutConfig, 5],
+    ['layout.roles.admin', adminLayoutConfig, 6],
     ['layout.roles.doctor', doctorLayoutConfig, 3],
-    ['layout.roles.patient', patientLayoutConfig, 3],
+    ['layout.roles.patient', patientLayoutConfig, 6],
   ])('defines navigation for %s', (roleLabelKey, config, itemCount) => {
     expect(config.roleLabelKey).toBe(roleLabelKey);
     expect(config.navItems).toHaveLength(itemCount);
@@ -30,5 +30,10 @@ describe('role-layout-config', () => {
   it('links patient exercises navigation to patient exercises route', () => {
     const exercisesNav = patientLayoutConfig.navItems.find((item) => item.id === 'exercises');
     expect(exercisesNav?.to).toBe('/patient/exercises');
+  });
+
+  it('links patient doctors navigation to patient doctors route', () => {
+    const doctorsNav = patientLayoutConfig.navItems.find((item) => item.id === 'doctors');
+    expect(doctorsNav?.to).toBe('/patient/doctors');
   });
 });

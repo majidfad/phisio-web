@@ -12,6 +12,8 @@ import {
   StatCard,
 } from '@/components/ui';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { PatientDoctorBanner } from '@/features/patient/doctors/components/PatientDoctorBanner';
+import { useActiveDoctor } from '@/features/patient/doctors/hooks/useActiveDoctor';
 import { usePatientTodayExercises } from '@/features/patient/exercises/hooks/usePatientExercises';
 import {
   flattenTodayExercises,
@@ -26,19 +28,21 @@ export function PatientDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data, isLoading } = usePatientTodayExercises();
+  const { approvedDoctors, isLoading: isDoctorsLoading } = useActiveDoctor();
 
   const exercises = data ? flattenTodayExercises(data) : [];
   const total = exercises.length;
   const completed = exercises.filter((e) => e.completedToday).length;
   const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
   const hasExercises = data ? hasTodayExercises(data) : false;
+  const hasLinkedDoctor = approvedDoctors.length > 0;
 
   const displayName =
     user?.name ??
     (user?.phoneNumber ? convertToPersianDigits(user.phoneNumber) : t('layout.defaultUser'));
 
   const greeting = userGreeting(t);
-  const encouragement = getEncouragementMessage(t, percent, total);
+  const encouragement = getEncouragementMessage(t, percent, total, hasLinkedDoctor);
 
   return (
     <PageContainer>
@@ -49,9 +53,13 @@ export function PatientDashboard() {
         illustration={percent === 100 && total > 0 ? 'progress' : 'recovery'}
       />
 
-      {isLoading ? <LoadingState tip={t('patient.exercises.loading')} /> : null}
+      <PatientDoctorBanner />
 
-      {!isLoading ? (
+      {isLoading || isDoctorsLoading ? (
+        <LoadingState tip={t('patient.exercises.loading')} />
+      ) : null}
+
+      {!isLoading && !isDoctorsLoading ? (
         <PageSection title={t('patient.dashboard.todayOverview')}>
           <Row gutter={[16, 16]}>
             <Col xs={24} sm={12}>
@@ -87,6 +95,61 @@ export function PatientDashboard() {
                 accent="peach"
               />
             </Col>
+
+            {!hasLinkedDoctor ? (
+              <>
+                <Col xs={24}>
+                  <FocusCard hoverable onClick={() => void navigate(routes.patient.library)}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 16,
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <div>
+                        <Typography.Title level={5} style={{ margin: 0 }}>
+                          {t('patient.dashboard.browseLibrary')}
+                        </Typography.Title>
+                        <Typography.Text type="secondary">
+                          {t('patient.dashboard.browseLibraryHint')}
+                        </Typography.Text>
+                      </div>
+                      <Button type="primary" icon={<ArrowRightOutlined />} size="large">
+                        {t('patient.dashboard.goToLibrary')}
+                      </Button>
+                    </div>
+                  </FocusCard>
+                </Col>
+                <Col xs={24}>
+                  <FocusCard hoverable onClick={() => void navigate(routes.patient.articles)}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 16,
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <div>
+                        <Typography.Title level={5} style={{ margin: 0 }}>
+                          {t('patient.dashboard.browseArticles')}
+                        </Typography.Title>
+                        <Typography.Text type="secondary">
+                          {t('patient.dashboard.browseArticlesHint')}
+                        </Typography.Text>
+                      </div>
+                      <Button type="primary" icon={<ArrowRightOutlined />} size="large">
+                        {t('patient.dashboard.goToArticles')}
+                      </Button>
+                    </div>
+                  </FocusCard>
+                </Col>
+              </>
+            ) : null}
 
             {hasExercises && completed < total ? (
               <Col xs={24}>
@@ -139,10 +202,13 @@ function getEncouragementMessage(
   t: (key: string, options?: Record<string, unknown>) => string,
   percent: number,
   total: number,
+  hasLinkedDoctor: boolean,
 ): string {
+  if (!hasLinkedDoctor) return t('patient.dashboard.noDoctorEncouragement');
   if (total === 0) return t('patient.dashboard.noExercisesToday');
   if (percent === 100) return t('patient.dashboard.allDone');
   if (percent >= 50) return t('patient.dashboard.keepGoing');
   if (percent > 0) return t('patient.dashboard.goodStart');
   return t('patient.dashboard.subtitle');
 }
+

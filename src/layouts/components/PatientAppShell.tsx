@@ -1,9 +1,12 @@
 import {
+  BookOutlined,
   HomeOutlined,
   LineChartOutlined,
   LockOutlined,
   LogoutOutlined,
   MedicineBoxOutlined,
+  ReadOutlined,
+  TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Dropdown, Grid, Layout, Typography } from 'antd';
@@ -38,6 +41,21 @@ export function PatientAppShell() {
     () => [
       { key: routes.patient.root, icon: <HomeOutlined />, label: t('layout.nav.dashboard') },
       {
+        key: routes.patient.doctors,
+        icon: <TeamOutlined />,
+        label: t('layout.nav.myDoctors'),
+      },
+      {
+        key: routes.patient.library,
+        icon: <BookOutlined />,
+        label: t('layout.nav.library'),
+      },
+      {
+        key: routes.patient.articles,
+        icon: <ReadOutlined />,
+        label: t('layout.nav.articles'),
+      },
+      {
         key: routes.patient.exercises,
         icon: <MedicineBoxOutlined />,
         label: t('layout.nav.myExercises'),
@@ -53,11 +71,17 @@ export function PatientAppShell() {
 
   const selectedKey =
     navItems.find((item) => location.pathname === item.key)?.key ??
-    (location.pathname.startsWith(routes.patient.exercises)
-      ? routes.patient.exercises
-      : location.pathname.startsWith(routes.patient.progress)
-        ? routes.patient.progress
-        : routes.patient.root);
+    (location.pathname.startsWith(routes.patient.doctors)
+      ? routes.patient.doctors
+      : location.pathname.startsWith(routes.patient.library)
+        ? routes.patient.library
+        : location.pathname.startsWith(routes.patient.articles)
+          ? routes.patient.articles
+          : location.pathname.startsWith(routes.patient.exercises)
+            ? routes.patient.exercises
+            : location.pathname.startsWith(routes.patient.progress)
+              ? routes.patient.progress
+              : routes.patient.root);
 
   const userMenuItems = [
     {

@@ -37,7 +37,21 @@ describe('patientExerciseService', () => {
     vi.mocked(httpClient.get).mockResolvedValue({ data: response });
 
     await expect(patientExerciseService.getTodayExercises()).resolves.toEqual(response);
-    expect(httpClient.get).toHaveBeenCalledWith('/patient/exercises/today');
+    expect(httpClient.get).toHaveBeenCalledWith('/patient/exercises/today', {
+      params: undefined,
+    });
+  });
+
+  it('fetches today exercises scoped to a doctor', async () => {
+    const response = { doctorGroups: [] };
+    vi.mocked(httpClient.get).mockResolvedValue({ data: response });
+
+    await expect(
+      patientExerciseService.getTodayExercises('11111111-1111-1111-1111-111111111111'),
+    ).resolves.toEqual(response);
+    expect(httpClient.get).toHaveBeenCalledWith('/patient/exercises/today', {
+      params: { doctorId: '11111111-1111-1111-1111-111111111111' },
+    });
   });
 
   it('submits bulk exercise completions', async () => {

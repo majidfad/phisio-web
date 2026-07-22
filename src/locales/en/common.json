@@ -104,6 +104,9 @@
       "users": "Users",
       "patients": "Patients",
       "myPatients": "My patients",
+      "myDoctors": "My doctors",
+      "library": "Exercise library",
+      "articles": "Articles",
       "exercises": "Exercises",
       "assignments": "Exercise report",
       "myExercises": "My exercises",
@@ -322,6 +325,54 @@
         "saveFailed": "Failed to save exercise."
       }
     },
+    "articles": {
+      "title": "Manage articles",
+      "description": "Educational articles for patients",
+      "addButton": "Add article",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No articles yet.",
+      "emptyInactive": "No inactive articles found.",
+      "columns": {
+        "title": "Title",
+        "summary": "Summary",
+        "createdAt": "Created at",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Deactivate"
+      },
+      "form": {
+        "createTitle": "Add article",
+        "editTitle": "Edit article",
+        "title": "Title",
+        "summary": "Summary",
+        "body": "Body",
+        "create": "Create",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "validation": {
+        "titleRequired": "Title is required.",
+        "titleMax": "Title must be at most 200 characters.",
+        "summaryRequired": "Summary is required.",
+        "summaryMax": "Summary must be at most 500 characters.",
+        "bodyRequired": "Body is required.",
+        "bodyMax": "Body must be at most 20000 characters."
+      },
+      "delete": {
+        "title": "Deactivate article",
+        "message": "Deactivate “{{title}}”? Patients will no longer see it.",
+        "confirm": "Deactivate",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "loadFailed": "Failed to load articles.",
+        "saveFailed": "Failed to save article."
+      }
+    },
     "assignments": {
       "title": "Exercise report",
       "description": "Assigned exercises grouped by patient and doctor",
@@ -426,26 +477,29 @@
     },
     "patients": {
       "title": "My patients",
-      "description": "Patients assigned to you",
-      "addButton": "Add patient",
-      "addTitle": "Add patient by phone number",
-      "phoneLabel": "Phone number",
-      "addSubmit": "Add",
-      "adding": "Adding…",
-      "cancel": "Cancel",
+      "description": "Approve link requests and manage your patients",
+      "requestsTitle": "Pending requests",
+      "linkedTitle": "Linked patients",
+      "emptyRequests": "No pending link requests.",
+      "approve": "Approve",
+      "reject": "Reject",
       "remove": "Remove",
       "removing": "Removing…",
       "loading": "Loading…",
       "retry": "Retry",
-      "empty": "No patients have been added to your list yet.",
+      "empty": "No patients are linked to you yet.",
       "success": {
-        "added": "Patient added successfully."
+        "approved": "Patient request approved.",
+        "rejected": "Patient request rejected.",
+        "removed": "Patient unlinked."
       },
       "columns": {
         "name": "Name",
         "phone": "Phone number",
-        "assignedAt": "Assigned at",
+        "assignedAt": "Linked at",
+        "requestedAt": "Requested at",
         "exercisePlan": "Exercise plan",
+        "exerciseHistory": "Exercise history",
         "actions": "Actions"
       },
       "exercisePlan": {
@@ -483,12 +537,99 @@
             "saveFailed": "Failed to assign exercises.",
             "noneSelected": "Select at least one exercise."
           }
+        },
+        "wizard": {
+          "title": "Assign exercise plan",
+          "close": "Close",
+          "cancel": "Cancel",
+          "back": "Back",
+          "next": "Next",
+          "confirm": "✔ Confirm and save",
+          "saving": "Saving…",
+          "success": "Exercise plan saved successfully.",
+          "progress": "Assignment steps",
+          "steps": {
+            "1": "Select dates",
+            "2": "Select exercises",
+            "3": "Confirm"
+          },
+          "dates": {
+            "calendar": "Jalali calendar",
+            "selectedTitle": "Selected dates",
+            "empty": "No dates selected yet.",
+            "previousMonth": "Previous month",
+            "nextMonth": "Next month",
+            "removeDate": "Remove date"
+          },
+          "exercises": {
+            "loading": "Loading exercises…",
+            "loadFailed": "Failed to load exercise library."
+          },
+          "confirmation": {
+            "title": "Plan summary",
+            "patient": "Patient:",
+            "dates": "Dates:",
+            "exercises": "Exercises:",
+            "hint": "After confirmation, the plan is saved for the selected dates."
+          },
+          "errors": {
+            "noDatesSelected": "Select at least one date.",
+            "noExercisesSelected": "Select at least one exercise.",
+            "saveFailed": "Failed to save exercise plan."
+          }
+        }
+      },
+      "exerciseHistory": {
+        "open": "📈 Exercise history",
+        "title": "Exercise completion history",
+        "close": "Close",
+        "loading": "Loading…",
+        "retry": "Retry",
+        "empty": "No exercise completions recorded yet.",
+        "patientInfo": "Patient info",
+        "patientName": "Patient name:",
+        "patientPhone": "Mobile number:",
+        "summaryTitle": "Adherence summary",
+        "summary": {
+          "assignedExercises": "Assigned exercises",
+          "completedDays": "Completed days",
+          "missedDays": "Missed days",
+          "adherence": "Adherence",
+          "adherenceValue": "{{value}}%"
+        },
+        "columns": {
+          "date": "Date",
+          "completedCount": "Completed exercises",
+          "improvementScore": "Improvement score",
+          "patientComment": "Patient comment"
+        },
+        "feedbackSection": "Daily patient feedback",
+        "detailFeedback": {
+          "score": "Patient score:",
+          "comment": "Patient comment:"
+        },
+        "detailColumns": {
+          "title": "Exercise name",
+          "status": "Status"
+        },
+        "status": {
+          "completed": "✅ Completed",
+          "missed": "❌ Missed"
+        },
+        "exerciseStatus": {
+          "completed": "✅",
+          "missed": "❌"
+        },
+        "errors": {
+          "loadFailed": "Failed to load exercise history."
         }
       },
       "errors": {
         "loadFailed": "Failed to load patients.",
-        "addFailed": "Failed to add patient.",
-        "phoneRequired": "Phone number is required."
+        "loadRequestsFailed": "Failed to load link requests.",
+        "approveFailed": "Failed to approve request.",
+        "rejectFailed": "Failed to reject request.",
+        "removeFailed": "Failed to unlink patient."
       }
     }
   },
@@ -510,7 +651,101 @@
       "allDone": "Amazing work today — you completed all your exercises!",
       "startExercises": "Ready for today's exercises?",
       "startExercisesHint": "Complete your assigned exercises for today",
-      "goToExercises": "Start"
+      "goToExercises": "Start",
+      "noDoctorEncouragement": "Browse exercises and articles, or find a doctor for a personal plan.",
+      "browseLibrary": "Explore general exercises",
+      "browseLibraryHint": "Watch helpful movements while you wait to link with a doctor",
+      "goToLibrary": "Open library",
+      "browseArticles": "Read articles",
+      "browseArticlesHint": "Tips and guidance available without a linked doctor",
+      "goToArticles": "Open articles"
+    },
+    "library": {
+      "title": "Exercise library",
+      "description": "General exercises you can browse anytime — even without a linked doctor.",
+      "searchPlaceholder": "Search exercises",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No exercises are available yet.",
+      "video": {
+        "play": "Play video for \"{{title}}\"",
+        "none": "—"
+      },
+      "errors": {
+        "loadFailed": "Failed to load exercise library."
+      }
+    },
+    "articles": {
+      "title": "Articles",
+      "description": "Educational tips and recovery guidance you can read anytime.",
+      "detailTitle": "Article",
+      "detailDescription": "Read the full article.",
+      "searchPlaceholder": "Search articles",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No articles are available yet.",
+      "readMore": "Read more",
+      "backToList": "Back to articles",
+      "errors": {
+        "loadFailed": "Failed to load articles."
+      }
+    },
+    "doctors": {
+      "title": "Find doctors",
+      "description": "Browse doctors, view profiles, and request a care link.",
+      "profileTitle": "Doctor profile",
+      "profileDescription": "Review details and manage your link request.",
+      "searchPlaceholder": "Search by name, specialty, or clinic",
+      "specialtyFilter": "Specialty",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "emptyDirectory": "No doctors found.",
+      "viewProfile": "View profile",
+      "backToDirectory": "Back to doctors",
+      "fields": {
+        "specialty": "Specialty",
+        "license": "Medical license",
+        "clinic": "Clinic address",
+        "phone": "Phone",
+        "status": "Link status"
+      },
+      "status": {
+        "none": "Not linked",
+        "pending": "Pending approval",
+        "approved": "Linked",
+        "rejected": "Rejected"
+      },
+      "actions": {
+        "request": "Request link",
+        "cancelRequest": "Cancel request",
+        "unlink": "Unlink"
+      },
+      "banner": {
+        "noDoctorTitle": "No doctor linked yet",
+        "noDoctorDescription": "You can browse the exercise library and articles anytime. Find a doctor when you are ready for a personal plan.",
+        "findDoctor": "Find a doctor",
+        "browseLibrary": "Exercise library",
+        "browseArticles": "Articles",
+        "pendingTitle": "Waiting for doctor approval",
+        "pendingDescription": "You have {{count}} pending link request(s).",
+        "viewRequests": "View doctors",
+        "linkedTitle": "Your doctor: {{doctorName}}",
+        "linkedSpecialty": "{{specialty}}",
+        "linkedDescription": "Exercises and progress are scoped to your selected doctor.",
+        "switchLabel": "Switch doctor",
+        "manage": "Manage"
+      },
+      "success": {
+        "requested": "Link request sent.",
+        "cancelled": "Link request cancelled.",
+        "unlinked": "Doctor unlinked."
+      },
+      "errors": {
+        "loadFailed": "Failed to load doctors.",
+        "requestFailed": "Failed to send link request.",
+        "cancelFailed": "Failed to cancel request.",
+        "unlinkFailed": "Failed to unlink doctor."
+      }
     },
     "progress": {
       "badge": "Progress",

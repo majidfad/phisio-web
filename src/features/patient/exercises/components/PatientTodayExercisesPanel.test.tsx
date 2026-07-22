@@ -52,6 +52,7 @@ describe('PatientTodayExercisesPanel', () => {
       data: {
         doctorGroups: [
           {
+            doctorId: 'doc-1',
             doctorName: 'Dr. Smith',
             exercises: [
               {
@@ -85,6 +86,7 @@ describe('PatientTodayExercisesPanel checkbox', () => {
       data: {
         doctorGroups: [
           {
+            doctorId: 'doc-1',
             doctorName: 'Dr. Smith',
             exercises: [
               {

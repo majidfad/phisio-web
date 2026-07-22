@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { exerciseCatalogService } from '@/features/exercises/services/exerciseCatalogService';
 
 import { doctorPatientService } from '../services/doctorPatientService';
-import type { AddDoctorPatientRequest } from '../types/doctor-patient';
 import type { AssignPatientExercisesRequest } from '../types/patient-exercise-plan';
 
 import { doctorPatientQueryKeys, exerciseCatalogQueryKeys } from './doctor-patient-query-keys';
@@ -15,13 +14,34 @@ export function useDoctorPatients() {
   });
 }
 
-export function useAddDoctorPatient() {
+export function useDoctorPatientRequests() {
+  return useQuery({
+    queryKey: doctorPatientQueryKeys.requests(),
+    queryFn: () => doctorPatientService.getPendingRequests(),
+  });
+}
+
+export function useApproveDoctorPatientRequest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (request: AddDoctorPatientRequest) => doctorPatientService.add(request),
+    mutationFn: (patientId: string) => doctorPatientService.approveRequest(patientId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.requests() }),
+      ]);
+    },
+  });
+}
+
+export function useRejectDoctorPatientRequest() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (patientId: string) => doctorPatientService.rejectRequest(patientId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.requests() });
     },
   });
 }

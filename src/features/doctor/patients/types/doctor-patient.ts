@@ -5,6 +5,9 @@ export interface DoctorPatientDto {
   assignedAt: string;
 }
 
-export interface AddDoctorPatientRequest {
+export interface DoctorPatientRequestDto {
+  patientId: string;
+  patientName: string;
   phoneNumber: string;
+  requestedAt: string;
 }

@@ -10,20 +10,27 @@ import type {
 const PATIENT_EXERCISES_BASE = '/patient/exercises';
 
 export const patientExerciseService = {
-  async getTodayExercises(): Promise<PatientTodayExercisesResponse> {
+  async getTodayExercises(doctorId?: string | null): Promise<PatientTodayExercisesResponse> {
     const { data } = await httpClient.get<PatientTodayExercisesResponse>(
       `${PATIENT_EXERCISES_BASE}/today`,
+      {
+        params: doctorId ? { doctorId } : undefined,
+      },
     );
     return data;
   },
 
   /** Reserved for future tabs (upcoming / history). */
-  async getExercises(scheduledDate?: string): Promise<PatientExercisesResponse> {
-    const { data } = scheduledDate
-      ? await httpClient.get<PatientExercisesResponse>(PATIENT_EXERCISES_BASE, {
-          params: { scheduledDate },
-        })
-      : await httpClient.get<PatientExercisesResponse>(PATIENT_EXERCISES_BASE);
+  async getExercises(
+    scheduledDate?: string,
+    doctorId?: string | null,
+  ): Promise<PatientExercisesResponse> {
+    const { data } = await httpClient.get<PatientExercisesResponse>(PATIENT_EXERCISES_BASE, {
+      params: {
+        ...(scheduledDate ? { scheduledDate } : {}),
+        ...(doctorId ? { doctorId } : {}),
+      },
+    });
     return data;
   },
 

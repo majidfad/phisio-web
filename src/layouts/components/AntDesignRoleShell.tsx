@@ -5,6 +5,7 @@ import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  ReadOutlined,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -27,6 +28,7 @@ const NAV_ICONS: Record<string, ReactNode> = {
   dashboard: <DashboardOutlined />,
   doctors: <TeamOutlined />,
   patients: <UserOutlined />,
+  articles: <ReadOutlined />,
   exercises: <FileTextOutlined />,
   assignments: <FileTextOutlined />,
   overview: <DashboardOutlined />,

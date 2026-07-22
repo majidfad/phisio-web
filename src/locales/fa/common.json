@@ -104,6 +104,9 @@
       "users": "کاربران",
       "patients": "بیماران",
       "myPatients": "بیماران من",
+      "myDoctors": "پزشکان من",
+      "library": "کتابخانه تمرین",
+      "articles": "مقالات",
       "exercises": "تمرین‌ها",
       "assignments": "گزارش تمرین‌ها",
       "myExercises": "تمرین‌های من",
@@ -322,6 +325,54 @@
         "saveFailed": "ثبت تمرین ناموفق بود."
       }
     },
+    "articles": {
+      "title": "مدیریت مقالات",
+      "description": "مقالات آموزشی برای بیماران",
+      "addButton": "افزودن مقاله",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز مقاله‌ای ثبت نشده است.",
+      "emptyInactive": "مقاله غیرفعالی یافت نشد.",
+      "columns": {
+        "title": "عنوان",
+        "summary": "خلاصه",
+        "createdAt": "تاریخ ثبت",
+        "status": "وضعیت",
+        "actions": "عملیات"
+      },
+      "actions": {
+        "edit": "ویرایش",
+        "delete": "غیرفعال‌سازی"
+      },
+      "form": {
+        "createTitle": "افزودن مقاله",
+        "editTitle": "ویرایش مقاله",
+        "title": "عنوان",
+        "summary": "خلاصه",
+        "body": "متن",
+        "create": "ایجاد",
+        "save": "ذخیره",
+        "cancel": "انصراف"
+      },
+      "validation": {
+        "titleRequired": "عنوان الزامی است.",
+        "titleMax": "عنوان حداکثر ۲۰۰ کاراکتر باشد.",
+        "summaryRequired": "خلاصه الزامی است.",
+        "summaryMax": "خلاصه حداکثر ۵۰۰ کاراکتر باشد.",
+        "bodyRequired": "متن الزامی است.",
+        "bodyMax": "متن حداکثر ۲۰۰۰۰ کاراکتر باشد."
+      },
+      "delete": {
+        "title": "غیرفعال‌سازی مقاله",
+        "message": "مقاله «{{title}}» غیرفعال شود؟ بیماران دیگر آن را نمی‌بینند.",
+        "confirm": "غیرفعال‌سازی",
+        "cancel": "انصراف"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری مقالات ناموفق بود.",
+        "saveFailed": "ذخیره مقاله ناموفق بود."
+      }
+    },
     "assignments": {
       "title": "گزارش تمرین‌ها",
       "description": "گزارش تمرین‌های اختصاص‌داده‌شده به بیماران بر اساس پزشک",
@@ -426,25 +477,27 @@
     },
     "patients": {
       "title": "بیماران من",
-      "description": "لیست بیماران شما",
-      "addButton": "افزودن بیمار",
-      "addTitle": "افزودن بیمار با شماره تلفن",
-      "phoneLabel": "شماره تلفن",
-      "addSubmit": "افزودن",
-      "adding": "در حال افزودن…",
-      "cancel": "انصراف",
+      "description": "تأیید درخواست‌های اتصال و مدیریت بیماران",
+      "requestsTitle": "درخواست‌های در انتظار",
+      "linkedTitle": "بیماران متصل",
+      "emptyRequests": "درخواست اتصال در انتظاری وجود ندارد.",
+      "approve": "تأیید",
+      "reject": "رد",
       "remove": "حذف",
       "removing": "در حال حذف…",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
-      "empty": "هنوز بیماری به لیست شما اضافه نشده است.",
+      "empty": "هنوز بیماری به شما متصل نیست.",
       "success": {
-        "added": "بیمار با موفقیت اضافه شد."
+        "approved": "درخواست بیمار تأیید شد.",
+        "rejected": "درخواست بیمار رد شد.",
+        "removed": "اتصال بیمار قطع شد."
       },
       "columns": {
         "name": "نام",
         "phone": "شماره تلفن",
-        "assignedAt": "تاریخ اختصاص",
+        "assignedAt": "تاریخ اتصال",
+        "requestedAt": "تاریخ درخواست",
         "exercisePlan": "برنامه تمرین‌ها",
         "exerciseHistory": "تاریخچه تمرین‌ها",
         "actions": "عملیات"
@@ -573,8 +626,10 @@
       },
       "errors": {
         "loadFailed": "بارگذاری بیماران ناموفق بود.",
-        "addFailed": "افزودن بیمار ناموفق بود.",
-        "phoneRequired": "شماره تلفن الزامی است."
+        "loadRequestsFailed": "بارگذاری درخواست‌های اتصال ناموفق بود.",
+        "approveFailed": "تأیید درخواست ناموفق بود.",
+        "rejectFailed": "رد درخواست ناموفق بود.",
+        "removeFailed": "قطع اتصال بیمار ناموفق بود."
       }
     }
   },
@@ -596,7 +651,101 @@
       "allDone": "عالی بود — همه تمرین‌های امروز را انجام دادید!",
       "startExercises": "آماده تمرین‌های امروز هستید؟",
       "startExercisesHint": "تمرین‌های اختصاص‌داده‌شده امروز را انجام دهید",
-      "goToExercises": "شروع"
+      "goToExercises": "شروع",
+      "noDoctorEncouragement": "تمرین‌ها و مقالات را ببینید، یا برای برنامه شخصی پزشک پیدا کنید.",
+      "browseLibrary": "مشاهده تمرین‌های عمومی",
+      "browseLibraryHint": "تا اتصال به پزشک، حرکات مفید را تماشا کنید",
+      "goToLibrary": "باز کردن کتابخانه",
+      "browseArticles": "خواندن مقالات",
+      "browseArticlesHint": "نکات و راهنما بدون نیاز به اتصال پزشک",
+      "goToArticles": "باز کردن مقالات"
+    },
+    "library": {
+      "title": "کتابخانه تمرین",
+      "description": "تمرین‌های عمومی که حتی بدون اتصال به پزشک هم می‌توانید ببینید.",
+      "searchPlaceholder": "جستجوی تمرین",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز تمرینی موجود نیست.",
+      "video": {
+        "play": "پخش ویدیوی «{{title}}»",
+        "none": "—"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری کتابخانه تمرین ناموفق بود."
+      }
+    },
+    "articles": {
+      "title": "مقالات",
+      "description": "نکات آموزشی و راهنمای بهبودی که هر زمان می‌توانید بخوانید.",
+      "detailTitle": "مقاله",
+      "detailDescription": "متن کامل مقاله را بخوانید.",
+      "searchPlaceholder": "جستجوی مقاله",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز مقاله‌ای موجود نیست.",
+      "readMore": "ادامه مطلب",
+      "backToList": "بازگشت به مقالات",
+      "errors": {
+        "loadFailed": "بارگذاری مقالات ناموفق بود."
+      }
+    },
+    "doctors": {
+      "title": "جستجوی پزشک",
+      "description": "پزشکان را ببینید، پروفایل را مشاهده کنید و درخواست اتصال بفرستید.",
+      "profileTitle": "پروفایل پزشک",
+      "profileDescription": "جزئیات را ببینید و وضعیت اتصال را مدیریت کنید.",
+      "searchPlaceholder": "جستجو بر اساس نام، تخصص یا کلینیک",
+      "specialtyFilter": "تخصص",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "emptyDirectory": "پزشکی یافت نشد.",
+      "viewProfile": "مشاهده پروفایل",
+      "backToDirectory": "بازگشت به فهرست پزشکان",
+      "fields": {
+        "specialty": "تخصص",
+        "license": "شماره نظام پزشکی",
+        "clinic": "آدرس کلینیک",
+        "phone": "تلفن",
+        "status": "وضعیت اتصال"
+      },
+      "status": {
+        "none": "متصل نیست",
+        "pending": "در انتظار تأیید",
+        "approved": "متصل",
+        "rejected": "رد شده"
+      },
+      "actions": {
+        "request": "درخواست اتصال",
+        "cancelRequest": "لغو درخواست",
+        "unlink": "قطع اتصال"
+      },
+      "banner": {
+        "noDoctorTitle": "هنوز به پزشکی متصل نیستید",
+        "noDoctorDescription": "هر زمان می‌توانید کتابخانه تمرین و مقالات را ببینید. برای برنامه شخصی، پزشک پیدا کنید.",
+        "findDoctor": "یافتن پزشک",
+        "browseLibrary": "کتابخانه تمرین",
+        "browseArticles": "مقالات",
+        "pendingTitle": "در انتظار تأیید پزشک",
+        "pendingDescription": "{{count}} درخواست اتصال در انتظار دارید.",
+        "viewRequests": "مشاهده پزشکان",
+        "linkedTitle": "پزشک شما: {{doctorName}}",
+        "linkedSpecialty": "{{specialty}}",
+        "linkedDescription": "تمرین و پیشرفت بر اساس پزشک انتخاب‌شده نمایش داده می‌شود.",
+        "switchLabel": "تعویض پزشک",
+        "manage": "مدیریت"
+      },
+      "success": {
+        "requested": "درخواست اتصال ارسال شد.",
+        "cancelled": "درخواست اتصال لغو شد.",
+        "unlinked": "اتصال با پزشک قطع شد."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری پزشکان ناموفق بود.",
+        "requestFailed": "ارسال درخواست اتصال ناموفق بود.",
+        "cancelFailed": "لغو درخواست ناموفق بود.",
+        "unlinkFailed": "قطع اتصال ناموفق بود."
+      }
     },
     "progress": {
       "badge": "پیشرفت",

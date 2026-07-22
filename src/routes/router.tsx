@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { AdminLayout, AuthLayout, DoctorLayout, PatientLayout, RootLayout } from '@/layouts';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
+import { ArticlesPage } from '@/pages/admin/ArticlesPage';
 import { AssignmentsPage } from '@/pages/admin/AssignmentsPage';
 import { DoctorsPage } from '@/pages/admin/DoctorsPage';
 import { ExercisesPage } from '@/pages/admin/ExercisesPage';
@@ -12,8 +13,13 @@ import { DoctorHomePage } from '@/pages/doctor/DoctorHomePage';
 import { DoctorPatientsPage } from '@/pages/doctor/DoctorPatientsPage';
 import { LoginPage } from '@/pages/login/LoginPage';
 import { RegisterPage } from '@/pages/register/RegisterPage';
+import { PatientArticleDetailPage } from '@/pages/patient/PatientArticleDetailPage';
+import { PatientArticlesPage } from '@/pages/patient/PatientArticlesPage';
+import { PatientDoctorProfilePage } from '@/pages/patient/PatientDoctorProfilePage';
+import { PatientDoctorsPage } from '@/pages/patient/PatientDoctorsPage';
 import { PatientExercisesPage } from '@/pages/patient/PatientExercisesPage';
 import { PatientHomePage } from '@/pages/patient/PatientHomePage';
+import { PatientLibraryPage } from '@/pages/patient/PatientLibraryPage';
 import { PatientProgressPage } from '@/pages/patient/PatientProgressPage';
 import { GuestRoute } from '@/routes/guards/GuestRoute';
 import { ProtectedRoute } from '@/routes/guards/ProtectedRoute';
@@ -76,6 +82,10 @@ export const router = createBrowserRouter([
                 element: <ExercisesPage />,
               },
               {
+                path: 'articles',
+                element: <ArticlesPage />,
+              },
+              {
                 path: 'assignments',
                 element: <AssignmentsPage />,
               },
@@ -116,6 +126,26 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 element: <PatientHomePage />,
+              },
+              {
+                path: 'doctors',
+                element: <PatientDoctorsPage />,
+              },
+              {
+                path: 'doctors/:doctorId',
+                element: <PatientDoctorProfilePage />,
+              },
+              {
+                path: 'library',
+                element: <PatientLibraryPage />,
+              },
+              {
+                path: 'articles',
+                element: <PatientArticlesPage />,
+              },
+              {
+                path: 'articles/:articleId',
+                element: <PatientArticleDetailPage />,
               },
               {
                 path: 'exercises',

@@ -8,6 +8,7 @@ export interface PatientTodayExerciseItemDto {
 }
 
 export interface PatientDoctorExerciseGroupDto {
+  doctorId: string;
   doctorName: string;
   exercises: PatientTodayExerciseItemDto[];
 }

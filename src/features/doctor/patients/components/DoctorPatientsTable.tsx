@@ -1,12 +1,14 @@
 import { History, LayoutDashboard, Stethoscope, Trash2 } from 'lucide-react';
-import { Button, Space, Tooltip } from 'antd';
+import { Button, Grid, Space, Tooltip, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
 import { denseIconProps } from '@/components/icons/app-icon';
-import { AppTable, AppEmpty } from '@/components/ui';
+import { AppTable, WarmEmptyState } from '@/components/ui';
 import type { DoctorPatientDto } from '@/features/doctor/patients/types/doctor-patient';
 import { formatDisplayPhone } from '@/utils/persian-format';
+
+const { Text } = Typography;
 
 interface DoctorPatientsTableProps {
   patients: DoctorPatientDto[];
@@ -39,6 +41,8 @@ export function DoctorPatientsTable({
   onOpenExerciseHistory,
 }: DoctorPatientsTableProps) {
   const { t } = useTranslation();
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md;
 
   const columns: ColumnsType<DoctorPatientDto> = [
     {
@@ -112,7 +116,48 @@ export function DoctorPatientsTable({
   ];
 
   if (patients.length === 0) {
-    return <AppEmpty description={t('doctor.patients.empty')} />;
+    return <WarmEmptyState description={t('doctor.patients.empty')} />;
+  }
+
+  if (isMobile) {
+    return (
+      <div className="patient-card-list" role="list">
+        {patients.map((patient) => (
+          <article key={patient.patientId} className="patient-card" role="listitem">
+            <div className="patient-card__body">
+              <Text strong className="patient-card__name">
+                {patient.patientName}
+              </Text>
+              <Text type="secondary" dir="ltr" className="patient-card__meta">
+                {formatDisplayPhone(patient.phoneNumber)}
+              </Text>
+              <Text type="secondary" className="patient-card__meta">
+                {formatAssignedAt(patient.assignedAt)}
+              </Text>
+            </div>
+            <div className="patient-card__actions">
+              <Button size="small" onClick={() => onOpenOverview(patient)}>
+                {t('doctor.patients.overview.open')}
+              </Button>
+              <Button size="small" type="primary" onClick={() => onOpenExercisePlan(patient)}>
+                {t('doctor.patients.exercisePlan.open')}
+              </Button>
+              <Button size="small" onClick={() => onOpenExerciseHistory(patient)}>
+                {t('doctor.patients.exerciseHistory.open')}
+              </Button>
+              <Button
+                size="small"
+                danger
+                loading={removingPatientId === patient.patientId}
+                onClick={() => onRemove(patient)}
+              >
+                {t('doctor.patients.remove')}
+              </Button>
+            </div>
+          </article>
+        ))}
+      </div>
+    );
   }
 
   return (

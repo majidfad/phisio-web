@@ -5,7 +5,7 @@
   "app": {
     "name": "Zivan",
     "tagline": "Move Better, Live Better.",
-    "authFooter": "Zivan — Move Better, Live Better."
+    "authFooter": "Move Better, Live Better."
   },
   "languages": {
     "fa": "Persian",
@@ -84,6 +84,7 @@
     "changePassword": "Change password",
     "switchToLight": "Switch to light mode",
     "switchToDark": "Switch to dark mode",
+    "appearance": "Appearance",
     "openNav": "Open navigation menu",
     "closeNav": "Close navigation menu",
     "defaultUser": "User",
@@ -110,7 +111,8 @@
       "exercises": "Exercises",
       "assignments": "Exercise report",
       "myExercises": "My exercises",
-      "progress": "Progress"
+      "progress": "Progress",
+      "more": "More"
     }
   },
   "admin": {
@@ -748,7 +750,10 @@
       "goToLibrary": "Open library",
       "browseArticles": "Read articles",
       "browseArticlesHint": "Tips and guidance available without a linked doctor",
-      "goToArticles": "Open articles"
+      "goToArticles": "Open articles",
+      "continueSession": "Continue today's session",
+      "viewProgress": "View progress",
+      "remainingCount": "{{count}} exercises remaining"
     },
     "library": {
       "title": "Exercise library",
@@ -864,6 +869,8 @@
       "submittingCompletions": "Saving…",
       "completionsRecorded": "Exercises saved successfully.",
       "completedToday": "Completed today",
+      "showChecklist": "Mark manually",
+      "hideChecklist": "Hide checklist",
       "dosage": {
         "sets": "{{count}} sets",
         "reps": "{{count}} reps",
@@ -950,7 +957,7 @@
     }
   },
   "pwa": {
-    "installPrompt": "Install Zivan for quick access",
+    "installPrompt": "Install the app for quick access",
     "install": "Install"
   }
 }

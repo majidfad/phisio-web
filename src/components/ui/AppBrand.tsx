@@ -1,30 +1,23 @@
-import { Typography } from 'antd';
-import { useTranslation } from 'react-i18next';
-
 import { ZivanLogo } from './ZivanLogo';
 
-const { Text } = Typography;
-
 interface AppBrandProps {
+  /** Kept for call-site compatibility; brand is image-only. */
   collapsed?: boolean;
   showLogo?: boolean;
+  size?: number;
 }
 
-export function AppBrand({ collapsed = false, showLogo = true }: AppBrandProps) {
-  const { t } = useTranslation();
+/** Brand mark only — no wordmark typography. */
+export function AppBrand({ showLogo = true, size = 36 }: AppBrandProps) {
+  if (!showLogo) {
+    return null;
+  }
 
   return (
-    <div className="app-sider__brand">
-      {showLogo ? (
-        <span className="app-sider__logo">
-          <ZivanLogo size={26} />
-        </span>
-      ) : null}
-      {!collapsed ? (
-        <Text strong className="app-header__brand">
-          {t('app.name')}
-        </Text>
-      ) : null}
+    <div className="app-sider__brand app-sider__brand--mark-only">
+      <span className="app-sider__logo">
+        <ZivanLogo size={size} />
+      </span>
     </div>
   );
 }

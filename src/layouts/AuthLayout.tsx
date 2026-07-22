@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { EnergyWaveBg } from '@/components/illustrations';
-import { AppBrand, ZivanLogo } from '@/components/ui';
+import { ZivanLogo } from '@/components/ui';
 
 const { Content, Footer } = Layout;
 const { Text } = Typography;
@@ -36,11 +36,8 @@ export function AuthLayout() {
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: 28, width: '100%', maxWidth: 440 }}>
-          <div className="auth-brand-icon" aria-hidden="true">
-            <ZivanLogo size={44} />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
-            <AppBrand showLogo={false} />
+          <div className="auth-brand-icon">
+            <ZivanLogo size={64} />
           </div>
           <Text style={{ fontSize: 15, color: 'var(--phisio-text-secondary)' }}>
             {t('app.tagline')}
@@ -61,7 +58,7 @@ export function AuthLayout() {
           zIndex: 1,
         }}
       >
-        <Text style={{ color: 'var(--phisio-text-secondary)' }}>{t('app.authFooter')}</Text>
+        <Text style={{ color: 'var(--phisio-text-secondary)' }}>{t('app.tagline')}</Text>
       </Footer>
     </Layout>
   );

@@ -5,6 +5,8 @@ export interface DockNavItem {
   key: string;
   icon: ReactNode;
   label: string;
+  /** When set, called instead of navigating to `key`. */
+  onSelect?: () => void;
 }
 
 interface DockNavProps {
@@ -25,11 +27,17 @@ export function DockNav({ items, selectedKey, ariaLabel }: DockNavProps) {
             key={item.key}
             type="button"
             className={`dock-nav__item touch-target${active ? ' dock-nav__item--active' : ''}`}
-            onClick={() => void navigate(item.key)}
+            onClick={() => {
+              if (item.onSelect) {
+                item.onSelect();
+                return;
+              }
+              void navigate(item.key);
+            }}
             aria-current={active ? 'page' : undefined}
           >
             <span className="dock-nav__icon">{item.icon}</span>
-            <span>{item.label}</span>
+            <span className="dock-nav__label">{item.label}</span>
           </button>
         );
       })}

@@ -1,4 +1,4 @@
-import { Button, Drawer, Space, Tag, Typography } from 'antd';
+import { Button, Drawer, Progress, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { patientExerciseService } from '@/features/patient/exercises/services/pa
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
+import { formatPersianNumber } from '@/utils/persian-format';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -35,6 +36,7 @@ export function PatientExerciseSession({
   const current = exercises[index] ?? null;
   const total = exercises.length;
   const isLast = index >= total - 1;
+  const progressPercent = total > 0 ? Math.round(((index + 1) / total) * 100) : 0;
 
   const finishSession = (didCompleteAny: boolean) => {
     onClose();
@@ -86,15 +88,32 @@ export function PatientExerciseSession({
     finishSession(completedCount > 0);
   };
 
+  const dosageLine = current
+    ? [
+        current.sets ? t('patient.exercises.dosage.sets', { count: current.sets }) : null,
+        current.reps ? t('patient.exercises.dosage.reps', { count: current.reps }) : null,
+        current.holdSeconds
+          ? t('patient.exercises.dosage.hold', { count: current.holdSeconds })
+          : null,
+        current.restSeconds
+          ? t('patient.exercises.dosage.rest', { count: current.restSeconds })
+          : null,
+        current.side ? t(`exerciseMeta.side.${current.side}`) : null,
+      ]
+        .filter(Boolean)
+        .join(' · ')
+    : '';
+
   return (
     <Drawer
       open={open}
       onClose={handleExit}
       placement="bottom"
-      height="92%"
+      height="94%"
       title={t('patient.exercises.session.title')}
       destroyOnHidden
-      styles={{ body: { display: 'flex', flexDirection: 'column', gap: 16 } }}
+      className="exercise-session-drawer"
+      styles={{ body: { display: 'flex', flexDirection: 'column', gap: 14, paddingTop: 8 } }}
       extra={
         <Button type="text" onClick={handleExit} disabled={isCompleting}>
           {t('patient.exercises.session.exit')}
@@ -105,46 +124,40 @@ export function PatientExerciseSession({
         <Text type="secondary">{t('patient.exercises.session.allDone')}</Text>
       ) : (
         <>
-          <Text type="secondary">
-            {t('patient.exercises.session.progress', { current: index + 1, total })}
-          </Text>
+          <div className="exercise-session__progress">
+            <Text type="secondary">
+              {t('patient.exercises.session.progress', {
+                current: formatPersianNumber(index + 1),
+                total: formatPersianNumber(total),
+              })}
+            </Text>
+            <Progress
+              percent={progressPercent}
+              showInfo={false}
+              strokeColor="var(--phisio-primary)"
+              trailColor="var(--phisio-border)"
+              strokeWidth={8}
+            />
+          </div>
 
           <Title level={4} style={{ margin: 0 }}>
             {current.title}
           </Title>
 
-          <ExerciseMediaPlayer
-            title={current.title}
-            videoUrl={current.videoUrl}
-            mediaType={current.mediaType}
-            autoPlay
-          />
+          <div className="exercise-session__media">
+            <ExerciseMediaPlayer
+              title={current.title}
+              videoUrl={current.videoUrl}
+              mediaType={current.mediaType}
+              autoPlay
+            />
+          </div>
 
-          <Space wrap size={[6, 6]}>
-            {current.sets ? (
-              <Tag className="exercise-dosage-chip">
-                {t('patient.exercises.dosage.sets', { count: current.sets })}
-              </Tag>
-            ) : null}
-            {current.reps ? (
-              <Tag className="exercise-dosage-chip">
-                {t('patient.exercises.dosage.reps', { count: current.reps })}
-              </Tag>
-            ) : null}
-            {current.holdSeconds ? (
-              <Tag className="exercise-dosage-chip">
-                {t('patient.exercises.dosage.hold', { count: current.holdSeconds })}
-              </Tag>
-            ) : null}
-            {current.restSeconds ? (
-              <Tag className="exercise-dosage-chip">
-                {t('patient.exercises.dosage.rest', { count: current.restSeconds })}
-              </Tag>
-            ) : null}
-            {current.side ? (
-              <Tag className="exercise-dosage-chip">{t(`exerciseMeta.side.${current.side}`)}</Tag>
-            ) : null}
-          </Space>
+          {dosageLine ? (
+            <Text type="secondary" className="exercise-session__dosage">
+              {dosageLine}
+            </Text>
+          ) : null}
 
           {current.patientCue ? (
             <Paragraph style={{ marginBottom: 0 }}>{current.patientCue}</Paragraph>
@@ -155,7 +168,7 @@ export function PatientExerciseSession({
             </Paragraph>
           ) : null}
 
-          <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="exercise-session__actions">
             <Button
               type="primary"
               size="large"

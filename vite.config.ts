@@ -11,24 +11,23 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/zivan-icon.svg', 'icons/apple-touch-icon.png'],
+      includeAssets: [
+        'favicon.png',
+        'favicon.svg',
+        'brand/zivan-mark.png',
+        'icons/apple-touch-icon.png',
+      ],
       manifest: {
         name: 'Zivan',
         short_name: 'Zivan',
         description: 'Zivan — Move Better, Live Better.',
-        theme_color: '#2563eb',
+        theme_color: '#2e5bcc',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
         icons: [
-          {
-            src: 'icons/zivan-icon.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'any',
-          },
           {
             src: 'icons/zivan-192.png',
             sizes: '192x192',

@@ -17,7 +17,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
 import { NavCard } from '@/components/navigation/NavCard';
-import { AppBrand, ThemeToggleButton, ZivanLogo } from '@/components/ui';
+import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -152,12 +152,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
                 aria-label={t('layout.openNav')}
               />
             ) : null}
-            {isMobile ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ZivanLogo size={28} />
-                <span className="app-header__brand">{t('app.name')}</span>
-              </div>
-            ) : null}
+            {isMobile ? <AppBrand size={28} /> : null}
             <Tag
               style={{
                 margin: 0,

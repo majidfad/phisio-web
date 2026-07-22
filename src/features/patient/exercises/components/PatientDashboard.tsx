@@ -1,19 +1,11 @@
-import { ArrowRight } from 'lucide-react';
-import { Button, Card, Col, Progress, Row, Statistic, Typography } from 'antd';
+import { BookOpen, Book, Stethoscope } from 'lucide-react';
+import { Button, Progress, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
-import {
-  FocusCard,
-  HeroCard,
-  LoadingState,
-  PageContainer,
-  PageSection,
-  StatCard,
-} from '@/components/ui';
+import { LoadingState, PageContainer, WarmEmptyState } from '@/components/ui';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { PatientDoctorBanner } from '@/features/patient/doctors/components/PatientDoctorBanner';
 import { useActiveDoctor } from '@/features/patient/doctors/hooks/useActiveDoctor';
 import { usePatientTodayExercises } from '@/features/patient/exercises/hooks/usePatientExercises';
 import {
@@ -21,15 +13,16 @@ import {
   hasTodayExercises,
 } from '@/features/patient/exercises/types/patient-exercise';
 import { routes } from '@/routes/routes';
-import { PHISIO_COLORS } from '@/theme/phisio-theme';
 import { convertToPersianDigits, formatPersianNumber } from '@/utils/persian-format';
+
+const { Text, Title } = Typography;
 
 export function PatientDashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data, isLoading } = usePatientTodayExercises();
-  const { approvedDoctors, isLoading: isDoctorsLoading } = useActiveDoctor();
+  const { activeDoctor, approvedDoctors, isLoading: isDoctorsLoading } = useActiveDoctor();
 
   const exercises = data ? flattenTodayExercises(data) : [];
   const total = exercises.length;
@@ -37,6 +30,8 @@ export function PatientDashboard() {
   const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
   const hasExercises = data ? hasTodayExercises(data) : false;
   const hasLinkedDoctor = approvedDoctors.length > 0;
+  const remaining = Math.max(total - completed, 0);
+  const allDone = hasExercises && completed === total && total > 0;
 
   const displayName =
     user?.name ??
@@ -47,145 +42,112 @@ export function PatientDashboard() {
 
   return (
     <PageContainer>
-      <HeroCard
-        badge={t('patient.dashboard.badge')}
-        title={t('patient.dashboard.greetingWithName', { name: displayName, greeting })}
-        description={encouragement}
-        illustration={percent === 100 && total > 0 ? 'progress' : 'recovery'}
-      />
+      <section className="home-today" aria-label={t('patient.dashboard.todayOverview')}>
+        <div className="home-today__greeting">
+          <Title level={3} className="home-today__title">
+            {t('patient.dashboard.greetingWithName', { name: displayName, greeting })}
+          </Title>
+          <Text type="secondary" className="home-today__subtitle">
+            {encouragement}
+          </Text>
+        </div>
 
-      <PatientDoctorBanner />
+        {hasLinkedDoctor && activeDoctor ? (
+          <Link to={routes.patient.doctors} className="home-doctor-chip">
+            <span className="home-doctor-chip__label">
+              {t('patient.dashboard.treatingDoctor', { doctorName: activeDoctor.name })}
+            </span>
+            <span className="home-doctor-chip__action">{t('patient.doctors.banner.manage')}</span>
+          </Link>
+        ) : null}
 
-      {isLoading || isDoctorsLoading ? <LoadingState tip={t('patient.exercises.loading')} /> : null}
+        {isLoading || isDoctorsLoading ? (
+          <LoadingState tip={t('patient.exercises.loading')} />
+        ) : null}
 
-      {!isLoading && !isDoctorsLoading ? (
-        <PageSection title={t('patient.dashboard.todayOverview')}>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12}>
-              <Card
-                className="energy-stat-card energy-progress-card"
-                styles={{ body: { padding: 24 } }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-                  <Progress
-                    type="circle"
-                    percent={percent}
-                    format={(p) => formatPersianNumber(p ?? 0)}
-                    strokeColor={{
-                      '0%': PHISIO_COLORS.primary,
-                      '100%': PHISIO_COLORS.teal,
-                    }}
-                    size={108}
-                    strokeWidth={8}
-                  />
-                  <Statistic
-                    title={t('patient.dashboard.completedToday')}
-                    value={formatPersianNumber(completed)}
-                    suffix={`/ ${formatPersianNumber(total)}`}
-                  />
-                </div>
-              </Card>
-            </Col>
+        {!isLoading && !isDoctorsLoading && !hasLinkedDoctor ? (
+          <WarmEmptyState
+            lucideIcon={Stethoscope}
+            title={t('patient.doctors.banner.noDoctorTitle')}
+            description={t('patient.dashboard.noDoctorEncouragement')}
+            action={
+              <div className="home-today__actions">
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => void navigate(routes.patient.doctors)}
+                >
+                  {t('patient.doctors.banner.findDoctor')}
+                </Button>
+                <Button
+                  size="large"
+                  icon={<Book {...appIconProps} />}
+                  onClick={() => void navigate(routes.patient.library)}
+                >
+                  {t('patient.dashboard.goToLibrary')}
+                </Button>
+                <Button
+                  size="large"
+                  icon={<BookOpen {...appIconProps} />}
+                  onClick={() => void navigate(routes.patient.articles)}
+                >
+                  {t('patient.dashboard.goToArticles')}
+                </Button>
+              </div>
+            }
+          />
+        ) : null}
 
-            <Col xs={24} sm={12}>
-              <StatCard
-                label={t('patient.dashboard.remaining')}
-                value={formatPersianNumber(total - completed)}
-                accent="peach"
+        {!isLoading && !isDoctorsLoading && hasLinkedDoctor && !hasExercises ? (
+          <WarmEmptyState
+            title={t('patient.exercises.emptyTodayTitle')}
+            description={t('patient.dashboard.noExercisesToday')}
+          />
+        ) : null}
+
+        {!isLoading && !isDoctorsLoading && hasExercises ? (
+          <div className="home-session-card">
+            <div className="home-session-card__progress">
+              <div className="home-session-card__stats">
+                <Text strong>
+                  {t('patient.dashboard.completedToday')}: {formatPersianNumber(completed)} /{' '}
+                  {formatPersianNumber(total)}
+                </Text>
+                <Text type="secondary">
+                  {allDone
+                    ? t('patient.dashboard.allDone')
+                    : t('patient.dashboard.remainingCount', { count: remaining })}
+                </Text>
+              </div>
+              <Progress
+                percent={percent}
+                showInfo={false}
+                strokeColor="var(--phisio-primary)"
+                trailColor="var(--phisio-border)"
+                strokeWidth={10}
               />
-            </Col>
+            </div>
 
-            {!hasLinkedDoctor ? (
-              <>
-                <Col xs={24}>
-                  <FocusCard hoverable onClick={() => void navigate(routes.patient.library)}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 16,
-                        flexWrap: 'wrap',
-                      }}
-                    >
-                      <div>
-                        <Typography.Title level={5} style={{ margin: 0 }}>
-                          {t('patient.dashboard.browseLibrary')}
-                        </Typography.Title>
-                        <Typography.Text type="secondary">
-                          {t('patient.dashboard.browseLibraryHint')}
-                        </Typography.Text>
-                      </div>
-                      <Button type="primary" icon={<ArrowRight {...appIconProps} />} size="large">
-                        {t('patient.dashboard.goToLibrary')}
-                      </Button>
-                    </div>
-                  </FocusCard>
-                </Col>
-                <Col xs={24}>
-                  <FocusCard hoverable onClick={() => void navigate(routes.patient.articles)}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 16,
-                        flexWrap: 'wrap',
-                      }}
-                    >
-                      <div>
-                        <Typography.Title level={5} style={{ margin: 0 }}>
-                          {t('patient.dashboard.browseArticles')}
-                        </Typography.Title>
-                        <Typography.Text type="secondary">
-                          {t('patient.dashboard.browseArticlesHint')}
-                        </Typography.Text>
-                      </div>
-                      <Button type="primary" icon={<ArrowRight {...appIconProps} />} size="large">
-                        {t('patient.dashboard.goToArticles')}
-                      </Button>
-                    </div>
-                  </FocusCard>
-                </Col>
-              </>
-            ) : null}
-
-            {hasExercises && completed < total ? (
-              <Col xs={24}>
-                <FocusCard hoverable onClick={() => void navigate(routes.patient.exercises)}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 16,
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <div>
-                      <Typography.Title level={5} style={{ margin: 0 }}>
-                        {t('patient.dashboard.startExercises')}
-                      </Typography.Title>
-                      <Typography.Text type="secondary">
-                        {t('patient.dashboard.startExercisesHint')}
-                      </Typography.Text>
-                    </div>
-                    <Button type="primary" icon={<ArrowRight {...appIconProps} />} size="large">
-                      {t('patient.dashboard.goToExercises')}
-                    </Button>
-                  </div>
-                </FocusCard>
-              </Col>
-            ) : null}
-
-            {hasExercises && completed === total && total > 0 ? (
-              <Col xs={24}>
-                <StatCard label={t('patient.dashboard.allDone')} value="✓" accent="mint" />
-              </Col>
-            ) : null}
-          </Row>
-        </PageSection>
-      ) : null}
+            {allDone ? (
+              <Button size="large" block onClick={() => void navigate(routes.patient.progress)}>
+                {t('patient.dashboard.viewProgress')}
+              </Button>
+            ) : (
+              <Button
+                type="primary"
+                size="large"
+                block
+                className="touch-target"
+                onClick={() => void navigate(routes.patient.exercises)}
+              >
+                {completed > 0
+                  ? t('patient.dashboard.continueSession')
+                  : t('patient.exercises.session.start')}
+              </Button>
+            )}
+          </div>
+        ) : null}
+      </section>
     </PageContainer>
   );
 }

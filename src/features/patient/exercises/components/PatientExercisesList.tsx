@@ -45,6 +45,7 @@ export function PatientExercisesList({
   const [sessionQueue, setSessionQueue] = useState<PatientTodayExerciseItemDto[]>([]);
   const [sessionKey, setSessionKey] = useState(0);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [showChecklist, setShowChecklist] = useState(false);
 
   const sanitizedPendingIds = useMemo(() => {
     const completedTodayIds = new Set(
@@ -131,18 +132,29 @@ export function PatientExercisesList({
           </Button>
         ) : null}
 
+        <Button
+          type="link"
+          style={{ paddingInline: 0 }}
+          onClick={() => setShowChecklist((v) => !v)}
+        >
+          {showChecklist
+            ? t('patient.exercises.hideChecklist')
+            : t('patient.exercises.showChecklist')}
+        </Button>
+
         {doctorGroups.map((group) => (
           <section key={group.doctorId}>
             <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>
               {t('patient.dashboard.treatingDoctor', { doctorName: group.doctorName })}
             </Text>
-            <div role="list">
+            <div className="exercise-list" role="list">
               {group.exercises.map((exercise) => (
                 <div key={exercise.userExerciseId} role="listitem">
                   <PatientExerciseListItem
                     exercise={exercise}
                     isChecked={isExerciseCheckboxChecked(exercise, sanitizedPendingIds)}
-                    isDisabled={exercise.completedToday || isSubmitting}
+                    isDisabled={!showChecklist || exercise.completedToday || isSubmitting}
+                    showCheckbox={showChecklist}
                     onToggle={(item, checked) => handleToggle(item, checked)}
                     onPlay={handlePlay}
                   />
@@ -153,21 +165,23 @@ export function PatientExercisesList({
         ))}
       </Space>
 
-      <div style={{ marginTop: 24, position: 'sticky', bottom: 72 }}>
-        <Button
-          type="default"
-          block
-          size="large"
-          disabled={submittableIds.length === 0 || isSubmitting}
-          loading={isSubmitting}
-          onClick={() => void handleSubmit()}
-          className="touch-target"
-        >
-          {isSubmitting
-            ? t('patient.exercises.submittingCompletions')
-            : t('patient.exercises.submitCompletions')}
-        </Button>
-      </div>
+      {showChecklist ? (
+        <div className="patient-sticky-cta">
+          <Button
+            type="default"
+            block
+            size="large"
+            disabled={submittableIds.length === 0 || isSubmitting}
+            loading={isSubmitting}
+            onClick={() => void handleSubmit()}
+            className="touch-target"
+          >
+            {isSubmitting
+              ? t('patient.exercises.submittingCompletions')
+              : t('patient.exercises.submitCompletions')}
+          </Button>
+        </div>
+      ) : null}
 
       <PatientExerciseSession
         key={sessionKey}

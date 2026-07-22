@@ -262,6 +262,19 @@
   line-height: 1;
 }
 
+.dock-nav__label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 400px) {
+  .dock-nav__label {
+    font-size: 10px;
+  }
+}
+
 /* Dashboard action cards */
 .action-card {
   display: flex;
@@ -330,11 +343,9 @@
   height: 72px;
   margin: 0 auto 16px;
   border-radius: 20px;
-  background: var(--phisio-surface);
-  border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card);
-  color: var(--phisio-primary);
-  font-size: 32px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 @media (max-width: 576px) {

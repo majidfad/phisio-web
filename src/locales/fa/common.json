@@ -5,7 +5,7 @@
   "app": {
     "name": "زیوان",
     "tagline": "بهتر حرکت کن، بهتر زندگی کن.",
-    "authFooter": "زیوان — بهتر حرکت کن، بهتر زندگی کن."
+    "authFooter": "بهتر حرکت کن، بهتر زندگی کن."
   },
   "languages": {
     "fa": "فارسی",
@@ -84,6 +84,7 @@
     "changePassword": "تغییر رمز عبور",
     "switchToLight": "تغییر به حالت روشن",
     "switchToDark": "تغییر به حالت تاریک",
+    "appearance": "ظاهر",
     "openNav": "باز کردن منوی ناوبری",
     "closeNav": "بستن منوی ناوبری",
     "defaultUser": "کاربر",
@@ -110,7 +111,8 @@
       "exercises": "تمرین‌ها",
       "assignments": "گزارش تمرین‌ها",
       "myExercises": "تمرین‌های من",
-      "progress": "پیشرفت"
+      "progress": "پیشرفت",
+      "more": "بیشتر"
     }
   },
   "admin": {
@@ -742,7 +744,10 @@
       "goToLibrary": "باز کردن کتابخانه",
       "browseArticles": "خواندن مقالات",
       "browseArticlesHint": "نکات و راهنما بدون نیاز به اتصال پزشک",
-      "goToArticles": "باز کردن مقالات"
+      "goToArticles": "باز کردن مقالات",
+      "continueSession": "ادامه جلسه امروز",
+      "viewProgress": "مشاهده پیشرفت",
+      "remainingCount": "{{count}} تمرین باقی مانده"
     },
     "library": {
       "title": "کتابخانه تمرین",
@@ -858,6 +863,8 @@
       "submittingCompletions": "در حال ثبت…",
       "completionsRecorded": "تمرین ها با موفقیت ثبت شدند.",
       "completedToday": "امروز انجام شده",
+      "showChecklist": "علامت‌گذاری دستی",
+      "hideChecklist": "بستن فهرست",
       "dosage": {
         "sets": "{{count}} ست",
         "reps": "{{count}} تکرار",
@@ -944,7 +951,7 @@
     }
   },
   "pwa": {
-    "installPrompt": "زیوان را نصب کنید برای دسترسی سریع",
+    "installPrompt": "اپ را نصب کنید برای دسترسی سریع",
     "install": "نصب"
   }
 }

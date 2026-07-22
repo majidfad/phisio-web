@@ -54,7 +54,18 @@ export function PwaInstallPrompt() {
       <div
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
       >
-        <span style={{ fontSize: 14, color: 'var(--phisio-text)' }}>{t('pwa.installPrompt')}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+          <img
+            src="/brand/zivan-mark.png"
+            alt=""
+            width={36}
+            height={36}
+            style={{ flexShrink: 0, objectFit: 'contain' }}
+          />
+          <span style={{ fontSize: 14, color: 'var(--phisio-text)' }}>
+            {t('pwa.installPrompt')}
+          </span>
+        </div>
         <Button
           type="primary"
           icon={<Download {...appIconProps} />}

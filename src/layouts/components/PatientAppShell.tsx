@@ -2,6 +2,7 @@ import {
   Book,
   BookOpen,
   BarChart3,
+  Ellipsis,
   Home,
   Lock,
   LogOut,
@@ -9,10 +10,10 @@ import {
   Users,
   User,
 } from 'lucide-react';
-import { Avatar, Dropdown, Grid, Layout, Typography } from 'antd';
-import { useMemo, useState } from 'react';
+import { Avatar, Drawer, Dropdown, Grid, Layout, List } from 'antd';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
 import { DockNav } from '@/components/navigation';
@@ -26,19 +27,29 @@ import { convertToPersianDigits } from '@/utils/persian-format';
 
 const { Header, Content, Sider } = Layout;
 
+const MORE_KEY = '__more__';
+
+interface ShellNavItem {
+  key: string;
+  icon: ReactNode;
+  label: string;
+}
+
 export function PatientAppShell() {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.lg;
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   const displayName =
     user?.name ??
     (user?.phoneNumber ? convertToPersianDigits(user.phoneNumber) : t('layout.defaultUser'));
 
-  const navItems = useMemo(
+  const allNavItems = useMemo<ShellNavItem[]>(
     () => [
       {
         key: routes.patient.root,
@@ -46,9 +57,19 @@ export function PatientAppShell() {
         label: t('layout.nav.dashboard'),
       },
       {
+        key: routes.patient.exercises,
+        icon: <Stethoscope {...appIconProps} />,
+        label: t('layout.nav.myExercises'),
+      },
+      {
         key: routes.patient.doctors,
         icon: <Users {...appIconProps} />,
         label: t('layout.nav.myDoctors'),
+      },
+      {
+        key: routes.patient.progress,
+        icon: <BarChart3 {...appIconProps} />,
+        label: t('layout.nav.progress'),
       },
       {
         key: routes.patient.library,
@@ -60,33 +81,58 @@ export function PatientAppShell() {
         icon: <BookOpen {...appIconProps} />,
         label: t('layout.nav.articles'),
       },
-      {
-        key: routes.patient.exercises,
-        icon: <Stethoscope {...appIconProps} />,
-        label: t('layout.nav.myExercises'),
-      },
-      {
-        key: routes.patient.progress,
-        icon: <BarChart3 {...appIconProps} />,
-        label: t('layout.nav.progress'),
-      },
     ],
     [t],
   );
 
-  const selectedKey =
-    navItems.find((item) => location.pathname === item.key)?.key ??
-    (location.pathname.startsWith(routes.patient.doctors)
-      ? routes.patient.doctors
-      : location.pathname.startsWith(routes.patient.library)
-        ? routes.patient.library
-        : location.pathname.startsWith(routes.patient.articles)
-          ? routes.patient.articles
-          : location.pathname.startsWith(routes.patient.exercises)
-            ? routes.patient.exercises
-            : location.pathname.startsWith(routes.patient.progress)
-              ? routes.patient.progress
-              : routes.patient.root);
+  const primaryKeys = useMemo(
+    () =>
+      new Set([
+        routes.patient.root,
+        routes.patient.exercises,
+        routes.patient.doctors,
+        routes.patient.progress,
+      ]),
+    [],
+  );
+
+  const primaryNavItems = useMemo(
+    () => allNavItems.filter((item) => primaryKeys.has(item.key)),
+    [allNavItems, primaryKeys],
+  );
+
+  const moreNavItems = useMemo(
+    () => allNavItems.filter((item) => !primaryKeys.has(item.key)),
+    [allNavItems, primaryKeys],
+  );
+
+  const selectedKey = useMemo(() => {
+    const exact = allNavItems.find((item) => location.pathname === item.key)?.key;
+    if (exact) {
+      return exact;
+    }
+    if (location.pathname.startsWith(routes.patient.doctors)) return routes.patient.doctors;
+    if (location.pathname.startsWith(routes.patient.library)) return routes.patient.library;
+    if (location.pathname.startsWith(routes.patient.articles)) return routes.patient.articles;
+    if (location.pathname.startsWith(routes.patient.exercises)) return routes.patient.exercises;
+    if (location.pathname.startsWith(routes.patient.progress)) return routes.patient.progress;
+    return routes.patient.root;
+  }, [allNavItems, location.pathname]);
+
+  const moreSelected = moreNavItems.some((item) => item.key === selectedKey);
+
+  const dockItems = useMemo(
+    () => [
+      ...primaryNavItems,
+      {
+        key: MORE_KEY,
+        icon: <Ellipsis {...appIconProps} />,
+        label: t('layout.nav.more'),
+        onSelect: () => setMoreOpen(true),
+      },
+    ],
+    [primaryNavItems, t],
+  );
 
   const userMenuItems = [
     {
@@ -107,27 +153,17 @@ export function PatientAppShell() {
   return (
     <Layout className={patientLayoutConfig.layoutClassName} style={{ minHeight: '100vh' }}>
       <Header className="app-header safe-area-top">
-        <AppBrand showLogo={false} />
+        <AppBrand size={isMobile ? 32 : 36} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <ThemeToggleButton />
+          {!isMobile ? <ThemeToggleButton /> : null}
           <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
             <button
               type="button"
-              className="touch-target touch-active"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-                padding: '4px 8px',
-                color: 'var(--phisio-text)',
-              }}
+              className="touch-target touch-active app-header__user"
               aria-label={displayName}
             >
               <Avatar
-                size={38}
+                size={isMobile ? 36 : 38}
                 style={{
                   background: 'var(--phisio-primary-soft)',
                   color: 'var(--phisio-primary)',
@@ -135,12 +171,7 @@ export function PatientAppShell() {
                 }}
                 icon={<User {...appIconProps} />}
               />
-              <Typography.Text
-                ellipsis
-                style={{ maxWidth: 120, fontWeight: 600, color: 'inherit' }}
-              >
-                {displayName}
-              </Typography.Text>
+              {!isMobile ? <span className="app-header__user-name">{displayName}</span> : null}
             </button>
           </Dropdown>
         </div>
@@ -149,9 +180,8 @@ export function PatientAppShell() {
       <Layout>
         {!isMobile ? (
           <Sider width={260} className="app-sider">
-            <AppBrand />
-            <nav aria-label={t(patientLayoutConfig.navAriaLabelKey)}>
-              {navItems.map((item) => (
+            <nav aria-label={t(patientLayoutConfig.navAriaLabelKey)} style={{ paddingTop: 8 }}>
+              {allNavItems.map((item) => (
                 <NavCard
                   key={item.key}
                   to={item.key}
@@ -173,11 +203,40 @@ export function PatientAppShell() {
 
       {isMobile ? (
         <DockNav
-          items={navItems}
-          selectedKey={selectedKey}
+          items={dockItems}
+          selectedKey={moreSelected ? MORE_KEY : selectedKey}
           ariaLabel={t(patientLayoutConfig.navAriaLabelKey)}
         />
       ) : null}
+
+      <Drawer
+        title={t('layout.nav.more')}
+        open={moreOpen}
+        onClose={() => setMoreOpen(false)}
+        placement="bottom"
+        height="auto"
+        className="patient-more-drawer"
+        destroyOnHidden
+      >
+        <List
+          dataSource={moreNavItems}
+          renderItem={(item) => (
+            <List.Item
+              className="patient-more-drawer__item touch-target touch-active"
+              onClick={() => {
+                setMoreOpen(false);
+                void navigate(item.key);
+              }}
+            >
+              <List.Item.Meta avatar={item.icon} title={item.label} />
+            </List.Item>
+          )}
+        />
+        <div className="patient-more-drawer__theme">
+          <ThemeToggleButton />
+          <span>{t('layout.appearance')}</span>
+        </div>
+      </Drawer>
 
       <ChangePasswordModal open={changePasswordOpen} onClose={() => setChangePasswordOpen(false)} />
     </Layout>

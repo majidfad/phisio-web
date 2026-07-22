@@ -20,6 +20,32 @@
   letter-spacing: -0.02em;
 }
 
+.app-header__mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.app-header__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--phisio-text);
+}
+
+.app-header__user-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
 .app-content {
   padding: var(--phisio-content-padding);
   width: 100%;
@@ -47,6 +73,15 @@
   padding: 16px 8px 20px;
 }
 
+.app-sider__brand--mark-only {
+  justify-content: center;
+  padding: 12px 8px 16px;
+}
+
+.app-header .app-sider__brand {
+  padding: 0;
+}
+
 .app-sider__logo {
   display: flex;
   align-items: center;
@@ -54,13 +89,10 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: var(--phisio-bg-elevated);
-  border: 1px solid var(--phisio-border);
-  color: var(--phisio-primary);
-  font-weight: 800;
-  font-size: 17px;
-  box-shadow: none;
-  overflow: hidden;
+  background: transparent;
+  border: none;
+  overflow: visible;
+  flex-shrink: 0;
 }
 
 .app-page {
@@ -237,3 +269,292 @@
 .status-panel--empty {
   border-style: dashed;
 }
+
+.patient-more-drawer .ant-drawer-body {
+  padding-top: 8px;
+}
+
+.patient-more-drawer__item {
+  cursor: pointer;
+  border-radius: var(--phisio-radius);
+  padding-inline: 8px !important;
+}
+
+.patient-more-drawer__item:hover {
+  background: var(--phisio-primary-soft);
+}
+
+.patient-more-drawer__theme {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px;
+  border-top: 1px solid var(--phisio-border);
+  color: var(--phisio-text-secondary);
+  font-weight: 600;
+}
+
+@media (max-width: 576px) {
+  .status-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-panel__actions {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+
+  .status-panel__actions .ant-btn,
+  .status-panel__actions a {
+    flex: 1;
+  }
+
+  .status-panel__actions a {
+    display: flex;
+  }
+
+  .status-panel__actions a .ant-btn {
+    width: 100%;
+  }
+
+  .status-panel__title-row .ant-select {
+    width: 100%;
+    min-width: 0 !important;
+  }
+}
+
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exercise-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 12px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius);
+  background: var(--phisio-surface);
+}
+
+.exercise-row--completed {
+  border-color: rgba(72, 201, 176, 0.35);
+  background: var(--phisio-gradient-success-card);
+}
+
+.exercise-row__check {
+  margin-top: 2px;
+}
+
+.exercise-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.exercise-row__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.exercise-row__done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--phisio-accent);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.exercise-row__dosage {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.exercise-row__cue {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.exercise-row__play {
+  flex-shrink: 0;
+  color: var(--phisio-primary) !important;
+}
+
+.exercise-row__thumb {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid var(--phisio-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--phisio-bg-elevated);
+  cursor: pointer;
+}
+
+.exercise-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Patient home — session-first */
+.home-today {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home-today__title {
+  margin: 0 !important;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.home-today__subtitle {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.home-doctor-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--phisio-border);
+  border-radius: 999px;
+  background: var(--phisio-surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-doctor-chip__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--phisio-text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-doctor-chip__action {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--phisio-primary);
+}
+
+.home-session-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 16px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-lg);
+  background: var(--phisio-surface);
+}
+
+.home-session-card__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.home-today__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.energy-empty__action {
+  margin-top: 16px;
+}
+
+/* Doctor patient cards (mobile) */
+.patient-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.patient-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius);
+  background: var(--phisio-surface);
+}
+
+.patient-card__name {
+  display: block;
+  font-size: 16px;
+}
+
+.patient-card__meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.patient-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.patient-card__actions .ant-btn {
+  flex: 1 1 calc(50% - 8px);
+}
+
+/* Guided session */
+.exercise-session__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exercise-session__media {
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--phisio-bg-elevated);
+}
+
+.exercise-session__media video,
+.exercise-session__media img,
+.exercise-session__media iframe {
+  max-height: min(52vh, 420px) !important;
+}
+
+.exercise-session__dosage {
+  display: block;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.exercise-session__actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+}
+

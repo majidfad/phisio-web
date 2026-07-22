@@ -55,9 +55,7 @@ export function PatientDashboard() {
 
       <PatientDoctorBanner />
 
-      {isLoading || isDoctorsLoading ? (
-        <LoadingState tip={t('patient.exercises.loading')} />
-      ) : null}
+      {isLoading || isDoctorsLoading ? <LoadingState tip={t('patient.exercises.loading')} /> : null}
 
       {!isLoading && !isDoctorsLoading ? (
         <PageSection title={t('patient.dashboard.todayOverview')}>
@@ -211,4 +209,3 @@ function getEncouragementMessage(
   if (percent > 0) return t('patient.dashboard.goodStart');
   return t('patient.dashboard.subtitle');
 }
-

@@ -19,10 +19,13 @@ export function PatientDoctorsDirectory() {
   const [search, setSearch] = useState('');
   const [specialty, setSpecialty] = useState('');
 
-  const { data = [], isLoading, isError, error, refetch } = usePatientDoctorDirectory(
-    search,
-    specialty,
-  );
+  const {
+    data = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = usePatientDoctorDirectory(search, specialty);
 
   const specialtyOptions = useMemo(() => {
     const values = new Set(
@@ -60,7 +63,9 @@ export function PatientDoctorsDirectory() {
 
       {isError ? (
         <Card>
-          <Text type="danger">{getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}</Text>
+          <Text type="danger">
+            {getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}
+          </Text>
           <div style={{ marginTop: 12 }}>
             <Button onClick={() => void refetch()}>{t('patient.doctors.retry')}</Button>
           </div>

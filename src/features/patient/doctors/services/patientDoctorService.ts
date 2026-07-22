@@ -20,9 +20,7 @@ export const patientDoctorService = {
   },
 
   async getMine(): Promise<PatientLinkedDoctorDto[]> {
-    const { data } = await httpClient.get<PatientLinkedDoctorDto[]>(
-      `${PATIENT_DOCTORS_BASE}/mine`,
-    );
+    const { data } = await httpClient.get<PatientLinkedDoctorDto[]>(`${PATIENT_DOCTORS_BASE}/mine`);
     return data;
   },
 

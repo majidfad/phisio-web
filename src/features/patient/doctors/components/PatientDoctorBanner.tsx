@@ -8,13 +8,8 @@ import { useActiveDoctor } from '../hooks/useActiveDoctor';
 
 export function PatientDoctorBanner() {
   const { t } = useTranslation();
-  const {
-    activeDoctor,
-    approvedDoctors,
-    pendingDoctors,
-    setSelectedDoctorId,
-    isLoading,
-  } = useActiveDoctor();
+  const { activeDoctor, approvedDoctors, pendingDoctors, setSelectedDoctorId, isLoading } =
+    useActiveDoctor();
 
   if (isLoading) {
     return null;

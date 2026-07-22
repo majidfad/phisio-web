@@ -14,7 +14,10 @@ import {
   useRejectDoctorPatientRequest,
   useRemoveDoctorPatient,
 } from '@/features/doctor/patients/hooks/useDoctorPatients';
-import type { DoctorPatientDto, DoctorPatientRequestDto } from '@/features/doctor/patients/types/doctor-patient';
+import type {
+  DoctorPatientDto,
+  DoctorPatientRequestDto,
+} from '@/features/doctor/patients/types/doctor-patient';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits, formatPersianDate } from '@/utils/persian-format';
 
@@ -133,9 +136,7 @@ export function DoctorPatientsPage() {
             {
               title: t('doctor.patients.columns.phone'),
               dataIndex: 'phoneNumber',
-              render: (value: string) => (
-                <span dir="ltr">{convertToPersianDigits(value)}</span>
-              ),
+              render: (value: string) => <span dir="ltr">{convertToPersianDigits(value)}</span>,
             },
             {
               title: t('doctor.patients.columns.requestedAt'),

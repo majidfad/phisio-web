@@ -35,8 +35,7 @@ export function useActiveDoctor(): {
   const selectedDoctorId = useSelectedDoctorId();
   const setSelectedDoctorId = useSetSelectedDoctorId();
 
-  const pending =
-    data?.filter((doctor) => doctor.status === DoctorPatientStatusCode.Pending) ?? [];
+  const pending = data?.filter((doctor) => doctor.status === DoctorPatientStatusCode.Pending) ?? [];
 
   const activeDoctor =
     approved.find((doctor) => doctor.doctorId === selectedDoctorId) ?? approved[0] ?? null;

@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
 import { LoadingState, PageContainer } from '@/components/ui';
 import { AdminStatusTabs } from '@/features/admin/components/AdminStatusTabs';
-import {
-  ArticleFormModal,
-} from '@/features/admin/articles/components/ArticleFormModal';
+import { ArticleFormModal } from '@/features/admin/articles/components/ArticleFormModal';
 import {
   ArticlesTable,
   DeleteArticleDialog,

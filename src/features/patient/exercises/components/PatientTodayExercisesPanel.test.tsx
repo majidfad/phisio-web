@@ -109,6 +109,8 @@ describe('PatientTodayExercisesPanel checkbox', () => {
 
     renderWithProviders(<PatientTodayExercisesPanel />);
 
+    await user.click(screen.getByRole('button', { name: /Mark manually|علامت‌گذاری دستی/i }));
+
     const checkbox = screen.getByRole('checkbox', { name: 'Knee Extension' });
     expect(checkbox).not.toBeChecked();
 

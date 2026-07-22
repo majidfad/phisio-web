@@ -27,11 +27,14 @@ export function PatientExerciseSession({
   onExerciseCompleted,
   onSessionFinishedWithCompletions,
 }: PatientExerciseSessionProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const toast = useToast();
   const [index, setIndex] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
+
+  const formatCount = (value: number) =>
+    i18n.language.startsWith('fa') ? formatPersianNumber(value) : String(value);
 
   const current = exercises[index] ?? null;
   const total = exercises.length;
@@ -127,8 +130,8 @@ export function PatientExerciseSession({
           <div className="exercise-session__progress">
             <Text type="secondary">
               {t('patient.exercises.session.progress', {
-                current: formatPersianNumber(index + 1),
-                total: formatPersianNumber(total),
+                current: formatCount(index + 1),
+                total: formatCount(total),
               })}
             </Text>
             <Progress

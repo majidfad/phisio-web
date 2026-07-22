@@ -18,12 +18,14 @@ import {
 import type { PatientFormSchemaValues } from '@/features/admin/patients/schemas/patient-form-schema';
 import type { PatientDto } from '@/features/admin/patients/types/patient';
 import type { AdminListFilter } from '@/features/admin/types/admin-list-filter';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 type FormMode = 'create' | 'edit';
 
 export function PatientsPage() {
   const { t } = useTranslation();
+  const toast = useToast();
   const [listFilter, setListFilter] = useState<AdminListFilter>('active');
   const showInactiveView = listFilter === 'inactive';
 
@@ -37,29 +39,23 @@ export function PatientsPage() {
   const [selectedPatient, setSelectedPatient] = useState<PatientDto | null>(null);
   const [patientToDelete, setPatientToDelete] = useState<PatientDto | null>(null);
   const [activatingPatientId, setActivatingPatientId] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const openCreateForm = () => {
     setSelectedPatient(null);
-    setFormError(null);
     setFormMode('create');
   };
 
   const openEditForm = (patient: PatientDto) => {
     setSelectedPatient(patient);
-    setFormError(null);
     setFormMode('edit');
   };
 
   const closeForm = () => {
     setFormMode(null);
     setSelectedPatient(null);
-    setFormError(null);
   };
 
   const handleFormSubmit = async (values: PatientFormSchemaValues) => {
-    setFormError(null);
-
     const payload = {
       name: values.name.trim(),
       phoneNumber: values.phoneNumber.trim(),
@@ -75,7 +71,7 @@ export function PatientsPage() {
 
       closeForm();
     } catch (submitError) {
-      setFormError(getErrorMessage(submitError, t('admin.patients.errors.saveFailed')));
+      toast.error(getErrorMessage(submitError, t('admin.patients.errors.saveFailed')));
     }
   };
 
@@ -151,7 +147,6 @@ export function PatientsPage() {
         mode={formMode ?? 'create'}
         patient={selectedPatient}
         isSubmitting={isFormSubmitting}
-        submitError={formError}
         onClose={closeForm}
         onSubmit={handleFormSubmit}
       />

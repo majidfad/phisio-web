@@ -1,13 +1,24 @@
 import { AppResult } from '@/components/ui';
-import { Alert, Button, Modal, Space, Spin, Typography } from 'antd';
+import { Button, Modal, Space, Spin, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExerciseSelectionList } from '@/features/doctor/patients/components/ExerciseSelectionList';
+import { ExerciseDosageFields } from '@/features/doctor/patients/components/ExerciseDosageFields';
 import {
   useAssignPatientExercises,
   useExerciseCatalog,
 } from '@/features/doctor/patients/hooks/useDoctorPatients';
+import type {
+  AssignPatientExerciseItem,
+  DoctorPatientExerciseDto,
+} from '@/features/doctor/patients/types/patient-exercise-plan';
+import {
+  latestDosageByExerciseId,
+  resolveDosageForSelection,
+} from '@/features/doctor/patients/utils/copy-last-dosage';
+import { createDefaultDosage } from '@/features/doctor/patients/utils/dosage-presets';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 const { Text } = Typography;
@@ -15,6 +26,7 @@ const { Text } = Typography;
 interface AddPatientExercisesModalProps {
   patientId: string;
   assignedExerciseIds: ReadonlySet<string>;
+  planExercises: DoctorPatientExerciseDto[];
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
@@ -23,23 +35,53 @@ interface AddPatientExercisesModalProps {
 export function AddPatientExercisesModal({
   patientId,
   assignedExerciseIds,
+  planExercises,
   isOpen,
   onClose,
   onSuccess,
 }: AddPatientExercisesModalProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const { data: exercises = [], isLoading, isError, error, refetch } = useExerciseCatalog(isOpen);
   const assignExercises = useAssignPatientExercises(patientId);
   const [selectedExerciseIds, setSelectedExerciseIds] = useState<Set<string>>(new Set());
-  const [formError, setFormError] = useState<string | null>(null);
+  const [dosageByExerciseId, setDosageByExerciseId] = useState<
+    Record<string, AssignPatientExerciseItem>
+  >({});
+  const [copiedFromLastIds, setCopiedFromLastIds] = useState<Set<string>>(new Set());
 
   const selectableCount = useMemo(
     () => exercises.filter((exercise) => !assignedExerciseIds.has(exercise.exerciseId)).length,
     [assignedExerciseIds, exercises],
   );
+  const latestByExerciseId = useMemo(
+    () => latestDosageByExerciseId(planExercises),
+    [planExercises],
+  );
 
   const handleToggle = (exerciseId: string, checked: boolean) => {
-    setFormError(null);
+    setDosageByExerciseId((current) => {
+      if (checked) {
+        if (current[exerciseId]) {
+          return current;
+        }
+        const { item, copiedFromLast } = resolveDosageForSelection(exerciseId, latestByExerciseId);
+        if (copiedFromLast) {
+          setCopiedFromLastIds((ids) => new Set(ids).add(exerciseId));
+        }
+        return { ...current, [exerciseId]: item };
+      }
+      const rest = { ...current };
+      delete rest[exerciseId];
+      return rest;
+    });
+    if (!checked) {
+      setCopiedFromLastIds((current) => {
+        const next = new Set(current);
+        next.delete(exerciseId);
+        return next;
+      });
+    }
     setSelectedExerciseIds((current) => {
       const next = new Set(current);
       if (checked) {
@@ -57,29 +99,33 @@ export function AddPatientExercisesModal({
     }
 
     setSelectedExerciseIds(new Set());
-    setFormError(null);
+    setDosageByExerciseId({});
+    setCopiedFromLastIds(new Set());
     onClose();
   };
 
   const handleSubmit = async () => {
-    setFormError(null);
-
     if (selectedExerciseIds.size === 0) {
-      setFormError(t('doctor.patients.exercisePlan.add.errors.noneSelected'));
+      toast.error(t('doctor.patients.exercisePlan.add.errors.noneSelected'));
       return;
     }
 
     try {
       const today = new Date().toISOString().slice(0, 10);
       await assignExercises.mutateAsync({
-        exerciseIds: [...selectedExerciseIds],
+        items: exercises
+          .filter((exercise) => selectedExerciseIds.has(exercise.exerciseId))
+          .map(
+            (exercise) =>
+              dosageByExerciseId[exercise.exerciseId] ?? createDefaultDosage(exercise.exerciseId),
+          ),
         scheduledDates: [today],
       });
       setSelectedExerciseIds(new Set());
       onSuccess();
       onClose();
     } catch (submitError) {
-      setFormError(
+      toast.error(
         getErrorMessage(submitError, t('doctor.patients.exercisePlan.add.errors.saveFailed')),
       );
     }
@@ -133,11 +179,24 @@ export function AddPatientExercisesModal({
             assignedExerciseIds={assignedExerciseIds}
             onToggle={handleToggle}
           />
+          {selectedExerciseIds.size > 0 ? (
+            <ExerciseDosageFields
+              exercises={exercises.filter((exercise) =>
+                selectedExerciseIds.has(exercise.exerciseId),
+              )}
+              values={dosageByExerciseId}
+              copiedFromLastIds={copiedFromLastIds}
+              onChange={(exerciseId, value) => {
+                setDosageByExerciseId((current) => ({ ...current, [exerciseId]: value }));
+                setCopiedFromLastIds((current) => {
+                  const next = new Set(current);
+                  next.delete(exerciseId);
+                  return next;
+                });
+              }}
+            />
+          ) : null}
         </Space>
-      ) : null}
-
-      {formError ? (
-        <Alert type="error" message={formError} showIcon style={{ marginTop: 16 }} />
       ) : null}
     </Modal>
   );

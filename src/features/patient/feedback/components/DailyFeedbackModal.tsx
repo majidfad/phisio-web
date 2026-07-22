@@ -1,4 +1,4 @@
-import { Alert, Button, Drawer, Form, Grid, Input, Modal, Radio, Space, Typography } from 'antd';
+import { Button, Drawer, Form, Grid, Input, Modal, Radio, Space, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import {
   DAILY_FEEDBACK_SCORE_MAX,
   DAILY_FEEDBACK_SCORE_MIN,
 } from '@/features/patient/feedback/types/daily-feedback';
+import { useToast } from '@/hooks/useToast';
 import { formatPersianNumber } from '@/utils/persian-format';
 import { getErrorMessage } from '@/utils/get-error-message';
 
@@ -21,29 +22,25 @@ interface DailyFeedbackModalProps {
 
 export function DailyFeedbackModal({ isOpen, onClose }: DailyFeedbackModalProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleClose = () => {
     setSelectedScore(null);
     setComment('');
-    setSubmitError(null);
-    setSuccessMessage(null);
     onClose();
   };
 
   const handleSubmit = async () => {
     if (selectedScore === null) {
-      setSubmitError(t('patient.feedback.errors.scoreRequired'));
+      toast.error(t('patient.feedback.errors.scoreRequired'));
       return;
     }
 
-    setSubmitError(null);
     setIsSubmitting(true);
 
     try {
@@ -52,10 +49,10 @@ export function DailyFeedbackModal({ isOpen, onClose }: DailyFeedbackModalProps)
         comment: comment.trim() || null,
       });
 
-      setSuccessMessage(t('patient.feedback.success'));
-      window.setTimeout(() => handleClose(), 1200);
+      toast.success(t('patient.feedback.success'));
+      handleClose();
     } catch (error) {
-      setSubmitError(getErrorMessage(error, t('patient.feedback.errors.submitFailed')));
+      toast.error(getErrorMessage(error, t('patient.feedback.errors.submitFailed')));
     } finally {
       setIsSubmitting(false);
     }
@@ -74,7 +71,6 @@ export function DailyFeedbackModal({ isOpen, onClose }: DailyFeedbackModalProps)
         value={selectedScore ?? undefined}
         onChange={(e) => {
           setSelectedScore(e.target.value as number);
-          setSubmitError(null);
         }}
         style={{ width: '100%' }}
       >
@@ -108,9 +104,6 @@ export function DailyFeedbackModal({ isOpen, onClose }: DailyFeedbackModalProps)
           count: formatPersianNumber(DAILY_FEEDBACK_COMMENT_MAX_LENGTH - comment.length),
         })}
       </Text>
-
-      {submitError ? <Alert type="error" message={submitError} showIcon /> : null}
-      {successMessage ? <Alert type="success" message={successMessage} showIcon /> : null}
 
       <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
         <Button onClick={handleClose} disabled={isSubmitting}>

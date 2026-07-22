@@ -23,15 +23,15 @@ export function EnergyWaveBg({ className, style, idSuffix = 'default' }: EnergyW
     >
       <defs>
         <linearGradient id={blueId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+          <stop offset="0%" stopColor="#2e5bcc" stopOpacity="0.45" />
+          <stop offset="100%" stopColor="#2e5bcc" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={greenId} x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.32" />
-          <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
+          <stop offset="0%" stopColor="#48c9b0" stopOpacity="0.32" />
+          <stop offset="100%" stopColor="#48c9b0" stopOpacity="0" />
         </linearGradient>
         <radialGradient id={meshId} cx="50%" cy="40%" r="65%">
-          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.14" />
+          <stop offset="0%" stopColor="#2e5bcc" stopOpacity="0.14" />
           <stop offset="55%" stopColor="#1a2c44" stopOpacity="0" />
         </radialGradient>
         <filter id={`blur-${idSuffix}`} x="-20%" y="-20%" width="140%" height="140%">

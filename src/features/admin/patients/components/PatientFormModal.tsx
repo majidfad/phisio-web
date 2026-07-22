@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Button, Form, Input, Modal, Space, Typography } from 'antd';
+import { Button, Form, Input, Modal, Space, Typography } from 'antd';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,6 @@ interface PatientFormModalProps {
   mode: 'create' | 'edit';
   patient?: PatientDto | null;
   isSubmitting: boolean;
-  submitError: string | null;
   onClose: () => void;
   onSubmit: (values: PatientFormSchemaValues) => Promise<void>;
 }
@@ -27,7 +26,6 @@ export function PatientFormModal({
   mode,
   patient,
   isSubmitting,
-  submitError,
   onClose,
   onSubmit,
 }: PatientFormModalProps) {
@@ -73,10 +71,6 @@ export function PatientFormModal({
           })()
         }
       >
-        {submitError ? (
-          <Alert type="error" message={submitError} showIcon style={{ marginBottom: 16 }} />
-        ) : null}
-
         <Form.Item
           label={t('admin.patients.form.name')}
           validateStatus={errors.name ? 'error' : undefined}

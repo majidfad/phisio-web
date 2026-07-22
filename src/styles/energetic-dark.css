@@ -11,7 +11,7 @@
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-gradient-hero);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
   overflow: hidden;
 }
 
@@ -71,13 +71,13 @@
   width: 96px;
   height: 96px;
   border-radius: 22px;
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .energy-stat-card.ant-card {
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   border: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-card);
   transition:
@@ -89,7 +89,7 @@
 .energy-stat-card.ant-card:hover {
   transform: translateY(-3px);
   border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .energy-stat-card--accent.ant-card {
@@ -103,14 +103,14 @@
 .energy-focus-card.ant-card {
   background: var(--phisio-gradient-focus);
   border: 1px solid rgba(34, 197, 94, 0.35);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-accent);
+  box-shadow: var(--phisio-shadow-card);
   cursor: pointer;
 }
 
 .energy-progress-card.ant-card {
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .energy-empty {
@@ -155,7 +155,7 @@
   padding: 14px 16px;
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius);
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   color: var(--phisio-text-secondary);
   text-decoration: none;
   font-weight: 600;
@@ -178,7 +178,7 @@
   color: var(--phisio-primary);
   border-color: var(--phisio-border-glow);
   background: var(--phisio-gradient-nav-active);
-  box-shadow: var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .nav-card__icon {
@@ -196,7 +196,7 @@
 
 .nav-card--active .nav-card__icon {
   background: var(--phisio-primary-muted);
-  box-shadow: var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .nav-card__label {
@@ -220,7 +220,7 @@
   border-radius: 20px;
   background: var(--phisio-header-bg);
   backdrop-filter: blur(16px);
-  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-md);
 }
 
 .dock-nav__item {
@@ -254,7 +254,7 @@
 .dock-nav__item--active {
   color: var(--phisio-primary);
   background: var(--phisio-primary-soft);
-  box-shadow: var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .dock-nav__icon {
@@ -273,7 +273,7 @@
   padding: 20px;
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   color: var(--phisio-text);
   text-decoration: none;
   transition:
@@ -285,7 +285,7 @@
 .action-card:hover {
   color: var(--phisio-text);
   border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
   transform: translateY(-3px);
 }
 
@@ -319,7 +319,7 @@
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-panel-bg);
   backdrop-filter: blur(20px);
-  box-shadow: var(--phisio-shadow-md), var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-md);
 }
 
 .auth-brand-icon {
@@ -330,9 +330,9 @@
   height: 72px;
   margin: 0 auto 16px;
   border-radius: 20px;
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   border: 1px solid var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-glow-primary);
+  box-shadow: var(--phisio-shadow-card);
   color: var(--phisio-primary);
   font-size: 32px;
 }

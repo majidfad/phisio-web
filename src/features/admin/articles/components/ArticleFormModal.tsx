@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Button, Form, Input, Modal, Space } from 'antd';
+import { Button, Form, Input, Modal, Space } from 'antd';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ interface ArticleFormModalProps {
   mode: 'create' | 'edit';
   article?: ArticleDto | null;
   isSubmitting: boolean;
-  submitError: string | null;
   onClose: () => void;
   onSubmit: (values: ArticleFormSchemaValues) => Promise<void>;
 }
@@ -25,7 +24,6 @@ export function ArticleFormModal({
   mode,
   article,
   isSubmitting,
-  submitError,
   onClose,
   onSubmit,
 }: ArticleFormModalProps) {
@@ -72,10 +70,6 @@ export function ArticleFormModal({
         }
         style={{ marginTop: 16 }}
       >
-        {submitError ? (
-          <Alert type="error" showIcon message={submitError} style={{ marginBottom: 16 }} />
-        ) : null}
-
         <Form.Item
           label={t('admin.articles.form.title')}
           validateStatus={errors.title ? 'error' : undefined}

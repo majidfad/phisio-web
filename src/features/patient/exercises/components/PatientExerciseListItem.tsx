@@ -1,8 +1,8 @@
-import { CirclePlay } from 'lucide-react';
-import { Button, Card, Checkbox, Space, Tag, Typography } from 'antd';
+import { Check, CirclePlay } from 'lucide-react';
+import { Button, Card, Checkbox, Tag, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import { appIconProps } from '@/components/icons/app-icon';
+import { appIconProps, denseIconProps } from '@/components/icons/app-icon';
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
 
 const { Text } = Typography;
@@ -23,22 +23,24 @@ export function PatientExerciseListItem({
   onPlay,
 }: PatientExerciseListItemProps) {
   const { t } = useTranslation();
+  const hasMedia = Boolean(exercise.videoUrl);
+
   return (
     <Card
       size="small"
       className={`exercise-card touch-active${exercise.completedToday ? ' exercise-card--completed' : ''}`}
       styles={{ body: { padding: '16px 18px' } }}
+      style={{ marginBottom: 12 }}
     >
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'space-between',
-          gap: 12,
-          minHeight: 48,
+          gap: 14,
         }}
       >
-        <Space align="start" size={14}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, flex: 1, minWidth: 0 }}>
           <Checkbox
             checked={isChecked}
             disabled={isDisabled}
@@ -46,32 +48,87 @@ export function PatientExerciseListItem({
             style={{ marginTop: 4, transform: 'scale(1.15)' }}
             aria-label={exercise.title}
           />
-          <div>
-            <Text
-              strong
-              delete={exercise.completedToday}
-              style={{ fontSize: 16, display: 'block', lineHeight: 1.4 }}
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <Text
+                strong
+                style={{
+                  fontSize: 16,
+                  lineHeight: 1.4,
+                  color: exercise.completedToday ? 'var(--phisio-text-secondary)' : undefined,
+                }}
+              >
+                {exercise.title}
+              </Text>
+              {exercise.completedToday ? (
+                <Tag
+                  color="success"
+                  icon={<Check {...denseIconProps} />}
+                  style={{ marginInlineEnd: 0 }}
+                >
+                  {t('patient.exercises.completedToday')}
+                </Tag>
+              ) : null}
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 6,
+                marginTop: 10,
+              }}
             >
-              {exercise.title}
-            </Text>
-            {exercise.completedToday ? (
-              <Tag color="success" style={{ marginTop: 6 }}>
-                {t('patient.exercises.completedToday')}
-              </Tag>
+              {exercise.sets ? (
+                <Tag className="exercise-dosage-chip">
+                  {t('patient.exercises.dosage.sets', { count: exercise.sets })}
+                </Tag>
+              ) : null}
+              {exercise.reps ? (
+                <Tag className="exercise-dosage-chip">
+                  {t('patient.exercises.dosage.reps', { count: exercise.reps })}
+                </Tag>
+              ) : null}
+              {exercise.holdSeconds ? (
+                <Tag className="exercise-dosage-chip">
+                  {t('patient.exercises.dosage.hold', { count: exercise.holdSeconds })}
+                </Tag>
+              ) : null}
+              {exercise.restSeconds ? (
+                <Tag className="exercise-dosage-chip">
+                  {t('patient.exercises.dosage.rest', { count: exercise.restSeconds })}
+                </Tag>
+              ) : null}
+              {exercise.side ? (
+                <Tag className="exercise-dosage-chip">
+                  {t(`exerciseMeta.side.${exercise.side}`)}
+                </Tag>
+              ) : null}
+            </div>
+
+            {exercise.patientCue ? (
+              <Text
+                type="secondary"
+                style={{ display: 'block', marginTop: 10, fontSize: 13, lineHeight: 1.5 }}
+              >
+                {exercise.patientCue}
+              </Text>
             ) : null}
           </div>
-        </Space>
+        </div>
 
-        <Button
-          type="primary"
-          ghost
-          icon={<CirclePlay {...appIconProps} />}
-          onClick={() => onPlay(exercise)}
-          className="touch-target"
-          aria-label={t('patient.exercises.video.watch', { title: exercise.title })}
-        >
-          {t('patient.exercises.video.watchLabel')}
-        </Button>
+        {hasMedia ? (
+          <Button
+            type="default"
+            icon={<CirclePlay {...appIconProps} />}
+            onClick={() => onPlay(exercise)}
+            className="touch-target exercise-play-button"
+            aria-label={t('patient.exercises.video.watch', { title: exercise.title })}
+          >
+            {t('patient.exercises.video.watchLabel')}
+          </Button>
+        ) : null}
       </div>
     </Card>
   );

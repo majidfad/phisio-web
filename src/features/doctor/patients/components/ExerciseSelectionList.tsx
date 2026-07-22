@@ -41,7 +41,7 @@ export function ExerciseSelectionList({
           const isAssigned =
             !allowAssignedSelection && assignedExerciseIds.has(exercise.exerciseId);
           const isSelected = selectedExerciseIds.has(exercise.exerciseId);
-          const hasVideo = Boolean(getVideoPreviewSource(exercise.videoUrl));
+          const hasVideo = Boolean(getVideoPreviewSource(exercise.videoUrl, exercise.mediaType));
 
           return (
             <List.Item
@@ -87,6 +87,7 @@ export function ExerciseSelectionList({
       <ExerciseVideoModal
         title={previewExercise?.title ?? null}
         videoUrl={previewExercise?.videoUrl}
+        mediaType={previewExercise?.mediaType}
         onClose={() => setPreviewExercise(null)}
       />
     </>

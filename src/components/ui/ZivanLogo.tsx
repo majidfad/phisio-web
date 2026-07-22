@@ -5,7 +5,7 @@ interface ZivanLogoProps {
   className?: string;
 }
 
-/** Zivan brand mark — the "Z" figure with the dot head, in the brand gradient. */
+/** Zivan brand mark — figure + head in logo gradient (teal → cobalt). */
 export function ZivanLogo({ size = 24, className }: ZivanLogoProps) {
   const uid = useId();
   const bodyId = `zivan-body-${uid}`;
@@ -25,13 +25,14 @@ export function ZivanLogo({ size = 24, className }: ZivanLogoProps) {
         <linearGradient
           id={bodyId}
           x1="256"
-          y1="196"
+          y1="180"
           x2="256"
           y2="440"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0%" stopColor="#2563eb" />
-          <stop offset="100%" stopColor="#14b8a6" />
+          <stop offset="0%" stopColor="#48c9b0" />
+          <stop offset="48%" stopColor="#3498db" />
+          <stop offset="100%" stopColor="#2e5bcc" />
         </linearGradient>
         <linearGradient
           id={headId}
@@ -41,8 +42,8 @@ export function ZivanLogo({ size = 24, className }: ZivanLogoProps) {
           y2="152"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0%" stopColor="#22c55e" />
-          <stop offset="100%" stopColor="#14b8a6" />
+          <stop offset="0%" stopColor="#64d2b1" />
+          <stop offset="100%" stopColor="#48c9b0" />
         </linearGradient>
       </defs>
       <circle cx="298" cy="106" r="46" fill={`url(#${headId})`} />

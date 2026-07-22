@@ -27,6 +27,8 @@ describe('doctorExerciseService', () => {
     vi.mocked(httpClient.get).mockResolvedValue({ data: exercises });
 
     await expect(doctorExerciseService.getAll()).resolves.toEqual(exercises);
-    expect(httpClient.get).toHaveBeenCalledWith('/doctor/exercises');
+    expect(httpClient.get).toHaveBeenCalledWith('/doctor/exercises', {
+      params: { scope: 'all' },
+    });
   });
 });

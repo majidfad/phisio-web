@@ -54,12 +54,13 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: var(--phisio-primary-soft);
-  border: 1px solid var(--phisio-border-glow);
+  background: var(--phisio-bg-elevated);
+  border: 1px solid var(--phisio-border);
   color: var(--phisio-primary);
   font-weight: 800;
   font-size: 17px;
-  box-shadow: var(--phisio-shadow-glow-primary);
+  box-shadow: none;
+  overflow: hidden;
 }
 
 .app-page {
@@ -98,7 +99,7 @@
 }
 
 .exercise-card.ant-card {
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface);
   border: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-card);
   transition:
@@ -107,16 +108,40 @@
 }
 
 .exercise-card.ant-card:hover {
-  border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card), var(--phisio-shadow-glow-primary);
+  border-color: var(--phisio-primary);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .exercise-card--completed.ant-card {
-  border-color: rgba(34, 197, 94, 0.45);
+  border-color: rgba(72, 201, 176, 0.45);
   background: var(--phisio-gradient-success-card);
-  box-shadow:
-    var(--phisio-shadow-card),
-    0 0 20px rgba(34, 197, 94, 0.15);
+  box-shadow: var(--phisio-shadow-card);
+}
+
+.exercise-dosage-chip.ant-tag {
+  margin-inline-end: 0;
+  border-radius: 999px;
+  padding-inline: 10px;
+  line-height: 24px;
+  border-color: var(--phisio-border);
+  background: var(--phisio-bg-elevated, rgba(0, 0, 0, 0.03));
+  color: var(--phisio-text-secondary);
+  font-size: 12px;
+}
+
+.exercise-play-button.ant-btn {
+  flex-shrink: 0;
+  color: var(--phisio-text);
+  border-color: var(--phisio-border);
+  background: var(--phisio-bg-elevated, #fff);
+  font-weight: 500;
+}
+
+.exercise-play-button.ant-btn:hover,
+.exercise-play-button.ant-btn:focus {
+  color: var(--phisio-primary) !important;
+  border-color: var(--phisio-primary) !important;
+  background: var(--phisio-bg-elevated, #fff) !important;
 }
 
 .page-header {
@@ -156,4 +181,59 @@
 
 .role-layout--patient .dock-nav__item--active {
   color: var(--phisio-teal);
+}
+
+/* Neutral status panels (replace colored Ant Alerts for persistent state) */
+.status-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius);
+  background: var(--phisio-surface);
+}
+
+.status-panel__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--phisio-accent);
+}
+
+.status-panel__body {
+  flex: 1 1 200px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-panel__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.status-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+
+.status-panel--pending {
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.status-panel--empty {
+  border-style: dashed;
 }

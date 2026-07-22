@@ -7,6 +7,8 @@ export const doctorPatientQueryKeys = {
     [...doctorPatientQueryKeys.all, 'exercises', patientId] as const,
   exerciseHistory: (patientId: string) =>
     [...doctorPatientQueryKeys.all, 'exercise-history', patientId] as const,
+  overview: (patientId: string) => [...doctorPatientQueryKeys.all, 'overview', patientId] as const,
+  programs: (patientId: string) => [...doctorPatientQueryKeys.all, 'programs', patientId] as const,
 };
 
 export const exerciseCatalogQueryKeys = {

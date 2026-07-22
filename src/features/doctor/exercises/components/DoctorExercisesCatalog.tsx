@@ -10,9 +10,15 @@ import { DoctorExerciseCard } from './DoctorExerciseCard';
 
 interface DoctorExercisesCatalogProps {
   exercises: DoctorExerciseDto[];
+  onEdit?: (exercise: DoctorExerciseDto) => void;
+  onArchive?: (exercise: DoctorExerciseDto) => void;
 }
 
-export function DoctorExercisesCatalog({ exercises }: DoctorExercisesCatalogProps) {
+export function DoctorExercisesCatalog({
+  exercises,
+  onEdit,
+  onArchive,
+}: DoctorExercisesCatalogProps) {
   const { t } = useTranslation();
   const [selectedExercise, setSelectedExercise] = useState<DoctorExerciseDto | null>(null);
 
@@ -25,7 +31,12 @@ export function DoctorExercisesCatalog({ exercises }: DoctorExercisesCatalogProp
       <Row gutter={[16, 16]}>
         {exercises.map((exercise) => (
           <Col key={exercise.exerciseId} xs={24} sm={12} lg={8}>
-            <DoctorExerciseCard exercise={exercise} onPlay={setSelectedExercise} />
+            <DoctorExerciseCard
+              exercise={exercise}
+              onPlay={setSelectedExercise}
+              onEdit={onEdit}
+              onArchive={onArchive}
+            />
           </Col>
         ))}
       </Row>
@@ -33,6 +44,7 @@ export function DoctorExercisesCatalog({ exercises }: DoctorExercisesCatalogProp
       <ExerciseVideoModal
         title={selectedExercise?.title ?? null}
         videoUrl={selectedExercise?.videoUrl}
+        mediaType={selectedExercise?.mediaType}
         onClose={() => setSelectedExercise(null)}
       />
     </>

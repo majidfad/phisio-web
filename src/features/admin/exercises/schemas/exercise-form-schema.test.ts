@@ -22,7 +22,15 @@ describe('createExerciseFormSchema', () => {
   it('accepts valid exercise data', () => {
     const file = { name: 'stretch.mp4', type: 'video/mp4', size: 1024 };
     const result = schema.safeParse({
-      name: 'Hamstring Stretch',
+      title: 'Hamstring Stretch',
+      description: 'A gentle stretch.',
+      instructions: 'Move slowly.',
+      bodyRegion: 5,
+      equipment: 1,
+      difficulty: 1,
+      mediaMode: 'upload',
+      mediaType: 1,
+      videoUrl: '',
       video: createFileList(file),
     });
 
@@ -31,7 +39,15 @@ describe('createExerciseFormSchema', () => {
 
   it('rejects missing video', () => {
     const result = schema.safeParse({
-      name: 'Hamstring Stretch',
+      title: 'Hamstring Stretch',
+      description: '',
+      instructions: '',
+      bodyRegion: 5,
+      equipment: 1,
+      difficulty: 1,
+      mediaMode: 'upload',
+      mediaType: 1,
+      videoUrl: '',
       video: createFileList(),
     });
 
@@ -41,7 +57,15 @@ describe('createExerciseFormSchema', () => {
   it('rejects non-mp4 files', () => {
     const file = { name: 'stretch.webm', type: 'video/webm', size: 1024 };
     const result = schema.safeParse({
-      name: 'Hamstring Stretch',
+      title: 'Hamstring Stretch',
+      description: '',
+      instructions: '',
+      bodyRegion: 5,
+      equipment: 1,
+      difficulty: 1,
+      mediaMode: 'upload',
+      mediaType: 1,
+      videoUrl: '',
       video: createFileList(file),
     });
 
@@ -56,7 +80,15 @@ describe('createExerciseFormSchema', () => {
     };
 
     const result = schema.safeParse({
-      name: 'Hamstring Stretch',
+      title: 'Hamstring Stretch',
+      description: '',
+      instructions: '',
+      bodyRegion: 5,
+      equipment: 1,
+      difficulty: 1,
+      mediaMode: 'upload',
+      mediaType: 1,
+      videoUrl: '',
       video: createFileList(file),
     });
 

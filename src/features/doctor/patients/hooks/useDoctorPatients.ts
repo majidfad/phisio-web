@@ -4,6 +4,10 @@ import { exerciseCatalogService } from '@/features/exercises/services/exerciseCa
 
 import { doctorPatientService } from '../services/doctorPatientService';
 import type { AssignPatientExercisesRequest } from '../types/patient-exercise-plan';
+import type {
+  CreateExerciseProgramRequest,
+  UpdateExerciseProgramRequest,
+} from '../types/exercise-program';
 
 import { doctorPatientQueryKeys, exerciseCatalogQueryKeys } from './doctor-patient-query-keys';
 
@@ -109,5 +113,40 @@ export function usePatientExerciseHistory(patientId: string | null) {
     queryKey: doctorPatientQueryKeys.exerciseHistory(patientId ?? ''),
     queryFn: () => doctorPatientService.getExerciseHistory(patientId!),
     enabled: Boolean(patientId),
+  });
+}
+
+export function usePatientOverview(patientId: string | null) {
+  return useQuery({
+    queryKey: doctorPatientQueryKeys.overview(patientId ?? ''),
+    queryFn: () => doctorPatientService.getPatientOverview(patientId!),
+    enabled: Boolean(patientId),
+  });
+}
+
+export function useSavePatientProgram(patientId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      programId,
+      request,
+    }: {
+      programId?: string;
+      request: CreateExerciseProgramRequest | UpdateExerciseProgramRequest;
+    }) =>
+      programId
+        ? doctorPatientService.updateProgram(patientId, programId, request)
+        : doctorPatientService.createProgram(patientId, request),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.overview(patientId) }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.programs(patientId) }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.exercises(patientId) }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseHistory(patientId),
+        }),
+      ]);
+    },
   });
 }

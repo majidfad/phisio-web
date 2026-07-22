@@ -1,9 +1,9 @@
-import { Alert, Button, Card, Descriptions, Space, Tag } from 'antd';
-import { useState } from 'react';
+import { Button, Card, Descriptions, Space, Tag } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { LoadingState, AppResult } from '@/components/ui';
+import { useToast } from '@/hooks/useToast';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -22,12 +22,11 @@ interface PatientDoctorProfileViewProps {
 
 export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const { data, isLoading, isError, error, refetch } = usePatientDoctorProfile(doctorId);
   const requestLink = useRequestDoctorLink();
   const cancelRequest = useCancelDoctorRequest();
   const unlink = useUnlinkDoctor();
-  const [actionError, setActionError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   if (isLoading) {
     return <LoadingState tip={t('patient.doctors.loading')} />;
@@ -56,35 +55,29 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
   const isPending = requestLink.isPending || cancelRequest.isPending || unlink.isPending;
 
   const handleRequest = async () => {
-    setActionError(null);
-    setSuccessMessage(null);
     try {
       await requestLink.mutateAsync(doctorId);
-      setSuccessMessage(t('patient.doctors.success.requested'));
+      toast.success(t('patient.doctors.success.requested'));
     } catch (submitError) {
-      setActionError(getErrorMessage(submitError, t('patient.doctors.errors.requestFailed')));
+      toast.error(getErrorMessage(submitError, t('patient.doctors.errors.requestFailed')));
     }
   };
 
   const handleCancel = async () => {
-    setActionError(null);
-    setSuccessMessage(null);
     try {
       await cancelRequest.mutateAsync(doctorId);
-      setSuccessMessage(t('patient.doctors.success.cancelled'));
+      toast.success(t('patient.doctors.success.cancelled'));
     } catch (submitError) {
-      setActionError(getErrorMessage(submitError, t('patient.doctors.errors.cancelFailed')));
+      toast.error(getErrorMessage(submitError, t('patient.doctors.errors.cancelFailed')));
     }
   };
 
   const handleUnlink = async () => {
-    setActionError(null);
-    setSuccessMessage(null);
     try {
       await unlink.mutateAsync(doctorId);
-      setSuccessMessage(t('patient.doctors.success.unlinked'));
+      toast.success(t('patient.doctors.success.unlinked'));
     } catch (submitError) {
-      setActionError(getErrorMessage(submitError, t('patient.doctors.errors.unlinkFailed')));
+      toast.error(getErrorMessage(submitError, t('patient.doctors.errors.unlinkFailed')));
     }
   };
 
@@ -95,9 +88,6 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
           {t('patient.doctors.backToDirectory')}
         </Button>
       </Link>
-
-      {successMessage ? <Alert type="success" showIcon message={successMessage} /> : null}
-      {actionError ? <Alert type="error" showIcon message={actionError} /> : null}
 
       <Card title={data.name}>
         <Descriptions column={1} size="small">

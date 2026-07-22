@@ -1,4 +1,4 @@
-import { History, Stethoscope, Trash2 } from 'lucide-react';
+import { History, LayoutDashboard, Stethoscope, Trash2 } from 'lucide-react';
 import { Button, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ interface DoctorPatientsTableProps {
   patients: DoctorPatientDto[];
   removingPatientId?: string | null;
   onRemove: (patient: DoctorPatientDto) => void;
+  onOpenOverview: (patient: DoctorPatientDto) => void;
   onOpenExercisePlan: (patient: DoctorPatientDto) => void;
   onOpenExerciseHistory: (patient: DoctorPatientDto) => void;
 }
@@ -33,6 +34,7 @@ export function DoctorPatientsTable({
   patients,
   removingPatientId = null,
   onRemove,
+  onOpenOverview,
   onOpenExercisePlan,
   onOpenExerciseHistory,
 }: DoctorPatientsTableProps) {
@@ -62,10 +64,19 @@ export function DoctorPatientsTable({
     {
       title: t('doctor.patients.columns.actions'),
       key: 'actions',
-      width: 160,
+      width: 200,
       align: 'center',
       render: (_, patient) => (
         <Space size={4} className="table-icon-actions">
+          <Tooltip title={t('doctor.patients.overview.open')}>
+            <Button
+              type="text"
+              className="table-icon-actions__btn table-icon-actions__btn--edit"
+              icon={<LayoutDashboard {...denseIconProps} />}
+              aria-label={t('doctor.patients.overview.open')}
+              onClick={() => onOpenOverview(patient)}
+            />
+          </Tooltip>
           <Tooltip title={t('doctor.patients.exercisePlan.open')}>
             <Button
               type="text"

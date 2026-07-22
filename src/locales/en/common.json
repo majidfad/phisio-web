@@ -303,22 +303,34 @@
       },
       "form": {
         "createTitle": "Add exercise",
+        "editTitle": "Edit exercise",
         "name": "Exercise name",
+        "description": "Description",
+        "instructions": "Instructions",
+        "bodyRegion": "Body region",
+        "equipment": "Equipment",
+        "difficulty": "Difficulty",
         "video": "Upload video",
+        "mediaUpload": "Upload MP4 / GIF",
+        "mediaUrl": "YouTube / video URL",
+        "mediaGif": "GIF / animation URL",
         "create": "Create exercise",
+        "update": "Save changes",
         "saving": "Uploading and saving…",
         "cancel": "Cancel",
         "close": "Close"
       },
       "success": {
-        "created": "Exercise created successfully."
+        "created": "Exercise created successfully.",
+        "updated": "Exercise updated successfully."
       },
       "validation": {
         "nameRequired": "Exercise name is required.",
         "nameMaxLength": "Exercise name must be at most 200 characters.",
         "videoRequired": "Video upload is required.",
         "videoMp4Only": "Only MP4 files are allowed.",
-        "videoMaxSize": "File size must not exceed 50 MB."
+        "videoMaxSize": "File size must not exceed 50 MB.",
+        "urlInvalid": "Enter a valid URL."
       },
       "errors": {
         "loadFailed": "Failed to load exercises.",
@@ -466,13 +478,21 @@
       "loading": "Loading…",
       "retry": "Retry",
       "empty": "No exercises are available in the library yet.",
+      "create": "Create exercise",
+      "shareClinic": "Share with the clinic",
+      "shared": "Clinic shared",
+      "bodyRegion": "Body region",
+      "equipment": "Equipment",
+      "difficulty": "Difficulty",
+      "scopes": { "all": "All", "mine": "Mine", "clinic": "Clinic" },
       "video": {
         "play": "Play video for “{{title}}”",
         "none": "—",
         "unavailable": "No video is available for this exercise."
       },
       "errors": {
-        "loadFailed": "Failed to load exercises."
+        "loadFailed": "Failed to load exercises.",
+        "saveFailed": "Failed to save exercise."
       }
     },
     "patients": {
@@ -511,6 +531,7 @@
         "empty": "No exercises have been assigned to this patient yet.",
         "columns": {
           "title": "Exercise name",
+          "dosage": "Dosage",
           "video": "Video",
           "assignedAt": "Assigned at"
         },
@@ -538,20 +559,59 @@
             "noneSelected": "Select at least one exercise."
           }
         },
+        "dosage": {
+          "sets": "Sets",
+          "reps": "Reps",
+          "hold": "Hold (s)",
+          "rest": "Rest (s)",
+          "side": "Side",
+          "patientCue": "Patient cue",
+          "clinicianNote": "Clinician note",
+          "copiedFromLast": "Copied from last prescription",
+          "presets": {
+            "strength": "Strength",
+            "stretch": "Stretch",
+            "activation": "Activation"
+          }
+        },
         "wizard": {
-          "title": "Assign exercise plan",
+          "title": "Assign exercise program",
+          "editTitle": "Edit exercise program",
           "close": "Close",
           "cancel": "Cancel",
           "back": "Back",
           "next": "Next",
-          "confirm": "✔ Confirm and save",
+          "confirm": "Create program",
+          "updateProgram": "Update program",
           "saving": "Saving…",
-          "success": "Exercise plan saved successfully.",
+          "success": "Exercise program saved successfully.",
           "progress": "Assignment steps",
+          "futureOnlyHint": "Changes apply to today and future days only. Past history stays unchanged.",
           "steps": {
             "1": "Select dates",
+            "period": "Period & cadence",
             "2": "Select exercises",
             "3": "Confirm"
+          },
+          "period": {
+            "startDate": "Start date",
+            "endDate": "End date",
+            "duration": "Duration",
+            "months": "{{count}} months",
+            "cadence": "Schedule cadence",
+            "daysOfWeek": "Days of week",
+            "interval": "Every N days",
+            "every": "Every",
+            "days": "days"
+          },
+          "weekdays": {
+            "0": "Sun",
+            "1": "Mon",
+            "2": "Tue",
+            "3": "Wed",
+            "4": "Thu",
+            "5": "Fri",
+            "6": "Sat"
           },
           "dates": {
             "calendar": "Jalali calendar",
@@ -570,14 +630,38 @@
             "patient": "Patient:",
             "dates": "Dates:",
             "exercises": "Exercises:",
-            "hint": "After confirmation, the plan is saved for the selected dates."
+            "hint": "After confirmation, the program is saved for the selected period."
           },
           "errors": {
             "noDatesSelected": "Select at least one date.",
             "noExercisesSelected": "Select at least one exercise.",
-            "saveFailed": "Failed to save exercise plan."
+            "invalidPeriod": "Choose a valid start and end date.",
+            "noWeekdays": "Select at least one weekday.",
+            "invalidInterval": "Interval must be at least 1 day.",
+            "saveFailed": "Failed to save exercise program."
           }
         }
+      },
+      "overview": {
+        "open": "Patient overview",
+        "title": "Patient overview",
+        "loadFailed": "Failed to load patient overview.",
+        "demographics": "Patient info",
+        "linkedAt": "Linked: {{date}}",
+        "registeredAt": "Registered: {{date}}",
+        "stats": "Exercise insights",
+        "assigned": "{{count}} assigned",
+        "completedDays": "{{count}} completed days",
+        "missedDays": "{{count}} missed days",
+        "adherence": "{{percent}}% adherence",
+        "todayCount": "{{count}} today",
+        "programs": "Programs",
+        "newProgram": "New program",
+        "editProgram": "Edit program",
+        "noPrograms": "No programs yet.",
+        "cadenceDays": "Days: {{days}}",
+        "cadenceInterval": "Every {{count}} days",
+        "programCounts": "{{exercises}} exercises · {{upcoming}} upcoming · {{past}} past"
       },
       "exerciseHistory": {
         "open": "📈 Exercise history",
@@ -644,6 +728,12 @@
       "greetingWithName": "{{greeting}}, {{name}}",
       "todayOverview": "Today's overview",
       "completedToday": "Completed today",
+      "dosage": {
+        "sets": "{{count}} sets",
+        "reps": "{{count}} reps",
+        "hold": "Hold {{count}}s",
+        "rest": "Rest {{count}}s"
+      },
       "remaining": "Remaining",
       "keepGoing": "Keep going — you're doing great!",
       "goodStart": "Nice start — every rep brings you closer to recovery.",
@@ -774,6 +864,21 @@
       "submittingCompletions": "Saving…",
       "completionsRecorded": "Exercises saved successfully.",
       "completedToday": "Completed today",
+      "dosage": {
+        "sets": "{{count}} sets",
+        "reps": "{{count}} reps",
+        "hold": "Hold {{count}}s",
+        "rest": "Rest {{count}}s"
+      },
+      "session": {
+        "title": "Today's session",
+        "start": "Start today's session",
+        "progress": "Exercise {{current}} of {{total}}",
+        "markDone": "Mark done",
+        "skip": "Skip",
+        "exit": "Exit",
+        "allDone": "All exercises for today are already done."
+      },
       "video": {
         "play": "Play video for \"{{title}}\"",
         "watch": "Watch video for \"{{title}}\"",
@@ -809,6 +914,29 @@
         "submitFailed": "Failed to submit feedback."
       }
     }
+  },
+  "exerciseMeta": {
+    "bodyRegion": {
+      "1": "Neck",
+      "2": "Shoulder",
+      "3": "Upper back",
+      "4": "Lumbar",
+      "5": "Hip",
+      "6": "Knee",
+      "7": "Ankle",
+      "8": "Wrist",
+      "9": "Other"
+    },
+    "equipment": {
+      "1": "None",
+      "2": "Band",
+      "3": "Ball",
+      "4": "Chair",
+      "5": "Weights",
+      "6": "Other"
+    },
+    "difficulty": { "1": "Easy", "2": "Moderate", "3": "Hard" },
+    "side": { "0": "Not applicable", "1": "Left", "2": "Right", "3": "Bilateral" }
   },
   "errors": {
     "unexpected": "An unexpected error occurred.",

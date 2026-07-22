@@ -1,5 +1,5 @@
 import { AppResult } from '@/components/ui';
-import { Alert, Button, Modal, Space, Spin } from 'antd';
+import { Button, Modal, Space, Spin } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { AddPatientExercisesModal } from '@/features/doctor/patients/components/
 import { PatientExercisePlanTable } from '@/features/doctor/patients/components/PatientExercisePlanTable';
 import { usePatientExercisePlan } from '@/features/doctor/patients/hooks/useDoctorPatients';
 import type { DoctorPatientDto } from '@/features/doctor/patients/types/doctor-patient';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 interface PatientExercisePlanModalProps {
@@ -16,6 +17,7 @@ interface PatientExercisePlanModalProps {
 
 export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePlanModalProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const {
     data: exercises = [],
     isLoading,
@@ -24,7 +26,6 @@ export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePl
     refetch,
   } = usePatientExercisePlan(patient?.patientId ?? null);
   const [showAddExercises, setShowAddExercises] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const assignedExerciseIds = useMemo(
     () => new Set(exercises.map((exercise) => exercise.exerciseId)),
@@ -48,17 +49,9 @@ export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePl
       >
         {patient ? (
           <Space direction="vertical" size={16} style={{ width: '100%' }}>
-            <Button
-              type="primary"
-              onClick={() => {
-                setSuccessMessage(null);
-                setShowAddExercises(true);
-              }}
-            >
+            <Button type="primary" onClick={() => setShowAddExercises(true)}>
               {t('doctor.patients.exercisePlan.add.open')}
             </Button>
-
-            {successMessage ? <Alert type="success" message={successMessage} showIcon /> : null}
 
             {isLoading ? (
               <div style={{ textAlign: 'center', padding: 24 }}>
@@ -87,9 +80,10 @@ export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePl
         <AddPatientExercisesModal
           patientId={patient.patientId}
           assignedExerciseIds={assignedExerciseIds}
+          planExercises={exercises}
           isOpen={showAddExercises}
           onClose={() => setShowAddExercises(false)}
-          onSuccess={() => setSuccessMessage(t('doctor.patients.exercisePlan.add.success'))}
+          onSuccess={() => toast.success(t('doctor.patients.exercisePlan.add.success'))}
         />
       ) : null}
     </>

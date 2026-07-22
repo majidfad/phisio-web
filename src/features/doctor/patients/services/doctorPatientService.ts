@@ -7,6 +7,13 @@ import type {
   DoctorPatientExerciseDto,
 } from '../types/patient-exercise-plan';
 import type { PatientExerciseHistoryResponse } from '../types/patient-exercise-history';
+import type {
+  CreateExerciseProgramRequest,
+  CreateExerciseProgramResultDto,
+  DoctorPatientOverviewDto,
+  ExerciseProgramDto,
+  UpdateExerciseProgramRequest,
+} from '../types/exercise-program';
 
 const DOCTOR_PATIENTS_BASE = '/doctor/patients';
 
@@ -59,6 +66,43 @@ export const doctorPatientService = {
   async getExerciseHistory(patientId: string): Promise<PatientExerciseHistoryResponse> {
     const { data } = await httpClient.get<PatientExerciseHistoryResponse>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/exercise-history`,
+    );
+    return data;
+  },
+
+  async getPatientOverview(patientId: string): Promise<DoctorPatientOverviewDto> {
+    const { data } = await httpClient.get<DoctorPatientOverviewDto>(
+      `${DOCTOR_PATIENTS_BASE}/${patientId}/overview`,
+    );
+    return data;
+  },
+
+  async getPatientPrograms(patientId: string): Promise<ExerciseProgramDto[]> {
+    const { data } = await httpClient.get<ExerciseProgramDto[]>(
+      `${DOCTOR_PATIENTS_BASE}/${patientId}/programs`,
+    );
+    return data;
+  },
+
+  async createProgram(
+    patientId: string,
+    request: CreateExerciseProgramRequest,
+  ): Promise<CreateExerciseProgramResultDto> {
+    const { data } = await httpClient.post<CreateExerciseProgramResultDto>(
+      `${DOCTOR_PATIENTS_BASE}/${patientId}/programs`,
+      request,
+    );
+    return data;
+  },
+
+  async updateProgram(
+    patientId: string,
+    programId: string,
+    request: UpdateExerciseProgramRequest,
+  ): Promise<CreateExerciseProgramResultDto> {
+    const { data } = await httpClient.put<CreateExerciseProgramResultDto>(
+      `${DOCTOR_PATIENTS_BASE}/${patientId}/programs/${programId}`,
+      request,
     );
     return data;
   },

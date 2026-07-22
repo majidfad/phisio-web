@@ -1,4 +1,4 @@
-import { CirclePlay } from 'lucide-react';
+import { CirclePlay, Pencil } from 'lucide-react';
 import { Button, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
@@ -17,6 +17,7 @@ interface ExercisesTableProps {
   isActivating?: boolean;
   activatingExerciseId?: string | null;
   onActivate: (exercise: ExerciseDto) => void;
+  onEdit: (exercise: ExerciseDto) => void;
 }
 
 export function ExercisesTable({
@@ -25,6 +26,7 @@ export function ExercisesTable({
   isActivating = false,
   activatingExerciseId = null,
   onActivate,
+  onEdit,
 }: ExercisesTableProps) {
   const { t } = useTranslation();
   const [selectedExercise, setSelectedExercise] = useState<ExerciseDto | null>(null);
@@ -35,6 +37,19 @@ export function ExercisesTable({
       dataIndex: 'title',
       key: 'title',
       ellipsis: true,
+    },
+    {
+      title: t('admin.doctors.columns.actions'),
+      key: 'edit',
+      width: 70,
+      render: (_, exercise) =>
+        !showInactiveView ? (
+          <Button
+            type="text"
+            icon={<Pencil {...denseIconProps} />}
+            onClick={() => onEdit(exercise)}
+          />
+        ) : null,
     },
     {
       title: t('admin.exercises.columns.video'),
@@ -119,6 +134,7 @@ export function ExercisesTable({
       <ExerciseVideoModal
         title={selectedExercise?.title ?? null}
         videoUrl={selectedExercise?.videoUrl}
+        mediaType={selectedExercise?.mediaType}
         onClose={() => setSelectedExercise(null)}
       />
     </>

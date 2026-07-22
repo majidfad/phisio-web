@@ -31,7 +31,7 @@
 .ant-select-focused .ant-select-selector,
 .ant-input-textarea textarea:focus {
   border-color: var(--phisio-primary) !important;
-  box-shadow: 0 0 0 3px var(--phisio-primary-muted) !important;
+  box-shadow: 0 0 0 2px var(--phisio-primary-muted) !important;
 }
 
 .ant-input-affix-wrapper .ant-input {
@@ -40,24 +40,68 @@
 }
 
 .ant-btn {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ant-btn-primary {
-  background: var(--phisio-btn-gradient) !important;
-  border: none !important;
-  box-shadow: var(--phisio-shadow-glow-primary);
+  background: var(--phisio-btn-solid, var(--phisio-primary)) !important;
+  border: 1px solid var(--phisio-btn-solid, var(--phisio-primary)) !important;
+  color: #fff !important;
+  box-shadow: none !important;
 }
 
 .ant-btn-primary:not(:disabled):hover {
-  background: var(--phisio-btn-gradient-hover) !important;
-  box-shadow: var(--phisio-shadow-glow-primary);
+  background: var(--phisio-btn-solid-hover, var(--phisio-primary-hover)) !important;
+  border-color: var(--phisio-btn-solid-hover, var(--phisio-primary-hover)) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.ant-btn-default {
+  background: var(--phisio-bg-elevated) !important;
+  border-color: var(--phisio-border) !important;
+  color: var(--phisio-text) !important;
+  box-shadow: none !important;
+}
+
+.ant-btn-default:not(:disabled):hover {
+  border-color: var(--phisio-primary) !important;
+  color: var(--phisio-primary) !important;
 }
 
 .ant-card {
-  background: var(--phisio-gradient-card);
+  background: var(--phisio-surface) !important;
   border: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-card);
+}
+
+/* Quiet Alerts — surface fill, semantic border/icon only (no pastel washes) */
+.ant-alert {
+  background: var(--phisio-surface) !important;
+  border: 1px solid var(--phisio-border) !important;
+}
+
+.ant-alert-success {
+  border-color: rgba(52, 211, 153, 0.4) !important;
+}
+
+.ant-alert-info {
+  border-color: rgba(46, 91, 204, 0.35) !important;
+}
+
+.ant-alert-warning {
+  border-color: rgba(251, 191, 36, 0.4) !important;
+}
+
+.ant-alert-error {
+  border-color: rgba(248, 113, 113, 0.45) !important;
+}
+
+.ant-message-notice-content {
+  background: var(--phisio-surface) !important;
+  border: 1px solid var(--phisio-border);
+  box-shadow: var(--phisio-shadow-md);
+  color: var(--phisio-text);
 }
 
 .ant-modal .ant-modal-content {

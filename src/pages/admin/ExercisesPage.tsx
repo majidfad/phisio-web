@@ -1,4 +1,4 @@
-import { Alert, Button } from 'antd';
+import { Button } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,58 +11,67 @@ import {
   useActivateExercise,
   useCreateExercise,
   useExercises,
+  useUpdateExercise,
 } from '@/features/admin/exercises/hooks/useExercises';
 import type { ExerciseFormSchemaValues } from '@/features/admin/exercises/schemas/exercise-form-schema';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import type { AdminListFilter } from '@/features/admin/types/admin-list-filter';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 export function ExercisesPage() {
   const { t } = useTranslation();
+  const toast = useToast();
   const [listFilter, setListFilter] = useState<AdminListFilter>('active');
   const showInactiveView = listFilter === 'inactive';
 
   const { data: exercises = [], isLoading, isError, error, refetch } = useExercises(listFilter);
   const createExercise = useCreateExercise();
+  const updateExercise = useUpdateExercise();
   const activateExercise = useActivateExercise();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [editingExercise, setEditingExercise] = useState<ExerciseDto | null>(null);
   const [activatingExerciseId, setActivatingExerciseId] = useState<string | null>(null);
 
   const openCreateForm = () => {
-    setFormError(null);
-    setSuccessMessage(null);
+    setEditingExercise(null);
     setIsFormOpen(true);
   };
 
   const closeForm = () => {
     setIsFormOpen(false);
-    setFormError(null);
+    setEditingExercise(null);
   };
 
   const handleFormSubmit = async (values: ExerciseFormSchemaValues) => {
-    setFormError(null);
-    setSuccessMessage(null);
-
-    const videoFile = values.video[0];
-
-    if (!videoFile) {
-      setFormError(t('admin.exercises.validation.videoRequired'));
-      return;
-    }
-
     try {
-      await createExercise.mutateAsync({
-        name: values.name.trim(),
-        videoFile,
-      });
+      const request = {
+        title: values.title.trim(),
+        description: values.description.trim(),
+        instructions: values.instructions.trim(),
+        bodyRegion: values.bodyRegion,
+        equipment: values.equipment,
+        difficulty: values.difficulty,
+        mediaType: values.mediaType,
+        videoUrl: values.videoUrl || null,
+      };
+      if (editingExercise) {
+        await updateExercise.mutateAsync({
+          id: editingExercise.exerciseId,
+          request,
+          videoFile: values.video?.[0],
+        });
+      } else {
+        await createExercise.mutateAsync({ request, videoFile: values.video?.[0] });
+      }
 
-      setSuccessMessage(t('admin.exercises.success.created'));
+      toast.success(
+        t(editingExercise ? 'admin.exercises.success.updated' : 'admin.exercises.success.created'),
+      );
       closeForm();
     } catch (submitError) {
-      setFormError(getErrorMessage(submitError, t('admin.exercises.errors.saveFailed')));
+      toast.error(getErrorMessage(submitError, t('admin.exercises.errors.saveFailed')));
     }
   };
 
@@ -92,10 +101,6 @@ export function ExercisesPage() {
 
       <AdminStatusTabs value={listFilter} onChange={setListFilter} />
 
-      {successMessage ? (
-        <Alert type="success" message={successMessage} showIcon style={{ marginBottom: 16 }} />
-      ) : null}
-
       {isLoading ? <LoadingState tip={t('admin.exercises.loading')} /> : null}
 
       {isError ? (
@@ -117,13 +122,26 @@ export function ExercisesPage() {
           isActivating={activateExercise.isPending}
           activatingExerciseId={activatingExerciseId}
           onActivate={(exercise) => void handleActivate(exercise)}
+          onEdit={(exercise) => {
+            setEditingExercise(exercise);
+            setIsFormOpen(true);
+          }}
         />
       ) : null}
 
       <ExerciseFormModal
         isOpen={isFormOpen}
-        isSubmitting={createExercise.isPending}
-        submitError={formError}
+        isSubmitting={createExercise.isPending || updateExercise.isPending}
+        initialValues={
+          editingExercise
+            ? {
+                ...editingExercise,
+                description: editingExercise.description ?? '',
+                instructions: editingExercise.instructions ?? '',
+                videoUrl: editingExercise.videoUrl ?? '',
+              }
+            : undefined
+        }
         onClose={closeForm}
         onSubmit={handleFormSubmit}
       />

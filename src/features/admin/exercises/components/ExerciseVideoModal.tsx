@@ -3,12 +3,14 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
+import type { ExerciseMediaType } from '@/features/exercises/types';
 
 const { Text } = Typography;
 
 interface ExerciseVideoModalProps {
   title: string | null;
   videoUrl?: string | null;
+  mediaType?: ExerciseMediaType | null;
   onClose: () => void;
 }
 
@@ -22,7 +24,12 @@ function unloadVideo(video: HTMLVideoElement | null) {
   video.load();
 }
 
-export function ExerciseVideoModal({ title, videoUrl, onClose }: ExerciseVideoModalProps) {
+export function ExerciseVideoModal({
+  title,
+  videoUrl,
+  mediaType,
+  onClose,
+}: ExerciseVideoModalProps) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -36,7 +43,7 @@ export function ExerciseVideoModal({ title, videoUrl, onClose }: ExerciseVideoMo
     onClose();
   };
 
-  const preview = getVideoPreviewSource(videoUrl);
+  const preview = getVideoPreviewSource(videoUrl, mediaType);
 
   return (
     <Modal
@@ -64,6 +71,12 @@ export function ExerciseVideoModal({ title, videoUrl, onClose }: ExerciseVideoMo
             >
               <track kind="captions" />
             </video>
+          ) : preview.kind === 'image' ? (
+            <img
+              src={preview.src}
+              alt={title ?? ''}
+              style={{ width: '100%', maxHeight: '70vh', objectFit: 'contain', display: 'block' }}
+            />
           ) : (
             <iframe
               key={preview.src}

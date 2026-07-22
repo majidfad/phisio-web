@@ -19,12 +19,14 @@ import {
 import type { DoctorFormSchemaValues } from '@/features/admin/doctors/schemas/doctor-form-schema';
 import type { DoctorDto } from '@/features/admin/doctors/types/doctor';
 import type { AdminListFilter } from '@/features/admin/types/admin-list-filter';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 type FormMode = 'create' | 'edit';
 
 export function DoctorsPage() {
   const { t } = useTranslation();
+  const toast = useToast();
   const [listFilter, setListFilter] = useState<AdminListFilter>('active');
   const showInactiveView = listFilter === 'inactive';
 
@@ -40,29 +42,23 @@ export function DoctorsPage() {
   const [doctorToDelete, setDoctorToDelete] = useState<DoctorDto | null>(null);
   const [activatingDoctorId, setActivatingDoctorId] = useState<string | null>(null);
   const [deactivatingDoctorId, setDeactivatingDoctorId] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const openCreateForm = () => {
     setSelectedDoctor(null);
-    setFormError(null);
     setFormMode('create');
   };
 
   const openEditForm = (doctor: DoctorDto) => {
     setSelectedDoctor(doctor);
-    setFormError(null);
     setFormMode('edit');
   };
 
   const closeForm = () => {
     setFormMode(null);
     setSelectedDoctor(null);
-    setFormError(null);
   };
 
   const handleFormSubmit = async (values: DoctorFormSchemaValues) => {
-    setFormError(null);
-
     const payload = {
       name: values.name.trim(),
       phoneNumber: values.phoneNumber.trim(),
@@ -81,7 +77,7 @@ export function DoctorsPage() {
 
       closeForm();
     } catch (submitError) {
-      setFormError(getErrorMessage(submitError, t('admin.doctors.errors.saveFailed')));
+      toast.error(getErrorMessage(submitError, t('admin.doctors.errors.saveFailed')));
     }
   };
 
@@ -176,7 +172,6 @@ export function DoctorsPage() {
         mode={formMode ?? 'create'}
         doctor={selectedDoctor}
         isSubmitting={isFormSubmitting}
-        submitError={formError}
         onClose={closeForm}
         onSubmit={handleFormSubmit}
       />

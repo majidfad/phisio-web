@@ -1,18 +1,12 @@
 import { httpClient } from '@/api/http-client';
 
-import type { ExerciseDto } from '../types/exercise';
+import type { CreateExerciseRequest, ExerciseDto } from '../types/exercise';
 
 const EXERCISES_BASE = '/admin/exercises';
 
 export interface UploadExerciseVideoResponse {
   videoUrl: string;
   fileName: string;
-}
-
-export interface CreateExerciseRequest {
-  title: string;
-  description: string;
-  videoUrl: string;
 }
 
 export const exerciseService = {
@@ -44,6 +38,11 @@ export const exerciseService = {
 
   async create(request: CreateExerciseRequest): Promise<ExerciseDto> {
     const { data } = await httpClient.post<ExerciseDto>(EXERCISES_BASE, request);
+    return data;
+  },
+
+  async update(id: string, request: CreateExerciseRequest): Promise<ExerciseDto> {
+    const { data } = await httpClient.put<ExerciseDto>(`${EXERCISES_BASE}/${id}`, request);
     return data;
   },
 

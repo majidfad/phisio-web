@@ -20,12 +20,14 @@ import {
 import type { ArticleFormSchemaValues } from '@/features/admin/articles/schemas/article-form-schema';
 import type { ArticleDto } from '@/features/admin/articles/types/article';
 import type { AdminListFilter } from '@/features/admin/types/admin-list-filter';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 type FormMode = 'create' | 'edit';
 
 export function ArticlesPage() {
   const { t } = useTranslation();
+  const toast = useToast();
   const [listFilter, setListFilter] = useState<AdminListFilter>('active');
   const showInactiveView = listFilter === 'inactive';
 
@@ -39,28 +41,23 @@ export function ArticlesPage() {
   const [selectedArticle, setSelectedArticle] = useState<ArticleDto | null>(null);
   const [articleToDelete, setArticleToDelete] = useState<ArticleDto | null>(null);
   const [activatingArticleId, setActivatingArticleId] = useState<string | null>(null);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const openCreateForm = () => {
     setSelectedArticle(null);
-    setFormError(null);
     setFormMode('create');
   };
 
   const openEditForm = (article: ArticleDto) => {
     setSelectedArticle(article);
-    setFormError(null);
     setFormMode('edit');
   };
 
   const closeForm = () => {
     setFormMode(null);
     setSelectedArticle(null);
-    setFormError(null);
   };
 
   const handleFormSubmit = async (values: ArticleFormSchemaValues) => {
-    setFormError(null);
     const payload = {
       title: values.title.trim(),
       summary: values.summary.trim(),
@@ -75,7 +72,7 @@ export function ArticlesPage() {
       }
       closeForm();
     } catch (submitError) {
-      setFormError(getErrorMessage(submitError, t('admin.articles.errors.saveFailed')));
+      toast.error(getErrorMessage(submitError, t('admin.articles.errors.saveFailed')));
     }
   };
 
@@ -146,7 +143,6 @@ export function ArticlesPage() {
         mode={formMode ?? 'create'}
         article={selectedArticle}
         isSubmitting={createArticle.isPending || updateArticle.isPending}
-        submitError={formError}
         onClose={closeForm}
         onSubmit={handleFormSubmit}
       />

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Button, Form, Input, Typography } from 'antd';
-import { useMemo, useState } from 'react';
+import { Button, Form, Input, Typography } from 'antd';
+import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ import {
   type RegisterFormValues,
   type RegistrationRole,
 } from '@/features/auth/schemas/register-schema';
+import { useToast } from '@/hooks/useToast';
 import { routes } from '@/routes/routes';
 import { UserRoleCode } from '@/types/auth';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -24,8 +25,8 @@ interface RegisterFormProps {
 
 export function RegisterForm({ role, onBack }: RegisterFormProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const registerSchema = useMemo(() => createRegisterSchema(t, role), [t, role]);
   const isDoctor = role === 'doctor';
 
@@ -46,8 +47,6 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
   });
 
   const onSubmit = handleSubmit(async (values) => {
-    setSubmitError(null);
-
     try {
       await registerApi({
         name: values.name.trim(),
@@ -68,7 +67,7 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
         state: { registrationSuccess: true, registeredRole: role },
       });
     } catch (error) {
-      setSubmitError(getErrorMessage(error, t('auth.unableToRegister')));
+      toast.error(getErrorMessage(error, t('auth.unableToRegister')));
     }
   });
 
@@ -77,10 +76,6 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
       <Title level={4} className="auth-form__title">
         {isDoctor ? t('auth.registerDoctorTitle') : t('auth.registerPatientTitle')}
       </Title>
-
-      {submitError ? (
-        <Alert type="error" message={submitError} showIcon className="auth-form__alert" />
-      ) : null}
 
       <Form layout="vertical" component={false}>
         <Form.Item

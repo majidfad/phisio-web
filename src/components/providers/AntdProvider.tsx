@@ -42,7 +42,9 @@ export function AntdProvider({ children }: AntdProviderProps) {
       locale={locale}
       renderEmpty={() => <AppEmpty />}
     >
-      <App>{children}</App>
+      <App message={{ maxCount: 3, duration: 3.5 }} notification={{ placement: 'top' }}>
+        {children}
+      </App>
     </ConfigProvider>
   );
 }

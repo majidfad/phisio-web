@@ -1,4 +1,6 @@
-export type VideoPreviewKind = 'iframe' | 'video';
+import { ExerciseMediaType } from '@/features/exercises/types';
+
+export type VideoPreviewKind = 'iframe' | 'video' | 'image';
 
 export interface VideoPreviewSource {
   kind: VideoPreviewKind;
@@ -33,12 +35,18 @@ function extractYouTubeId(url: string): string | null {
   return null;
 }
 
-export function getVideoPreviewSource(url: string | null | undefined): VideoPreviewSource | null {
+export function getVideoPreviewSource(
+  url: string | null | undefined,
+  mediaType?: ExerciseMediaType | null,
+): VideoPreviewSource | null {
   if (!url?.trim()) {
     return null;
   }
 
   const trimmed = url.trim();
+  if (mediaType === ExerciseMediaType.Gif || /\.gif(\?.*)?$/i.test(trimmed)) {
+    return { kind: 'image', src: trimmed };
+  }
   const youTubeId = extractYouTubeId(trimmed);
 
   if (youTubeId) {
@@ -48,7 +56,11 @@ export function getVideoPreviewSource(url: string | null | undefined): VideoPrev
     };
   }
 
-  if (DIRECT_VIDEO_PATTERN.test(trimmed)) {
+  if (
+    mediaType === ExerciseMediaType.UploadedVideo ||
+    mediaType === ExerciseMediaType.ExternalVideo ||
+    DIRECT_VIDEO_PATTERN.test(trimmed)
+  ) {
     return {
       kind: 'video',
       src: trimmed,

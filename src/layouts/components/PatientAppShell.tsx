@@ -131,7 +131,7 @@ export function PatientAppShell() {
                 style={{
                   background: 'var(--phisio-primary-soft)',
                   color: 'var(--phisio-primary)',
-                  border: '1px solid var(--phisio-border-glow)',
+                  border: '1px solid var(--phisio-border)',
                 }}
                 icon={<User {...appIconProps} />}
               />

@@ -1,10 +1,11 @@
-import { Alert, Button, Space, Typography } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { Button, Space, Typography } from 'antd';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import { DailyFeedbackModal } from '@/features/patient/feedback/components/DailyFeedbackModal';
 import { PatientExerciseListItem } from '@/features/patient/exercises/components/PatientExerciseListItem';
+import { PatientExerciseSession } from '@/features/patient/exercises/components/PatientExerciseSession';
 import { patientExerciseService } from '@/features/patient/exercises/services/patientExerciseService';
 import type {
   PatientDoctorExerciseGroupDto,
@@ -16,6 +17,7 @@ import {
   getSubmittableExerciseIds,
   isExerciseCheckboxChecked,
 } from '@/features/patient/exercises/utils/exercise-checkbox-state';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 const { Text } = Typography;
@@ -30,13 +32,19 @@ export function PatientExercisesList({
   onCompletionsSaved,
 }: PatientExercisesListProps) {
   const { t } = useTranslation();
+  const toast = useToast();
   const exercises = useMemo(() => flattenTodayExercises({ doctorGroups }), [doctorGroups]);
+  const incompleteExercises = useMemo(
+    () => exercises.filter((exercise) => !exercise.completedToday),
+    [exercises],
+  );
   const [selectedExercise, setSelectedExercise] = useState<PatientExercisePlayback | null>(null);
   const [pendingSelectionIds, setPendingSelectionIds] = useState<Set<string>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSessionOpen, setIsSessionOpen] = useState(false);
+  const [sessionQueue, setSessionQueue] = useState<PatientTodayExerciseItemDto[]>([]);
+  const [sessionKey, setSessionKey] = useState(0);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const sanitizedPendingIds = useMemo(() => {
     const completedTodayIds = new Set(
@@ -54,15 +62,6 @@ export function PatientExercisesList({
 
     return next;
   }, [exercises, pendingSelectionIds]);
-
-  useEffect(() => {
-    if (!successMessage) {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => setSuccessMessage(null), 3000);
-    return () => window.clearTimeout(timeoutId);
-  }, [successMessage]);
 
   const handleToggle = (exercise: PatientTodayExerciseItemDto, checked: boolean) => {
     if (exercise.completedToday) {
@@ -84,6 +83,7 @@ export function PatientExercisesList({
     setSelectedExercise({
       title: exercise.title,
       videoUrl: exercise.videoUrl,
+      mediaType: exercise.mediaType,
     });
   };
 
@@ -94,7 +94,6 @@ export function PatientExercisesList({
       return;
     }
 
-    setSubmitError(null);
     setIsSubmitting(true);
 
     try {
@@ -103,11 +102,11 @@ export function PatientExercisesList({
       });
 
       setPendingSelectionIds(new Set());
-      setSuccessMessage(t('patient.exercises.completionsRecorded'));
+      toast.success(t('patient.exercises.completionsRecorded'));
       await onCompletionsSaved();
       setIsFeedbackModalOpen(true);
     } catch (error) {
-      setSubmitError(getErrorMessage(error, t('patient.exercises.errors.completionFailed')));
+      toast.error(getErrorMessage(error, t('patient.exercises.errors.completionFailed')));
     } finally {
       setIsSubmitting(false);
     }
@@ -116,8 +115,21 @@ export function PatientExercisesList({
   return (
     <>
       <Space direction="vertical" size={16} style={{ width: '100%', marginTop: 16 }}>
-        {successMessage ? <Alert type="success" message={successMessage} showIcon /> : null}
-        {submitError ? <Alert type="error" message={submitError} showIcon /> : null}
+        {incompleteExercises.length > 0 ? (
+          <Button
+            type="primary"
+            size="large"
+            block
+            onClick={() => {
+              setSessionQueue(incompleteExercises);
+              setSessionKey((value) => value + 1);
+              setIsSessionOpen(true);
+            }}
+            className="touch-target"
+          >
+            {t('patient.exercises.session.start')}
+          </Button>
+        ) : null}
 
         {doctorGroups.map((group) => (
           <section key={group.doctorId}>
@@ -143,7 +155,7 @@ export function PatientExercisesList({
 
       <div style={{ marginTop: 24, position: 'sticky', bottom: 72 }}>
         <Button
-          type="primary"
+          type="default"
           block
           size="large"
           disabled={submittableIds.length === 0 || isSubmitting}
@@ -157,9 +169,22 @@ export function PatientExercisesList({
         </Button>
       </div>
 
+      <PatientExerciseSession
+        key={sessionKey}
+        open={isSessionOpen}
+        exercises={sessionQueue}
+        onClose={() => setIsSessionOpen(false)}
+        onExerciseCompleted={onCompletionsSaved}
+        onSessionFinishedWithCompletions={() => {
+          toast.success(t('patient.exercises.completionsRecorded'));
+          setIsFeedbackModalOpen(true);
+        }}
+      />
+
       <ExerciseVideoModal
         title={selectedExercise?.title ?? null}
         videoUrl={selectedExercise?.videoUrl}
+        mediaType={selectedExercise?.mediaType}
         onClose={() => setSelectedExercise(null)}
       />
 

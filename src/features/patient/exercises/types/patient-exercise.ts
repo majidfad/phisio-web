@@ -1,8 +1,18 @@
+import type { ExerciseMediaType, ExerciseSide } from '@/features/exercises/types';
+
 export interface PatientTodayExerciseItemDto {
   userExerciseId: string;
   exerciseId: string;
   title: string;
   videoUrl: string | null;
+  mediaType: ExerciseMediaType;
+  instructions: string | null;
+  sets: number | null;
+  reps: string | null;
+  holdSeconds: number | null;
+  restSeconds: number | null;
+  side: ExerciseSide;
+  patientCue: string | null;
   scheduledDate: string;
   completedToday: boolean;
 }
@@ -23,6 +33,7 @@ export interface PatientExerciseItemDto {
   exerciseId: string;
   title: string;
   videoUrl: string | null;
+  mediaType: ExerciseMediaType;
   scheduledDate: string;
   completedToday: boolean;
 }
@@ -45,6 +56,7 @@ export interface CompleteExercisesResponse {
 export interface PatientExercisePlayback {
   title: string;
   videoUrl: string | null;
+  mediaType: ExerciseMediaType;
 }
 
 export function flattenTodayExercises(

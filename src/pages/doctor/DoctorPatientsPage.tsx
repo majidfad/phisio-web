@@ -1,4 +1,4 @@
-import { Alert, Button, Space, Table, Typography } from 'antd';
+import { Button, Space, Table, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { DoctorPatientsTable } from '@/features/doctor/patients/components/DoctorPatientsTable';
 import { PatientExerciseHistoryModal } from '@/features/doctor/patients/components/PatientExerciseHistoryModal';
 import { ExerciseAssignmentWizard } from '@/features/doctor/patients/components/ExerciseAssignmentWizard';
+import { PatientOverviewDrawer } from '@/features/doctor/patients/components/PatientOverviewDrawer';
 import {
   useApproveDoctorPatientRequest,
   useDoctorPatientRequests,
@@ -18,11 +19,13 @@ import type {
   DoctorPatientDto,
   DoctorPatientRequestDto,
 } from '@/features/doctor/patients/types/doctor-patient';
+import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits, formatPersianDate } from '@/utils/persian-format';
 
 export function DoctorPatientsPage() {
   const { t } = useTranslation();
+  const toast = useToast();
   const { data: patients = [], isLoading, isError, error, refetch } = useDoctorPatients();
   const {
     data: requests = [],
@@ -35,27 +38,24 @@ export function DoctorPatientsPage() {
   const rejectRequest = useRejectDoctorPatientRequest();
   const removePatient = useRemoveDoctorPatient();
 
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [actionError, setActionError] = useState<string | null>(null);
   const [removingPatientId, setRemovingPatientId] = useState<string | null>(null);
   const [actingRequestId, setActingRequestId] = useState<string | null>(null);
   const [assignmentWizardPatient, setAssignmentWizardPatient] = useState<DoctorPatientDto | null>(
     null,
   );
+  const [overviewPatient, setOverviewPatient] = useState<DoctorPatientDto | null>(null);
   const [exerciseHistoryPatient, setExerciseHistoryPatient] = useState<DoctorPatientDto | null>(
     null,
   );
 
   const handleRemove = async (patient: DoctorPatientDto) => {
     setRemovingPatientId(patient.patientId);
-    setSuccessMessage(null);
-    setActionError(null);
 
     try {
       await removePatient.mutateAsync(patient.patientId);
-      setSuccessMessage(t('doctor.patients.success.removed'));
+      toast.success(t('doctor.patients.success.removed'));
     } catch (removeError) {
-      setActionError(getErrorMessage(removeError, t('doctor.patients.errors.removeFailed')));
+      toast.error(getErrorMessage(removeError, t('doctor.patients.errors.removeFailed')));
     } finally {
       setRemovingPatientId(null);
     }
@@ -63,14 +63,12 @@ export function DoctorPatientsPage() {
 
   const handleApprove = async (request: DoctorPatientRequestDto) => {
     setActingRequestId(request.patientId);
-    setSuccessMessage(null);
-    setActionError(null);
 
     try {
       await approveRequest.mutateAsync(request.patientId);
-      setSuccessMessage(t('doctor.patients.success.approved'));
+      toast.success(t('doctor.patients.success.approved'));
     } catch (approveError) {
-      setActionError(getErrorMessage(approveError, t('doctor.patients.errors.approveFailed')));
+      toast.error(getErrorMessage(approveError, t('doctor.patients.errors.approveFailed')));
     } finally {
       setActingRequestId(null);
     }
@@ -78,14 +76,12 @@ export function DoctorPatientsPage() {
 
   const handleReject = async (request: DoctorPatientRequestDto) => {
     setActingRequestId(request.patientId);
-    setSuccessMessage(null);
-    setActionError(null);
 
     try {
       await rejectRequest.mutateAsync(request.patientId);
-      setSuccessMessage(t('doctor.patients.success.rejected'));
+      toast.success(t('doctor.patients.success.rejected'));
     } catch (rejectError) {
-      setActionError(getErrorMessage(rejectError, t('doctor.patients.errors.rejectFailed')));
+      toast.error(getErrorMessage(rejectError, t('doctor.patients.errors.rejectFailed')));
     } finally {
       setActingRequestId(null);
     }
@@ -97,13 +93,6 @@ export function DoctorPatientsPage() {
         title={t('doctor.patients.title')}
         description={t('doctor.patients.description')}
       />
-
-      {successMessage ? (
-        <Alert type="success" message={successMessage} showIcon style={{ marginBottom: 16 }} />
-      ) : null}
-      {actionError ? (
-        <Alert type="error" message={actionError} showIcon style={{ marginBottom: 16 }} />
-      ) : null}
 
       <Typography.Title level={5}>{t('doctor.patients.requestsTitle')}</Typography.Title>
 
@@ -192,15 +181,18 @@ export function DoctorPatientsPage() {
           patients={patients}
           removingPatientId={removingPatientId}
           onRemove={(patient) => void handleRemove(patient)}
+          onOpenOverview={setOverviewPatient}
           onOpenExercisePlan={setAssignmentWizardPatient}
           onOpenExerciseHistory={setExerciseHistoryPatient}
         />
       ) : null}
 
+      <PatientOverviewDrawer patient={overviewPatient} onClose={() => setOverviewPatient(null)} />
+
       <ExerciseAssignmentWizard
         patient={assignmentWizardPatient}
         onClose={() => setAssignmentWizardPatient(null)}
-        onSuccess={() => setSuccessMessage(t('doctor.patients.exercisePlan.wizard.success'))}
+        onSuccess={() => toast.success(t('doctor.patients.exercisePlan.wizard.success'))}
       />
 
       <PatientExerciseHistoryModal

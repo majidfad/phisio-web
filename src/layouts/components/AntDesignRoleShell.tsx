@@ -1,19 +1,21 @@
 import {
-  DashboardOutlined,
-  FileTextOutlined,
-  LockOutlined,
-  LogoutOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  ReadOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+  FileText,
+  LayoutDashboard,
+  Lock,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+  BookOpen,
+  BarChart3,
+  Users,
+  User,
+} from 'lucide-react';
 import { Avatar, Button, Drawer, Dropdown, Grid, Layout, Tag, Typography } from 'antd';
 import { useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
@@ -25,14 +27,14 @@ import type { RoleLayoutConfig } from '../config/role-layout-config.types';
 const { Header, Content, Sider } = Layout;
 
 const NAV_ICONS: Record<string, ReactNode> = {
-  dashboard: <DashboardOutlined />,
-  doctors: <TeamOutlined />,
-  patients: <UserOutlined />,
-  articles: <ReadOutlined />,
-  exercises: <FileTextOutlined />,
-  assignments: <FileTextOutlined />,
-  overview: <DashboardOutlined />,
-  progress: <DashboardOutlined />,
+  dashboard: <LayoutDashboard {...appIconProps} />,
+  doctors: <Users {...appIconProps} />,
+  patients: <User {...appIconProps} />,
+  articles: <BookOpen {...appIconProps} />,
+  exercises: <FileText {...appIconProps} />,
+  assignments: <FileText {...appIconProps} />,
+  overview: <LayoutDashboard {...appIconProps} />,
+  progress: <BarChart3 {...appIconProps} />,
 };
 
 interface AntDesignRoleShellProps {
@@ -60,7 +62,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
         .map((item) => ({
           key: item.to!,
           id: item.id,
-          icon: NAV_ICONS[item.id] ?? <DashboardOutlined />,
+          icon: NAV_ICONS[item.id] ?? <LayoutDashboard {...appIconProps} />,
           label: t(item.labelKey),
         })),
     [config.navItems, t],
@@ -74,13 +76,13 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
   const userMenuItems = [
     {
       key: 'change-password',
-      icon: <LockOutlined />,
+      icon: <Lock {...appIconProps} />,
       label: t('layout.changePassword'),
       onClick: () => setChangePasswordOpen(true),
     },
     {
       key: 'logout',
-      icon: <LogoutOutlined />,
+      icon: <LogOut {...appIconProps} />,
       label: t('layout.signOut'),
       danger: true,
       onClick: logout,
@@ -124,7 +126,13 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
             <AppBrand collapsed={collapsed} />
             <Button
               type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              icon={
+                collapsed ? (
+                  <PanelLeftOpen {...appIconProps} />
+                ) : (
+                  <PanelLeftClose {...appIconProps} />
+                )
+              }
               onClick={() => setCollapsed(!collapsed)}
               aria-label={collapsed ? t('layout.openNav') : t('layout.openNav')}
             />
@@ -139,7 +147,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
             {isMobile ? (
               <Button
                 type="text"
-                icon={<MenuUnfoldOutlined />}
+                icon={<PanelLeftOpen {...appIconProps} />}
                 onClick={() => setDrawerOpen(true)}
                 aria-label={t('layout.openNav')}
               />
@@ -178,7 +186,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
                     color: 'var(--phisio-primary)',
                     border: '1px solid var(--phisio-border-glow)',
                   }}
-                  icon={<UserOutlined />}
+                  icon={<User {...appIconProps} />}
                 />
                 <Typography.Text ellipsis style={{ maxWidth: 140, color: 'inherit' }}>
                   {displayName}

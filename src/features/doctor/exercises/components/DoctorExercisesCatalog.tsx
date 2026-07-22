@@ -1,4 +1,5 @@
-import { Col, Empty, Row } from 'antd';
+import { AppEmpty } from '@/components/ui';
+import { Col, Row } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +17,7 @@ export function DoctorExercisesCatalog({ exercises }: DoctorExercisesCatalogProp
   const [selectedExercise, setSelectedExercise] = useState<DoctorExerciseDto | null>(null);
 
   if (exercises.length === 0) {
-    return <Empty description={t('doctor.exercises.empty')} />;
+    return <AppEmpty description={t('doctor.exercises.empty')} />;
   }
 
   return (

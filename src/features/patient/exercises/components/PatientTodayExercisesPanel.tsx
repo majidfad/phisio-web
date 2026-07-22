@@ -1,7 +1,8 @@
-import { Button, Result, Skeleton, Space } from 'antd';
+import { PersonStanding } from 'lucide-react';
+import { Button, Skeleton, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import { WarmEmptyState } from '@/components/ui';
+import { AppResult, WarmEmptyState } from '@/components/ui';
 import { PatientExercisesList } from '@/features/patient/exercises/components/PatientExercisesList';
 import { usePatientTodayExercises } from '@/features/patient/exercises/hooks/usePatientExercises';
 import { hasTodayExercises } from '@/features/patient/exercises/types/patient-exercise';
@@ -25,7 +26,7 @@ export function PatientTodayExercisesPanel() {
 
   if (isError) {
     return (
-      <Result
+      <AppResult
         status="error"
         title={getErrorMessage(error, t('patient.exercises.errors.loadFailed'))}
         extra={
@@ -42,7 +43,7 @@ export function PatientTodayExercisesPanel() {
       <WarmEmptyState
         title={t('patient.exercises.emptyTodayTitle')}
         description={t('patient.exercises.emptyToday')}
-        icon="🧘"
+        lucideIcon={PersonStanding}
       />
     );
   }

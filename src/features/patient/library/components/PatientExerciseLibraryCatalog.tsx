@@ -1,8 +1,10 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Row, Typography } from 'antd';
+import { AppEmpty } from '@/components/ui';
+import { CirclePlay } from 'lucide-react';
+import { Button, Card, Col, Row, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
@@ -18,7 +20,7 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
   const [selectedExercise, setSelectedExercise] = useState<ExerciseDto | null>(null);
 
   if (exercises.length === 0) {
-    return <Empty description={t('patient.library.empty')} />;
+    return <AppEmpty description={t('patient.library.empty')} />;
   }
 
   return (
@@ -38,10 +40,7 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
                     <Button
                       type="text"
                       icon={
-                        <PlayCircleOutlined
-                          className="phisio-icon-primary"
-                          style={{ fontSize: 22 }}
-                        />
+                        <CirclePlay {...appIconProps} className="phisio-icon-primary" size={22} />
                       }
                       aria-label={t('patient.library.video.play', { title: exercise.title })}
                       onClick={() => setSelectedExercise(exercise)}

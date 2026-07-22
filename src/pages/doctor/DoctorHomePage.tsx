@@ -1,7 +1,7 @@
-import { Button, Col, Result, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import { HeroCard, LoadingState, PageContainer, PageSection } from '@/components/ui';
+import { HeroCard, LoadingState, PageContainer, PageSection, AppResult } from '@/components/ui';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { DashboardNavButton } from '@/features/admin/components/DashboardNavButton';
 import { SummaryCard } from '@/features/admin/components/SummaryCard';
@@ -32,7 +32,7 @@ export function DoctorHomePage() {
       {isLoading ? <LoadingState tip={t('doctor.dashboard.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('doctor.dashboard.errors.loadFailed'))}
           extra={

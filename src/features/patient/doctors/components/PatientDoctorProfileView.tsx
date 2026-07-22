@@ -1,9 +1,9 @@
-import { Alert, Button, Card, Descriptions, Result, Space, Tag } from 'antd';
+import { Alert, Button, Card, Descriptions, Space, Tag } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState } from '@/components/ui';
+import { LoadingState, AppResult } from '@/components/ui';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -35,7 +35,7 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
 
   if (isError || !data) {
     return (
-      <Result
+      <AppResult
         status="error"
         title={getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}
         extra={

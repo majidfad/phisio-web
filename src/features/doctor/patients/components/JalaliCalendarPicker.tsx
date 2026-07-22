@@ -1,8 +1,9 @@
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button, Card, Space, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import {
   getCurrentJalaliDate,
   getJalaliMonthLength,
@@ -85,7 +86,7 @@ export function JalaliCalendarPicker({ selectedDates, onChange }: JalaliCalendar
         >
           <Button
             type="text"
-            icon={<RightOutlined />}
+            icon={<ChevronRight {...appIconProps} />}
             aria-label={t('doctor.patients.exercisePlan.wizard.dates.previousMonth')}
             onClick={goToPreviousMonth}
           />
@@ -94,7 +95,7 @@ export function JalaliCalendarPicker({ selectedDates, onChange }: JalaliCalendar
           </Text>
           <Button
             type="text"
-            icon={<LeftOutlined />}
+            icon={<ChevronLeft {...appIconProps} />}
             aria-label={t('doctor.patients.exercisePlan.wizard.dates.nextMonth')}
             onClick={goToNextMonth}
           />

@@ -1,10 +1,11 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Empty, Input, Result } from 'antd';
+import { Search } from 'lucide-react';
+import { Button, Input } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { PageHeader } from '@/components/PageHeader';
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppEmpty, AppResult } from '@/components/ui';
 import { PatientExerciseLibraryCatalog } from '@/features/patient/library/components/PatientExerciseLibraryCatalog';
 import { usePatientExerciseLibrary } from '@/features/patient/library/hooks/usePatientExerciseLibrary';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -37,7 +38,7 @@ export function PatientLibraryPage() {
       <Input
         size="large"
         allowClear
-        prefix={<SearchOutlined />}
+        prefix={<Search {...appIconProps} />}
         placeholder={t('patient.library.searchPlaceholder')}
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}
@@ -47,7 +48,7 @@ export function PatientLibraryPage() {
       {isLoading ? <LoadingState tip={t('patient.library.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('patient.library.errors.loadFailed'))}
           extra={
@@ -59,7 +60,7 @@ export function PatientLibraryPage() {
       ) : null}
 
       {!isLoading && !isError && filteredExercises.length === 0 ? (
-        <Empty description={t('patient.library.empty')} />
+        <AppEmpty description={t('patient.library.empty')} />
       ) : null}
 
       {!isLoading && !isError && filteredExercises.length > 0 ? (

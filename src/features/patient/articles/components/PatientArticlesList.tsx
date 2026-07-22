@@ -1,9 +1,9 @@
-import { Button, Card, Empty, Input, Result, Space, Typography } from 'antd';
+import { Button, Card, Input, Space, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState } from '@/components/ui';
+import { LoadingState, AppEmpty, AppResult } from '@/components/ui';
 import { usePatientArticles } from '@/features/patient/articles/hooks/usePatientArticles';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -42,7 +42,7 @@ export function PatientArticlesList() {
       {isLoading ? <LoadingState tip={t('patient.articles.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('patient.articles.errors.loadFailed'))}
           extra={
@@ -54,7 +54,7 @@ export function PatientArticlesList() {
       ) : null}
 
       {!isLoading && !isError && filteredArticles.length === 0 ? (
-        <Empty description={t('patient.articles.empty')} />
+        <AppEmpty description={t('patient.articles.empty')} />
       ) : null}
 
       {!isLoading && !isError

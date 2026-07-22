@@ -1,45 +1,37 @@
 @font-face {
-  font-family: IRANSans;
-  font-style: normal;
-  font-weight: 200;
-  font-display: swap;
-  src: url('/fonts/iransans/IRANSansWeb_UltraLight.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: IRANSans;
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('/fonts/iransans/IRANSansWeb_Light.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: IRANSans;
+  font-family: Vazirmatn;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/iransans/IRANSansWeb.woff2') format('woff2');
+  src: url('/fonts/vazirmatn/Vazirmatn-UI-Regular.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: IRANSans;
+  font-family: Vazirmatn;
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/fonts/iransans/IRANSansWeb_Medium.woff2') format('woff2');
+  src: url('/fonts/vazirmatn/Vazirmatn-UI-Medium.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: IRANSans;
+  font-family: Vazirmatn;
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/vazirmatn/Vazirmatn-UI-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: Vazirmatn;
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/fonts/iransans/IRANSansWeb_Bold.woff2') format('woff2');
+  src: url('/fonts/vazirmatn/Vazirmatn-UI-Bold.woff2') format('woff2');
 }
 
 :root {
-  --font-family-base: IRANSans, Tahoma, sans-serif;
+  --font-family-base: Vazirmatn, Tahoma, sans-serif;
 }
 
 body {

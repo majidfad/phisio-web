@@ -1,7 +1,8 @@
-import { MoonOutlined, SunOutlined } from '@ant-design/icons';
+import { Moon, Sun } from 'lucide-react';
 import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { useTheme } from '@/theme/use-theme';
 
 export function ThemeToggleButton() {
@@ -13,7 +14,7 @@ export function ThemeToggleButton() {
   return (
     <Button
       type="text"
-      icon={isDark ? <MoonOutlined /> : <SunOutlined />}
+      icon={isDark ? <Moon {...appIconProps} /> : <Sun {...appIconProps} />}
       onClick={toggleTheme}
       aria-label={label}
       title={label}

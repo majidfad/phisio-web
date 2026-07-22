@@ -1,8 +1,9 @@
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { ArrowRight } from 'lucide-react';
 import { Button, Card, Col, Progress, Row, Statistic, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import {
   FocusCard,
   HeroCard,
@@ -115,7 +116,7 @@ export function PatientDashboard() {
                           {t('patient.dashboard.browseLibraryHint')}
                         </Typography.Text>
                       </div>
-                      <Button type="primary" icon={<ArrowRightOutlined />} size="large">
+                      <Button type="primary" icon={<ArrowRight {...appIconProps} />} size="large">
                         {t('patient.dashboard.goToLibrary')}
                       </Button>
                     </div>
@@ -140,7 +141,7 @@ export function PatientDashboard() {
                           {t('patient.dashboard.browseArticlesHint')}
                         </Typography.Text>
                       </div>
-                      <Button type="primary" icon={<ArrowRightOutlined />} size="large">
+                      <Button type="primary" icon={<ArrowRight {...appIconProps} />} size="large">
                         {t('patient.dashboard.goToArticles')}
                       </Button>
                     </div>
@@ -169,7 +170,7 @@ export function PatientDashboard() {
                         {t('patient.dashboard.startExercisesHint')}
                       </Typography.Text>
                     </div>
-                    <Button type="primary" icon={<ArrowRightOutlined />} size="large">
+                    <Button type="primary" icon={<ArrowRight {...appIconProps} />} size="large">
                       {t('patient.dashboard.goToExercises')}
                     </Button>
                   </div>

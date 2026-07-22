@@ -1,8 +1,8 @@
-import { Button, Card, Result, Space, Typography } from 'antd';
+import { Button, Card, Space, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState } from '@/components/ui';
+import { LoadingState, AppResult } from '@/components/ui';
 import { usePatientArticle } from '@/features/patient/articles/hooks/usePatientArticles';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -24,7 +24,7 @@ export function PatientArticleDetail({ articleId }: PatientArticleDetailProps) {
 
   if (isError || !data) {
     return (
-      <Result
+      <AppResult
         status="error"
         title={getErrorMessage(error, t('patient.articles.errors.loadFailed'))}
         extra={

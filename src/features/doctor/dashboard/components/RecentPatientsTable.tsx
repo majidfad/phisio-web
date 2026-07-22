@@ -1,8 +1,7 @@
-import { Empty } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable } from '@/components/ui';
+import { AppTable, AppEmpty } from '@/components/ui';
 
 import type { DoctorDashboardRecentPatientDto } from '@/features/doctor/dashboard/types/dashboard';
 import { formatDisplayPhone } from '@/utils/persian-format';
@@ -29,7 +28,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
   ];
 
   if (patients.length === 0) {
-    return <Empty description={t('doctor.dashboard.emptyPatients')} />;
+    return <AppEmpty description={t('doctor.dashboard.emptyPatients')} />;
   }
 
   return (

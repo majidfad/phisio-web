@@ -1,4 +1,5 @@
-import { Alert, Button, Modal, Result, Space, Spin, Steps, Typography } from 'antd';
+import { AppResult } from '@/components/ui';
+import { Alert, Button, Modal, Space, Spin, Steps, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -173,7 +174,7 @@ export function ExerciseAssignmentWizard({
           ) : null}
 
           {isError ? (
-            <Result
+            <AppResult
               status="error"
               title={getErrorMessage(
                 error,

@@ -1,9 +1,10 @@
-import { MedicineBoxOutlined, UserOutlined } from '@ant-design/icons';
+import { Stethoscope, User } from 'lucide-react';
 import { Button, Space, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { RegisterForm } from '@/features/auth/components/RegisterForm';
 import type { RegistrationRole } from '@/features/auth/schemas/register-schema';
 import { routes } from '@/routes/routes';
@@ -32,7 +33,7 @@ export function RegisterPage() {
         <Button
           block
           size="large"
-          icon={<UserOutlined />}
+          icon={<User {...appIconProps} />}
           style={{ height: 56 }}
           onClick={() => setRole('patient')}
         >
@@ -42,7 +43,7 @@ export function RegisterPage() {
         <Button
           block
           size="large"
-          icon={<MedicineBoxOutlined />}
+          icon={<Stethoscope {...appIconProps} />}
           style={{ height: 56 }}
           onClick={() => setRole('doctor')}
         >

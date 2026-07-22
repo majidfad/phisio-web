@@ -1,5 +1,7 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Button, Space, Tooltip } from 'antd';
+
+import { denseIconProps } from '@/components/icons/app-icon';
 
 interface TableIconActionsProps {
   editLabel: string;
@@ -20,7 +22,7 @@ export function TableIconActions({
         <Button
           type="text"
           className="table-icon-actions__btn table-icon-actions__btn--edit"
-          icon={<EditOutlined />}
+          icon={<Pencil {...denseIconProps} />}
           aria-label={editLabel}
           onClick={onEdit}
         />
@@ -30,7 +32,7 @@ export function TableIconActions({
           type="text"
           danger
           className="table-icon-actions__btn table-icon-actions__btn--delete"
-          icon={<DeleteOutlined />}
+          icon={<Trash2 {...denseIconProps} />}
           aria-label={deleteLabel}
           onClick={onDelete}
         />

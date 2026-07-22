@@ -1,9 +1,11 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, Table, Typography } from 'antd';
+import { AppEmpty } from '@/components/ui';
+import { CirclePlay } from 'lucide-react';
+import { Button, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { DoctorPatientExerciseDto } from '@/features/doctor/patients/types/patient-exercise-plan';
@@ -46,7 +48,7 @@ export function PatientExercisePlanTable({ exercises }: PatientExercisePlanTable
         return hasVideo ? (
           <Button
             type="text"
-            icon={<PlayCircleOutlined style={{ fontSize: 20, color: 'var(--phisio-primary)' }} />}
+            icon={<CirclePlay {...appIconProps} size={20} color="var(--phisio-primary)" />}
             aria-label={t('doctor.patients.exercisePlan.video.play', {
               title: exercise.exerciseName,
             })}
@@ -67,7 +69,7 @@ export function PatientExercisePlanTable({ exercises }: PatientExercisePlanTable
   ];
 
   if (exercises.length === 0) {
-    return <Empty description={t('doctor.patients.exercisePlan.empty')} />;
+    return <AppEmpty description={t('doctor.patients.exercisePlan.empty')} />;
   }
 
   return (

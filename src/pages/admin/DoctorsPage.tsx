@@ -1,9 +1,9 @@
-import { Button, Result } from 'antd';
+import { Button } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppResult } from '@/components/ui';
 import { AdminStatusTabs } from '@/features/admin/components/AdminStatusTabs';
 import { DeleteDoctorDialog } from '@/features/admin/doctors/components/DeleteDoctorDialog';
 import { DoctorFormModal } from '@/features/admin/doctors/components/DoctorFormModal';
@@ -145,7 +145,7 @@ export function DoctorsPage() {
       {isLoading ? <LoadingState tip={t('admin.doctors.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('admin.doctors.errors.loadFailed'))}
           extra={

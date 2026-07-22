@@ -1,8 +1,8 @@
-import { Alert, Button, Result, Space, Table, Typography } from 'antd';
+import { Alert, Button, Space, Table, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppResult } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
 import { DoctorPatientsTable } from '@/features/doctor/patients/components/DoctorPatientsTable';
 import { PatientExerciseHistoryModal } from '@/features/doctor/patients/components/PatientExerciseHistoryModal';
@@ -110,7 +110,7 @@ export function DoctorPatientsPage() {
       {isRequestsLoading ? <LoadingState tip={t('doctor.patients.loading')} /> : null}
 
       {isRequestsError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(requestsError, t('doctor.patients.errors.loadRequestsFailed'))}
           extra={
@@ -176,7 +176,7 @@ export function DoctorPatientsPage() {
       {isLoading ? <LoadingState tip={t('doctor.patients.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('doctor.patients.errors.loadFailed'))}
           extra={

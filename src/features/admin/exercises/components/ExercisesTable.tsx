@@ -1,11 +1,12 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
-import { Button, Empty, Tag } from 'antd';
+import { CirclePlay } from 'lucide-react';
+import { Button, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { denseIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
-import { AppTable } from '@/components/ui';
+import { AppTable, AppEmpty } from '@/components/ui';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { formatExerciseDate } from '@/features/admin/exercises/utils/format-exercise-date';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
@@ -47,7 +48,7 @@ export function ExercisesTable({
           <Button
             type="text"
             className="table-icon-actions__btn table-icon-actions__btn--edit"
-            icon={<PlayCircleOutlined style={{ fontSize: 18 }} />}
+            icon={<CirclePlay {...denseIconProps} />}
             aria-label={t('admin.exercises.video.play', { title: exercise.title })}
             onClick={() => setSelectedExercise(exercise)}
           />
@@ -96,7 +97,7 @@ export function ExercisesTable({
 
   if (exercises.length === 0) {
     return (
-      <Empty
+      <AppEmpty
         description={t(
           showInactiveView ? 'admin.exercises.emptyInactive' : 'admin.exercises.empty',
         )}

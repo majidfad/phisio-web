@@ -4,6 +4,7 @@ import enUS from 'antd/locale/en_US';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AppEmpty } from '@/components/ui/AppEmpty';
 import { getLanguageDirection } from '@/i18n/config';
 import { createPhisioTheme } from '@/theme/phisio-theme';
 import { useTheme } from '@/theme/use-theme';
@@ -35,7 +36,12 @@ export function AntdProvider({ children }: AntdProviderProps) {
   const locale = i18n.language === 'fa' ? faIR : enUS;
 
   return (
-    <ConfigProvider theme={antdTheme} direction={direction} locale={locale}>
+    <ConfigProvider
+      theme={antdTheme}
+      direction={direction}
+      locale={locale}
+      renderEmpty={() => <AppEmpty />}
+    >
       <App>{children}</App>
     </ConfigProvider>
   );

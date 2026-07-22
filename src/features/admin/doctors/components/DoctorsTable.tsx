@@ -1,8 +1,8 @@
-import { Button, Empty, Space, Tag } from 'antd';
+import { Button, Space, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions } from '@/components/ui';
+import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
 import type { DoctorDto } from '@/features/admin/doctors/types/doctor';
 import { formatDisplayPhone } from '@/utils/persian-format';
 
@@ -124,7 +124,7 @@ export function DoctorsTable({
 
   if (doctors.length === 0) {
     return (
-      <Empty
+      <AppEmpty
         description={t(showInactiveView ? 'admin.doctors.emptyInactive' : 'admin.doctors.empty')}
       />
     );

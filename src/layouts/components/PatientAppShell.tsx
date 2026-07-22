@@ -1,19 +1,20 @@
 import {
-  BookOutlined,
-  HomeOutlined,
-  LineChartOutlined,
-  LockOutlined,
-  LogoutOutlined,
-  MedicineBoxOutlined,
-  ReadOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+  Book,
+  BookOpen,
+  BarChart3,
+  Home,
+  Lock,
+  LogOut,
+  Stethoscope,
+  Users,
+  User,
+} from 'lucide-react';
 import { Avatar, Dropdown, Grid, Layout, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { DockNav } from '@/components/navigation';
 import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand, ThemeToggleButton } from '@/components/ui';
@@ -39,30 +40,34 @@ export function PatientAppShell() {
 
   const navItems = useMemo(
     () => [
-      { key: routes.patient.root, icon: <HomeOutlined />, label: t('layout.nav.dashboard') },
+      {
+        key: routes.patient.root,
+        icon: <Home {...appIconProps} />,
+        label: t('layout.nav.dashboard'),
+      },
       {
         key: routes.patient.doctors,
-        icon: <TeamOutlined />,
+        icon: <Users {...appIconProps} />,
         label: t('layout.nav.myDoctors'),
       },
       {
         key: routes.patient.library,
-        icon: <BookOutlined />,
+        icon: <Book {...appIconProps} />,
         label: t('layout.nav.library'),
       },
       {
         key: routes.patient.articles,
-        icon: <ReadOutlined />,
+        icon: <BookOpen {...appIconProps} />,
         label: t('layout.nav.articles'),
       },
       {
         key: routes.patient.exercises,
-        icon: <MedicineBoxOutlined />,
+        icon: <Stethoscope {...appIconProps} />,
         label: t('layout.nav.myExercises'),
       },
       {
         key: routes.patient.progress,
-        icon: <LineChartOutlined />,
+        icon: <BarChart3 {...appIconProps} />,
         label: t('layout.nav.progress'),
       },
     ],
@@ -86,13 +91,13 @@ export function PatientAppShell() {
   const userMenuItems = [
     {
       key: 'change-password',
-      icon: <LockOutlined />,
+      icon: <Lock {...appIconProps} />,
       label: t('layout.changePassword'),
       onClick: () => setChangePasswordOpen(true),
     },
     {
       key: 'logout',
-      icon: <LogoutOutlined />,
+      icon: <LogOut {...appIconProps} />,
       label: t('layout.signOut'),
       danger: true,
       onClick: logout,
@@ -128,7 +133,7 @@ export function PatientAppShell() {
                   color: 'var(--phisio-primary)',
                   border: '1px solid var(--phisio-border-glow)',
                 }}
-                icon={<UserOutlined />}
+                icon={<User {...appIconProps} />}
               />
               <Typography.Text
                 ellipsis

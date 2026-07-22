@@ -1,8 +1,8 @@
-import { Button, Empty, Tag } from 'antd';
+import { Button, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions } from '@/components/ui';
+import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
 import type { PatientDto } from '@/features/admin/patients/types/patient';
 import {
   formatPatientDate,
@@ -97,7 +97,7 @@ export function PatientsTable({
 
   if (patients.length === 0) {
     return (
-      <Empty
+      <AppEmpty
         description={t(showInactiveView ? 'admin.patients.emptyInactive' : 'admin.patients.empty')}
       />
     );

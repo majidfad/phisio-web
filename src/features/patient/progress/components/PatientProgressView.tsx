@@ -1,3 +1,4 @@
+import { BarChart3 } from 'lucide-react';
 import { Col, Progress, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 
@@ -44,7 +45,7 @@ export function PatientProgressView() {
         <WarmEmptyState
           title={t('patient.progress.emptyTitle')}
           description={t('patient.progress.emptyDescription')}
-          icon="📊"
+          lucideIcon={BarChart3}
         />
       ) : null}
 

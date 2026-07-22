@@ -121,20 +121,28 @@
 .energy-empty__art {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+.energy-empty__lucide,
+.app-empty__icon,
+.app-result__icon,
+.energy-hero__lucide {
+  color: var(--phisio-primary);
+  opacity: 0.85;
 }
 
 .energy-empty__title {
   display: block;
   margin-bottom: 8px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--phisio-text);
 }
 
 .energy-empty__description {
   color: var(--phisio-text-secondary);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* Sidebar nav cards */

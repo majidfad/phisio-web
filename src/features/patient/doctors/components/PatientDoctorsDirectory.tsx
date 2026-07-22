@@ -1,9 +1,9 @@
-import { Button, Card, Empty, Input, Select, Space, Tag, Typography } from 'antd';
+import { Button, Card, Input, Select, Space, Tag, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState } from '@/components/ui';
+import { LoadingState, AppEmpty } from '@/components/ui';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -73,7 +73,7 @@ export function PatientDoctorsDirectory() {
       ) : null}
 
       {!isLoading && !isError && data.length === 0 ? (
-        <Empty description={t('patient.doctors.emptyDirectory')} />
+        <AppEmpty description={t('patient.doctors.emptyDirectory')} />
       ) : null}
 
       {!isLoading && !isError

@@ -1,8 +1,10 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Empty, List, Space, Tag, Typography } from 'antd';
+import { AppEmpty } from '@/components/ui';
+import { CirclePlay } from 'lucide-react';
+import { Button, Checkbox, List, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
@@ -28,7 +30,7 @@ export function ExerciseSelectionList({
   const [previewExercise, setPreviewExercise] = useState<ExerciseDto | null>(null);
 
   if (exercises.length === 0) {
-    return <Empty description={t('doctor.patients.exercisePlan.add.empty')} />;
+    return <AppEmpty description={t('doctor.patients.exercisePlan.add.empty')} />;
   }
 
   return (
@@ -52,7 +54,7 @@ export function ExerciseSelectionList({
                   <Button
                     key="play"
                     type="text"
-                    icon={<PlayCircleOutlined />}
+                    icon={<CirclePlay {...appIconProps} />}
                     aria-label={t('doctor.patients.exercisePlan.video.play', {
                       title: exercise.title,
                     })}

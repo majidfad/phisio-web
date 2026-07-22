@@ -1,8 +1,8 @@
-import { Button, Result } from 'antd';
+import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 import { PageHeader } from '@/components/PageHeader';
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppResult } from '@/components/ui';
 import { AssignmentReportTable } from '@/features/admin/assignments/components/AssignmentReportTable';
 import { useAssignmentReport } from '@/features/admin/assignments/hooks/useAssignmentReport';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -21,7 +21,7 @@ export function AssignmentsPage() {
       {isLoading ? <LoadingState tip={t('admin.assignments.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('admin.assignments.errors.loadFailed'))}
           extra={

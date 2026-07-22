@@ -1,9 +1,10 @@
-import { DeleteOutlined, HistoryOutlined, MedicineBoxOutlined } from '@ant-design/icons';
-import { Button, Empty, Space, Tooltip } from 'antd';
+import { History, Stethoscope, Trash2 } from 'lucide-react';
+import { Button, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable } from '@/components/ui';
+import { denseIconProps } from '@/components/icons/app-icon';
+import { AppTable, AppEmpty } from '@/components/ui';
 import type { DoctorPatientDto } from '@/features/doctor/patients/types/doctor-patient';
 import { formatDisplayPhone } from '@/utils/persian-format';
 
@@ -69,7 +70,7 @@ export function DoctorPatientsTable({
             <Button
               type="text"
               className="table-icon-actions__btn table-icon-actions__btn--edit"
-              icon={<MedicineBoxOutlined />}
+              icon={<Stethoscope {...denseIconProps} />}
               aria-label={t('doctor.patients.exercisePlan.open')}
               onClick={() => onOpenExercisePlan(patient)}
             />
@@ -78,7 +79,7 @@ export function DoctorPatientsTable({
             <Button
               type="text"
               className="table-icon-actions__btn table-icon-actions__btn--edit"
-              icon={<HistoryOutlined />}
+              icon={<History {...denseIconProps} />}
               aria-label={t('doctor.patients.exerciseHistory.open')}
               onClick={() => onOpenExerciseHistory(patient)}
             />
@@ -88,7 +89,7 @@ export function DoctorPatientsTable({
               type="text"
               danger
               className="table-icon-actions__btn table-icon-actions__btn--delete"
-              icon={<DeleteOutlined />}
+              icon={<Trash2 {...denseIconProps} />}
               loading={removingPatientId === patient.patientId}
               aria-label={t('doctor.patients.remove')}
               onClick={() => onRemove(patient)}
@@ -100,7 +101,7 @@ export function DoctorPatientsTable({
   ];
 
   if (patients.length === 0) {
-    return <Empty description={t('doctor.patients.empty')} />;
+    return <AppEmpty description={t('doctor.patients.empty')} />;
   }
 
   return (

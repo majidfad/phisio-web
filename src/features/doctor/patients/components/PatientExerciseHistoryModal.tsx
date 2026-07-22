@@ -1,17 +1,5 @@
-import {
-  Button,
-  Card,
-  Col,
-  Empty,
-  Modal,
-  Result,
-  Row,
-  Space,
-  Spin,
-  Statistic,
-  Table,
-  Typography,
-} from 'antd';
+import { AppEmpty, AppResult } from '@/components/ui';
+import { Button, Card, Col, Modal, Row, Space, Spin, Statistic, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
@@ -171,7 +159,7 @@ export function PatientExerciseHistoryModal({
           ) : null}
 
           {isError ? (
-            <Result
+            <AppResult
               status="error"
               title={getErrorMessage(error, t('doctor.patients.exerciseHistory.errors.loadFailed'))}
               extra={
@@ -222,7 +210,7 @@ export function PatientExerciseHistoryModal({
               </Row>
 
               {!hasCompletions ? (
-                <Empty description={t('doctor.patients.exerciseHistory.empty')} />
+                <AppEmpty description={t('doctor.patients.exerciseHistory.empty')} />
               ) : (
                 <Table
                   rowKey="date"

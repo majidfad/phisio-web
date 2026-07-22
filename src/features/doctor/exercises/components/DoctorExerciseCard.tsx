@@ -1,7 +1,8 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
+import { CirclePlay } from 'lucide-react';
 import { Button, Card, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
 const { Text, Paragraph } = Typography;
@@ -24,7 +25,7 @@ export function DoctorExerciseCard({ exercise, onPlay }: DoctorExerciseCardProps
         hasVideo ? (
           <Button
             type="text"
-            icon={<PlayCircleOutlined className="phisio-icon-primary" style={{ fontSize: 22 }} />}
+            icon={<CirclePlay {...appIconProps} className="phisio-icon-primary" size={22} />}
             aria-label={t('doctor.exercises.video.play', { title: exercise.title })}
             onClick={() => onPlay(exercise)}
           />

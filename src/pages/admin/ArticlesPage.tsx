@@ -1,9 +1,9 @@
-import { Button, Result } from 'antd';
+import { Button } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppResult } from '@/components/ui';
 import { AdminStatusTabs } from '@/features/admin/components/AdminStatusTabs';
 import { ArticleFormModal } from '@/features/admin/articles/components/ArticleFormModal';
 import {
@@ -118,7 +118,7 @@ export function ArticlesPage() {
       {isLoading ? <LoadingState tip={t('admin.articles.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('admin.articles.errors.loadFailed'))}
           extra={

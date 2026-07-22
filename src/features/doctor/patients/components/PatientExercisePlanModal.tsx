@@ -1,4 +1,5 @@
-import { Alert, Button, Modal, Result, Space, Spin } from 'antd';
+import { AppResult } from '@/components/ui';
+import { Alert, Button, Modal, Space, Spin } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -66,7 +67,7 @@ export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePl
             ) : null}
 
             {isError ? (
-              <Result
+              <AppResult
                 status="error"
                 title={getErrorMessage(error, t('doctor.patients.exercisePlan.errors.loadFailed'))}
                 extra={

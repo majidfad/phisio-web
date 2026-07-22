@@ -1,4 +1,5 @@
-import { Button, Result } from 'antd';
+import { AppResult } from '@/components/ui';
+import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +11,7 @@ export function UnauthorizedPage() {
 
   return (
     <div className="route-loading" style={{ background: 'var(--phisio-bg)' }}>
-      <Result
+      <AppResult
         status="403"
         title={t('errors.unauthorized.title')}
         subTitle={t('errors.unauthorized.message')}

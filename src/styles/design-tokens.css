@@ -24,12 +24,12 @@
   --phisio-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
   --phisio-shadow-glow-primary: 0 0 24px rgba(59, 130, 246, 0.25);
   --phisio-shadow-glow-accent: 0 0 24px rgba(34, 197, 94, 0.2);
-  --phisio-radius: 14px;
-  --phisio-radius-lg: 18px;
-  --phisio-header-height: 64px;
+  --phisio-radius: 8px;
+  --phisio-radius-lg: 12px;
+  --phisio-header-height: 56px;
   --phisio-content-max: 1160px;
-  --phisio-content-padding: 20px;
-  --phisio-content-padding-desktop: 28px;
+  --phisio-content-padding: 16px;
+  --phisio-content-padding-desktop: 20px;
   --phisio-btn-gradient: linear-gradient(135deg, #3b82f6 0%, #14b8a6 100%);
   --phisio-btn-gradient-hover: linear-gradient(135deg, #60a5fa 0%, #2dd4bf 100%);
   --phisio-gradient-auth:

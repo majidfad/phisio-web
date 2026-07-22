@@ -1,10 +1,11 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Empty, Input, Result } from 'antd';
+import { Search } from 'lucide-react';
+import { Button, Input } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { PageHeader } from '@/components/PageHeader';
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppEmpty, AppResult } from '@/components/ui';
 import { DoctorExercisesCatalog } from '@/features/doctor/exercises/components/DoctorExercisesCatalog';
 import { useDoctorExercises } from '@/features/doctor/exercises/hooks/useDoctorExercises';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -37,7 +38,7 @@ export function DoctorExercisesPage() {
       <Input
         size="large"
         allowClear
-        prefix={<SearchOutlined />}
+        prefix={<Search {...appIconProps} />}
         placeholder={t('doctor.exercises.searchPlaceholder')}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
@@ -47,7 +48,7 @@ export function DoctorExercisesPage() {
       {isLoading ? <LoadingState tip={t('doctor.exercises.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('doctor.exercises.errors.loadFailed'))}
           extra={
@@ -59,7 +60,7 @@ export function DoctorExercisesPage() {
       ) : null}
 
       {!isLoading && !isError && filteredExercises.length === 0 ? (
-        <Empty description={t('doctor.exercises.empty')} />
+        <AppEmpty description={t('doctor.exercises.empty')} />
       ) : null}
 
       {!isLoading && !isError && filteredExercises.length > 0 ? (

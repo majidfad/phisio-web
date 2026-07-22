@@ -1,7 +1,9 @@
-import { DownloadOutlined } from '@ant-design/icons';
+import { Download } from 'lucide-react';
 import { Button, Card } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { appIconProps } from '@/components/icons/app-icon';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -55,7 +57,7 @@ export function PwaInstallPrompt() {
         <span style={{ fontSize: 14, color: 'var(--phisio-text)' }}>{t('pwa.installPrompt')}</span>
         <Button
           type="primary"
-          icon={<DownloadOutlined />}
+          icon={<Download {...appIconProps} />}
           onClick={() => void handleInstall()}
           className="touch-active"
         >

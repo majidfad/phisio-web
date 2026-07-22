@@ -1,8 +1,16 @@
+import { Activity, BarChart3, LayoutDashboard, type LucideIcon, Stethoscope } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-import { EnergyWaveBg, RecoveryPulseSvg } from '@/components/illustrations';
+import { EnergyWaveBg } from '@/components/illustrations';
 
 export type HeroIllustrationVariant = 'recovery' | 'care' | 'progress' | 'admin';
+
+const HERO_ICONS: Record<HeroIllustrationVariant, LucideIcon> = {
+  recovery: Activity,
+  care: Stethoscope,
+  progress: BarChart3,
+  admin: LayoutDashboard,
+};
 
 interface HeroCardProps {
   badge?: string;
@@ -19,6 +27,8 @@ export function HeroCard({
   illustration = 'recovery',
   children,
 }: HeroCardProps) {
+  const Icon = HERO_ICONS[illustration];
+
   return (
     <section className="energy-hero" aria-label={title}>
       <EnergyWaveBg className="energy-hero__wave" idSuffix={illustration} />
@@ -29,7 +39,7 @@ export function HeroCard({
         {children}
       </div>
       <div className="energy-hero__art" aria-hidden="true">
-        <RecoveryPulseSvg variant={illustration} size={72} />
+        <Icon size={40} strokeWidth={1.5} className="energy-hero__lucide" />
       </div>
     </section>
   );

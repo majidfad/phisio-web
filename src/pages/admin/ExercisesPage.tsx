@@ -1,9 +1,9 @@
-import { Alert, Button, Result } from 'antd';
+import { Alert, Button } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
-import { LoadingState, PageContainer } from '@/components/ui';
+import { LoadingState, PageContainer, AppResult } from '@/components/ui';
 import { AdminStatusTabs } from '@/features/admin/components/AdminStatusTabs';
 import { ExerciseFormModal } from '@/features/admin/exercises/components/ExerciseFormModal';
 import { ExercisesTable } from '@/features/admin/exercises/components/ExercisesTable';
@@ -99,7 +99,7 @@ export function ExercisesPage() {
       {isLoading ? <LoadingState tip={t('admin.exercises.loading')} /> : null}
 
       {isError ? (
-        <Result
+        <AppResult
           status="error"
           title={getErrorMessage(error, t('admin.exercises.errors.loadFailed'))}
           extra={

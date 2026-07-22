@@ -1,8 +1,8 @@
-import { Button, Empty, Modal, Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions } from '@/components/ui';
+import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
 import type { ArticleDto } from '@/features/admin/articles/types/article';
 import { formatPersianDate } from '@/utils/persian-format';
 
@@ -89,7 +89,7 @@ export function ArticlesTable({
       dataSource={articles}
       locale={{
         emptyText: (
-          <Empty
+          <AppEmpty
             description={
               showInactiveView ? t('admin.articles.emptyInactive') : t('admin.articles.empty')
             }

@@ -1,7 +1,8 @@
-import { PlayCircleOutlined } from '@ant-design/icons';
+import { CirclePlay } from 'lucide-react';
 import { Button, Card, Checkbox, Space, Tag, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
 
 const { Text } = Typography;
@@ -64,7 +65,7 @@ export function PatientExerciseListItem({
         <Button
           type="primary"
           ghost
-          icon={<PlayCircleOutlined />}
+          icon={<CirclePlay {...appIconProps} />}
           onClick={() => onPlay(exercise)}
           className="touch-target"
           aria-label={t('patient.exercises.video.watch', { title: exercise.title })}

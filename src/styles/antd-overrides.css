@@ -40,7 +40,7 @@
 }
 
 .ant-btn {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .ant-btn-primary {
@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 0;
-  padding: 18px 24px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--phisio-border);
   background: var(--phisio-bg-elevated);
 }
@@ -80,7 +80,7 @@
   flex: 1;
   margin: 0;
   padding-inline-end: 12px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.45;
   text-align: start;
@@ -88,11 +88,11 @@
 }
 
 .ant-modal .ant-modal-close {
-  top: 14px;
-  inset-inline-end: 16px;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  top: 10px;
+  inset-inline-end: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   color: var(--phisio-text-secondary);
   transition:
     background 0.2s ease,
@@ -105,17 +105,17 @@
 }
 
 .ant-modal .ant-modal-body {
-  padding: 24px;
+  padding: 16px;
 }
 
 .ant-drawer .ant-drawer-header {
-  padding: 18px 24px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--phisio-border);
   background: var(--phisio-bg-elevated);
 }
 
 .ant-drawer .ant-drawer-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.45;
   text-align: start;
@@ -152,18 +152,18 @@
 
 .ant-table-wrapper .ant-table-thead > tr > th {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0;
   text-transform: none;
   color: var(--phisio-text-secondary);
   background: var(--phisio-bg-elevated) !important;
-  padding: 14px 16px !important;
+  padding: 10px 12px !important;
   text-align: start !important;
 }
 
 .ant-table-wrapper .ant-table-tbody > tr > td {
   border-bottom-color: var(--phisio-border);
-  padding: 14px 16px !important;
+  padding: 10px 12px !important;
   vertical-align: middle;
 }
 
@@ -172,9 +172,9 @@
 }
 
 .table-icon-actions__btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -203,13 +203,13 @@
 }
 
 .ant-form-item-label > label {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .auth-form__title {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   text-align: center;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--phisio-text);
 }
 

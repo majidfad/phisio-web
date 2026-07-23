@@ -16,7 +16,13 @@ interface CatalogPickerModalProps {
 
 export function CatalogPickerModal({ open, onClose, onSelect }: CatalogPickerModalProps) {
   const { t } = useTranslation();
-  const { data: exercises = [], isLoading, isError, error, refetch } = useDoctorExerciseCatalog(open);
+  const {
+    data: exercises = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useDoctorExerciseCatalog(open);
 
   return (
     <Modal

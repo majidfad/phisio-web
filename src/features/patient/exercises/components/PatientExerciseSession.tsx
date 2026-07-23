@@ -1,5 +1,5 @@
 import { Button, Progress, Space, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExerciseMediaPlayer } from '@/features/patient/exercises/components/ExerciseMediaPlayer';
@@ -35,6 +35,17 @@ export function PatientExerciseSession({
   const [completedCount, setCompletedCount] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [exerciseKey, setExerciseKey] = useState(0);
+  const [wasOpen, setWasOpen] = useState(open);
+
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) {
+      setIndex(0);
+      setCompletedCount(0);
+      setIsCompleting(false);
+      setExerciseKey(0);
+    }
+  }
 
   const formatCount = (value: number) =>
     i18n.language.startsWith('fa') ? formatPersianNumber(value) : String(value);
@@ -42,7 +53,8 @@ export function PatientExerciseSession({
   const current = exercises[index] ?? null;
   const total = exercises.length;
   const isLast = index >= total - 1;
-  const progressPercent = total > 0 ? Math.round(((index + (current ? 0.35 : 0)) / total) * 100) : 0;
+  const progressPercent =
+    total > 0 ? Math.round(((index + (current ? 0.35 : 0)) / total) * 100) : 0;
   const totalSets = Math.max(current?.sets ?? 1, 1);
 
   const finishSession = (didCompleteAny: boolean, count: number) => {
@@ -92,15 +104,6 @@ export function PatientExerciseSession({
       void handleMarkDone();
     },
   });
-
-  useEffect(() => {
-    if (!open) {
-      setIndex(0);
-      setCompletedCount(0);
-      setIsCompleting(false);
-      setExerciseKey(0);
-    }
-  }, [open]);
 
   const handleSkip = () => {
     if (isCompleting) {
@@ -171,7 +174,10 @@ export function PatientExerciseSession({
             {current.title}
           </Title>
 
-          <div className="workout-session__stats" aria-label={t('patient.exercises.session.dosage')}>
+          <div
+            className="workout-session__stats"
+            aria-label={t('patient.exercises.session.dosage')}
+          >
             <div className="workout-stat">
               <span className="workout-stat__value">{formatCount(timer.currentSet)}</span>
               <span className="workout-stat__label">
@@ -198,7 +204,9 @@ export function PatientExerciseSession({
             ) : null}
             {current.side ? (
               <div className="workout-stat">
-                <span className="workout-stat__value">{t(`exerciseMeta.side.${current.side}`)}</span>
+                <span className="workout-stat__value">
+                  {t(`exerciseMeta.side.${current.side}`)}
+                </span>
                 <span className="workout-stat__label">{t('patient.exercises.session.side')}</span>
               </div>
             ) : null}

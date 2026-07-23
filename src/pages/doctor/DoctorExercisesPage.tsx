@@ -20,9 +20,7 @@ import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 type TextsModalState =
-  | { mode: 'add'; exercise: ExerciseDto }
-  | { mode: 'edit'; exercise: DoctorExerciseDto }
-  | null;
+  { mode: 'add'; exercise: ExerciseDto } | { mode: 'edit'; exercise: DoctorExerciseDto } | null;
 
 export function DoctorExercisesPage() {
   const { t } = useTranslation();
@@ -75,7 +73,7 @@ export function DoctorExercisesPage() {
             title: exercise.title,
             description: values.description,
             instructions: values.instructions,
-            videoUrl: exercise.videoUrl,
+            videoUrl: exercise.videoUrl ?? null,
             mediaType: exercise.mediaType,
             bodyRegion: exercise.bodyRegion,
             equipment: exercise.equipment,
@@ -90,7 +88,7 @@ export function DoctorExercisesPage() {
             title: exercise.title,
             description: values.description,
             instructions: values.instructions,
-            videoUrl: exercise.videoUrl,
+            videoUrl: exercise.videoUrl ?? null,
             mediaType: exercise.mediaType,
             bodyRegion: exercise.bodyRegion,
             equipment: exercise.equipment,

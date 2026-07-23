@@ -19,9 +19,5 @@ export function hasPatientFeedback(
   comment: string | null | undefined,
   hardnessScore?: number | null,
 ): boolean {
-  return (
-    improvementScore != null ||
-    hardnessScore != null ||
-    Boolean(comment?.trim())
-  );
+  return improvementScore != null || hardnessScore != null || Boolean(comment?.trim());
 }

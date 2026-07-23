@@ -1,5 +1,5 @@
 import { Button, Space, Typography } from 'antd';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
@@ -51,6 +51,7 @@ export function PatientExercisesList({
   const [activeSession, setActiveSession] = useState<ActiveSession | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<FeedbackContext | null>(null);
   const [showChecklist, setShowChecklist] = useState(false);
+  const sessionKeyRef = useRef(0);
 
   const allExercises = useMemo(
     () => doctorGroups.flatMap((group) => group.exercises),
@@ -140,7 +141,7 @@ export function PatientExercisesList({
       doctorId: group.doctorId,
       doctorName: group.doctorName,
       exercises: incomplete,
-      key: Date.now(),
+      key: ++sessionKeyRef.current,
     });
   };
 
@@ -158,8 +159,9 @@ export function PatientExercisesList({
         </Button>
 
         {doctorGroups.map((group) => {
-          const incompleteCount = group.exercises.filter((exercise) => !exercise.completedToday)
-            .length;
+          const incompleteCount = group.exercises.filter(
+            (exercise) => !exercise.completedToday,
+          ).length;
 
           return (
             <section key={group.doctorId} className="workout-doctor-group">

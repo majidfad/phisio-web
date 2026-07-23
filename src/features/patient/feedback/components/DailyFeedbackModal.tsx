@@ -1,5 +1,5 @@
 import { Button, Drawer, Form, Grid, Input, Modal, Radio, Space, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { patientDailyFeedbackService } from '@/features/patient/feedback/services/patientDailyFeedbackService';
@@ -39,14 +39,16 @@ export function DailyFeedbackModal({
   const [improvementScore, setImprovementScore] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [wasOpen, setWasOpen] = useState(isOpen);
 
-  useEffect(() => {
-    if (!isOpen) {
+  if (isOpen !== wasOpen) {
+    setWasOpen(isOpen);
+    if (isOpen) {
       setHardnessScore(null);
       setImprovementScore(null);
       setComment('');
     }
-  }, [isOpen]);
+  }
 
   const handleClose = () => {
     onClose();

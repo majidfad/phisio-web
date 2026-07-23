@@ -1,6 +1,6 @@
 import { Library } from 'lucide-react';
 import { Button, Form, Input, Modal, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
@@ -33,16 +33,14 @@ export function DoctorExerciseTextsModal({
   const { t } = useTranslation();
   const [description, setDescription] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [trackedExercise, setTrackedExercise] = useState(exercise);
   const i18nKey = mode === 'edit' ? 'doctor.exercises.editTexts' : 'doctor.exercises.addToLibrary';
 
-  useEffect(() => {
-    if (!exercise) {
-      return;
-    }
-
-    setDescription(exercise.description ?? '');
-    setInstructions(exercise.instructions ?? '');
-  }, [exercise]);
+  if (exercise !== trackedExercise) {
+    setTrackedExercise(exercise);
+    setDescription(exercise?.description ?? '');
+    setInstructions(exercise?.instructions ?? '');
+  }
 
   return (
     <Modal

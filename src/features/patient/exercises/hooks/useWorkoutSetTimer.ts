@@ -11,6 +11,10 @@ interface UseWorkoutSetTimerOptions {
   resetKey: string | number;
 }
 
+function initialSeconds(holdSeconds: number | null): number | null {
+  return holdSeconds && holdSeconds > 0 ? holdSeconds : null;
+}
+
 export function useWorkoutSetTimer({
   holdSeconds,
   restSeconds,
@@ -21,33 +25,30 @@ export function useWorkoutSetTimer({
 }: UseWorkoutSetTimerOptions) {
   const [phase, setPhase] = useState<WorkoutPhase>('work');
   const [currentSet, setCurrentSet] = useState(1);
-  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
-  const completingRef = useRef(false);
-
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(() => initialSeconds(holdSeconds));
+  const [completionToken, setCompletionToken] = useState(0);
   const onCompleteRef = useRef(onExerciseComplete);
-  onCompleteRef.current = onExerciseComplete;
+
+  const [trackedResetKey, setTrackedResetKey] = useState(resetKey);
+  const [trackedHold, setTrackedHold] = useState(holdSeconds);
+  const [trackedEnabled, setTrackedEnabled] = useState(enabled);
+
+  if (trackedResetKey !== resetKey || trackedHold !== holdSeconds || trackedEnabled !== enabled) {
+    setTrackedResetKey(resetKey);
+    setTrackedHold(holdSeconds);
+    setTrackedEnabled(enabled);
+    setCompletionToken(0);
+    setPhase('work');
+    setCurrentSet(1);
+    setSecondsLeft(initialSeconds(holdSeconds));
+  }
+
+  useEffect(() => {
+    onCompleteRef.current = onExerciseComplete;
+  }, [onExerciseComplete]);
 
   const hasHoldTimer = Boolean(holdSeconds && holdSeconds > 0);
   const hasRestTimer = Boolean(restSeconds && restSeconds > 0);
-
-  useEffect(() => {
-    completingRef.current = false;
-    setPhase('work');
-    setCurrentSet(1);
-    setSecondsLeft(holdSeconds && holdSeconds > 0 ? holdSeconds : null);
-  }, [resetKey, holdSeconds, enabled]);
-
-  useEffect(() => {
-    if (!enabled || secondsLeft === null || secondsLeft <= 0) {
-      return;
-    }
-
-    const id = window.setTimeout(() => {
-      setSecondsLeft((value) => (value === null ? null : Math.max(value - 1, 0)));
-    }, 1000);
-
-    return () => window.clearTimeout(id);
-  }, [enabled, secondsLeft]);
 
   const advanceAfterWork = useCallback(
     (setNumber: number) => {
@@ -60,40 +61,51 @@ export function useWorkoutSetTimer({
       if (setNumber < totalSets) {
         setCurrentSet(setNumber + 1);
         setPhase('work');
-        setSecondsLeft(hasHoldTimer && holdSeconds ? holdSeconds : null);
+        setSecondsLeft(initialSeconds(holdSeconds));
         return;
       }
 
-      if (completingRef.current) {
+      if (completionToken > 0) {
         return;
       }
-      completingRef.current = true;
+
+      setCompletionToken(1);
       setSecondsLeft(null);
       onCompleteRef.current();
     },
-    [hasHoldTimer, hasRestTimer, holdSeconds, restSeconds, totalSets],
+    [completionToken, hasRestTimer, holdSeconds, restSeconds, totalSets],
   );
 
   const advanceAfterRest = useCallback(() => {
     setCurrentSet((setNumber) => {
       const nextSet = setNumber + 1;
       setPhase('work');
-      setSecondsLeft(hasHoldTimer && holdSeconds ? holdSeconds : null);
+      setSecondsLeft(initialSeconds(holdSeconds));
       return nextSet;
     });
-  }, [hasHoldTimer, holdSeconds]);
+  }, [holdSeconds]);
 
   useEffect(() => {
-    if (!enabled || secondsLeft !== 0) {
+    if (!enabled || secondsLeft === null) {
       return;
     }
 
-    if (phase === 'work') {
-      advanceAfterWork(currentSet);
-      return;
+    if (secondsLeft > 0) {
+      const id = window.setTimeout(() => {
+        setSecondsLeft((value) => (value === null ? null : Math.max(value - 1, 0)));
+      }, 1000);
+      return () => window.clearTimeout(id);
     }
 
-    advanceAfterRest();
+    const id = window.setTimeout(() => {
+      if (phase === 'work') {
+        advanceAfterWork(currentSet);
+        return;
+      }
+      advanceAfterRest();
+    }, 0);
+
+    return () => window.clearTimeout(id);
   }, [advanceAfterRest, advanceAfterWork, currentSet, enabled, phase, secondsLeft]);
 
   const completeSetManually = () => {

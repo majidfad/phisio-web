@@ -68,7 +68,9 @@ describe('PatientExerciseSession', () => {
     );
 
     expect(screen.getByText(/Exercise 1 of 1|تمرین 1 از 1/i)).toBeTruthy();
-    await user.click(screen.getByRole('button', { name: /Exercise done|تمرین انجام شد|Mark done|انجام شد/i }));
+    await user.click(
+      screen.getByRole('button', { name: /Exercise done|تمرین انجام شد|Mark done|انجام شد/i }),
+    );
 
     await waitFor(() => {
       expect(patientExerciseService.completeExercises).toHaveBeenCalledWith({
@@ -96,7 +98,9 @@ describe('PatientExerciseSession', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: /Skip exercise|رد کردن تمرین|Skip|رد کردن/i }));
+    await user.click(
+      screen.getByRole('button', { name: /Skip exercise|رد کردن تمرین|Skip|رد کردن/i }),
+    );
     expect(patientExerciseService.completeExercises).not.toHaveBeenCalled();
     expect(screen.getByText('Second')).toBeTruthy();
   });

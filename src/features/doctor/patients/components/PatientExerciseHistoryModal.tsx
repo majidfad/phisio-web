@@ -1,5 +1,17 @@
 import { AppEmpty, AppResult } from '@/components/ui';
-import { Button, Card, Col, Modal, Row, Space, Spin, Statistic, Table, Tag, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Modal,
+  Row,
+  Space,
+  Spin,
+  Statistic,
+  Table,
+  Tag,
+  Typography,
+} from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

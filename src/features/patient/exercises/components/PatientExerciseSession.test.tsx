@@ -28,9 +28,9 @@ function exercise(
     videoUrl: null,
     mediaType: ExerciseMediaType.UploadedVideo,
     instructions: 'Move slowly',
-    sets: 3,
+    sets: 1,
     reps: '10',
-    holdSeconds: 5,
+    holdSeconds: null,
     restSeconds: null,
     side: ExerciseSide.Left,
     patientCue: 'Breathe',
@@ -59,6 +59,7 @@ describe('PatientExerciseSession', () => {
     renderWithProviders(
       <PatientExerciseSession
         open
+        doctorName="Dr. A"
         exercises={[exercise()]}
         onClose={onClose}
         onExerciseCompleted={onExerciseCompleted}
@@ -67,7 +68,7 @@ describe('PatientExerciseSession', () => {
     );
 
     expect(screen.getByText(/Exercise 1 of 1|تمرین 1 از 1/i)).toBeTruthy();
-    await user.click(screen.getByRole('button', { name: /Mark done|انجام شد/i }));
+    await user.click(screen.getByRole('button', { name: /Exercise done|تمرین انجام شد|Mark done|انجام شد/i }));
 
     await waitFor(() => {
       expect(patientExerciseService.completeExercises).toHaveBeenCalledWith({
@@ -76,7 +77,7 @@ describe('PatientExerciseSession', () => {
     });
     expect(onExerciseCompleted).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
-    expect(onSessionFinishedWithCompletions).toHaveBeenCalled();
+    expect(onSessionFinishedWithCompletions).toHaveBeenCalledWith(1);
   });
 
   it('skips without calling complete API', async () => {
@@ -87,6 +88,7 @@ describe('PatientExerciseSession', () => {
     renderWithProviders(
       <PatientExerciseSession
         open
+        doctorName="Dr. A"
         exercises={[exercise(), exercise({ userExerciseId: 'ue-2', title: 'Second' })]}
         onClose={onClose}
         onExerciseCompleted={vi.fn()}
@@ -94,7 +96,7 @@ describe('PatientExerciseSession', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: /Skip|رد کردن/i }));
+    await user.click(screen.getByRole('button', { name: /Skip exercise|رد کردن تمرین|Skip|رد کردن/i }));
     expect(patientExerciseService.completeExercises).not.toHaveBeenCalled();
     expect(screen.getByText('Second')).toBeTruthy();
   });

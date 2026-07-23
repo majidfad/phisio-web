@@ -558,3 +558,140 @@
   padding-top: 8px;
 }
 
+/* Full-screen home-workout session */
+.workout-session {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  background: var(--phisio-bg);
+  overflow: auto;
+}
+
+.workout-session__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.workout-session__doctor,
+.workout-session__progress-label {
+  display: block;
+}
+
+.workout-session__progress-label {
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.workout-session__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.workout-session__media {
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--phisio-bg-elevated);
+}
+
+.workout-session__title {
+  margin: 0 !important;
+  text-align: center;
+}
+
+.workout-session__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 8px;
+}
+
+.workout-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 72px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--phisio-primary) 10%, var(--phisio-bg-elevated));
+  border: 1px solid var(--phisio-border);
+}
+
+.workout-stat__value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--phisio-text);
+}
+
+.workout-stat__label {
+  font-size: 0.75rem;
+  color: var(--phisio-text-secondary);
+  text-align: center;
+}
+
+.workout-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 4px;
+}
+
+.workout-timer__label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.workout-timer__ring {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 999px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  border: 6px solid var(--phisio-primary);
+  background: var(--phisio-bg-elevated);
+}
+
+.workout-timer--rest .workout-timer__ring {
+  border-color: color-mix(in srgb, var(--phisio-primary) 55%, #888);
+}
+
+.workout-session__cue,
+.workout-session__instructions {
+  margin-bottom: 0 !important;
+  white-space: pre-wrap;
+}
+
+.workout-session__actions {
+  margin-top: auto;
+  width: 100%;
+}
+
+.workout-doctor-group__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.workout-summary {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--phisio-primary) 12%, transparent);
+}
+

@@ -41,7 +41,6 @@ export function createExerciseFormSchema(t: TFunction) {
       mediaType: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
       videoUrl: z.string().trim().url(t('admin.exercises.validation.urlInvalid')).or(z.literal('')),
       video: z.custom<FileList | undefined>(),
-      isClinicShared: z.boolean().optional(),
     })
     .superRefine((value, context) => {
       const file = value.video?.[0];

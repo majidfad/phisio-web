@@ -1,10 +1,14 @@
 import { LoadingState, AppResult } from '@/components/ui';
-import { Button, Card, Drawer, Space, Tag, Typography } from 'antd';
+import { Button, Card, Drawer, Popconfirm, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExerciseAssignmentWizard } from '@/features/doctor/patients/components/ExerciseAssignmentWizard';
-import { usePatientOverview } from '@/features/doctor/patients/hooks/useDoctorPatients';
+import { PatientExerciseStatsPanel } from '@/features/doctor/patients/components/PatientExerciseStatsPanel';
+import {
+  useDeletePatientProgram,
+  usePatientOverview,
+} from '@/features/doctor/patients/hooks/useDoctorPatients';
 import type { DoctorPatientDto } from '@/features/doctor/patients/types/doctor-patient';
 import {
   daysFromMask,
@@ -43,6 +47,7 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
     error,
     refetch,
   } = usePatientOverview(patient?.patientId ?? null);
+  const deleteProgram = useDeletePatientProgram(patient?.patientId ?? '');
   const [wizardOpen, setWizardOpen] = useState(false);
   const [editingProgram, setEditingProgram] = useState<ExerciseProgramDto | null>(null);
 
@@ -56,12 +61,21 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
     return t('doctor.patients.overview.cadenceDays', { days });
   };
 
+  const handleRemoveProgram = async (programId: string) => {
+    try {
+      await deleteProgram.mutateAsync(programId);
+      toast.success(t('doctor.patients.overview.removeProgramSuccess'));
+    } catch (err) {
+      toast.error(getErrorMessage(err, t('doctor.patients.overview.removeProgramFailed')));
+    }
+  };
+
   return (
     <>
       <Drawer
         open={Boolean(patient)}
         onClose={onClose}
-        width={480}
+        width={640}
         title={patient?.patientName ?? t('doctor.patients.overview.title')}
         destroyOnHidden
       >
@@ -133,6 +147,10 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
               </Space>
             </Card>
 
+            <Card size="small">
+              <PatientExerciseStatsPanel patientId={overview.patientId} variant="overview" />
+            </Card>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Title level={5} style={{ margin: 0 }}>
                 {t('doctor.patients.overview.programs')}
@@ -172,15 +190,26 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
                       <Tag key={exercise.exerciseId}>{exercise.exerciseName}</Tag>
                     ))}
                   </Space>
-                  <Button
-                    style={{ marginTop: 12 }}
-                    onClick={() => {
-                      setEditingProgram(program);
-                      setWizardOpen(true);
-                    }}
-                  >
-                    {t('doctor.patients.overview.editProgram')}
-                  </Button>
+                  <Space style={{ marginTop: 12 }}>
+                    <Button
+                      onClick={() => {
+                        setEditingProgram(program);
+                        setWizardOpen(true);
+                      }}
+                    >
+                      {t('doctor.patients.overview.editProgram')}
+                    </Button>
+                    <Popconfirm
+                      title={t('doctor.patients.overview.removeProgramConfirmTitle')}
+                      description={t('doctor.patients.overview.removeProgramConfirm')}
+                      okText={t('doctor.patients.overview.removeProgram')}
+                      cancelText={t('auth.changePassword.cancel')}
+                      okButtonProps={{ danger: true, loading: deleteProgram.isPending }}
+                      onConfirm={() => void handleRemoveProgram(program.programId)}
+                    >
+                      <Button danger>{t('doctor.patients.overview.removeProgram')}</Button>
+                    </Popconfirm>
+                  </Space>
                 </Card>
               ))
             )}

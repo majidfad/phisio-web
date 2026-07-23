@@ -1,3 +1,4 @@
+import { JalaliDatePicker } from '@/components/JalaliDatePicker';
 import { AppResult } from '@/components/ui';
 import {
   Button,
@@ -274,15 +275,10 @@ export function ExerciseAssignmentWizard({
             <Text strong style={{ display: 'block', marginBottom: 8 }}>
               {t('doctor.patients.exercisePlan.wizard.period.startDate')}
             </Text>
-            <input
-              type="date"
+            <JalaliDatePicker
               value={startDate}
-              onChange={(event) => handleStartDateChange(event.target.value)}
-              style={{
-                padding: '8px 12px',
-                borderRadius: 8,
-                border: '1px solid var(--phisio-border)',
-              }}
+              onChange={handleStartDateChange}
+              ariaLabel={t('doctor.patients.exercisePlan.wizard.period.startDate')}
             />
           </div>
           <div>

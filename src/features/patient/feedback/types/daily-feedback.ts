@@ -1,5 +1,7 @@
 export interface SubmitDailyFeedbackRequest {
+  doctorId?: string;
   improvementScore: number;
+  hardnessScore: number;
   comment?: string | null;
 }
 
@@ -9,6 +11,7 @@ export interface SubmitDailyFeedbackResponse {
   doctorId: string;
   feedbackDate: string;
   improvementScore: number;
+  hardnessScore: number;
   comment: string | null;
   wasUpdated: boolean;
 }
@@ -23,4 +26,12 @@ export const DAILY_FEEDBACK_SCORE_LABEL_KEYS = [
   'patient.feedback.scoreLabels.3',
   'patient.feedback.scoreLabels.4',
   'patient.feedback.scoreLabels.5',
+] as const;
+
+export const DAILY_FEEDBACK_HARDNESS_LABEL_KEYS = [
+  'patient.feedback.hardnessLabels.1',
+  'patient.feedback.hardnessLabels.2',
+  'patient.feedback.hardnessLabels.3',
+  'patient.feedback.hardnessLabels.4',
+  'patient.feedback.hardnessLabels.5',
 ] as const;

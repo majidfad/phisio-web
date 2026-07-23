@@ -5,8 +5,6 @@ import type {
   ExerciseMediaType,
 } from '@/features/exercises/types';
 
-export type DoctorExerciseScope = 'all' | 'mine' | 'clinic';
-
 export interface DoctorExerciseDto {
   exerciseId: string;
   title: string;
@@ -18,7 +16,6 @@ export interface DoctorExerciseDto {
   equipment: ExerciseEquipment;
   difficulty: ExerciseDifficulty;
   createdByDoctorId: string | null;
-  isClinicShared: boolean;
   isOwnedByCurrentDoctor: boolean;
 }
 
@@ -31,5 +28,4 @@ export interface CreateDoctorExerciseRequest {
   bodyRegion: ExerciseBodyRegion;
   equipment: ExerciseEquipment;
   difficulty: ExerciseDifficulty;
-  isClinicShared: boolean;
 }

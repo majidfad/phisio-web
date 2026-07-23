@@ -17,6 +17,11 @@ export function formatPatientCommentDisplay(comment: string | null | undefined):
 export function hasPatientFeedback(
   improvementScore: number | null | undefined,
   comment: string | null | undefined,
+  hardnessScore?: number | null,
 ): boolean {
-  return improvementScore != null || Boolean(comment?.trim());
+  return (
+    improvementScore != null ||
+    hardnessScore != null ||
+    Boolean(comment?.trim())
+  );
 }

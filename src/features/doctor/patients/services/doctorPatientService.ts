@@ -6,7 +6,10 @@ import type {
   AssignPatientExercisesResultDto,
   DoctorPatientExerciseDto,
 } from '../types/patient-exercise-plan';
-import type { PatientExerciseHistoryResponse } from '../types/patient-exercise-history';
+import type {
+  PatientExerciseHistoryParams,
+  PatientExerciseHistoryResponse,
+} from '../types/patient-exercise-history';
 import type {
   CreateExerciseProgramRequest,
   CreateExerciseProgramResultDto,
@@ -14,6 +17,10 @@ import type {
   ExerciseProgramDto,
   UpdateExerciseProgramRequest,
 } from '../types/exercise-program';
+import type {
+  PatientExerciseStatsParams,
+  PatientExerciseStatsResponse,
+} from '../types/patient-exercise-stats';
 
 const DOCTOR_PATIENTS_BASE = '/doctor/patients';
 
@@ -63,9 +70,18 @@ export const doctorPatientService = {
     await httpClient.delete(`${DOCTOR_PATIENTS_BASE}/${patientId}`);
   },
 
-  async getExerciseHistory(patientId: string): Promise<PatientExerciseHistoryResponse> {
+  async getExerciseHistory(
+    patientId: string,
+    params: PatientExerciseHistoryParams = {},
+  ): Promise<PatientExerciseHistoryResponse> {
     const { data } = await httpClient.get<PatientExerciseHistoryResponse>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/exercise-history`,
+      {
+        params: {
+          page: params.page ?? 1,
+          pageSize: params.pageSize ?? 10,
+        },
+      },
     );
     return data;
   },
@@ -103,6 +119,26 @@ export const doctorPatientService = {
     const { data } = await httpClient.put<CreateExerciseProgramResultDto>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/programs/${programId}`,
       request,
+    );
+    return data;
+  },
+
+  async deleteProgram(patientId: string, programId: string): Promise<void> {
+    await httpClient.delete(`${DOCTOR_PATIENTS_BASE}/${patientId}/programs/${programId}`);
+  },
+
+  async getExerciseStats(
+    patientId: string,
+    params: PatientExerciseStatsParams = {},
+  ): Promise<PatientExerciseStatsResponse> {
+    const { data } = await httpClient.get<PatientExerciseStatsResponse>(
+      `${DOCTOR_PATIENTS_BASE}/${patientId}/exercise-stats`,
+      {
+        params: {
+          from: params.from,
+          to: params.to,
+        },
+      },
     );
     return data;
   },

@@ -29,6 +29,7 @@ describe('exercise-history-feedback-display', () => {
   it('detects when feedback exists', () => {
     expect(hasPatientFeedback(3, null)).toBe(true);
     expect(hasPatientFeedback(null, 'نظر')).toBe(true);
+    expect(hasPatientFeedback(null, null, 4)).toBe(true);
     expect(hasPatientFeedback(null, null)).toBe(false);
     expect(hasPatientFeedback(null, '   ')).toBe(false);
   });

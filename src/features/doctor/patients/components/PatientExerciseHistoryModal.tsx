@@ -1,16 +1,22 @@
 import { AppEmpty, AppResult } from '@/components/ui';
-import { Button, Card, Col, Modal, Row, Space, Spin, Statistic, Table, Typography } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Card, Col, Modal, Row, Space, Spin, Statistic, Table, Tag, Typography } from 'antd';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PatientExerciseStatsPanel } from '@/features/doctor/patients/components/PatientExerciseStatsPanel';
 import { usePatientExerciseHistory } from '@/features/doctor/patients/hooks/useDoctorPatients';
 import type { DoctorPatientDto } from '@/features/doctor/patients/types/doctor-patient';
-import type { PatientExerciseHistoryDayDto } from '@/features/doctor/patients/types/patient-exercise-history';
+import type {
+  PatientExerciseHistoryDayDto,
+  PatientExerciseHistoryExerciseDto,
+} from '@/features/doctor/patients/types/patient-exercise-history';
 import {
   formatImprovementScoreDisplay,
   formatPatientCommentDisplay,
   hasPatientFeedback,
 } from '@/features/doctor/patients/utils/exercise-history-feedback-display';
+import { ExerciseSide } from '@/features/exercises/types';
 import { getErrorMessage } from '@/utils/get-error-message';
 import {
   formatDisplayPhone,
@@ -27,7 +33,65 @@ interface PatientExerciseHistoryModalProps {
 
 function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
   const { t } = useTranslation();
-  const showFeedbackDetails = hasPatientFeedback(day.improvementScore, day.comment);
+  const showFeedbackDetails = hasPatientFeedback(
+    day.improvementScore,
+    day.comment,
+    day.hardnessScore,
+  );
+  const dosageKey = 'doctor.patients.exercisePlan.dosage';
+
+  const detailColumns: ColumnsType<PatientExerciseHistoryExerciseDto> = [
+    {
+      title: t('doctor.patients.exerciseHistory.detailColumns.title'),
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: t('doctor.patients.exerciseHistory.detailColumns.status'),
+      key: 'status',
+      render: (_, exercise) =>
+        exercise.isCompleted
+          ? t('doctor.patients.exerciseHistory.exerciseStatus.completed')
+          : t('doctor.patients.exerciseHistory.exerciseStatus.missed'),
+    },
+    {
+      title: t('doctor.patients.exerciseHistory.detailColumns.dosage'),
+      key: 'dosage',
+      render: (_, exercise) => (
+        <Space wrap size={[4, 4]}>
+          {exercise.sets != null ? (
+            <Tag>{t('patient.exercises.dosage.sets', { count: exercise.sets })}</Tag>
+          ) : null}
+          {exercise.reps ? (
+            <Tag>{t('patient.exercises.dosage.reps', { count: exercise.reps })}</Tag>
+          ) : null}
+          {exercise.holdSeconds != null ? (
+            <Tag>{t('patient.exercises.dosage.hold', { count: exercise.holdSeconds })}</Tag>
+          ) : null}
+          {exercise.restSeconds != null ? (
+            <Tag>{t('patient.exercises.dosage.rest', { count: exercise.restSeconds })}</Tag>
+          ) : null}
+          {exercise.side !== ExerciseSide.None ? (
+            <Tag>{t(`exerciseMeta.side.${exercise.side}`)}</Tag>
+          ) : null}
+        </Space>
+      ),
+    },
+    {
+      title: t(`${dosageKey}.patientCue`),
+      dataIndex: 'patientCue',
+      key: 'patientCue',
+      ellipsis: true,
+      render: (value: string | null) => value?.trim() || '—',
+    },
+    {
+      title: t(`${dosageKey}.clinicianNote`),
+      dataIndex: 'clinicianNote',
+      key: 'clinicianNote',
+      ellipsis: true,
+      render: (value: string | null) => value?.trim() || '—',
+    },
+  ];
 
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>
@@ -38,6 +102,12 @@ function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
               {t('doctor.patients.exerciseHistory.detailFeedback.score')}
             </Text>{' '}
             <Text>{formatImprovementScoreDisplay(day.improvementScore)}</Text>
+          </div>
+          <div style={{ marginTop: 8 }}>
+            <Text type="secondary">
+              {t('doctor.patients.exerciseHistory.detailFeedback.hardness')}
+            </Text>{' '}
+            <Text>{formatImprovementScoreDisplay(day.hardnessScore)}</Text>
           </div>
           <div style={{ marginTop: 8 }}>
             <Text type="secondary">
@@ -67,21 +137,8 @@ function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
         pagination={false}
         rowKey="userExerciseId"
         dataSource={day.exercises}
-        columns={[
-          {
-            title: t('doctor.patients.exerciseHistory.detailColumns.title'),
-            dataIndex: 'title',
-            key: 'title',
-          },
-          {
-            title: t('doctor.patients.exerciseHistory.detailColumns.status'),
-            key: 'status',
-            render: (_, exercise) =>
-              exercise.isCompleted
-                ? t('doctor.patients.exerciseHistory.exerciseStatus.completed')
-                : t('doctor.patients.exerciseHistory.exerciseStatus.missed'),
-          },
-        ]}
+        columns={detailColumns}
+        scroll={{ x: true }}
       />
     </Space>
   );
@@ -92,12 +149,15 @@ export function PatientExerciseHistoryModal({
   onClose,
 }: PatientExerciseHistoryModalProps) {
   const { t } = useTranslation();
-  const { data, isLoading, isError, error, refetch } = usePatientExerciseHistory(
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const { data, isLoading, isError, error, refetch, isFetching } = usePatientExerciseHistory(
     patient?.patientId ?? null,
+    { page, pageSize },
   );
 
   const summary = data?.summary;
-  const hasCompletions = (summary?.completedDaysCount ?? 0) > 0;
+  const hasHistory = (data?.totalDays ?? 0) > 0 || (summary?.assignedExerciseCount ?? 0) > 0;
 
   const columns: ColumnsType<PatientExerciseHistoryDayDto> = [
     {
@@ -119,6 +179,12 @@ export function PatientExerciseHistoryModal({
       render: (score) => formatImprovementScoreDisplay(score),
     },
     {
+      title: t('doctor.patients.exerciseHistory.columns.hardnessScore'),
+      dataIndex: 'hardnessScore',
+      key: 'hardnessScore',
+      render: (score) => formatImprovementScoreDisplay(score),
+    },
+    {
       title: t('doctor.patients.exerciseHistory.columns.patientComment'),
       dataIndex: 'comment',
       key: 'comment',
@@ -127,15 +193,26 @@ export function PatientExerciseHistoryModal({
     },
   ];
 
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setPage(pagination.current ?? 1);
+    setPageSize(pagination.pageSize ?? 10);
+  };
+
   return (
     <Modal
       title={t('doctor.patients.exerciseHistory.title')}
       open={Boolean(patient)}
       onCancel={onClose}
       footer={null}
-      width={800}
+      width={1040}
       destroyOnHidden
       centered
+      afterOpenChange={(open) => {
+        if (!open) {
+          setPage(1);
+          setPageSize(10);
+        }
+      }}
     >
       {patient ? (
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
@@ -209,14 +286,25 @@ export function PatientExerciseHistoryModal({
                 </Col>
               </Row>
 
-              {!hasCompletions ? (
+              <Card size="small">
+                <PatientExerciseStatsPanel patientId={patient.patientId} variant="history" />
+              </Card>
+
+              {!hasHistory ? (
                 <AppEmpty description={t('doctor.patients.exerciseHistory.empty')} />
               ) : (
                 <Table
                   rowKey="date"
                   columns={columns}
                   dataSource={data?.dailyHistory ?? []}
-                  pagination={{ pageSize: 10, showSizeChanger: true }}
+                  loading={isFetching}
+                  pagination={{
+                    current: page,
+                    pageSize,
+                    total: data?.totalDays ?? 0,
+                    showSizeChanger: true,
+                  }}
+                  onChange={handleTableChange}
                   size="middle"
                   expandable={{
                     expandedRowRender: (day) => <DayExpandedRow day={day} />,

@@ -108,7 +108,7 @@
       "myDoctors": "My doctors",
       "library": "Exercise library",
       "articles": "Articles",
-      "exercises": "Exercises",
+      "exercises": "My library",
       "assignments": "Exercise report",
       "myExercises": "My exercises",
       "progress": "Progress",
@@ -474,19 +474,37 @@
       "emptyPatients": "No patients have been added to you yet."
     },
     "exercises": {
-      "title": "Exercises",
-      "description": "Browse the physiotherapy exercise library",
+      "title": "My exercise library",
+      "description": "Add exercises from the admin catalog and customize description and instructions",
       "searchPlaceholder": "Search exercises…",
       "loading": "Loading…",
       "retry": "Retry",
-      "empty": "No exercises are available in the library yet.",
-      "create": "Create exercise",
-      "shareClinic": "Share with the clinic",
-      "shared": "Clinic shared",
+      "empty": "Your library is empty. Add exercises from the catalog.",
       "bodyRegion": "Body region",
       "equipment": "Equipment",
       "difficulty": "Difficulty",
-      "scopes": { "all": "All", "mine": "Mine", "clinic": "Clinic" },
+      "addFromCatalog": {
+        "action": "Add from catalog",
+        "title": "Choose an exercise from the catalog",
+        "select": "Add",
+        "empty": "No catalog exercises are available yet."
+      },
+      "addToLibrary": {
+        "action": "Add \"{{title}}\" to my library",
+        "title": "Add exercise to my library",
+        "hint": "Customize description and instructions for \"{{title}}\", then save it to your library.",
+        "submit": "Add to my library",
+        "cancel": "Cancel",
+        "success": "Exercise added to your library.",
+        "validationRequired": "Description and instructions are required."
+      },
+      "editTexts": {
+        "title": "Edit description and instructions",
+        "hint": "Update your description and instructions for \"{{title}}\".",
+        "submit": "Save changes",
+        "cancel": "Cancel",
+        "success": "Exercise texts updated."
+      },
       "video": {
         "play": "Play video for “{{title}}”",
         "none": "—",
@@ -660,10 +678,44 @@
         "programs": "Programs",
         "newProgram": "New program",
         "editProgram": "Edit program",
+        "removeProgram": "Remove program",
+        "removeProgramConfirmTitle": "Remove this program?",
+        "removeProgramConfirm": "Future and today’s incomplete sessions will be cancelled. Past history stays available.",
+        "removeProgramSuccess": "Program removed.",
+        "removeProgramFailed": "Failed to remove program.",
         "noPrograms": "No programs yet.",
         "cadenceDays": "Days: {{days}}",
         "cadenceInterval": "Every {{count}} days",
         "programCounts": "{{exercises}} exercises · {{upcoming}} upcoming · {{past}} past"
+      },
+      "stats": {
+        "title": "Trends",
+        "loading": "Loading statistics…",
+        "loadFailed": "Failed to load statistics.",
+        "empty": "No scheduled sessions in this range.",
+        "noFeedback": "No patient feedback scores in this range yet.",
+        "needsAttention": "Needs attention",
+        "range": {
+          "days7": "7 days",
+          "days30": "30 days",
+          "days90": "90 days"
+        },
+        "summary": {
+          "adherence": "{{percent}}% day adherence",
+          "exerciseCompletion": "{{percent}}% exercise completion",
+          "avgImprovement": "Avg improvement {{value}}",
+          "avgHardness": "Avg hardness {{value}}"
+        },
+        "charts": {
+          "weeklyAdherence": "Weekly adherence",
+          "dailyCompleteness": "Daily session completeness",
+          "feedbackTrend": "Improvement vs hardness",
+          "adherenceSeries": "Adherence %",
+          "completedSeries": "Completed",
+          "remainingSeries": "Remaining",
+          "improvementSeries": "Improvement",
+          "hardnessSeries": "Hardness"
+        }
       },
       "exerciseHistory": {
         "open": "📈 Exercise history",
@@ -687,16 +739,19 @@
           "date": "Date",
           "completedCount": "Completed exercises",
           "improvementScore": "Improvement score",
+          "hardnessScore": "Hardness",
           "patientComment": "Patient comment"
         },
         "feedbackSection": "Daily patient feedback",
         "detailFeedback": {
           "score": "Patient score:",
+          "hardness": "Hardness:",
           "comment": "Patient comment:"
         },
         "detailColumns": {
           "title": "Exercise name",
-          "status": "Status"
+          "status": "Status",
+          "dosage": "Dosage"
         },
         "status": {
           "completed": "✅ Completed",
@@ -878,11 +933,25 @@
         "rest": "Rest {{count}}s"
       },
       "session": {
-        "title": "Today's session",
+        "title": "Workout session",
         "start": "Start today's session",
+        "startForDoctor": "Start workout ({{count}})",
+        "doctorDone": "All done for today",
+        "withDoctor": "Exercises from {{doctorName}}",
         "progress": "Exercise {{current}} of {{total}}",
-        "markDone": "Mark done",
-        "skip": "Skip",
+        "dosage": "Exercise dosage",
+        "setOf": "of {{total}} sets",
+        "reps": "Reps",
+        "hold": "Hold (s)",
+        "rest": "Rest (s)",
+        "side": "Side",
+        "holdPhase": "Hold",
+        "restPhase": "Rest",
+        "setHint": "Set {{set}} of {{total}} — complete when ready",
+        "completeSet": "Complete set",
+        "skipTimer": "Skip timer",
+        "markDone": "Exercise done",
+        "skip": "Skip exercise",
         "exit": "Exit",
         "allDone": "All exercises for today are already done."
       },
@@ -898,7 +967,10 @@
       }
     },
     "feedback": {
-      "title": "How do you feel after exercising?",
+      "title": "How was your workout?",
+      "greatJob": "Great job!",
+      "summary": "You completed {{count}} exercises with {{doctorName}}.",
+      "hardnessQuestion": "How hard was this workout?",
       "question": "How much improvement do you feel today?",
       "ratingAria": "Improvement score from 1 to 5",
       "scoreLabels": {
@@ -907,6 +979,13 @@
         "3": "No change",
         "4": "Better",
         "5": "Much better"
+      },
+      "hardnessLabels": {
+        "1": "Very easy",
+        "2": "Easy",
+        "3": "Moderate",
+        "4": "Hard",
+        "5": "Very hard"
       },
       "commentLabel": "Your comments",
       "commentPlaceholder": "Optional notes about how you feel…",
@@ -918,6 +997,7 @@
       "success": "Your feedback was saved successfully.",
       "errors": {
         "scoreRequired": "Please select an improvement score.",
+        "scoresRequired": "Please rate hardness and improvement.",
         "submitFailed": "Failed to submit feedback."
       }
     }

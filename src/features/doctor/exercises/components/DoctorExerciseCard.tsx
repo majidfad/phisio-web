@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { appIconProps } from '@/components/icons/app-icon';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
+
 const { Text, Paragraph } = Typography;
 
 interface DoctorExerciseCardProps {
@@ -40,21 +41,17 @@ export function DoctorExerciseCard({
           ) : (
             <Text type="secondary">{t('doctor.exercises.video.none')}</Text>
           )}
-          {exercise.isOwnedByCurrentDoctor ? (
-            <>
-              <Button
-                type="text"
-                icon={<Pencil {...appIconProps} />}
-                onClick={() => onEdit?.(exercise)}
-              />
-              <Button
-                type="text"
-                danger
-                icon={<Archive {...appIconProps} />}
-                onClick={() => onArchive?.(exercise)}
-              />
-            </>
-          ) : null}
+          <Button
+            type="text"
+            icon={<Pencil {...appIconProps} />}
+            onClick={() => onEdit?.(exercise)}
+          />
+          <Button
+            type="text"
+            danger
+            icon={<Archive {...appIconProps} />}
+            onClick={() => onArchive?.(exercise)}
+          />
         </Space>
       }
       style={{ height: '100%' }}
@@ -68,7 +65,6 @@ export function DoctorExerciseCard({
         <Tag>{t(`exerciseMeta.bodyRegion.${exercise.bodyRegion}`)}</Tag>
         <Tag>{t(`exerciseMeta.equipment.${exercise.equipment}`)}</Tag>
         <Tag color="blue">{t(`exerciseMeta.difficulty.${exercise.difficulty}`)}</Tag>
-        {exercise.isClinicShared ? <Tag color="green">{t('doctor.exercises.shared')}</Tag> : null}
       </Space>
     </Card>
   );

@@ -12,7 +12,6 @@ import type {
   PatientExercisePlayback,
   PatientTodayExerciseItemDto,
 } from '@/features/patient/exercises/types/patient-exercise';
-import { flattenTodayExercises } from '@/features/patient/exercises/types/patient-exercise';
 import {
   getSubmittableExerciseIds,
   isExerciseCheckboxChecked,
@@ -27,29 +26,40 @@ interface PatientExercisesListProps {
   onCompletionsSaved: () => Promise<unknown>;
 }
 
+interface ActiveSession {
+  doctorId: string;
+  doctorName: string;
+  exercises: PatientTodayExerciseItemDto[];
+  key: number;
+}
+
+interface FeedbackContext {
+  doctorId: string;
+  doctorName: string;
+  completedCount: number;
+}
+
 export function PatientExercisesList({
   doctorGroups,
   onCompletionsSaved,
 }: PatientExercisesListProps) {
   const { t } = useTranslation();
   const toast = useToast();
-  const exercises = useMemo(() => flattenTodayExercises({ doctorGroups }), [doctorGroups]);
-  const incompleteExercises = useMemo(
-    () => exercises.filter((exercise) => !exercise.completedToday),
-    [exercises],
-  );
   const [selectedExercise, setSelectedExercise] = useState<PatientExercisePlayback | null>(null);
   const [pendingSelectionIds, setPendingSelectionIds] = useState<Set<string>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSessionOpen, setIsSessionOpen] = useState(false);
-  const [sessionQueue, setSessionQueue] = useState<PatientTodayExerciseItemDto[]>([]);
-  const [sessionKey, setSessionKey] = useState(0);
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [activeSession, setActiveSession] = useState<ActiveSession | null>(null);
+  const [feedbackContext, setFeedbackContext] = useState<FeedbackContext | null>(null);
   const [showChecklist, setShowChecklist] = useState(false);
+
+  const allExercises = useMemo(
+    () => doctorGroups.flatMap((group) => group.exercises),
+    [doctorGroups],
+  );
 
   const sanitizedPendingIds = useMemo(() => {
     const completedTodayIds = new Set(
-      exercises
+      allExercises
         .filter((exercise) => exercise.completedToday)
         .map((exercise) => exercise.userExerciseId),
     );
@@ -62,7 +72,7 @@ export function PatientExercisesList({
     }
 
     return next;
-  }, [exercises, pendingSelectionIds]);
+  }, [allExercises, pendingSelectionIds]);
 
   const handleToggle = (exercise: PatientTodayExerciseItemDto, checked: boolean) => {
     if (exercise.completedToday) {
@@ -88,7 +98,7 @@ export function PatientExercisesList({
     });
   };
 
-  const submittableIds = getSubmittableExerciseIds(exercises, sanitizedPendingIds);
+  const submittableIds = getSubmittableExerciseIds(allExercises, sanitizedPendingIds);
 
   const handleSubmit = async () => {
     if (submittableIds.length === 0) {
@@ -105,7 +115,14 @@ export function PatientExercisesList({
       setPendingSelectionIds(new Set());
       toast.success(t('patient.exercises.completionsRecorded'));
       await onCompletionsSaved();
-      setIsFeedbackModalOpen(true);
+      const firstGroup = doctorGroups[0];
+      if (firstGroup) {
+        setFeedbackContext({
+          doctorId: firstGroup.doctorId,
+          doctorName: firstGroup.doctorName,
+          completedCount: submittableIds.length,
+        });
+      }
     } catch (error) {
       toast.error(getErrorMessage(error, t('patient.exercises.errors.completionFailed')));
     } finally {
@@ -113,25 +130,23 @@ export function PatientExercisesList({
     }
   };
 
+  const startDoctorSession = (group: PatientDoctorExerciseGroupDto) => {
+    const incomplete = group.exercises.filter((exercise) => !exercise.completedToday);
+    if (incomplete.length === 0) {
+      return;
+    }
+
+    setActiveSession({
+      doctorId: group.doctorId,
+      doctorName: group.doctorName,
+      exercises: incomplete,
+      key: Date.now(),
+    });
+  };
+
   return (
     <>
-      <Space direction="vertical" size={16} style={{ width: '100%', marginTop: 16 }}>
-        {incompleteExercises.length > 0 ? (
-          <Button
-            type="primary"
-            size="large"
-            block
-            onClick={() => {
-              setSessionQueue(incompleteExercises);
-              setSessionKey((value) => value + 1);
-              setIsSessionOpen(true);
-            }}
-            className="touch-target"
-          >
-            {t('patient.exercises.session.start')}
-          </Button>
-        ) : null}
-
+      <Space direction="vertical" size={20} style={{ width: '100%', marginTop: 16 }}>
         <Button
           type="link"
           style={{ paddingInline: 0 }}
@@ -142,27 +157,48 @@ export function PatientExercisesList({
             : t('patient.exercises.showChecklist')}
         </Button>
 
-        {doctorGroups.map((group) => (
-          <section key={group.doctorId}>
-            <Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>
-              {t('patient.dashboard.treatingDoctor', { doctorName: group.doctorName })}
-            </Text>
-            <div className="exercise-list" role="list">
-              {group.exercises.map((exercise) => (
-                <div key={exercise.userExerciseId} role="listitem">
-                  <PatientExerciseListItem
-                    exercise={exercise}
-                    isChecked={isExerciseCheckboxChecked(exercise, sanitizedPendingIds)}
-                    isDisabled={!showChecklist || exercise.completedToday || isSubmitting}
-                    showCheckbox={showChecklist}
-                    onToggle={(item, checked) => handleToggle(item, checked)}
-                    onPlay={handlePlay}
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
+        {doctorGroups.map((group) => {
+          const incompleteCount = group.exercises.filter((exercise) => !exercise.completedToday)
+            .length;
+
+          return (
+            <section key={group.doctorId} className="workout-doctor-group">
+              <div className="workout-doctor-group__header">
+                <Text strong>
+                  {t('patient.dashboard.treatingDoctor', { doctorName: group.doctorName })}
+                </Text>
+                {incompleteCount > 0 ? (
+                  <Button
+                    type="primary"
+                    size="large"
+                    onClick={() => startDoctorSession(group)}
+                    className="touch-target"
+                  >
+                    {t('patient.exercises.session.startForDoctor', {
+                      count: incompleteCount,
+                    })}
+                  </Button>
+                ) : (
+                  <Text type="secondary">{t('patient.exercises.session.doctorDone')}</Text>
+                )}
+              </div>
+              <div className="exercise-list" role="list">
+                {group.exercises.map((exercise) => (
+                  <div key={exercise.userExerciseId} role="listitem">
+                    <PatientExerciseListItem
+                      exercise={exercise}
+                      isChecked={isExerciseCheckboxChecked(exercise, sanitizedPendingIds)}
+                      isDisabled={!showChecklist || exercise.completedToday || isSubmitting}
+                      showCheckbox={showChecklist}
+                      onToggle={(item, checked) => handleToggle(item, checked)}
+                      onPlay={handlePlay}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </Space>
 
       {showChecklist ? (
@@ -183,17 +219,24 @@ export function PatientExercisesList({
         </div>
       ) : null}
 
-      <PatientExerciseSession
-        key={sessionKey}
-        open={isSessionOpen}
-        exercises={sessionQueue}
-        onClose={() => setIsSessionOpen(false)}
-        onExerciseCompleted={onCompletionsSaved}
-        onSessionFinishedWithCompletions={() => {
-          toast.success(t('patient.exercises.completionsRecorded'));
-          setIsFeedbackModalOpen(true);
-        }}
-      />
+      {activeSession ? (
+        <PatientExerciseSession
+          key={activeSession.key}
+          open
+          doctorName={activeSession.doctorName}
+          exercises={activeSession.exercises}
+          onClose={() => setActiveSession(null)}
+          onExerciseCompleted={onCompletionsSaved}
+          onSessionFinishedWithCompletions={(completedCount) => {
+            toast.success(t('patient.exercises.completionsRecorded'));
+            setFeedbackContext({
+              doctorId: activeSession.doctorId,
+              doctorName: activeSession.doctorName,
+              completedCount,
+            });
+          }}
+        />
+      ) : null}
 
       <ExerciseVideoModal
         title={selectedExercise?.title ?? null}
@@ -203,8 +246,11 @@ export function PatientExercisesList({
       />
 
       <DailyFeedbackModal
-        isOpen={isFeedbackModalOpen}
-        onClose={() => setIsFeedbackModalOpen(false)}
+        isOpen={Boolean(feedbackContext)}
+        doctorId={feedbackContext?.doctorId}
+        doctorName={feedbackContext?.doctorName}
+        completedCount={feedbackContext?.completedCount}
+        onClose={() => setFeedbackContext(null)}
       />
     </>
   );

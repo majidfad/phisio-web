@@ -12,6 +12,7 @@ interface ExerciseMediaPlayerProps {
   videoUrl?: string | null;
   mediaType?: ExerciseMediaType | null;
   autoPlay?: boolean;
+  maxHeight?: string;
 }
 
 function unloadVideo(video: HTMLVideoElement | null) {
@@ -29,6 +30,7 @@ export function ExerciseMediaPlayer({
   videoUrl,
   mediaType,
   autoPlay = false,
+  maxHeight = '40vh',
 }: ExerciseMediaPlayerProps) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -48,7 +50,7 @@ export function ExerciseMediaPlayer({
       <video
         key={preview.src}
         ref={videoRef}
-        style={{ width: '100%', maxHeight: '40vh', display: 'block', borderRadius: 12 }}
+        style={{ width: '100%', maxHeight, display: 'block', borderRadius: 12 }}
         controls
         playsInline
         autoPlay={autoPlay}
@@ -67,7 +69,7 @@ export function ExerciseMediaPlayer({
         alt={title}
         style={{
           width: '100%',
-          maxHeight: '40vh',
+          maxHeight,
           objectFit: 'contain',
           display: 'block',
           borderRadius: 12,

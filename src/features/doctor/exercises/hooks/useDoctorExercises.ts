@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ExerciseMediaType } from '@/features/exercises/types';
 
 import { doctorExerciseService } from '../services/doctorExerciseService';
-import type { CreateDoctorExerciseRequest, DoctorExerciseScope } from '../types/doctor-exercise';
+import type { CreateDoctorExerciseRequest } from '../types/doctor-exercise';
 
 import { doctorExerciseQueryKeys } from './doctor-exercise-query-keys';
 
@@ -16,10 +16,18 @@ function resolveMediaType(request: CreateDoctorExerciseRequest, videoFile?: File
   return isGif ? ExerciseMediaType.Gif : ExerciseMediaType.UploadedVideo;
 }
 
-export function useDoctorExercises(scope: DoctorExerciseScope) {
+export function useDoctorExerciseLibrary() {
   return useQuery({
-    queryKey: doctorExerciseQueryKeys.list(scope),
-    queryFn: () => doctorExerciseService.getAll(scope),
+    queryKey: doctorExerciseQueryKeys.library(),
+    queryFn: () => doctorExerciseService.getLibrary(),
+  });
+}
+
+export function useDoctorExerciseCatalog(enabled = true) {
+  return useQuery({
+    queryKey: doctorExerciseQueryKeys.catalog(),
+    queryFn: () => doctorExerciseService.getCatalog(),
+    enabled,
   });
 }
 

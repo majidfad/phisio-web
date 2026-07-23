@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { exerciseCatalogService } from '@/features/exercises/services/exerciseCatalogService';
+import { doctorExerciseService } from '@/features/doctor/exercises/services/doctorExerciseService';
+import { doctorExerciseQueryKeys } from '@/features/doctor/exercises/hooks/doctor-exercise-query-keys';
 
 import { doctorPatientService } from '../services/doctorPatientService';
 import type { AssignPatientExercisesRequest } from '../types/patient-exercise-plan';
@@ -9,7 +10,7 @@ import type {
   UpdateExerciseProgramRequest,
 } from '../types/exercise-program';
 
-import { doctorPatientQueryKeys, exerciseCatalogQueryKeys } from './doctor-patient-query-keys';
+import { doctorPatientQueryKeys } from './doctor-patient-query-keys';
 
 export function useDoctorPatients() {
   return useQuery({
@@ -88,8 +89,8 @@ export function usePatientExercisePlan(patientId: string | null) {
 
 export function useExerciseCatalog(enabled: boolean) {
   return useQuery({
-    queryKey: exerciseCatalogQueryKeys.list(),
-    queryFn: () => exerciseCatalogService.getAll(),
+    queryKey: doctorExerciseQueryKeys.library(),
+    queryFn: () => doctorExerciseService.getLibrary(),
     enabled,
   });
 }
@@ -108,11 +109,18 @@ export function useAssignPatientExercises(patientId: string) {
   });
 }
 
-export function usePatientExerciseHistory(patientId: string | null) {
+export function usePatientExerciseHistory(
+  patientId: string | null,
+  params: { page?: number; pageSize?: number } = {},
+) {
+  const page = params.page ?? 1;
+  const pageSize = params.pageSize ?? 10;
+
   return useQuery({
-    queryKey: doctorPatientQueryKeys.exerciseHistory(patientId ?? ''),
-    queryFn: () => doctorPatientService.getExerciseHistory(patientId!),
+    queryKey: doctorPatientQueryKeys.exerciseHistoryPage(patientId ?? '', page, pageSize),
+    queryFn: () => doctorPatientService.getExerciseHistory(patientId!, { page, pageSize }),
     enabled: Boolean(patientId),
+    placeholderData: (previous) => previous,
   });
 }
 
@@ -146,7 +154,50 @@ export function useSavePatientProgram(patientId: string) {
         queryClient.invalidateQueries({
           queryKey: doctorPatientQueryKeys.exerciseHistory(patientId),
         }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseStats(patientId),
+        }),
       ]);
     },
+  });
+}
+
+export function useDeletePatientProgram(patientId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (programId: string) => doctorPatientService.deleteProgram(patientId, programId),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.overview(patientId) }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.programs(patientId) }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.exercises(patientId) }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseHistory(patientId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseStats(patientId),
+        }),
+      ]);
+    },
+  });
+}
+
+export function usePatientExerciseStats(
+  patientId: string | null,
+  params: { from: string; to: string } | null,
+) {
+  return useQuery({
+    queryKey: doctorPatientQueryKeys.exerciseStatsRange(
+      patientId ?? '',
+      params?.from ?? '',
+      params?.to ?? '',
+    ),
+    queryFn: () =>
+      doctorPatientService.getExerciseStats(patientId!, {
+        from: params!.from,
+        to: params!.to,
+      }),
+    enabled: Boolean(patientId && params),
   });
 }

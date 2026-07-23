@@ -1,18 +1,19 @@
 import { httpClient } from '@/api/http-client';
 
-import type {
-  CreateDoctorExerciseRequest,
-  DoctorExerciseDto,
-  DoctorExerciseScope,
-} from '../types/doctor-exercise';
+import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
+
+import type { CreateDoctorExerciseRequest, DoctorExerciseDto } from '../types/doctor-exercise';
 
 const DOCTOR_EXERCISES_BASE = '/doctor/exercises';
 
 export const doctorExerciseService = {
-  async getAll(scope: DoctorExerciseScope = 'all'): Promise<DoctorExerciseDto[]> {
-    const { data } = await httpClient.get<DoctorExerciseDto[]>(DOCTOR_EXERCISES_BASE, {
-      params: { scope },
-    });
+  async getLibrary(): Promise<DoctorExerciseDto[]> {
+    const { data } = await httpClient.get<DoctorExerciseDto[]>(DOCTOR_EXERCISES_BASE);
+    return data;
+  },
+
+  async getCatalog(): Promise<ExerciseDto[]> {
+    const { data } = await httpClient.get<ExerciseDto[]>(`${DOCTOR_EXERCISES_BASE}/catalog`);
     return data;
   },
 

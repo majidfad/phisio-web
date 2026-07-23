@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Checkbox, Form, Input, Modal, Select, Space, Tabs } from 'antd';
+import { Button, Form, Input, Modal, Select, Space, Tabs } from 'antd';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,6 @@ interface ExerciseFormModalProps {
   isOpen: boolean;
   isSubmitting: boolean;
   initialValues?: Partial<ExerciseFormSchemaValues>;
-  showClinicShare?: boolean;
   onClose: () => void;
   onSubmit: (values: ExerciseFormSchemaValues) => Promise<void>;
 }
@@ -28,7 +27,6 @@ export function ExerciseFormModal({
   isOpen,
   isSubmitting,
   initialValues,
-  showClinicShare = false,
   onClose,
   onSubmit,
 }: ExerciseFormModalProps) {
@@ -258,22 +256,6 @@ export function ExerciseFormModal({
             )}
           />
         </Form.Item>
-        {showClinicShare ? (
-          <Form.Item>
-            <Controller
-              name="isClinicShared"
-              control={control}
-              render={({ field }) => (
-                <Checkbox
-                  checked={Boolean(field.value)}
-                  onChange={(event) => field.onChange(event.target.checked)}
-                >
-                  {t('doctor.exercises.shareClinic')}
-                </Checkbox>
-              )}
-            />
-          </Form.Item>
-        ) : null}
 
         <Form.Item style={{ marginBottom: 0 }}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>

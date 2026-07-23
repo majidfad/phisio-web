@@ -1,37 +1,39 @@
-import { Plus, Search } from 'lucide-react';
-import { Button, Input, Select, Tabs } from 'antd';
+import { BookPlus, Search } from 'lucide-react';
+import { Button, Input, Select } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
 import { PageHeader } from '@/components/PageHeader';
 import { LoadingState, PageContainer, AppEmpty, AppResult } from '@/components/ui';
+import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
+import { CatalogPickerModal } from '@/features/doctor/exercises/components/CatalogPickerModal';
+import { DoctorExerciseTextsModal } from '@/features/doctor/exercises/components/DoctorExerciseTextsModal';
 import { DoctorExercisesCatalog } from '@/features/doctor/exercises/components/DoctorExercisesCatalog';
-import { ExerciseFormModal } from '@/features/admin/exercises/components/ExerciseFormModal';
-import type { ExerciseFormSchemaValues } from '@/features/admin/exercises/schemas/exercise-form-schema';
 import {
   useArchiveDoctorExercise,
-  useDoctorExercises,
+  useDoctorExerciseLibrary,
   useSaveDoctorExercise,
 } from '@/features/doctor/exercises/hooks/useDoctorExercises';
-import type {
-  DoctorExerciseDto,
-  DoctorExerciseScope,
-} from '@/features/doctor/exercises/types/doctor-exercise';
+import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
+
+type TextsModalState =
+  | { mode: 'add'; exercise: ExerciseDto }
+  | { mode: 'edit'; exercise: DoctorExerciseDto }
+  | null;
 
 export function DoctorExercisesPage() {
   const { t } = useTranslation();
   const toast = useToast();
-  const [scope, setScope] = useState<DoctorExerciseScope>('all');
-  const { data: exercises = [], isLoading, isError, error, refetch } = useDoctorExercises(scope);
+  const { data: exercises = [], isLoading, isError, error, refetch } = useDoctorExerciseLibrary();
   const [searchQuery, setSearchQuery] = useState('');
   const [bodyRegion, setBodyRegion] = useState<number | undefined>();
   const [equipment, setEquipment] = useState<number | undefined>();
   const [difficulty, setDifficulty] = useState<number | undefined>();
-  const [editingExercise, setEditingExercise] = useState<DoctorExerciseDto | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const [textsModal, setTextsModal] = useState<TextsModalState>(null);
   const saveExercise = useSaveDoctorExercise();
   const archiveExercise = useArchiveDoctorExercise();
 
@@ -54,25 +56,50 @@ export function DoctorExercisesPage() {
     return true;
   });
 
-  const handleSubmit = async (values: ExerciseFormSchemaValues) => {
+  const handleSaveTexts = async (values: { description: string; instructions: string }) => {
+    if (!textsModal) {
+      return;
+    }
+
+    if (!values.description || !values.instructions) {
+      toast.error(t('doctor.exercises.addToLibrary.validationRequired'));
+      return;
+    }
+
+    const { exercise, mode } = textsModal;
+
     try {
-      await saveExercise.mutateAsync({
-        id: editingExercise?.exerciseId,
-        videoFile: values.video?.[0],
-        request: {
-          title: values.title.trim(),
-          description: values.description.trim(),
-          instructions: values.instructions.trim(),
-          videoUrl: values.videoUrl || null,
-          mediaType: values.mediaType,
-          bodyRegion: values.bodyRegion,
-          equipment: values.equipment,
-          difficulty: values.difficulty,
-          isClinicShared: Boolean(values.isClinicShared),
-        },
-      });
-      setIsFormOpen(false);
-      setEditingExercise(null);
+      if (mode === 'add') {
+        await saveExercise.mutateAsync({
+          request: {
+            title: exercise.title,
+            description: values.description,
+            instructions: values.instructions,
+            videoUrl: exercise.videoUrl,
+            mediaType: exercise.mediaType,
+            bodyRegion: exercise.bodyRegion,
+            equipment: exercise.equipment,
+            difficulty: exercise.difficulty,
+          },
+        });
+        toast.success(t('doctor.exercises.addToLibrary.success'));
+      } else {
+        await saveExercise.mutateAsync({
+          id: exercise.exerciseId,
+          request: {
+            title: exercise.title,
+            description: values.description,
+            instructions: values.instructions,
+            videoUrl: exercise.videoUrl,
+            mediaType: exercise.mediaType,
+            bodyRegion: exercise.bodyRegion,
+            equipment: exercise.equipment,
+            difficulty: exercise.difficulty,
+          },
+        });
+        toast.success(t('doctor.exercises.editTexts.success'));
+      }
+      setTextsModal(null);
     } catch (submitError) {
       toast.error(getErrorMessage(submitError, t('doctor.exercises.errors.saveFailed')));
     }
@@ -86,20 +113,12 @@ export function DoctorExercisesPage() {
         action={
           <Button
             type="primary"
-            icon={<Plus {...appIconProps} />}
-            onClick={() => setIsFormOpen(true)}
+            icon={<BookPlus {...appIconProps} />}
+            onClick={() => setIsCatalogOpen(true)}
           >
-            {t('doctor.exercises.create')}
+            {t('doctor.exercises.addFromCatalog.action')}
           </Button>
         }
-      />
-      <Tabs
-        activeKey={scope}
-        onChange={(value) => setScope(value as DoctorExerciseScope)}
-        items={['all', 'mine', 'clinic'].map((value) => ({
-          key: value,
-          label: t(`doctor.exercises.scopes.${value}`),
-        }))}
       />
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
@@ -168,32 +187,23 @@ export function DoctorExercisesPage() {
       {!isLoading && !isError && visibleExercises.length > 0 ? (
         <DoctorExercisesCatalog
           exercises={visibleExercises}
-          onEdit={(exercise) => {
-            setEditingExercise(exercise);
-            setIsFormOpen(true);
-          }}
+          onEdit={(exercise) => setTextsModal({ mode: 'edit', exercise })}
           onArchive={(exercise) => void archiveExercise.mutateAsync(exercise.exerciseId)}
         />
       ) : null}
-      <ExerciseFormModal
-        isOpen={isFormOpen}
+
+      <CatalogPickerModal
+        open={isCatalogOpen}
+        onClose={() => setIsCatalogOpen(false)}
+        onSelect={(exercise) => setTextsModal({ mode: 'add', exercise })}
+      />
+
+      <DoctorExerciseTextsModal
+        exercise={textsModal?.exercise ?? null}
+        mode={textsModal?.mode ?? 'add'}
         isSubmitting={saveExercise.isPending}
-        initialValues={
-          editingExercise
-            ? {
-                ...editingExercise,
-                description: editingExercise.description ?? '',
-                instructions: editingExercise.instructions ?? '',
-                videoUrl: editingExercise.videoUrl ?? '',
-              }
-            : undefined
-        }
-        showClinicShare
-        onClose={() => {
-          setIsFormOpen(false);
-          setEditingExercise(null);
-        }}
-        onSubmit={handleSubmit}
+        onClose={() => setTextsModal(null)}
+        onSubmit={handleSaveTexts}
       />
     </PageContainer>
   );

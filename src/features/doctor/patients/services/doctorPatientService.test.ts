@@ -67,11 +67,16 @@ describe('doctorPatientService', () => {
         adherencePercentage: 100,
       },
       dailyHistory: [],
+      totalDays: 0,
+      page: 1,
+      pageSize: 10,
     };
 
     vi.mocked(httpClient.get).mockResolvedValue({ data: history });
 
     await expect(doctorPatientService.getExerciseHistory(patientId)).resolves.toEqual(history);
-    expect(httpClient.get).toHaveBeenCalledWith(`/doctor/patients/${patientId}/exercise-history`);
+    expect(httpClient.get).toHaveBeenCalledWith(`/doctor/patients/${patientId}/exercise-history`, {
+      params: { page: 1, pageSize: 10 },
+    });
   });
 });

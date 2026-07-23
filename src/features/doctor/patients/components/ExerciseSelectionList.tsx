@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
-import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
+import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 
 const { Text } = Typography;
 
 interface ExerciseSelectionListProps {
-  exercises: ExerciseDto[];
+  exercises: DoctorExerciseDto[];
   selectedExerciseIds: ReadonlySet<string>;
   assignedExerciseIds?: ReadonlySet<string>;
   allowAssignedSelection?: boolean;
@@ -27,7 +27,7 @@ export function ExerciseSelectionList({
   onToggle,
 }: ExerciseSelectionListProps) {
   const { t } = useTranslation();
-  const [previewExercise, setPreviewExercise] = useState<ExerciseDto | null>(null);
+  const [previewExercise, setPreviewExercise] = useState<DoctorExerciseDto | null>(null);
 
   if (exercises.length === 0) {
     return <AppEmpty description={t('doctor.patients.exercisePlan.add.empty')} />;

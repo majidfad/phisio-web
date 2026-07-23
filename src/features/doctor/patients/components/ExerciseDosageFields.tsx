@@ -1,7 +1,7 @@
 import { Button, Form, Input, InputNumber, Select, Space, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
+import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
 import type { AssignPatientExerciseItem } from '@/features/doctor/patients/types/patient-exercise-plan';
 import {
   applyDosagePreset,
@@ -10,7 +10,7 @@ import {
 import { ExerciseSide, type ExerciseSide as ExerciseSideType } from '@/features/exercises/types';
 
 interface ExerciseDosageFieldsProps {
-  exercises: ExerciseDto[];
+  exercises: DoctorExerciseDto[];
   values: Record<string, AssignPatientExerciseItem>;
   copiedFromLastIds?: ReadonlySet<string>;
   onChange: (exerciseId: string, value: AssignPatientExerciseItem) => void;

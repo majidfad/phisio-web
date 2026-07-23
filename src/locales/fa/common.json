@@ -108,7 +108,7 @@
       "myDoctors": "پزشکان من",
       "library": "کتابخانه تمرین",
       "articles": "مقالات",
-      "exercises": "تمرین‌ها",
+      "exercises": "کتابخانه من",
       "assignments": "گزارش تمرین‌ها",
       "myExercises": "تمرین‌های من",
       "progress": "پیشرفت",
@@ -474,19 +474,37 @@
       }
     },
     "exercises": {
-      "title": "تمرین‌ها",
-      "description": "مرور کتابخانه تمرین‌های فیزیوتراپی",
+      "title": "کتابخانه تمرین‌های من",
+      "description": "تمرین‌ها را از فهرست ادمین انتخاب کنید و توضیحات و دستورالعمل خود را تنظیم کنید",
       "searchPlaceholder": "جستجوی تمرین…",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
-      "empty": "هیچ تمرینی در کتابخانه ثبت نشده است.",
-      "create": "ایجاد تمرین",
-      "shareClinic": "اشتراک‌گذاری با کلینیک",
-      "shared": "اشتراک کلینیک",
+      "empty": "کتابخانه شما خالی است. از فهرست تمرین‌ها اضافه کنید.",
       "bodyRegion": "ناحیه بدن",
       "equipment": "وسیله",
       "difficulty": "سطح سختی",
-      "scopes": { "all": "همه", "mine": "تمرین‌های من", "clinic": "کلینیک" },
+      "addFromCatalog": {
+        "action": "افزودن از فهرست",
+        "title": "انتخاب تمرین از فهرست",
+        "select": "افزودن",
+        "empty": "هنوز تمرینی در فهرست ثبت نشده است."
+      },
+      "addToLibrary": {
+        "action": "افزودن «{{title}}» به کتابخانه من",
+        "title": "افزودن تمرین به کتابخانه من",
+        "hint": "توضیحات و دستورالعمل دلخواه خود را برای «{{title}}» تنظیم کنید و به کتابخانه خود اضافه کنید.",
+        "submit": "افزودن به کتابخانه من",
+        "cancel": "انصراف",
+        "success": "تمرین به کتابخانه شما اضافه شد.",
+        "validationRequired": "توضیحات و دستورالعمل الزامی هستند."
+      },
+      "editTexts": {
+        "title": "ویرایش توضیحات و دستورالعمل",
+        "hint": "توضیحات و دستورالعمل خود را برای «{{title}}» به‌روزرسانی کنید.",
+        "submit": "ذخیره تغییرات",
+        "cancel": "انصراف",
+        "success": "توضیحات تمرین به‌روزرسانی شد."
+      },
       "video": {
         "play": "پخش ویدیوی «{{title}}»",
         "none": "—",
@@ -660,10 +678,44 @@
         "programs": "برنامه‌ها",
         "newProgram": "برنامه جدید",
         "editProgram": "ویرایش برنامه",
+        "removeProgram": "حذف برنامه",
+        "removeProgramConfirmTitle": "این برنامه حذف شود؟",
+        "removeProgramConfirm": "جلسات آینده و تمرین‌های ناتمام امروز لغو می‌شوند. تاریخچه گذشته حفظ می‌شود.",
+        "removeProgramSuccess": "برنامه حذف شد.",
+        "removeProgramFailed": "حذف برنامه ناموفق بود.",
         "noPrograms": "هنوز برنامه‌ای ثبت نشده است.",
         "cadenceDays": "روزها: {{days}}",
         "cadenceInterval": "هر {{count}} روز",
         "programCounts": "{{exercises}} تمرین · {{upcoming}} پیش‌رو · {{past}} گذشته"
+      },
+      "stats": {
+        "title": "روندها",
+        "loading": "در حال بارگذاری آمار…",
+        "loadFailed": "بارگذاری آمار ناموفق بود.",
+        "empty": "در این بازه جلسه‌ای برنامه‌ریزی نشده است.",
+        "noFeedback": "در این بازه هنوز بازخوردی ثبت نشده است.",
+        "needsAttention": "نیاز به توجه",
+        "range": {
+          "days7": "۷ روز",
+          "days30": "۳۰ روز",
+          "days90": "۹۰ روز"
+        },
+        "summary": {
+          "adherence": "پایبندی روزانه {{percent}}٪",
+          "exerciseCompletion": "تکمیل تمرین‌ها {{percent}}٪",
+          "avgImprovement": "میانگین بهبود {{value}}",
+          "avgHardness": "میانگین سختی {{value}}"
+        },
+        "charts": {
+          "weeklyAdherence": "پایبندی هفتگی",
+          "dailyCompleteness": "تکمیل جلسات روزانه",
+          "feedbackTrend": "بهبود در برابر سختی",
+          "adherenceSeries": "پایبندی ٪",
+          "completedSeries": "انجام‌شده",
+          "remainingSeries": "باقی‌مانده",
+          "improvementSeries": "بهبود",
+          "hardnessSeries": "سختی"
+        }
       },
       "exerciseHistory": {
         "open": "📈 تاریخچه تمرین‌ها",
@@ -687,16 +739,19 @@
           "date": "تاریخ",
           "completedCount": "تعداد تمرین‌های انجام شده",
           "improvementScore": "امتیاز بهبود",
+          "hardnessScore": "سختی",
           "patientComment": "نظر بیمار"
         },
         "feedbackSection": "بازخورد روزانه بیمار",
         "detailFeedback": {
           "score": "امتیاز بیمار:",
+          "hardness": "سختی:",
           "comment": "نظر بیمار:"
         },
         "detailColumns": {
           "title": "نام تمرین",
-          "status": "وضعیت"
+          "status": "وضعیت",
+          "dosage": "دوز"
         },
         "status": {
           "completed": "✅ انجام شده",
@@ -872,11 +927,25 @@
         "rest": "{{count}} ثانیه استراحت"
       },
       "session": {
-        "title": "جلسه امروز",
+        "title": "جلسه تمرین",
         "start": "شروع جلسه امروز",
+        "startForDoctor": "شروع تمرین ({{count}})",
+        "doctorDone": "تمرین‌های امروز انجام شد",
+        "withDoctor": "تمرین‌های {{doctorName}}",
         "progress": "تمرین {{current}} از {{total}}",
-        "markDone": "انجام شد",
-        "skip": "رد کردن",
+        "dosage": "جزئیات تمرین",
+        "setOf": "از {{total}} ست",
+        "reps": "تکرار",
+        "hold": "نگه‌داشتن (ثانیه)",
+        "rest": "استراحت (ثانیه)",
+        "side": "سمت",
+        "holdPhase": "نگه‌داشتن",
+        "restPhase": "استراحت",
+        "setHint": "ست {{set}} از {{total}} — وقتی آماده بودید تکمیل کنید",
+        "completeSet": "اتمام ست",
+        "skipTimer": "رد کردن زمان‌سنج",
+        "markDone": "تمرین انجام شد",
+        "skip": "رد کردن تمرین",
         "exit": "خروج",
         "allDone": "همه تمرین‌های امروز انجام شده‌اند."
       },
@@ -892,7 +961,10 @@
       }
     },
     "feedback": {
-      "title": "احساس شما بعد از انجام تمرین‌ها",
+      "title": "تمرین چطور بود؟",
+      "greatJob": "آفرین!",
+      "summary": "{{count}} تمرین با {{doctorName}} انجام دادید.",
+      "hardnessQuestion": "سختی این تمرین چقدر بود؟",
       "question": "امروز چقدر احساس بهبود دارید؟",
       "ratingAria": "امتیاز احساس بهبود از ۱ تا ۵",
       "scoreLabels": {
@@ -901,6 +973,13 @@
         "3": "بدون تغییر",
         "4": "بهتر",
         "5": "خیلی بهتر"
+      },
+      "hardnessLabels": {
+        "1": "خیلی آسان",
+        "2": "آسان",
+        "3": "متوسط",
+        "4": "سخت",
+        "5": "خیلی سخت"
       },
       "commentLabel": "نظر یا توضیحات شما",
       "commentPlaceholder": "در صورت تمایل توضیحات خود را بنویسید…",
@@ -912,6 +991,7 @@
       "success": "نظر شما با موفقیت ثبت شد.",
       "errors": {
         "scoreRequired": "لطفاً یکی از گزینه‌های امتیاز را انتخاب کنید.",
+        "scoresRequired": "لطفاً سختی و بهبود را امتیاز دهید.",
         "submitFailed": "ثبت نظر ناموفق بود."
       }
     }

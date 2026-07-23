@@ -1,4 +1,5 @@
 export const doctorExerciseQueryKeys = {
   all: ['doctor-exercises'] as const,
-  list: (scope: string) => [...doctorExerciseQueryKeys.all, 'list', scope] as const,
+  library: () => [...doctorExerciseQueryKeys.all, 'library'] as const,
+  catalog: () => [...doctorExerciseQueryKeys.all, 'catalog'] as const,
 };

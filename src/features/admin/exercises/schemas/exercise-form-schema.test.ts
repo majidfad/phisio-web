@@ -72,7 +72,7 @@ describe('createExerciseFormSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('rejects files larger than 50MB', () => {
+  it('rejects files larger than the configured max upload size', () => {
     const file = {
       name: 'stretch.mp4',
       type: 'video/mp4',

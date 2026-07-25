@@ -1,4 +1,5 @@
 import { httpClient } from '@/api/http-client';
+import { env } from '@/constants/env';
 
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 
@@ -27,7 +28,7 @@ export const doctorExerciseService = {
     const { data } = await httpClient.post<{ videoUrl: string; fileName: string }>(
       `${DOCTOR_EXERCISES_BASE}/upload`,
       formData,
-      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120_000 },
+      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: env.uploadTimeoutMs },
     );
     return data;
   },

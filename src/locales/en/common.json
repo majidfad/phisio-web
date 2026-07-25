@@ -331,7 +331,7 @@
         "nameMaxLength": "Exercise name must be at most 200 characters.",
         "videoRequired": "Video upload is required.",
         "videoMp4Only": "Only MP4 files are allowed.",
-        "videoMaxSize": "File size must not exceed 50 MB.",
+        "videoMaxSize": "File size must not exceed 500 MB.",
         "urlInvalid": "Enter a valid URL."
       },
       "errors": {

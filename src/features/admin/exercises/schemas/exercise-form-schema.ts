@@ -1,7 +1,9 @@
 import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
-export const MAX_EXERCISE_VIDEO_SIZE_BYTES = 52_428_800;
+import { env } from '@/constants/env';
+
+export const MAX_EXERCISE_VIDEO_SIZE_BYTES = env.maxExerciseUploadBytes;
 
 const supportedUploadMimeTypes = ['video/mp4', 'image/gif'];
 

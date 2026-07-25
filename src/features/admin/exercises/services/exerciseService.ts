@@ -1,4 +1,5 @@
 import { httpClient } from '@/api/http-client';
+import { env } from '@/constants/env';
 
 import type { CreateExerciseRequest, ExerciseDto } from '../types/exercise';
 
@@ -29,7 +30,7 @@ export const exerciseService = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        timeout: 120_000,
+        timeout: env.uploadTimeoutMs,
       },
     );
 

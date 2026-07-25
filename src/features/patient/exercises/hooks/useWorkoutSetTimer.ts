@@ -111,9 +111,11 @@ export function useWorkoutSetTimer({
 
     // secondsLeft === 0
     if (phase === 'work') {
-      setPhase('idle');
-      setSecondsLeft(null);
-      return;
+      const id = window.setTimeout(() => {
+        setPhase('idle');
+        setSecondsLeft(null);
+      }, 0);
+      return () => window.clearTimeout(id);
     }
 
     if (phase === 'rest') {

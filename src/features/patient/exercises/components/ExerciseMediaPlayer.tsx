@@ -78,7 +78,8 @@ export function ExerciseMediaPlayer({
   }, [previewKind, previewSrc, autoPlay, continuous]);
 
   useEffect(() => {
-    return () => unloadVideo(videoRef.current);
+    const video = videoRef.current;
+    return () => unloadVideo(video);
   }, []);
 
   if (!preview) {

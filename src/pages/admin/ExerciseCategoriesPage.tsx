@@ -31,8 +31,13 @@ export function ExerciseCategoriesPage() {
   const [listFilter, setListFilter] = useState<AdminListFilter>('active');
   const showInactiveView = listFilter === 'inactive';
 
-  const { data: categories = [], isLoading, isError, error, refetch } =
-    useExerciseCategories(listFilter);
+  const {
+    data: categories = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useExerciseCategories(listFilter);
   const createCategory = useCreateExerciseCategory();
   const updateCategory = useUpdateExerciseCategory();
   const deleteCategory = useDeleteExerciseCategory();

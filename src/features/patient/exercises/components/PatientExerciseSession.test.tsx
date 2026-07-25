@@ -119,9 +119,7 @@ describe('PatientExerciseSession', () => {
       />,
     );
 
-    await user.click(
-      screen.getByRole('button', { name: /Show instructions|نمایش دستورالعمل/i }),
-    );
+    await user.click(screen.getByRole('button', { name: /Show instructions|نمایش دستورالعمل/i }));
 
     expect(screen.getByText('Move slowly')).toBeTruthy();
     expect(screen.getByText('Breathe')).toBeTruthy();

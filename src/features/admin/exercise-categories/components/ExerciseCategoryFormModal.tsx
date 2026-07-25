@@ -104,9 +104,7 @@ export function ExerciseCategoryFormModal({
           <Controller
             name="sortOrder"
             control={control}
-            render={({ field }) => (
-              <InputNumber {...field} min={0} style={{ width: '100%' }} />
-            )}
+            render={({ field }) => <InputNumber {...field} min={0} style={{ width: '100%' }} />}
           />
         </Form.Item>
 

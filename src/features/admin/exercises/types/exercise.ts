@@ -1,4 +1,8 @@
-import type { ExerciseDifficulty, ExerciseEquipment, ExerciseMediaType } from '@/features/exercises/types';
+import type {
+  ExerciseDifficulty,
+  ExerciseEquipment,
+  ExerciseMediaType,
+} from '@/features/exercises/types';
 import type { ExerciseCategorySummaryDto } from '@/features/admin/exercise-categories/types/exercise-category';
 
 export interface ExerciseDto {

@@ -5,6 +5,7 @@ import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { ArticlesPage } from '@/pages/admin/ArticlesPage';
 import { AssignmentsPage } from '@/pages/admin/AssignmentsPage';
 import { DoctorsPage } from '@/pages/admin/DoctorsPage';
+import { ExerciseCategoriesPage } from '@/pages/admin/ExerciseCategoriesPage';
 import { ExercisesPage } from '@/pages/admin/ExercisesPage';
 import { PatientsPage } from '@/pages/admin/PatientsPage';
 import { UnauthorizedPage } from '@/pages/errors/UnauthorizedPage';
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
               {
                 path: 'exercises',
                 element: <ExercisesPage />,
+              },
+              {
+                path: 'exercise-categories',
+                element: <ExerciseCategoriesPage />,
               },
               {
                 path: 'articles',

@@ -6,10 +6,14 @@ import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
 import { LoadingState, PageContainer, AppResult } from '@/components/ui';
 import { AdminStatusTabs } from '@/features/admin/components/AdminStatusTabs';
 import { ExerciseFormModal } from '@/features/admin/exercises/components/ExerciseFormModal';
-import { ExercisesTable } from '@/features/admin/exercises/components/ExercisesTable';
+import {
+  DeleteExerciseDialog,
+  ExercisesTable,
+} from '@/features/admin/exercises/components/ExercisesTable';
 import {
   useActivateExercise,
   useCreateExercise,
+  useDeleteExercise,
   useExercises,
   useUpdateExercise,
 } from '@/features/admin/exercises/hooks/useExercises';
@@ -29,9 +33,11 @@ export function ExercisesPage() {
   const createExercise = useCreateExercise();
   const updateExercise = useUpdateExercise();
   const activateExercise = useActivateExercise();
+  const deleteExercise = useDeleteExercise();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingExercise, setEditingExercise] = useState<ExerciseDto | null>(null);
+  const [exerciseToDelete, setExerciseToDelete] = useState<ExerciseDto | null>(null);
   const [activatingExerciseId, setActivatingExerciseId] = useState<string | null>(null);
 
   const openCreateForm = () => {
@@ -50,7 +56,7 @@ export function ExercisesPage() {
         title: values.title.trim(),
         description: values.description.trim(),
         instructions: values.instructions.trim(),
-        bodyRegion: values.bodyRegion,
+        categoryIds: values.categoryIds,
         equipment: values.equipment,
         difficulty: values.difficulty,
         mediaType: values.mediaType,
@@ -80,10 +86,25 @@ export function ExercisesPage() {
 
     try {
       await activateExercise.mutateAsync(exercise.exerciseId);
-    } catch {
-      // Error surfaced via query refetch state if needed.
+      toast.success(t('admin.exercises.success.activated'));
+    } catch (activateError) {
+      toast.error(getErrorMessage(activateError, t('admin.exercises.errors.activateFailed')));
     } finally {
       setActivatingExerciseId(null);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!exerciseToDelete) {
+      return;
+    }
+
+    try {
+      await deleteExercise.mutateAsync(exerciseToDelete.exerciseId);
+      toast.success(t('admin.exercises.success.deactivated'));
+      setExerciseToDelete(null);
+    } catch (deleteError) {
+      toast.error(getErrorMessage(deleteError, t('admin.exercises.errors.deactivateFailed')));
     }
   };
 
@@ -126,6 +147,7 @@ export function ExercisesPage() {
             setEditingExercise(exercise);
             setIsFormOpen(true);
           }}
+          onDelete={setExerciseToDelete}
         />
       ) : null}
 
@@ -139,11 +161,19 @@ export function ExercisesPage() {
                 description: editingExercise.description ?? '',
                 instructions: editingExercise.instructions ?? '',
                 videoUrl: editingExercise.videoUrl ?? '',
+                categoryIds: editingExercise.categories.map((c) => c.exerciseCategoryId),
               }
             : undefined
         }
         onClose={closeForm}
         onSubmit={handleFormSubmit}
+      />
+
+      <DeleteExerciseDialog
+        exercise={exerciseToDelete}
+        isDeleting={deleteExercise.isPending}
+        onCancel={() => setExerciseToDelete(null)}
+        onConfirm={() => void handleDelete()}
       />
     </PageContainer>
   );

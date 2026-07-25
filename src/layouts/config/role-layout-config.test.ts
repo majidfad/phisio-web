@@ -8,7 +8,7 @@ import {
 
 describe('role-layout-config', () => {
   it.each([
-    ['layout.roles.admin', adminLayoutConfig, 6],
+    ['layout.roles.admin', adminLayoutConfig, 7],
     ['layout.roles.doctor', doctorLayoutConfig, 3],
     ['layout.roles.patient', patientLayoutConfig, 6],
   ])('defines navigation for %s', (roleLabelKey, config, itemCount) => {

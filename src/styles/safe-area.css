@@ -37,6 +37,51 @@
   background: linear-gradient(180deg, transparent 0%, var(--phisio-bg) 28%);
 }
 
+.pwa-install-prompt.ant-card {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(12px + var(--safe-area-bottom));
+  /* Above patient tab bar (z-index 100) so the banner stays visible at the bottom */
+  z-index: 110;
+  margin: 0;
+}
+
+.pwa-install-prompt--above-tabs.ant-card {
+  bottom: calc(var(--patient-tab-bar-height) + var(--safe-area-bottom) + 8px);
+}
+
+.pwa-install-prompt__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pwa-install-prompt__copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.pwa-install-prompt__mark {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.pwa-install-prompt__text {
+  font-size: 14px;
+  color: var(--phisio-text);
+}
+
+.pwa-install-prompt__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
 .touch-target {
   min-height: 48px;
   min-width: 48px;

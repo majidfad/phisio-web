@@ -19,17 +19,7 @@ export function createExerciseFormSchema(t: TFunction) {
         .max(200, t('admin.exercises.validation.nameMaxLength')),
       description: z.string().trim().max(2_000),
       instructions: z.string().trim().max(4_000),
-      bodyRegion: z.union([
-        z.literal(1),
-        z.literal(2),
-        z.literal(3),
-        z.literal(4),
-        z.literal(5),
-        z.literal(6),
-        z.literal(7),
-        z.literal(8),
-        z.literal(9),
-      ]),
+      categoryIds: z.array(z.string().uuid()),
       equipment: z.union([
         z.literal(1),
         z.literal(2),

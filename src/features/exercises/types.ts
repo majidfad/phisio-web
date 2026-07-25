@@ -7,19 +7,6 @@ export const ExerciseMediaType = {
 } as const;
 export type ExerciseMediaType = (typeof ExerciseMediaType)[keyof typeof ExerciseMediaType];
 
-export const ExerciseBodyRegion = {
-  Neck: 1,
-  Shoulder: 2,
-  Elbow: 3,
-  WristHand: 4,
-  Back: 5,
-  Hip: 6,
-  Knee: 7,
-  AnkleFoot: 8,
-  FullBody: 9,
-} as const;
-export type ExerciseBodyRegion = (typeof ExerciseBodyRegion)[keyof typeof ExerciseBodyRegion];
-
 export const ExerciseEquipment = {
   None: 1,
   Band: 2,
@@ -38,7 +25,6 @@ export type ExerciseSide = (typeof ExerciseSide)[keyof typeof ExerciseSide];
 
 export interface ExerciseMediaMetadata {
   mediaType: ExerciseMediaType;
-  bodyRegion: ExerciseBodyRegion;
   equipment: ExerciseEquipment;
   difficulty: ExerciseDifficulty;
   instructions: string;
@@ -50,6 +36,5 @@ export interface ExerciseMetadata extends ExerciseMediaMetadata {
   videoUrl: string | null;
 }
 
-export const exerciseBodyRegionOptions = Object.values(ExerciseBodyRegion);
 export const exerciseEquipmentOptions = Object.values(ExerciseEquipment);
 export const exerciseDifficultyOptions = Object.values(ExerciseDifficulty);

@@ -8,6 +8,7 @@ export const routes = {
     doctors: '/admin/doctors',
     patients: '/admin/patients',
     exercises: '/admin/exercises',
+    exerciseCategories: '/admin/exercise-categories',
     articles: '/admin/articles',
     assignments: '/admin/assignments',
   },
@@ -35,6 +36,7 @@ export type AppRoutePath =
   | typeof routes.admin.doctors
   | typeof routes.admin.patients
   | typeof routes.admin.exercises
+  | typeof routes.admin.exerciseCategories
   | typeof routes.admin.articles
   | typeof routes.admin.assignments
   | typeof routes.doctor.root

@@ -89,3 +89,14 @@ export function useActivateExercise() {
     },
   });
 }
+
+export function useDeleteExercise() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => exerciseService.delete(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: exerciseQueryKeys.lists() });
+    },
+  });
+}

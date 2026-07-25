@@ -12,7 +12,10 @@ interface ExerciseMediaPlayerProps {
   videoUrl?: string | null;
   mediaType?: ExerciseMediaType | null;
   autoPlay?: boolean;
+  /** Guided session: loop without controls, continuous playback. */
+  continuous?: boolean;
   maxHeight?: string;
+  className?: string;
 }
 
 function unloadVideo(video: HTMLVideoElement | null) {
@@ -25,21 +28,58 @@ function unloadVideo(video: HTMLVideoElement | null) {
   video.load();
 }
 
+async function tryPlay(video: HTMLVideoElement, preferMuted: boolean) {
+  if (preferMuted) {
+    video.muted = true;
+  }
+
+  try {
+    await video.play();
+  } catch {
+    video.muted = true;
+    try {
+      await video.play();
+    } catch {
+      // Browser blocked autoplay entirely.
+    }
+  }
+}
+
 export function ExerciseMediaPlayer({
   title,
   videoUrl,
   mediaType,
   autoPlay = false,
+  continuous = false,
   maxHeight = '40vh',
+  className,
 }: ExerciseMediaPlayerProps) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const preview = getVideoPreviewSource(videoUrl, mediaType);
+  const previewKind = preview?.kind;
+  const previewSrc = preview?.src;
 
   useEffect(() => {
     const video = videoRef.current;
-    return () => unloadVideo(video);
-  }, [preview?.src]);
+    if (!video || previewKind !== 'video' || !previewSrc) {
+      return;
+    }
+
+    // Keep muted for continuous coach mode — browsers block unmuted autoplay,
+    // and continuous mode has no play button to recover.
+    if (autoPlay || continuous) {
+      void tryPlay(video, continuous);
+    }
+
+    return () => {
+      video.pause();
+    };
+  }, [previewKind, previewSrc, autoPlay, continuous]);
+
+  useEffect(() => {
+    return () => unloadVideo(videoRef.current);
+  }, []);
 
   if (!preview) {
     return <Text type="secondary">{t('admin.exercises.video.unavailable')}</Text>;
@@ -50,12 +90,25 @@ export function ExerciseMediaPlayer({
       <video
         key={preview.src}
         ref={videoRef}
-        style={{ width: '100%', maxHeight, display: 'block', borderRadius: 12 }}
-        controls
+        className={className}
+        style={{
+          width: '100%',
+          height: continuous ? '100%' : undefined,
+          maxHeight: continuous ? undefined : maxHeight,
+          objectFit: continuous ? 'contain' : 'cover',
+          display: 'block',
+          borderRadius: continuous ? 0 : 12,
+          background: '#0b1220',
+        }}
+        controls={!continuous}
+        controlsList={continuous ? undefined : 'nodownload'}
         playsInline
-        autoPlay={autoPlay}
+        muted={continuous}
+        loop={continuous}
+        autoPlay={autoPlay || continuous}
         preload="auto"
         src={preview.src}
+        aria-label={title}
       >
         <track kind="captions" />
       </video>
@@ -67,12 +120,15 @@ export function ExerciseMediaPlayer({
       <img
         src={preview.src}
         alt={title}
+        className={className}
         style={{
           width: '100%',
-          maxHeight,
-          objectFit: 'contain',
+          height: continuous ? '100%' : undefined,
+          maxHeight: continuous ? undefined : maxHeight,
+          objectFit: continuous ? 'contain' : 'contain',
           display: 'block',
-          borderRadius: 12,
+          borderRadius: continuous ? 0 : 12,
+          background: '#0b1220',
         }}
       />
     );
@@ -81,17 +137,19 @@ export function ExerciseMediaPlayer({
   return (
     <iframe
       key={preview.src}
+      className={className}
       style={{
         width: '100%',
         aspectRatio: '16 / 9',
         border: 'none',
         display: 'block',
-        borderRadius: 12,
+        borderRadius: continuous ? 0 : 12,
+        maxHeight: continuous ? '100%' : undefined,
       }}
       src={preview.src}
       title={title}
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
+      allowFullScreen={!continuous}
     />
   );
 }

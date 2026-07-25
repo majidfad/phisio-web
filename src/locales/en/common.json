@@ -109,6 +109,7 @@
       "library": "Exercise library",
       "articles": "Articles",
       "exercises": "My library",
+      "exerciseCategories": "Exercise categories",
       "assignments": "Exercise report",
       "myExercises": "My exercises",
       "progress": "Progress",
@@ -290,9 +291,20 @@
       "emptyInactive": "No inactive exercises found.",
       "columns": {
         "title": "Exercise title",
+        "categories": "Categories",
         "video": "Video",
         "createdAt": "Created at",
         "status": "Status"
+      },
+      "actions": {
+        "edit": "Edit",
+        "deactivate": "Deactivate"
+      },
+      "delete": {
+        "title": "Deactivate exercise",
+        "message": "Deactivate \"{{title}}\"? It will be unassigned from all patients.",
+        "confirm": "Deactivate",
+        "cancel": "Cancel"
       },
       "status": {
         "active": "Active"
@@ -309,7 +321,8 @@
         "name": "Exercise name",
         "description": "Description",
         "instructions": "Instructions",
-        "bodyRegion": "Body region",
+        "categories": "Categories",
+        "categoriesPlaceholder": "Select one or more categories",
         "equipment": "Equipment",
         "difficulty": "Difficulty",
         "video": "Upload video",
@@ -324,7 +337,9 @@
       },
       "success": {
         "created": "Exercise created successfully.",
-        "updated": "Exercise updated successfully."
+        "updated": "Exercise updated successfully.",
+        "activated": "Exercise activated successfully.",
+        "deactivated": "Exercise deactivated and unassigned from patients."
       },
       "validation": {
         "nameRequired": "Exercise name is required.",
@@ -336,7 +351,56 @@
       },
       "errors": {
         "loadFailed": "Failed to load exercises.",
-        "saveFailed": "Failed to save exercise."
+        "saveFailed": "Failed to save exercise.",
+        "activateFailed": "Failed to activate exercise.",
+        "deactivateFailed": "Failed to deactivate exercise."
+      }
+    },
+    "exerciseCategories": {
+      "title": "Exercise categories",
+      "description": "Bilingual categories for catalog exercises",
+      "addButton": "Add category",
+      "loading": "Loading…",
+      "retry": "Retry",
+      "empty": "No categories yet.",
+      "emptyInactive": "No inactive categories found.",
+      "columns": {
+        "name": "Display name",
+        "nameFa": "Persian name",
+        "nameEn": "English name",
+        "sortOrder": "Order",
+        "createdAt": "Created at",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Deactivate"
+      },
+      "delete": {
+        "title": "Deactivate category",
+        "message": "Deactivate \"{{name}}\"? Exercises keep other categories.",
+        "confirm": "Deactivate",
+        "cancel": "Cancel"
+      },
+      "form": {
+        "createTitle": "Add category",
+        "editTitle": "Edit category",
+        "nameFa": "Persian name",
+        "nameEn": "English name",
+        "sortOrder": "Sort order",
+        "create": "Create category",
+        "update": "Save changes",
+        "cancel": "Cancel"
+      },
+      "validation": {
+        "nameFaRequired": "Persian name is required.",
+        "nameEnRequired": "English name is required.",
+        "nameMax": "Name must be at most 100 characters."
+      },
+      "errors": {
+        "loadFailed": "Failed to load categories.",
+        "saveFailed": "Failed to save category."
       }
     },
     "articles": {
@@ -952,6 +1016,15 @@
         "skipTimer": "Skip timer",
         "markDone": "Exercise done",
         "skip": "Skip exercise",
+        "next": "Next exercise",
+        "prev": "Previous exercise",
+        "finish": "Finish session",
+        "nextUp": "Next: {{title}}",
+        "setsUnit": "{{count}} sets",
+        "repsUnit": "{{count}} reps",
+        "holdUnit": "{{count}}s hold",
+        "showInstructions": "Show instructions",
+        "hideInstructions": "Hide instructions",
         "exit": "Exit",
         "allDone": "All exercises for today are already done."
       },
@@ -1038,6 +1111,7 @@
   },
   "pwa": {
     "installPrompt": "Install the app for quick access",
-    "install": "Install"
+    "install": "Install",
+    "dismiss": "Dismiss"
   }
 }

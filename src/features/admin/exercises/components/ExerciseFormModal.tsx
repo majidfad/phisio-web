@@ -4,12 +4,13 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useExerciseCategories } from '@/features/admin/exercise-categories/hooks/useExerciseCategories';
+import { getCategoryDisplayName } from '@/features/admin/exercise-categories/utils/get-category-display-name';
 import {
   createExerciseFormSchema,
   type ExerciseFormSchemaValues,
 } from '@/features/admin/exercises/schemas/exercise-form-schema';
 import {
-  exerciseBodyRegionOptions,
   exerciseDifficultyOptions,
   exerciseEquipmentOptions,
   ExerciseMediaType,
@@ -30,8 +31,9 @@ export function ExerciseFormModal({
   onClose,
   onSubmit,
 }: ExerciseFormModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const schema = useMemo(() => createExerciseFormSchema(t), [t]);
+  const { data: categories = [] } = useExerciseCategories('active');
 
   const {
     control,
@@ -45,7 +47,7 @@ export function ExerciseFormModal({
       title: '',
       description: '',
       instructions: '',
-      bodyRegion: 5,
+      categoryIds: [],
       equipment: 1,
       difficulty: 1,
       mediaMode: 'upload',
@@ -64,7 +66,7 @@ export function ExerciseFormModal({
       title: '',
       description: '',
       instructions: '',
-      bodyRegion: 5,
+      categoryIds: [],
       equipment: 1,
       difficulty: 1,
       mediaMode:
@@ -124,22 +126,26 @@ export function ExerciseFormModal({
             render={({ field }) => <Input.TextArea {...field} rows={3} />}
           />
         </Form.Item>
+        <Form.Item label={t('admin.exercises.form.categories')}>
+          <Controller
+            name="categoryIds"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                mode="multiple"
+                allowClear
+                optionFilterProp="label"
+                placeholder={t('admin.exercises.form.categoriesPlaceholder')}
+                options={categories.map((category) => ({
+                  value: category.exerciseCategoryId,
+                  label: getCategoryDisplayName(category, i18n.language),
+                }))}
+              />
+            )}
+          />
+        </Form.Item>
         <Space size="middle" style={{ display: 'flex' }}>
-          <Form.Item label={t('admin.exercises.form.bodyRegion')} style={{ flex: 1 }}>
-            <Controller
-              name="bodyRegion"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  options={exerciseBodyRegionOptions.map((value) => ({
-                    value,
-                    label: t(`exerciseMeta.bodyRegion.${value}`),
-                  }))}
-                />
-              )}
-            />
-          </Form.Item>
           <Form.Item label={t('admin.exercises.form.equipment')} style={{ flex: 1 }}>
             <Controller
               name="equipment"

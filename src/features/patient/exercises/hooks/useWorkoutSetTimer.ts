@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export type WorkoutPhase = 'work' | 'rest';
+export type WorkoutPhase = 'work' | 'rest' | 'idle';
 
 interface UseWorkoutSetTimerOptions {
   holdSeconds: number | null;
@@ -15,6 +15,11 @@ function initialSeconds(holdSeconds: number | null): number | null {
   return holdSeconds && holdSeconds > 0 ? holdSeconds : null;
 }
 
+/**
+ * Hold timer can auto-count during work.
+ * Rest starts only after the user marks the set done (completeSetManually),
+ * never automatically when hold reaches zero.
+ */
 export function useWorkoutSetTimer({
   holdSeconds,
   restSeconds,
@@ -50,7 +55,18 @@ export function useWorkoutSetTimer({
   const hasHoldTimer = Boolean(holdSeconds && holdSeconds > 0);
   const hasRestTimer = Boolean(restSeconds && restSeconds > 0);
 
-  const advanceAfterWork = useCallback(
+  const finishExercise = useCallback(() => {
+    if (completionToken > 0) {
+      return;
+    }
+
+    setCompletionToken(1);
+    setPhase('idle');
+    setSecondsLeft(null);
+    onCompleteRef.current();
+  }, [completionToken]);
+
+  const startRestOrNextSet = useCallback(
     (setNumber: number) => {
       if (setNumber < totalSets && hasRestTimer && restSeconds) {
         setPhase('rest');
@@ -65,15 +81,9 @@ export function useWorkoutSetTimer({
         return;
       }
 
-      if (completionToken > 0) {
-        return;
-      }
-
-      setCompletionToken(1);
-      setSecondsLeft(null);
-      onCompleteRef.current();
+      finishExercise();
     },
-    [completionToken, hasRestTimer, holdSeconds, restSeconds, totalSets],
+    [finishExercise, hasRestTimer, holdSeconds, restSeconds, totalSets],
   );
 
   const advanceAfterRest = useCallback(() => {
@@ -85,6 +95,8 @@ export function useWorkoutSetTimer({
     });
   }, [holdSeconds]);
 
+  // Hold / rest countdown ticks. When hold hits 0 → idle (wait for user).
+  // Rest hitting 0 still advances to next set automatically.
   useEffect(() => {
     if (!enabled || secondsLeft === null) {
       return;
@@ -97,27 +109,41 @@ export function useWorkoutSetTimer({
       return () => window.clearTimeout(id);
     }
 
-    const id = window.setTimeout(() => {
-      if (phase === 'work') {
-        advanceAfterWork(currentSet);
-        return;
-      }
-      advanceAfterRest();
-    }, 0);
+    // secondsLeft === 0
+    if (phase === 'work') {
+      setPhase('idle');
+      setSecondsLeft(null);
+      return;
+    }
 
-    return () => window.clearTimeout(id);
-  }, [advanceAfterRest, advanceAfterWork, currentSet, enabled, phase, secondsLeft]);
+    if (phase === 'rest') {
+      const id = window.setTimeout(() => {
+        advanceAfterRest();
+      }, 0);
+      return () => window.clearTimeout(id);
+    }
+  }, [advanceAfterRest, enabled, phase, secondsLeft]);
 
   const completeSetManually = () => {
     if (phase === 'rest') {
       advanceAfterRest();
       return;
     }
-    advanceAfterWork(currentSet);
+
+    // User finished this set → only then start rest (or next set / complete).
+    startRestOrNextSet(currentSet);
   };
 
   const skipTimer = () => {
-    setSecondsLeft(0);
+    if (phase === 'rest') {
+      advanceAfterRest();
+      return;
+    }
+
+    if (phase === 'work') {
+      setPhase('idle');
+      setSecondsLeft(null);
+    }
   };
 
   return {

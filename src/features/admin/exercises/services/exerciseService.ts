@@ -50,4 +50,8 @@ export const exerciseService = {
   async activate(id: string): Promise<void> {
     await httpClient.patch(`${EXERCISES_BASE}/${id}/activate`);
   },
+
+  async delete(id: string): Promise<void> {
+    await httpClient.delete(`${EXERCISES_BASE}/${id}`);
+  },
 };

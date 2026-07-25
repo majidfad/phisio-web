@@ -1,7 +1,8 @@
-import { Download } from 'lucide-react';
+import { Download, X } from 'lucide-react';
 import { Button, Card } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
 
@@ -10,70 +11,137 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
+const DISMISS_STORAGE_KEY = 'phisio.pwaInstallDismissed';
+
+function isRunningAsInstalledPwa(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  const displayStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.matchMedia('(display-mode: fullscreen)').matches ||
+    window.matchMedia('(display-mode: minimal-ui)').matches;
+
+  const iosStandalone =
+    'standalone' in window.navigator &&
+    Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
+
+  return displayStandalone || iosStandalone;
+}
+
 export function PwaInstallPrompt() {
   const { t } = useTranslation();
+  const location = useLocation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return sessionStorage.getItem(DISMISS_STORAGE_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
+  const [installed, setInstalled] = useState(() => isRunningAsInstalledPwa());
+
+  const isPatientRoute = location.pathname.startsWith('/patient');
 
   useEffect(() => {
-    const handler = (e: Event) => {
+    if (installed) {
+      return;
+    }
+
+    const onBeforeInstall = (e: Event) => {
+      // Never offer install while already running as an installed PWA.
+      if (isRunningAsInstalledPwa()) {
+        setInstalled(true);
+        return;
+      }
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+    const onAppInstalled = () => {
+      setInstalled(true);
+      setDeferredPrompt(null);
+    };
 
-  if (!deferredPrompt || dismissed) {
+    const onDisplayModeChange = () => {
+      if (isRunningAsInstalledPwa()) {
+        setInstalled(true);
+        setDeferredPrompt(null);
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', onBeforeInstall);
+    window.addEventListener('appinstalled', onAppInstalled);
+
+    const mediaQuery = window.matchMedia('(display-mode: standalone)');
+    mediaQuery.addEventListener('change', onDisplayModeChange);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
+      window.removeEventListener('appinstalled', onAppInstalled);
+      mediaQuery.removeEventListener('change', onDisplayModeChange);
+    };
+  }, [installed]);
+
+  if (installed || !deferredPrompt || dismissed) {
     return null;
   }
+
+  const dismiss = () => {
+    setDismissed(true);
+    try {
+      sessionStorage.setItem(DISMISS_STORAGE_KEY, '1');
+    } catch {
+      // Ignore storage failures (private mode).
+    }
+  };
 
   const handleInstall = async () => {
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === 'accepted') {
       setDeferredPrompt(null);
+      setInstalled(true);
     }
-    setDismissed(true);
+    dismiss();
   };
 
   return (
     <Card
-      className="energy-stat-card safe-area-bottom"
-      style={{
-        position: 'fixed',
-        bottom: 100,
-        left: 16,
-        right: 16,
-        zIndex: 99,
-        margin: 0,
-      }}
-      styles={{ body: { padding: '14px 16px' } }}
+      className={`pwa-install-prompt energy-stat-card${isPatientRoute ? ' pwa-install-prompt--above-tabs' : ''}`}
+      styles={{ body: { padding: '12px 14px' } }}
     >
-      <div
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+      <div className="pwa-install-prompt__row">
+        <div className="pwa-install-prompt__copy">
           <img
             src="/brand/zivan-mark.png"
             alt=""
-            width={36}
-            height={36}
-            style={{ flexShrink: 0, objectFit: 'contain' }}
+            width={32}
+            height={32}
+            className="pwa-install-prompt__mark"
           />
-          <span style={{ fontSize: 14, color: 'var(--phisio-text)' }}>
-            {t('pwa.installPrompt')}
-          </span>
+          <span className="pwa-install-prompt__text">{t('pwa.installPrompt')}</span>
         </div>
-        <Button
-          type="primary"
-          icon={<Download {...appIconProps} />}
-          onClick={() => void handleInstall()}
-          className="touch-active"
-        >
-          {t('pwa.install')}
-        </Button>
+        <div className="pwa-install-prompt__actions">
+          <Button
+            type="primary"
+            size="middle"
+            icon={<Download {...appIconProps} />}
+            onClick={() => void handleInstall()}
+            className="touch-active"
+          >
+            {t('pwa.install')}
+          </Button>
+          <Button
+            type="text"
+            shape="circle"
+            aria-label={t('pwa.dismiss', { defaultValue: 'Dismiss' })}
+            icon={<X {...appIconProps} />}
+            onClick={dismiss}
+          />
+        </div>
       </div>
     </Card>
   );

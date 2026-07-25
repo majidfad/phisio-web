@@ -1,12 +1,13 @@
-import { CirclePlay, Pencil } from 'lucide-react';
-import { Button, Tag } from 'antd';
+import { CirclePlay } from 'lucide-react';
+import { Button, Modal, Space, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { denseIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
-import { AppTable, AppEmpty } from '@/components/ui';
+import { AppTable, AppEmpty, TableIconActions } from '@/components/ui';
+import { getCategoryDisplayName } from '@/features/admin/exercise-categories/utils/get-category-display-name';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { formatExerciseDate } from '@/features/admin/exercises/utils/format-exercise-date';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
@@ -18,6 +19,7 @@ interface ExercisesTableProps {
   activatingExerciseId?: string | null;
   onActivate: (exercise: ExerciseDto) => void;
   onEdit: (exercise: ExerciseDto) => void;
+  onDelete: (exercise: ExerciseDto) => void;
 }
 
 export function ExercisesTable({
@@ -27,8 +29,9 @@ export function ExercisesTable({
   activatingExerciseId = null,
   onActivate,
   onEdit,
+  onDelete,
 }: ExercisesTableProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedExercise, setSelectedExercise] = useState<ExerciseDto | null>(null);
 
   const columns: ColumnsType<ExerciseDto> = [
@@ -39,17 +42,21 @@ export function ExercisesTable({
       ellipsis: true,
     },
     {
-      title: t('admin.doctors.columns.actions'),
-      key: 'edit',
-      width: 70,
+      title: t('admin.exercises.columns.categories'),
+      key: 'categories',
+      width: 220,
       render: (_, exercise) =>
-        !showInactiveView ? (
-          <Button
-            type="text"
-            icon={<Pencil {...denseIconProps} />}
-            onClick={() => onEdit(exercise)}
-          />
-        ) : null,
+        exercise.categories?.length ? (
+          <Space size={[4, 4]} wrap>
+            {exercise.categories.map((category) => (
+              <Tag key={category.exerciseCategoryId}>
+                {getCategoryDisplayName(category, i18n.language)}
+              </Tag>
+            ))}
+          </Space>
+        ) : (
+          <span>—</span>
+        ),
     },
     {
       title: t('admin.exercises.columns.video'),
@@ -89,25 +96,29 @@ export function ExercisesTable({
           <Tag color="success">{t('admin.exercises.status.active')}</Tag>
         ),
     },
-    ...(showInactiveView
-      ? [
-          {
-            title: t('admin.doctors.columns.actions'),
-            key: 'actions',
-            width: 120,
-            align: 'center' as const,
-            render: (_: unknown, exercise: ExerciseDto) => (
-              <Button
-                type="link"
-                loading={isActivating && activatingExerciseId === exercise.exerciseId}
-                onClick={() => onActivate(exercise)}
-              >
-                {t('admin.common.actions.activate')}
-              </Button>
-            ),
-          },
-        ]
-      : []),
+    {
+      title: t('admin.doctors.columns.actions'),
+      key: 'actions',
+      width: 140,
+      align: 'center',
+      render: (_, exercise) =>
+        showInactiveView ? (
+          <Button
+            type="link"
+            loading={isActivating && activatingExerciseId === exercise.exerciseId}
+            onClick={() => onActivate(exercise)}
+          >
+            {t('admin.common.actions.activate')}
+          </Button>
+        ) : (
+          <TableIconActions
+            editLabel={t('admin.exercises.actions.edit')}
+            deleteLabel={t('admin.exercises.actions.deactivate')}
+            onEdit={() => onEdit(exercise)}
+            onDelete={() => onDelete(exercise)}
+          />
+        ),
+    },
   ];
 
   if (exercises.length === 0) {
@@ -138,5 +149,38 @@ export function ExercisesTable({
         onClose={() => setSelectedExercise(null)}
       />
     </>
+  );
+}
+
+interface DeleteExerciseDialogProps {
+  exercise: ExerciseDto | null;
+  isDeleting: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+export function DeleteExerciseDialog({
+  exercise,
+  isDeleting,
+  onCancel,
+  onConfirm,
+}: DeleteExerciseDialogProps) {
+  const { t } = useTranslation();
+
+  return (
+    <Modal
+      title={t('admin.exercises.delete.title')}
+      open={Boolean(exercise)}
+      onCancel={onCancel}
+      onOk={onConfirm}
+      okText={t('admin.exercises.delete.confirm')}
+      cancelText={t('admin.exercises.delete.cancel')}
+      confirmLoading={isDeleting}
+      okButtonProps={{ danger: true }}
+      centered
+      destroyOnHidden
+    >
+      {t('admin.exercises.delete.message', { title: exercise?.title ?? '' })}
+    </Modal>
   );
 }

@@ -13,6 +13,11 @@ export const adminLayoutConfig: RoleLayoutConfig = {
     { id: 'doctors', labelKey: 'layout.nav.doctors', to: routes.admin.doctors },
     { id: 'patients', labelKey: 'layout.nav.patients', to: routes.admin.patients },
     { id: 'exercises', labelKey: 'layout.nav.exercises', to: routes.admin.exercises },
+    {
+      id: 'exerciseCategories',
+      labelKey: 'layout.nav.exerciseCategories',
+      to: routes.admin.exerciseCategories,
+    },
     { id: 'articles', labelKey: 'layout.nav.articles', to: routes.admin.articles },
     { id: 'assignments', labelKey: 'layout.nav.assignments', to: routes.admin.assignments },
   ],

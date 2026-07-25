@@ -62,7 +62,6 @@ export function DoctorExerciseCard({
         </Paragraph>
       ) : null}
       <Space wrap size={[4, 4]} style={{ marginTop: hasDescription ? 12 : 0 }}>
-        <Tag>{t(`exerciseMeta.bodyRegion.${exercise.bodyRegion}`)}</Tag>
         <Tag>{t(`exerciseMeta.equipment.${exercise.equipment}`)}</Tag>
         <Tag color="blue">{t(`exerciseMeta.difficulty.${exercise.difficulty}`)}</Tag>
       </Space>

@@ -1,5 +1,4 @@
 import type {
-  ExerciseBodyRegion,
   ExerciseDifficulty,
   ExerciseEquipment,
   ExerciseMediaType,
@@ -12,7 +11,6 @@ export interface DoctorExerciseDto {
   instructions: string | null;
   videoUrl: string | null;
   mediaType: ExerciseMediaType;
-  bodyRegion: ExerciseBodyRegion;
   equipment: ExerciseEquipment;
   difficulty: ExerciseDifficulty;
   createdByDoctorId: string | null;
@@ -25,7 +23,6 @@ export interface CreateDoctorExerciseRequest {
   instructions: string;
   videoUrl: string | null;
   mediaType: ExerciseMediaType;
-  bodyRegion: ExerciseBodyRegion;
   equipment: ExerciseEquipment;
   difficulty: ExerciseDifficulty;
 }

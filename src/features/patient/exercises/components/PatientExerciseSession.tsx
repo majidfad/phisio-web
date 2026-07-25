@@ -1,4 +1,5 @@
-import { Button, Progress, Space, Typography } from 'antd';
+import { ArrowLeft, ArrowRight, Check, Info, X } from 'lucide-react';
+import { Button, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +11,7 @@ import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { formatPersianNumber } from '@/utils/persian-format';
 
-const { Text, Title, Paragraph } = Typography;
+const { Text, Paragraph } = Typography;
 
 interface PatientExerciseSessionProps {
   open: boolean;
@@ -35,6 +36,7 @@ export function PatientExerciseSession({
   const [completedCount, setCompletedCount] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [exerciseKey, setExerciseKey] = useState(0);
+  const [infoOpen, setInfoOpen] = useState(false);
   const [wasOpen, setWasOpen] = useState(open);
 
   if (open !== wasOpen) {
@@ -44,18 +46,19 @@ export function PatientExerciseSession({
       setCompletedCount(0);
       setIsCompleting(false);
       setExerciseKey(0);
+      setInfoOpen(false);
     }
   }
 
-  const formatCount = (value: number) =>
-    i18n.language.startsWith('fa') ? formatPersianNumber(value) : String(value);
+  const isRtl = i18n.language.startsWith('fa');
+  const formatCount = (value: number) => (isRtl ? formatPersianNumber(value) : String(value));
 
   const current = exercises[index] ?? null;
   const total = exercises.length;
   const isLast = index >= total - 1;
-  const progressPercent =
-    total > 0 ? Math.round(((index + (current ? 0.35 : 0)) / total) * 100) : 0;
+  const isFirst = index <= 0;
   const totalSets = Math.max(current?.sets ?? 1, 1);
+  const hasInfo = Boolean(current?.instructions?.trim() || current?.patientCue?.trim());
 
   const finishSession = (didCompleteAny: boolean, count: number) => {
     onClose();
@@ -69,6 +72,7 @@ export function PatientExerciseSession({
       finishSession(nextCompletedCount > 0, nextCompletedCount);
       return;
     }
+    setInfoOpen(false);
     setIndex((value) => value + 1);
     setExerciseKey((value) => value + 1);
   };
@@ -105,11 +109,20 @@ export function PatientExerciseSession({
     },
   });
 
-  const handleSkip = () => {
+  const handleNext = () => {
     if (isCompleting) {
       return;
     }
     advanceOrFinish(completedCount);
+  };
+
+  const handlePrev = () => {
+    if (isCompleting || isFirst) {
+      return;
+    }
+    setInfoOpen(false);
+    setIndex((value) => Math.max(0, value - 1));
+    setExerciseKey((value) => value + 1);
   };
 
   const handleExit = () => {
@@ -123,146 +136,214 @@ export function PatientExerciseSession({
     return null;
   }
 
-  const timerLabel =
-    timer.phase === 'rest'
-      ? t('patient.exercises.session.restPhase')
-      : t('patient.exercises.session.holdPhase');
+  const resting = timer.phase === 'rest' && timer.secondsLeft !== null;
+  const holding = timer.phase === 'work' && timer.secondsLeft !== null;
+  const NextIcon = isRtl ? ArrowLeft : ArrowRight;
+  const PrevIcon = isRtl ? ArrowRight : ArrowLeft;
+
+  const progressDots = (
+    <div
+      className="workout-session__dots"
+      role="status"
+      aria-label={t('patient.exercises.session.progress', {
+        current: formatCount(Math.min(index + 1, total)),
+        total: formatCount(total),
+      })}
+    >
+      {Array.from({ length: total }, (_, dotIndex) => (
+        <span
+          key={dotIndex}
+          className={
+            dotIndex === index
+              ? 'workout-session__dot workout-session__dot--active'
+              : dotIndex < index
+                ? 'workout-session__dot workout-session__dot--done'
+                : 'workout-session__dot'
+          }
+        />
+      ))}
+    </div>
+  );
+
+  if (resting) {
+    return (
+      <div
+        className="workout-session workout-session--overlay workout-session--rest"
+        role="dialog"
+        aria-modal="true"
+      >
+        <header className="workout-session__chrome workout-session__chrome--top">
+          <button
+            type="button"
+            className="workout-session__glass-btn"
+            onClick={handleExit}
+            disabled={isCompleting}
+            aria-label={t('patient.exercises.session.exit')}
+          >
+            <X size={20} strokeWidth={1.75} />
+          </button>
+          {progressDots}
+          <span className="workout-session__glass-spacer" aria-hidden="true" />
+        </header>
+
+        <div className="workout-session__rest-screen" aria-live="polite">
+          <span className="workout-session__rest-label">
+            {t('patient.exercises.session.restPhase')}
+          </span>
+          <div className="workout-session__count">{formatCount(timer.secondsLeft ?? 0)}</div>
+          <button
+            type="button"
+            className="workout-session__text-action"
+            onClick={timer.skipTimer}
+            disabled={isCompleting}
+          >
+            {t('patient.exercises.session.skipTimer')}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="workout-session" role="dialog" aria-modal="true">
-      <header className="workout-session__header">
-        <div>
-          <Text type="secondary" className="workout-session__doctor">
-            {t('patient.exercises.session.withDoctor', { doctorName })}
-          </Text>
-          <Text className="workout-session__progress-label">
-            {t('patient.exercises.session.progress', {
-              current: formatCount(Math.min(index + 1, total)),
-              total: formatCount(total),
-            })}
-          </Text>
-        </div>
-        <Button type="text" onClick={handleExit} disabled={isCompleting}>
-          {t('patient.exercises.session.exit')}
-        </Button>
-      </header>
-
-      <Progress
-        percent={progressPercent}
-        showInfo={false}
-        strokeColor="var(--phisio-primary)"
-        trailColor="var(--phisio-border)"
-        strokeWidth={6}
-        style={{ marginBottom: 12 }}
-      />
-
+    <div className="workout-session workout-session--overlay" role="dialog" aria-modal="true">
       {total === 0 || !current ? (
-        <Text type="secondary">{t('patient.exercises.session.allDone')}</Text>
+        <Text type="secondary" className="workout-session__empty">
+          {t('patient.exercises.session.allDone')}
+        </Text>
       ) : (
-        <div key={`${current.userExerciseId}-${exerciseKey}`} className="workout-session__body">
+        <div
+          key={`${current.userExerciseId}-${exerciseKey}`}
+          className="workout-session__stage workout-session__stage--enter"
+        >
           <div className="workout-session__media">
             <ExerciseMediaPlayer
               title={current.title}
               videoUrl={current.videoUrl}
               mediaType={current.mediaType}
-              autoPlay
-              maxHeight="34vh"
+              continuous
+              className="workout-session__media-el"
             />
           </div>
 
-          <Title level={3} className="workout-session__title">
-            {current.title}
-          </Title>
+          <header className="workout-session__chrome workout-session__chrome--top">
+            <button
+              type="button"
+              className="workout-session__glass-btn"
+              onClick={handleExit}
+              disabled={isCompleting}
+              aria-label={t('patient.exercises.session.exit')}
+            >
+              <X size={20} strokeWidth={1.75} />
+            </button>
+            {progressDots}
+            {hasInfo ? (
+              <button
+                type="button"
+                className="workout-session__glass-btn"
+                onClick={() => setInfoOpen(true)}
+                aria-label={t('patient.exercises.session.showInstructions')}
+              >
+                <Info size={20} strokeWidth={1.75} />
+              </button>
+            ) : (
+              <span className="workout-session__glass-spacer" aria-hidden="true" />
+            )}
+          </header>
 
-          <div
-            className="workout-session__stats"
-            aria-label={t('patient.exercises.session.dosage')}
-          >
-            <div className="workout-stat">
-              <span className="workout-stat__value">{formatCount(timer.currentSet)}</span>
-              <span className="workout-stat__label">
-                {t('patient.exercises.session.setOf', { total: formatCount(totalSets) })}
-              </span>
+          <div className="workout-session__chrome workout-session__chrome--bottom">
+            <div className="workout-session__meta">
+              <h2 className="workout-session__title">{current.title}</h2>
+              {holding ? (
+                <div
+                  className="workout-session__count workout-session__count--hold"
+                  aria-live="polite"
+                >
+                  {formatCount(timer.secondsLeft ?? 0)}
+                </div>
+              ) : null}
             </div>
-            {current.reps ? (
-              <div className="workout-stat">
-                <span className="workout-stat__value">{current.reps}</span>
-                <span className="workout-stat__label">{t('patient.exercises.session.reps')}</span>
-              </div>
-            ) : null}
-            {current.holdSeconds ? (
-              <div className="workout-stat">
-                <span className="workout-stat__value">{formatCount(current.holdSeconds)}</span>
-                <span className="workout-stat__label">{t('patient.exercises.session.hold')}</span>
-              </div>
-            ) : null}
-            {current.restSeconds ? (
-              <div className="workout-stat">
-                <span className="workout-stat__value">{formatCount(current.restSeconds)}</span>
-                <span className="workout-stat__label">{t('patient.exercises.session.rest')}</span>
-              </div>
-            ) : null}
-            {current.side ? (
-              <div className="workout-stat">
-                <span className="workout-stat__value">
-                  {t(`exerciseMeta.side.${current.side}`)}
-                </span>
-                <span className="workout-stat__label">{t('patient.exercises.session.side')}</span>
-              </div>
-            ) : null}
-          </div>
 
-          {timer.secondsLeft !== null ? (
-            <div className={`workout-timer workout-timer--${timer.phase}`}>
-              <Text className="workout-timer__label">{timerLabel}</Text>
-              <div className="workout-timer__ring" aria-live="polite">
-                {formatCount(timer.secondsLeft)}
-              </div>
-              <Button type="link" onClick={timer.skipTimer} disabled={isCompleting}>
-                {t('patient.exercises.session.skipTimer')}
-              </Button>
-            </div>
-          ) : (
-            <div className="workout-timer workout-timer--manual">
-              <Text type="secondary">
-                {t('patient.exercises.session.setHint', {
-                  set: formatCount(timer.currentSet),
-                  total: formatCount(totalSets),
-                })}
-              </Text>
-            </div>
-          )}
+            <div className="workout-session__transport">
+              <button
+                type="button"
+                className="workout-session__nav-ghost"
+                onClick={handlePrev}
+                disabled={isCompleting || isFirst}
+                aria-label={t('patient.exercises.session.prev')}
+              >
+                <PrevIcon size={24} strokeWidth={1.75} />
+              </button>
 
-          {current.patientCue ? (
-            <Paragraph className="workout-session__cue">{current.patientCue}</Paragraph>
-          ) : null}
-          {current.instructions ? (
-            <Paragraph type="secondary" className="workout-session__instructions">
-              {current.instructions}
-            </Paragraph>
-          ) : null}
-
-          <Space direction="vertical" size={10} className="workout-session__actions">
-            {timer.secondsLeft === null ? (
               <Button
                 type="primary"
+                shape="round"
                 size="large"
-                block
+                className="workout-session__cta-pill"
                 loading={isCompleting}
                 onClick={timer.completeSetManually}
-                className="touch-target"
+                icon={<Check size={18} strokeWidth={2} />}
               >
                 {timer.currentSet >= totalSets
                   ? t('patient.exercises.session.markDone')
                   : t('patient.exercises.session.completeSet')}
               </Button>
-            ) : null}
-            <Button size="large" block disabled={isCompleting} onClick={handleSkip}>
-              {t('patient.exercises.session.skip')}
-            </Button>
-          </Space>
+
+              <button
+                type="button"
+                className="workout-session__nav-ghost"
+                onClick={handleNext}
+                disabled={isCompleting}
+                aria-label={
+                  isLast
+                    ? t('patient.exercises.session.finish')
+                    : t('patient.exercises.session.next')
+                }
+              >
+                {isLast ? (
+                  <Check size={24} strokeWidth={2} />
+                ) : (
+                  <NextIcon size={24} strokeWidth={1.75} />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
+
+      {infoOpen && current ? (
+        <div className="workout-session__info" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            className="workout-session__info-backdrop"
+            aria-label={t('patient.exercises.session.hideInstructions')}
+            onClick={() => setInfoOpen(false)}
+          />
+          <div className="workout-session__info-sheet">
+            <div className="workout-session__info-header">
+              <h3 className="workout-session__info-title">{current.title}</h3>
+              <button
+                type="button"
+                className="workout-session__glass-btn workout-session__glass-btn--on-sheet"
+                onClick={() => setInfoOpen(false)}
+                aria-label={t('patient.exercises.session.hideInstructions')}
+              >
+                <X size={18} strokeWidth={1.75} />
+              </button>
+            </div>
+            {current.patientCue ? (
+              <Paragraph className="workout-session__cue">{current.patientCue}</Paragraph>
+            ) : null}
+            {current.instructions ? (
+              <Paragraph type="secondary" className="workout-session__instructions">
+                {current.instructions}
+              </Paragraph>
+            ) : null}
+            <Text type="secondary" className="workout-session__doctor-note">
+              {t('patient.exercises.session.withDoctor', { doctorName })}
+            </Text>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

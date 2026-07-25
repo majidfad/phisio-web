@@ -7,6 +7,7 @@ import {
   PanelLeftOpen,
   BookOpen,
   BarChart3,
+  Tags,
   Users,
   User,
 } from 'lucide-react';
@@ -32,6 +33,7 @@ const NAV_ICONS: Record<string, ReactNode> = {
   patients: <User {...appIconProps} />,
   articles: <BookOpen {...appIconProps} />,
   exercises: <FileText {...appIconProps} />,
+  exerciseCategories: <Tags {...appIconProps} />,
   assignments: <FileText {...appIconProps} />,
   overview: <LayoutDashboard {...appIconProps} />,
   progress: <BarChart3 {...appIconProps} />,

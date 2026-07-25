@@ -67,9 +67,11 @@ describe('PatientExerciseSession', () => {
       />,
     );
 
-    expect(screen.getByText(/Exercise 1 of 1|تمرین 1 از 1/i)).toBeTruthy();
+    expect(screen.getByRole('status', { name: /Exercise 1 of 1|تمرین 1 از 1/i })).toBeTruthy();
     await user.click(
-      screen.getByRole('button', { name: /Exercise done|تمرین انجام شد|Mark done|انجام شد/i }),
+      screen.getByRole('button', {
+        name: /Exercise done|تمرین انجام شد|Mark done|انجام شد|Complete set|تکمیل ست/i,
+      }),
     );
 
     await waitFor(() => {
@@ -98,10 +100,30 @@ describe('PatientExerciseSession', () => {
       />,
     );
 
-    await user.click(
-      screen.getByRole('button', { name: /Skip exercise|رد کردن تمرین|Skip|رد کردن/i }),
-    );
+    await user.click(screen.getByRole('button', { name: /Next exercise|تمرین بعدی/i }));
     expect(patientExerciseService.completeExercises).not.toHaveBeenCalled();
     expect(screen.getByText('Second')).toBeTruthy();
+  });
+
+  it('opens instructions sheet from info button', async () => {
+    const user = userEvent.setup();
+
+    renderWithProviders(
+      <PatientExerciseSession
+        open
+        doctorName="Dr. A"
+        exercises={[exercise()]}
+        onClose={vi.fn()}
+        onExerciseCompleted={vi.fn()}
+        onSessionFinishedWithCompletions={vi.fn()}
+      />,
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: /Show instructions|نمایش دستورالعمل/i }),
+    );
+
+    expect(screen.getByText('Move slowly')).toBeTruthy();
+    expect(screen.getByText('Breathe')).toBeTruthy();
   });
 });

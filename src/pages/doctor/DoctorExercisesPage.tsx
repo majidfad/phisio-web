@@ -27,7 +27,6 @@ export function DoctorExercisesPage() {
   const toast = useToast();
   const { data: exercises = [], isLoading, isError, error, refetch } = useDoctorExerciseLibrary();
   const [searchQuery, setSearchQuery] = useState('');
-  const [bodyRegion, setBodyRegion] = useState<number | undefined>();
   const [equipment, setEquipment] = useState<number | undefined>();
   const [difficulty, setDifficulty] = useState<number | undefined>();
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -48,7 +47,6 @@ export function DoctorExercisesPage() {
     );
   }, [exercises, searchQuery]);
   const visibleExercises = filteredExercises.filter((exercise) => {
-    if (bodyRegion && exercise.bodyRegion !== bodyRegion) return false;
     if (equipment && exercise.equipment !== equipment) return false;
     if (difficulty && exercise.difficulty !== difficulty) return false;
     return true;
@@ -75,7 +73,6 @@ export function DoctorExercisesPage() {
             instructions: values.instructions,
             videoUrl: exercise.videoUrl ?? null,
             mediaType: exercise.mediaType,
-            bodyRegion: exercise.bodyRegion,
             equipment: exercise.equipment,
             difficulty: exercise.difficulty,
           },
@@ -90,7 +87,6 @@ export function DoctorExercisesPage() {
             instructions: values.instructions,
             videoUrl: exercise.videoUrl ?? null,
             mediaType: exercise.mediaType,
-            bodyRegion: exercise.bodyRegion,
             equipment: exercise.equipment,
             difficulty: exercise.difficulty,
           },
@@ -128,17 +124,6 @@ export function DoctorExercisesPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{ maxWidth: 480 }}
-        />
-        <Select
-          allowClear
-          placeholder={t('doctor.exercises.bodyRegion')}
-          value={bodyRegion}
-          onChange={setBodyRegion}
-          options={Array.from({ length: 9 }, (_, index) => ({
-            value: index + 1,
-            label: t(`exerciseMeta.bodyRegion.${index + 1}`),
-          }))}
-          style={{ minWidth: 160 }}
         />
         <Select
           allowClear

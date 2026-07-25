@@ -109,6 +109,7 @@
       "library": "کتابخانه تمرین",
       "articles": "مقالات",
       "exercises": "کتابخانه من",
+      "exerciseCategories": "دسته‌بندی تمرین",
       "assignments": "گزارش تمرین‌ها",
       "myExercises": "تمرین‌های من",
       "progress": "پیشرفت",
@@ -290,9 +291,20 @@
       "emptyInactive": "تمرین غیرفعالی ثبت نشده است",
       "columns": {
         "title": "عنوان تمرین",
+        "categories": "دسته‌بندی",
         "video": "ویدیو",
         "createdAt": "تاریخ ثبت",
         "status": "وضعیت"
+      },
+      "actions": {
+        "edit": "ویرایش",
+        "deactivate": "غیرفعال‌سازی"
+      },
+      "delete": {
+        "title": "غیرفعال‌سازی تمرین",
+        "message": "تمرین «{{title}}» غیرفعال شود؟ از همه بیماران لغو انتساب خواهد شد.",
+        "confirm": "غیرفعال شود",
+        "cancel": "انصراف"
       },
       "status": {
         "active": "فعال"
@@ -309,7 +321,8 @@
         "name": "نام تمرین",
         "description": "توضیحات",
         "instructions": "دستورالعمل",
-        "bodyRegion": "ناحیه بدن",
+        "categories": "دسته‌بندی‌ها",
+        "categoriesPlaceholder": "یک یا چند دسته انتخاب کنید",
         "equipment": "تجهیزات",
         "difficulty": "سختی",
         "video": "آپلود ویدیو",
@@ -324,7 +337,9 @@
       },
       "success": {
         "created": "تمرین با موفقیت ثبت شد.",
-        "updated": "تمرین با موفقیت ویرایش شد."
+        "updated": "تمرین با موفقیت ویرایش شد.",
+        "activated": "تمرین با موفقیت فعال شد.",
+        "deactivated": "تمرین غیرفعال شد و از بیماران لغو انتساب شد."
       },
       "validation": {
         "nameRequired": "نام تمرین الزامی است.",
@@ -336,7 +351,56 @@
       },
       "errors": {
         "loadFailed": "بارگذاری فهرست تمرین‌ها ناموفق بود.",
-        "saveFailed": "ثبت تمرین ناموفق بود."
+        "saveFailed": "ثبت تمرین ناموفق بود.",
+        "activateFailed": "فعال‌سازی تمرین ناموفق بود.",
+        "deactivateFailed": "غیرفعال‌سازی تمرین ناموفق بود."
+      }
+    },
+    "exerciseCategories": {
+      "title": "دسته‌بندی تمرین‌ها",
+      "description": "دسته‌بندی دوزبانه برای تمرین‌های کاتالوگ",
+      "addButton": "افزودن دسته",
+      "loading": "در حال بارگذاری…",
+      "retry": "تلاش مجدد",
+      "empty": "هنوز دسته‌ای ثبت نشده است.",
+      "emptyInactive": "دسته غیرفعالی یافت نشد.",
+      "columns": {
+        "name": "نام نمایشی",
+        "nameFa": "نام فارسی",
+        "nameEn": "نام انگلیسی",
+        "sortOrder": "ترتیب",
+        "createdAt": "تاریخ ثبت",
+        "status": "وضعیت",
+        "actions": "عملیات"
+      },
+      "actions": {
+        "edit": "ویرایش",
+        "delete": "غیرفعال‌سازی"
+      },
+      "delete": {
+        "title": "غیرفعال‌سازی دسته",
+        "message": "دسته «{{name}}» غیرفعال شود؟ سایر دسته‌های تمرین‌ها باقی می‌مانند.",
+        "confirm": "غیرفعال شود",
+        "cancel": "انصراف"
+      },
+      "form": {
+        "createTitle": "افزودن دسته",
+        "editTitle": "ویرایش دسته",
+        "nameFa": "نام فارسی",
+        "nameEn": "نام انگلیسی",
+        "sortOrder": "ترتیب نمایش",
+        "create": "ثبت دسته",
+        "update": "ذخیره تغییرات",
+        "cancel": "انصراف"
+      },
+      "validation": {
+        "nameFaRequired": "نام فارسی الزامی است.",
+        "nameEnRequired": "نام انگلیسی الزامی است.",
+        "nameMax": "نام حداکثر ۱۰۰ کاراکتر باشد."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری دسته‌ها ناموفق بود.",
+        "saveFailed": "ذخیره دسته ناموفق بود."
       }
     },
     "articles": {
@@ -946,6 +1010,15 @@
         "skipTimer": "رد کردن زمان‌سنج",
         "markDone": "تمرین انجام شد",
         "skip": "رد کردن تمرین",
+        "next": "تمرین بعدی",
+        "prev": "تمرین قبلی",
+        "finish": "پایان جلسه",
+        "nextUp": "بعدی: {{title}}",
+        "setsUnit": "{{count}} ست",
+        "repsUnit": "{{count}} تکرار",
+        "holdUnit": "{{count}} ثانیه نگه‌دار",
+        "showInstructions": "نمایش دستورالعمل",
+        "hideInstructions": "مخفی کردن دستورالعمل",
         "exit": "خروج",
         "allDone": "همه تمرین‌های امروز انجام شده‌اند."
       },
@@ -1032,6 +1105,7 @@
   },
   "pwa": {
     "installPrompt": "اپ را نصب کنید برای دسترسی سریع",
-    "install": "نصب"
+    "install": "نصب",
+    "dismiss": "بستن"
   }
 }

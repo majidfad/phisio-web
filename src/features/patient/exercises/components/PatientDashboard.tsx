@@ -1,5 +1,5 @@
-import { BookOpen, Book, Stethoscope } from 'lucide-react';
-import { Button, Progress, Typography } from 'antd';
+import { BookOpen, Book, Play, Stethoscope } from 'lucide-react';
+import { Button, Progress } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -14,8 +14,6 @@ import {
 } from '@/features/patient/exercises/types/patient-exercise';
 import { routes } from '@/routes/routes';
 import { convertToPersianDigits, formatPersianNumber } from '@/utils/persian-format';
-
-const { Text, Title } = Typography;
 
 export function PatientDashboard() {
   const { t } = useTranslation();
@@ -44,12 +42,10 @@ export function PatientDashboard() {
     <PageContainer>
       <section className="home-today" aria-label={t('patient.dashboard.todayOverview')}>
         <div className="home-today__greeting">
-          <Title level={3} className="home-today__title">
+          <h1 className="home-today__title">
             {t('patient.dashboard.greetingWithName', { name: displayName, greeting })}
-          </Title>
-          <Text type="secondary" className="home-today__subtitle">
-            {encouragement}
-          </Text>
+          </h1>
+          <p className="home-today__subtitle">{encouragement}</p>
         </div>
 
         {hasLinkedDoctor && activeDoctor ? (
@@ -109,15 +105,15 @@ export function PatientDashboard() {
           <div className="home-session-card">
             <div className="home-session-card__progress">
               <div className="home-session-card__stats">
-                <Text strong>
+                <div className="home-session-card__stats-value">
                   {t('patient.dashboard.completedToday')}: {formatPersianNumber(completed)} /{' '}
                   {formatPersianNumber(total)}
-                </Text>
-                <Text type="secondary">
+                </div>
+                <div className="home-session-card__stats-hint">
                   {allDone
                     ? t('patient.dashboard.allDone')
                     : t('patient.dashboard.remainingCount', { count: remaining })}
-                </Text>
+                </div>
               </div>
               <Progress
                 percent={percent}
@@ -129,7 +125,12 @@ export function PatientDashboard() {
             </div>
 
             {allDone ? (
-              <Button size="large" block onClick={() => void navigate(routes.patient.progress)}>
+              <Button
+                size="large"
+                block
+                className="home-session-card__cta"
+                onClick={() => void navigate(routes.patient.progress)}
+              >
                 {t('patient.dashboard.viewProgress')}
               </Button>
             ) : (
@@ -137,7 +138,8 @@ export function PatientDashboard() {
                 type="primary"
                 size="large"
                 block
-                className="touch-target"
+                icon={<Play size={18} strokeWidth={2.25} aria-hidden />}
+                className="home-session-card__cta touch-target"
                 onClick={() => void navigate(routes.patient.exercises)}
               >
                 {completed > 0

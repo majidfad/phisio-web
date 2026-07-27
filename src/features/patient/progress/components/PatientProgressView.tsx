@@ -32,61 +32,52 @@ export function PatientProgressView() {
 
   return (
     <PageContainer>
-      <HeroCard
-        badge={t('patient.progress.badge')}
-        title={t('patient.progress.title')}
-        description={t('patient.progress.subtitle', { name: displayName })}
-        illustration="progress"
-      />
-
-      {isLoading ? <LoadingState tip={t('patient.exercises.loading')} /> : null}
-
-      {!isLoading && total === 0 ? (
-        <WarmEmptyState
-          title={t('patient.progress.emptyTitle')}
-          description={t('patient.progress.emptyDescription')}
-          lucideIcon={BarChart3}
+      <div className="patient-stack patient-stack--loose">
+        <HeroCard
+          badge={t('patient.progress.badge')}
+          title={t('patient.progress.title')}
+          description={t('patient.progress.subtitle', { name: displayName })}
+          illustration="progress"
         />
-      ) : null}
 
-      {!isLoading && total > 0 ? (
-        <PageSection title={t('patient.progress.todaySection')}>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12}>
-              <StatCard
-                label={t('patient.dashboard.completedToday')}
-                value={`${formatPersianNumber(completed)} / ${formatPersianNumber(total)}`}
-                accent="mint"
-              />
-            </Col>
-            <Col xs={24} sm={12}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 24,
-                  borderRadius: 16,
-                  border: '1px solid var(--phisio-border-soft)',
-                  background: 'var(--phisio-surface)',
-                  boxShadow: 'var(--phisio-shadow-card)',
-                }}
-              >
-                <Progress
-                  type="dashboard"
-                  percent={percent}
-                  format={(p) => `${formatPersianNumber(p ?? 0)}%`}
-                  strokeColor={{
-                    '0%': PHISIO_COLORS.primary,
-                    '100%': PHISIO_COLORS.teal,
-                  }}
-                  size={140}
+        {isLoading ? <LoadingState tip={t('patient.exercises.loading')} /> : null}
+
+        {!isLoading && total === 0 ? (
+          <WarmEmptyState
+            title={t('patient.progress.emptyTitle')}
+            description={t('patient.progress.emptyDescription')}
+            lucideIcon={BarChart3}
+          />
+        ) : null}
+
+        {!isLoading && total > 0 ? (
+          <PageSection title={t('patient.progress.todaySection')}>
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={12}>
+                <StatCard
+                  label={t('patient.dashboard.completedToday')}
+                  value={`${formatPersianNumber(completed)} / ${formatPersianNumber(total)}`}
+                  accent="mint"
                 />
-              </div>
-            </Col>
-          </Row>
-        </PageSection>
-      ) : null}
+              </Col>
+              <Col xs={24} sm={12}>
+                <div className="patient-progress-ring">
+                  <Progress
+                    type="dashboard"
+                    percent={percent}
+                    format={(p) => `${formatPersianNumber(p ?? 0)}%`}
+                    strokeColor={{
+                      '0%': PHISIO_COLORS.primary,
+                      '100%': PHISIO_COLORS.teal,
+                    }}
+                    size={140}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </PageSection>
+        ) : null}
+      </div>
     </PageContainer>
   );
 }

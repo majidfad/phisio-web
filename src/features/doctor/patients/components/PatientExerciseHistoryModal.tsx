@@ -1,17 +1,5 @@
-import { AppEmpty, AppResult } from '@/components/ui';
-import {
-  Button,
-  Card,
-  Col,
-  Modal,
-  Row,
-  Space,
-  Spin,
-  Statistic,
-  Table,
-  Tag,
-  Typography,
-} from 'antd';
+import { AppResult, LoadingState, WarmEmptyState } from '@/components/ui';
+import { Button, Card, Col, Modal, Row, Space, Statistic, Table, Tag, Typography } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -106,33 +94,30 @@ function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
   ];
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+    <div className="patient-stack">
       {showFeedbackDetails ? (
-        <section aria-label={t('doctor.patients.exerciseHistory.feedbackSection')}>
+        <section
+          className="doctor-history-feedback"
+          aria-label={t('doctor.patients.exerciseHistory.feedbackSection')}
+        >
           <div>
             <Text type="secondary">
               {t('doctor.patients.exerciseHistory.detailFeedback.score')}
             </Text>{' '}
             <Text>{formatImprovementScoreDisplay(day.improvementScore)}</Text>
           </div>
-          <div style={{ marginTop: 8 }}>
+          <div>
             <Text type="secondary">
               {t('doctor.patients.exerciseHistory.detailFeedback.hardness')}
             </Text>{' '}
             <Text>{formatImprovementScoreDisplay(day.hardnessScore)}</Text>
           </div>
-          <div style={{ marginTop: 8 }}>
+          <div>
             <Text type="secondary">
               {t('doctor.patients.exerciseHistory.detailFeedback.comment')}
             </Text>
             {day.comment?.trim() ? (
-              <blockquote
-                style={{
-                  margin: '8px 0 0',
-                  paddingInlineStart: 16,
-                  borderInlineStart: '3px solid var(--phisio-border)',
-                }}
-              >
+              <blockquote className="doctor-history-feedback__quote">
                 {day.comment.trim()}
               </blockquote>
             ) : (
@@ -152,7 +137,7 @@ function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
         columns={detailColumns}
         scroll={{ x: true }}
       />
-    </Space>
+    </div>
   );
 }
 
@@ -227,32 +212,38 @@ export function PatientExerciseHistoryModal({
       }}
     >
       {patient ? (
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
-          <section aria-label={t('doctor.patients.exerciseHistory.patientInfo')}>
-            <div>
-              <Text type="secondary">{t('doctor.patients.exerciseHistory.patientName')}</Text>{' '}
-              <Text>{data?.patient.patientName ?? patient.patientName}</Text>
+        <div className="patient-stack patient-stack--loose">
+          <Card
+            className="patient-media-card"
+            size="small"
+            aria-label={t('doctor.patients.exerciseHistory.patientInfo')}
+          >
+            <div className="doctor-history-patient">
+              <div className="doctor-history-patient__line">
+                <span className="doctor-history-patient__label">
+                  {t('doctor.patients.exerciseHistory.patientName')}
+                </span>
+                <Text strong>{data?.patient.patientName ?? patient.patientName}</Text>
+              </div>
+              <div className="doctor-history-patient__line">
+                <span className="doctor-history-patient__label">
+                  {t('doctor.patients.exerciseHistory.patientPhone')}
+                </span>
+                <Text dir="ltr">
+                  {formatDisplayPhone(data?.patient.phoneNumber ?? patient.phoneNumber)}
+                </Text>
+              </div>
             </div>
-            <div style={{ marginTop: 4 }}>
-              <Text type="secondary">{t('doctor.patients.exerciseHistory.patientPhone')}</Text>{' '}
-              <Text dir="ltr">
-                {formatDisplayPhone(data?.patient.phoneNumber ?? patient.phoneNumber)}
-              </Text>
-            </div>
-          </section>
+          </Card>
 
-          {isLoading ? (
-            <div style={{ textAlign: 'center', padding: 24 }}>
-              <Spin tip={t('doctor.patients.exerciseHistory.loading')} />
-            </div>
-          ) : null}
+          {isLoading ? <LoadingState tip={t('doctor.patients.exerciseHistory.loading')} /> : null}
 
           {isError ? (
             <AppResult
               status="error"
               title={getErrorMessage(error, t('doctor.patients.exerciseHistory.errors.loadFailed'))}
               extra={
-                <Button type="primary" onClick={() => void refetch()}>
+                <Button type="primary" size="large" onClick={() => void refetch()}>
                   {t('doctor.patients.exerciseHistory.retry')}
                 </Button>
               }
@@ -263,7 +254,7 @@ export function PatientExerciseHistoryModal({
             <>
               <Row gutter={[12, 12]} aria-label={t('doctor.patients.exerciseHistory.summaryTitle')}>
                 <Col xs={12} sm={6}>
-                  <Card size="small">
+                  <Card className="energy-stat-card energy-stat-card--primary" size="small">
                     <Statistic
                       title={t('doctor.patients.exerciseHistory.summary.assignedExercises')}
                       value={formatPersianNumber(summary.assignedExerciseCount)}
@@ -271,7 +262,7 @@ export function PatientExerciseHistoryModal({
                   </Card>
                 </Col>
                 <Col xs={12} sm={6}>
-                  <Card size="small">
+                  <Card className="energy-stat-card energy-stat-card--primary" size="small">
                     <Statistic
                       title={t('doctor.patients.exerciseHistory.summary.completedDays')}
                       value={formatPersianNumber(summary.completedDaysCount)}
@@ -279,7 +270,7 @@ export function PatientExerciseHistoryModal({
                   </Card>
                 </Col>
                 <Col xs={12} sm={6}>
-                  <Card size="small">
+                  <Card className="energy-stat-card energy-stat-card--accent" size="small">
                     <Statistic
                       title={t('doctor.patients.exerciseHistory.summary.missedDays')}
                       value={formatPersianNumber(summary.missedDaysCount)}
@@ -287,7 +278,7 @@ export function PatientExerciseHistoryModal({
                   </Card>
                 </Col>
                 <Col xs={12} sm={6}>
-                  <Card size="small">
+                  <Card className="energy-stat-card energy-stat-card--primary" size="small">
                     <Statistic
                       title={t('doctor.patients.exerciseHistory.summary.adherence')}
                       value={t('doctor.patients.exerciseHistory.summary.adherenceValue', {
@@ -298,12 +289,12 @@ export function PatientExerciseHistoryModal({
                 </Col>
               </Row>
 
-              <Card size="small">
+              <Card className="patient-media-card" size="small">
                 <PatientExerciseStatsPanel patientId={patient.patientId} variant="history" />
               </Card>
 
               {!hasHistory ? (
-                <AppEmpty description={t('doctor.patients.exerciseHistory.empty')} />
+                <WarmEmptyState description={t('doctor.patients.exerciseHistory.empty')} />
               ) : (
                 <Table
                   rowKey="date"
@@ -325,7 +316,7 @@ export function PatientExerciseHistoryModal({
               )}
             </>
           ) : null}
-        </Space>
+        </div>
       ) : null}
     </Modal>
   );

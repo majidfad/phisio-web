@@ -1,5 +1,5 @@
 import { LoadingState } from '@/components/ui';
-import { Progress, Segmented, Space, Typography } from 'antd';
+import { Button, Progress, Segmented, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -22,7 +22,7 @@ import {
 } from '@/features/doctor/patients/types/patient-exercise-stats';
 import { formatPersianCalendarDate, formatPersianNumber } from '@/utils/persian-format';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 export type PatientExerciseStatsPanelVariant = 'overview' | 'history';
 
@@ -76,11 +76,9 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
   );
 
   return (
-    <Space direction="vertical" size={12} style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <Title level={5} style={{ margin: 0 }}>
-          {t('doctor.patients.stats.title')}
-        </Title>
+    <div className="doctor-stats-panel">
+      <div className="doctor-stats-panel__header">
+        <h3 className="doctor-stats-panel__title">{t('doctor.patients.stats.title')}</h3>
         <Segmented<ExerciseStatsRangeDays>
           value={rangeDays}
           onChange={setRangeDays}
@@ -97,15 +95,13 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
       {isError ? (
         <Text type="danger">
           {t('doctor.patients.stats.loadFailed')}{' '}
-          <a
-            href="#retry-stats"
-            onClick={(event) => {
-              event.preventDefault();
-              void refetch();
-            }}
+          <Button
+            type="link"
+            onClick={() => void refetch()}
+            style={{ paddingInline: 0, height: 'auto' }}
           >
             {t('doctor.patients.retry')}
-          </a>
+          </Button>
         </Text>
       ) : null}
 
@@ -114,44 +110,46 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
           <Text type="secondary">{t('doctor.patients.stats.empty')}</Text>
         ) : (
           <>
-            <Space wrap size={[8, 8]}>
-              <Text>
+            <div className="doctor-stats-panel__summary">
+              <span>
                 {t('doctor.patients.stats.summary.adherence', {
                   percent: formatPersianNumber(data.summary.adherencePercentage),
                 })}
-              </Text>
-              <Text type="secondary">·</Text>
-              <Text>
+              </span>
+              <span className="doctor-stats-panel__summary-sep">·</span>
+              <span>
                 {t('doctor.patients.stats.summary.exerciseCompletion', {
                   percent: formatPersianNumber(data.summary.exerciseCompletionPercentage),
                 })}
-              </Text>
+              </span>
               {data.summary.averageImprovementScore != null ? (
                 <>
-                  <Text type="secondary">·</Text>
-                  <Text>
+                  <span className="doctor-stats-panel__summary-sep">·</span>
+                  <span>
                     {t('doctor.patients.stats.summary.avgImprovement', {
                       value: formatPersianNumber(data.summary.averageImprovementScore),
                     })}
-                  </Text>
+                  </span>
                 </>
               ) : null}
               {data.summary.averageHardnessScore != null ? (
                 <>
-                  <Text type="secondary">·</Text>
-                  <Text>
+                  <span className="doctor-stats-panel__summary-sep">·</span>
+                  <span>
                     {t('doctor.patients.stats.summary.avgHardness', {
                       value: formatPersianNumber(data.summary.averageHardnessScore),
                     })}
-                  </Text>
+                  </span>
                 </>
               ) : null}
-            </Space>
+            </div>
 
             {variant === 'overview' && weeklyChartData.length > 0 ? (
               <div>
-                <Text type="secondary">{t('doctor.patients.stats.charts.weeklyAdherence')}</Text>
-                <div style={{ width: '100%', height: 200, marginTop: 8 }}>
+                <span className="doctor-stats-panel__chart-label">
+                  {t('doctor.patients.stats.charts.weeklyAdherence')}
+                </span>
+                <div className="doctor-stats-panel__chart">
                   <ResponsiveContainer>
                     <BarChart data={weeklyChartData}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -172,8 +170,10 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
 
             {variant === 'history' && completenessChartData.length > 0 ? (
               <div>
-                <Text type="secondary">{t('doctor.patients.stats.charts.dailyCompleteness')}</Text>
-                <div style={{ width: '100%', height: 200, marginTop: 8 }}>
+                <span className="doctor-stats-panel__chart-label">
+                  {t('doctor.patients.stats.charts.dailyCompleteness')}
+                </span>
+                <div className="doctor-stats-panel__chart">
                   <ResponsiveContainer>
                     <BarChart data={completenessChartData}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -201,8 +201,10 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
 
             {feedbackChartData.length > 0 ? (
               <div>
-                <Text type="secondary">{t('doctor.patients.stats.charts.feedbackTrend')}</Text>
-                <div style={{ width: '100%', height: 200, marginTop: 8 }}>
+                <span className="doctor-stats-panel__chart-label">
+                  {t('doctor.patients.stats.charts.feedbackTrend')}
+                </span>
+                <div className="doctor-stats-panel__chart">
                   <ResponsiveContainer>
                     <LineChart data={feedbackChartData}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -238,18 +240,13 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
 
             {variant === 'overview' && attentionExercises.length > 0 ? (
               <div>
-                <Text type="secondary">{t('doctor.patients.stats.needsAttention')}</Text>
-                <Space direction="vertical" size={8} style={{ width: '100%', marginTop: 8 }}>
+                <span className="doctor-stats-panel__chart-label">
+                  {t('doctor.patients.stats.needsAttention')}
+                </span>
+                <div className="patient-stack">
                   {attentionExercises.map((exercise) => (
                     <div key={exercise.exerciseId}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          gap: 8,
-                          marginBottom: 4,
-                        }}
-                      >
+                      <div className="doctor-stats-panel__attention-row">
                         <Text ellipsis style={{ maxWidth: '70%' }}>
                           {exercise.title}
                         </Text>
@@ -265,12 +262,12 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
                       />
                     </div>
                   ))}
-                </Space>
+                </div>
               </div>
             ) : null}
           </>
         )
       ) : null}
-    </Space>
+    </div>
   );
 }

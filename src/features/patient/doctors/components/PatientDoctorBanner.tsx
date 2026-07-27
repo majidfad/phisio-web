@@ -28,15 +28,13 @@ export function PatientDoctorBanner() {
         </div>
         <div className="status-panel__actions">
           <Link to={routes.patient.doctors}>
-            <Button type="primary" size="small">
-              {t('patient.doctors.banner.findDoctor')}
-            </Button>
+            <Button type="primary">{t('patient.doctors.banner.findDoctor')}</Button>
           </Link>
           <Link to={routes.patient.library}>
-            <Button size="small">{t('patient.doctors.banner.browseLibrary')}</Button>
+            <Button>{t('patient.doctors.banner.browseLibrary')}</Button>
           </Link>
           <Link to={routes.patient.articles}>
-            <Button size="small">{t('patient.doctors.banner.browseArticles')}</Button>
+            <Button>{t('patient.doctors.banner.browseArticles')}</Button>
           </Link>
         </div>
       </div>
@@ -56,13 +54,13 @@ export function PatientDoctorBanner() {
         </div>
         <div className="status-panel__actions">
           <Link to={routes.patient.doctors}>
-            <Button size="small">{t('patient.doctors.banner.viewRequests')}</Button>
+            <Button>{t('patient.doctors.banner.viewRequests')}</Button>
           </Link>
           <Link to={routes.patient.library}>
-            <Button size="small">{t('patient.doctors.banner.browseLibrary')}</Button>
+            <Button>{t('patient.doctors.banner.browseLibrary')}</Button>
           </Link>
           <Link to={routes.patient.articles}>
-            <Button size="small">{t('patient.doctors.banner.browseArticles')}</Button>
+            <Button>{t('patient.doctors.banner.browseArticles')}</Button>
           </Link>
         </div>
       </div>
@@ -103,9 +101,7 @@ export function PatientDoctorBanner() {
       </div>
       <div className="status-panel__actions">
         <Link to={routes.patient.doctors}>
-          <Button size="small" type="default">
-            {t('patient.doctors.banner.manage')}
-          </Button>
+          <Button type="default">{t('patient.doctors.banner.manage')}</Button>
         </Link>
       </div>
     </div>

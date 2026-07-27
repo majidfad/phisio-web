@@ -14,6 +14,8 @@ interface ExerciseMediaPlayerProps {
   autoPlay?: boolean;
   /** Guided session: loop without controls, continuous playback. */
   continuous?: boolean;
+  /** Pause native video without unmounting (e.g. rest overlay). */
+  paused?: boolean;
   maxHeight?: string;
   className?: string;
 }
@@ -45,12 +47,33 @@ async function tryPlay(video: HTMLVideoElement, preferMuted: boolean) {
   }
 }
 
+function withYouTubeContinuousParams(embedSrc: string): string {
+  try {
+    const url = new URL(embedSrc);
+    const id = url.pathname.split('/').filter(Boolean).pop();
+    url.searchParams.set('autoplay', '1');
+    url.searchParams.set('mute', '1');
+    url.searchParams.set('playsinline', '1');
+    url.searchParams.set('rel', '0');
+    url.searchParams.set('modestbranding', '1');
+    url.searchParams.set('controls', '0');
+    url.searchParams.set('loop', '1');
+    if (id) {
+      url.searchParams.set('playlist', id);
+    }
+    return url.toString();
+  } catch {
+    return embedSrc;
+  }
+}
+
 export function ExerciseMediaPlayer({
   title,
   videoUrl,
   mediaType,
   autoPlay = false,
   continuous = false,
+  paused = false,
   maxHeight = '40vh',
   className,
 }: ExerciseMediaPlayerProps) {
@@ -66,6 +89,11 @@ export function ExerciseMediaPlayer({
       return;
     }
 
+    if (paused) {
+      video.pause();
+      return;
+    }
+
     // Keep muted for continuous coach mode — browsers block unmuted autoplay,
     // and continuous mode has no play button to recover.
     if (autoPlay || continuous) {
@@ -75,7 +103,7 @@ export function ExerciseMediaPlayer({
     return () => {
       video.pause();
     };
-  }, [previewKind, previewSrc, autoPlay, continuous]);
+  }, [previewKind, previewSrc, autoPlay, continuous, paused]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -106,7 +134,7 @@ export function ExerciseMediaPlayer({
         playsInline
         muted={continuous}
         loop={continuous}
-        autoPlay={autoPlay || continuous}
+        autoPlay={(autoPlay || continuous) && !paused}
         preload="auto"
         src={preview.src}
         aria-label={title}
@@ -126,7 +154,7 @@ export function ExerciseMediaPlayer({
           width: '100%',
           height: continuous ? '100%' : undefined,
           maxHeight: continuous ? undefined : maxHeight,
-          objectFit: continuous ? 'contain' : 'contain',
+          objectFit: 'contain',
           display: 'block',
           borderRadius: continuous ? 0 : 12,
           background: '#0b1220',
@@ -135,19 +163,23 @@ export function ExerciseMediaPlayer({
     );
   }
 
+  const iframeSrc = continuous ? withYouTubeContinuousParams(preview.src) : preview.src;
+
   return (
     <iframe
-      key={preview.src}
+      key={iframeSrc}
       className={className}
       style={{
         width: '100%',
-        aspectRatio: '16 / 9',
+        height: continuous ? '100%' : undefined,
+        aspectRatio: continuous ? undefined : '16 / 9',
         border: 'none',
         display: 'block',
         borderRadius: continuous ? 0 : 12,
-        maxHeight: continuous ? '100%' : undefined,
+        maxHeight: continuous ? undefined : maxHeight,
+        background: '#0b1220',
       }}
-      src={preview.src}
+      src={iframeSrc}
       title={title}
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen={!continuous}

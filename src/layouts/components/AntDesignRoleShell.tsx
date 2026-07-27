@@ -91,6 +91,8 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
     },
   ];
 
+  const siderCollapsed = collapsed && !isMobile;
+
   const navCards = (
     <nav aria-label={t(config.navAriaLabelKey)}>
       {navItems.map((item) => (
@@ -98,7 +100,8 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
           key={item.key}
           to={item.key}
           icon={item.icon}
-          label={collapsed && !isMobile ? '' : item.label}
+          label={item.label}
+          collapsed={siderCollapsed}
           active={selectedKey === item.key}
           onClick={() => setDrawerOpen(false)}
         />
@@ -114,20 +117,15 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
           collapsed={collapsed}
           onCollapse={setCollapsed}
           width={272}
+          collapsedWidth={80}
           className="app-sider"
           trigger={null}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '8px 4px 0',
-            }}
-          >
-            <AppBrand collapsed={collapsed} />
+          <div className={`app-sider__top${collapsed ? ' app-sider__top--collapsed' : ''}`}>
+            <AppBrand collapsed={collapsed} size={collapsed ? 32 : 36} />
             <Button
               type="text"
+              className="app-sider__collapse-btn"
               icon={
                 collapsed ? (
                   <PanelLeftOpen {...appIconProps} />
@@ -136,7 +134,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
                 )
               }
               onClick={() => setCollapsed(!collapsed)}
-              aria-label={collapsed ? t('layout.openNav') : t('layout.openNav')}
+              aria-label={collapsed ? t('layout.openNav') : t('layout.closeNav')}
             />
           </div>
           {navCards}

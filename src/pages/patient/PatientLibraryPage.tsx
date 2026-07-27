@@ -35,37 +35,40 @@ export function PatientLibraryPage() {
         description={t('patient.library.description')}
       />
 
-      <Input
-        size="large"
-        allowClear
-        prefix={<Search {...appIconProps} />}
-        placeholder={t('patient.library.searchPlaceholder')}
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
-        style={{ marginBottom: 20, maxWidth: 480 }}
-      />
+      <div className="patient-stack patient-stack--loose">
+        <div className="patient-filter-bar">
+          <Input
+            size="large"
+            allowClear
+            prefix={<Search {...appIconProps} />}
+            placeholder={t('patient.library.searchPlaceholder')}
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+          />
+        </div>
 
-      {isLoading ? <LoadingState tip={t('patient.library.loading')} /> : null}
+        {isLoading ? <LoadingState tip={t('patient.library.loading')} /> : null}
 
-      {isError ? (
-        <AppResult
-          status="error"
-          title={getErrorMessage(error, t('patient.library.errors.loadFailed'))}
-          extra={
-            <Button type="primary" onClick={() => void refetch()}>
-              {t('patient.library.retry')}
-            </Button>
-          }
-        />
-      ) : null}
+        {isError ? (
+          <AppResult
+            status="error"
+            title={getErrorMessage(error, t('patient.library.errors.loadFailed'))}
+            extra={
+              <Button type="primary" size="large" onClick={() => void refetch()}>
+                {t('patient.library.retry')}
+              </Button>
+            }
+          />
+        ) : null}
 
-      {!isLoading && !isError && filteredExercises.length === 0 ? (
-        <AppEmpty description={t('patient.library.empty')} />
-      ) : null}
+        {!isLoading && !isError && filteredExercises.length === 0 ? (
+          <AppEmpty description={t('patient.library.empty')} />
+        ) : null}
 
-      {!isLoading && !isError && filteredExercises.length > 0 ? (
-        <PatientExerciseLibraryCatalog exercises={filteredExercises} />
-      ) : null}
+        {!isLoading && !isError && filteredExercises.length > 0 ? (
+          <PatientExerciseLibraryCatalog exercises={filteredExercises} />
+        ) : null}
+      </div>
     </PageContainer>
   );
 }

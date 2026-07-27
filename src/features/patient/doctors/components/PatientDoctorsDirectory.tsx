@@ -1,4 +1,4 @@
-import { Button, Card, Input, Select, Space, Tag, Typography } from 'antd';
+import { Button, Card, Input, Select, Tag, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { convertToPersianDigits } from '@/utils/persian-format';
 import { usePatientDoctorDirectory } from '../hooks/usePatientDoctors';
 import { DoctorPatientStatusCode } from '../types/patient-doctor';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 export function PatientDoctorsDirectory() {
   const { t } = useTranslation();
@@ -37,36 +37,36 @@ export function PatientDoctorsDirectory() {
   }, [data]);
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
-      <Space wrap style={{ width: '100%' }}>
+    <div className="patient-stack patient-stack--loose">
+      <div className="patient-filter-bar">
         <Input.Search
           allowClear
+          size="large"
           placeholder={t('patient.doctors.searchPlaceholder')}
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
           onSearch={(value) => setSearch(value.trim())}
-          style={{ minWidth: 220, maxWidth: 360 }}
         />
         <Select
           allowClear
           showSearch
+          size="large"
           placeholder={t('patient.doctors.specialtyFilter')}
-          style={{ minWidth: 180 }}
           value={specialty || undefined}
           onChange={(value) => setSpecialty(value ?? '')}
           options={specialtyOptions}
           optionFilterProp="label"
         />
-      </Space>
+      </div>
 
       {isLoading ? <LoadingState tip={t('patient.doctors.loading')} /> : null}
 
       {isError ? (
-        <Card>
+        <Card className="patient-media-card">
           <Text type="danger">
             {getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}
           </Text>
-          <div style={{ marginTop: 12 }}>
+          <div className="patient-media-card__footer">
             <Button onClick={() => void refetch()}>{t('patient.doctors.retry')}</Button>
           </div>
         </Card>
@@ -76,31 +76,35 @@ export function PatientDoctorsDirectory() {
         <AppEmpty description={t('patient.doctors.emptyDirectory')} />
       ) : null}
 
-      {!isLoading && !isError
-        ? data.map((doctor) => (
-            <Card key={doctor.doctorId} size="small">
-              <Space direction="vertical" size={8} style={{ width: '100%' }}>
-                <Space wrap style={{ justifyContent: 'space-between', width: '100%' }}>
-                  <Title level={5} style={{ margin: 0 }}>
-                    {doctor.name}
-                  </Title>
-                  <RelationshipTag status={doctor.relationshipStatus} />
-                </Space>
-                {doctor.specialty ? <Text type="secondary">{doctor.specialty}</Text> : null}
-                {doctor.clinicAddress ? <Text>{doctor.clinicAddress}</Text> : null}
-                {doctor.phoneNumber ? (
-                  <Text dir="ltr">{convertToPersianDigits(doctor.phoneNumber)}</Text>
-                ) : null}
+      {!isLoading && !isError ? (
+        <div className="patient-stack">
+          {data.map((doctor) => (
+            <Card key={doctor.doctorId} className="patient-media-card" size="small">
+              <div className="patient-media-card__header">
+                <h3 className="patient-media-card__title">{doctor.name}</h3>
+                <RelationshipTag status={doctor.relationshipStatus} />
+              </div>
+              {doctor.specialty ? (
+                <span className="patient-media-card__meta">{doctor.specialty}</span>
+              ) : null}
+              {doctor.clinicAddress ? (
+                <p className="patient-media-card__body">{doctor.clinicAddress}</p>
+              ) : null}
+              {doctor.phoneNumber ? (
+                <p className="patient-media-card__body" dir="ltr">
+                  {convertToPersianDigits(doctor.phoneNumber)}
+                </p>
+              ) : null}
+              <div className="patient-media-card__footer">
                 <Link to={`${routes.patient.doctors}/${doctor.doctorId}`}>
-                  <Button type="link" style={{ paddingInline: 0 }}>
-                    {t('patient.doctors.viewProfile')}
-                  </Button>
+                  <Button type="link">{t('patient.doctors.viewProfile')}</Button>
                 </Link>
-              </Space>
+              </div>
             </Card>
-          ))
-        : null}
-    </Space>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 

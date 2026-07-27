@@ -262,6 +262,12 @@
         "deleting": "در حال حذف…",
         "cancel": "انصراف"
       },
+      "deactivate": {
+        "title": "غیرفعال‌سازی پزشک",
+        "message": "پزشک «{{name}}» غیرفعال شود؟ دیگر نمی‌تواند وارد شود.",
+        "confirm": "غیرفعال‌سازی",
+        "cancel": "انصراف"
+      },
       "validation": {
         "nameRequired": "نام الزامی است.",
         "nameMaxLength": "نام حداکثر ۲۰۰ کاراکتر باشد.",
@@ -553,6 +559,12 @@
         "select": "افزودن",
         "empty": "هنوز تمرینی در فهرست ثبت نشده است."
       },
+      "archive": {
+        "title": "حذف تمرین",
+        "message": "تمرین «{{title}}» از کتابخانه شما حذف شود؟",
+        "confirm": "حذف",
+        "cancel": "انصراف"
+      },
       "addToLibrary": {
         "action": "افزودن «{{title}}» به کتابخانه من",
         "title": "افزودن تمرین به کتابخانه من",
@@ -589,6 +601,18 @@
       "reject": "رد",
       "remove": "حذف",
       "removing": "در حال حذف…",
+      "confirmRemove": {
+        "title": "قطع اتصال بیمار",
+        "message": "اتصال بیمار «{{name}}» قطع شود؟",
+        "confirm": "قطع اتصال",
+        "cancel": "انصراف"
+      },
+      "confirmReject": {
+        "title": "رد درخواست",
+        "message": "درخواست اتصال «{{name}}» رد شود؟",
+        "confirm": "رد",
+        "cancel": "انصراف"
+      },
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
       "empty": "هنوز بیماری به شما متصل نیست.",
@@ -928,6 +952,18 @@
         "cancelRequest": "لغو درخواست",
         "unlink": "قطع اتصال"
       },
+      "confirmCancelRequest": {
+        "title": "لغو درخواست",
+        "message": "درخواست اتصال به این پزشک لغو شود؟",
+        "confirm": "لغو درخواست",
+        "cancel": "نگه داشتن"
+      },
+      "confirmUnlink": {
+        "title": "قطع اتصال پزشک",
+        "message": "اتصال با این پزشک قطع شود؟ ممکن است برنامه تمرین در دسترس نباشد.",
+        "confirm": "قطع اتصال",
+        "cancel": "نگه داشتن"
+      },
       "banner": {
         "noDoctorTitle": "هنوز به پزشکی متصل نیستید",
         "noDoctorDescription": "هر زمان می‌توانید کتابخانه تمرین و مقالات را ببینید. برای برنامه شخصی، پزشک پیدا کنید.",
@@ -984,6 +1020,13 @@
       "completedToday": "امروز انجام شده",
       "showChecklist": "علامت‌گذاری دستی",
       "hideChecklist": "بستن فهرست",
+      "moreActions": "عملیات بیشتر",
+      "progressSummary": "{{done}} از {{total}} انجام شده",
+      "fromDoctor": "از {{doctorName}}",
+      "chip": {
+        "sets": "ست",
+        "reps": "تکرار"
+      },
       "dosage": {
         "sets": "{{count}} ست",
         "reps": "{{count}} تکرار",
@@ -999,12 +1042,15 @@
         "progress": "تمرین {{current}} از {{total}}",
         "dosage": "جزئیات تمرین",
         "setOf": "از {{total}} ست",
+        "setProgress": "ست {{set}} از {{total}}",
         "reps": "تکرار",
         "hold": "نگه‌داشتن (ثانیه)",
         "rest": "استراحت (ثانیه)",
         "side": "سمت",
         "holdPhase": "نگه‌داشتن",
         "restPhase": "استراحت",
+        "restAfterSet": "بعد از ست {{set}} از {{total}}",
+        "restNextSet": "بعدی: ست {{set}}",
         "setHint": "ست {{set}} از {{total}} — وقتی آماده بودید تکمیل کنید",
         "completeSet": "اتمام ست",
         "skipTimer": "رد کردن زمان‌سنج",

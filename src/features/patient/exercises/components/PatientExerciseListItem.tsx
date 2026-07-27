@@ -1,11 +1,10 @@
 import { Check, CirclePlay } from 'lucide-react';
-import { Button, Checkbox, Typography } from 'antd';
-import { useMemo } from 'react';
+import { Checkbox, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import { appIconProps } from '@/components/icons/app-icon';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
+import { formatPersianNumber } from '@/utils/persian-format';
 
 const { Text } = Typography;
 
@@ -22,11 +21,21 @@ export function PatientExerciseListItem({
   exercise,
   isChecked,
   isDisabled,
-  showCheckbox = true,
+  showCheckbox = false,
   onToggle,
   onPlay,
 }: PatientExerciseListItemProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language.startsWith('fa');
+  const formatCount = (value: number) => (isRtl ? formatPersianNumber(value) : String(value));
+  const formatReps = (value: string) => {
+    const asNumber = Number(value);
+    if (Number.isFinite(asNumber) && value.trim() !== '') {
+      return formatCount(asNumber);
+    }
+    return value;
+  };
+
   const hasMedia = Boolean(exercise.videoUrl);
   const preview = getVideoPreviewSource(exercise.videoUrl, exercise.mediaType);
   const youtubeId =
@@ -40,25 +49,11 @@ export function PatientExerciseListItem({
         ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
         : null;
 
-  const dosageLine = useMemo(() => {
-    const parts: string[] = [];
-    if (exercise.sets) {
-      parts.push(t('patient.exercises.dosage.sets', { count: exercise.sets }));
+  const handleOpen = () => {
+    if (hasMedia) {
+      onPlay(exercise);
     }
-    if (exercise.reps) {
-      parts.push(t('patient.exercises.dosage.reps', { count: exercise.reps }));
-    }
-    if (exercise.holdSeconds) {
-      parts.push(t('patient.exercises.dosage.hold', { count: exercise.holdSeconds }));
-    }
-    if (exercise.restSeconds) {
-      parts.push(t('patient.exercises.dosage.rest', { count: exercise.restSeconds }));
-    }
-    if (exercise.side) {
-      parts.push(t(`exerciseMeta.side.${exercise.side}`));
-    }
-    return parts.join(' · ');
-  }, [exercise, t]);
+  };
 
   return (
     <div
@@ -76,59 +71,50 @@ export function PatientExerciseListItem({
         />
       ) : null}
 
-      {thumbSrc ? (
-        <button
-          type="button"
-          className="exercise-row__thumb"
-          onClick={() => onPlay(exercise)}
-          aria-label={t('patient.exercises.video.watch', { title: exercise.title })}
-        >
-          <img src={thumbSrc} alt="" />
-        </button>
-      ) : null}
+      <button
+        type="button"
+        className="exercise-row__thumb"
+        onClick={handleOpen}
+        disabled={!hasMedia}
+        aria-label={
+          hasMedia ? t('patient.exercises.video.watch', { title: exercise.title }) : exercise.title
+        }
+      >
+        {thumbSrc ? <img src={thumbSrc} alt="" /> : null}
+        <span className="exercise-row__thumb-overlay" aria-hidden="true">
+          {exercise.completedToday ? (
+            <span className="exercise-row__thumb-done">
+              <Check size={18} strokeWidth={2.5} />
+            </span>
+          ) : hasMedia ? (
+            <CirclePlay size={28} strokeWidth={1.75} />
+          ) : null}
+        </span>
+      </button>
 
       <div className="exercise-row__body">
-        <div className="exercise-row__title">
-          <Text
-            strong
-            style={{
-              fontSize: 15,
-              lineHeight: 1.45,
-              color: exercise.completedToday ? 'var(--phisio-text-secondary)' : undefined,
-            }}
-          >
-            {exercise.title}
-          </Text>
-          {exercise.completedToday ? (
-            <span className="exercise-row__done">
-              <Check size={14} strokeWidth={2.5} aria-hidden />
-              {t('patient.exercises.completedToday')}
+        <Text
+          strong
+          className={`exercise-row__name${exercise.completedToday ? ' exercise-row__name--done' : ''}`}
+        >
+          {exercise.title}
+        </Text>
+
+        <div className="exercise-row__chips">
+          {exercise.sets ? (
+            <span className="exercise-chip">
+              <span className="exercise-chip__value">{formatCount(exercise.sets)}</span>
+              <span className="exercise-chip__label">{t('patient.exercises.chip.sets')}</span>
+            </span>
+          ) : null}
+          {exercise.reps ? (
+            <span className="exercise-chip">
+              <span className="exercise-chip__value">{formatReps(exercise.reps)}</span>
+              <span className="exercise-chip__label">{t('patient.exercises.chip.reps')}</span>
             </span>
           ) : null}
         </div>
-
-        {dosageLine ? (
-          <Text type="secondary" className="exercise-row__dosage">
-            {dosageLine}
-          </Text>
-        ) : null}
-
-        {exercise.patientCue ? (
-          <Text type="secondary" className="exercise-row__cue">
-            {exercise.patientCue}
-          </Text>
-        ) : null}
       </div>
-
-      {hasMedia ? (
-        <Button
-          type="text"
-          icon={<CirclePlay {...appIconProps} />}
-          onClick={() => onPlay(exercise)}
-          className="touch-target exercise-row__play"
-          aria-label={t('patient.exercises.video.watch', { title: exercise.title })}
-        />
-      ) : null}
     </div>
   );
 }

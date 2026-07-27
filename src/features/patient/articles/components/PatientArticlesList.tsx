@@ -1,4 +1,4 @@
-import { Button, Card, Input, Space, Typography } from 'antd';
+import { Button, Card, Input } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -8,8 +8,6 @@ import { usePatientArticles } from '@/features/patient/articles/hooks/usePatient
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { formatPersianDate } from '@/utils/persian-format';
-
-const { Paragraph, Text, Title } = Typography;
 
 export function PatientArticlesList() {
   const { t } = useTranslation();
@@ -30,14 +28,16 @@ export function PatientArticlesList() {
   }, [articles, searchQuery]);
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
-      <Input.Search
-        allowClear
-        placeholder={t('patient.articles.searchPlaceholder')}
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
-        style={{ maxWidth: 480 }}
-      />
+    <div className="patient-stack patient-stack--loose">
+      <div className="patient-filter-bar">
+        <Input.Search
+          allowClear
+          size="large"
+          placeholder={t('patient.articles.searchPlaceholder')}
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
+      </div>
 
       {isLoading ? <LoadingState tip={t('patient.articles.loading')} /> : null}
 
@@ -46,7 +46,7 @@ export function PatientArticlesList() {
           status="error"
           title={getErrorMessage(error, t('patient.articles.errors.loadFailed'))}
           extra={
-            <Button type="primary" onClick={() => void refetch()}>
+            <Button type="primary" size="large" onClick={() => void refetch()}>
               {t('patient.articles.retry')}
             </Button>
           }
@@ -57,26 +57,24 @@ export function PatientArticlesList() {
         <AppEmpty description={t('patient.articles.empty')} />
       ) : null}
 
-      {!isLoading && !isError
-        ? filteredArticles.map((article) => (
-            <Card key={article.articleId} size="small">
-              <Space direction="vertical" size={8} style={{ width: '100%' }}>
-                <Title level={5} style={{ margin: 0 }}>
-                  {article.title}
-                </Title>
-                <Text type="secondary">{formatPersianDate(article.createdAt)}</Text>
-                <Paragraph type="secondary" style={{ marginBottom: 0 }}>
-                  {article.summary}
-                </Paragraph>
+      {!isLoading && !isError ? (
+        <div className="patient-stack">
+          {filteredArticles.map((article) => (
+            <Card key={article.articleId} className="patient-media-card" size="small">
+              <h3 className="patient-media-card__title">{article.title}</h3>
+              <span className="patient-media-card__meta">
+                {formatPersianDate(article.createdAt)}
+              </span>
+              <p className="patient-media-card__body">{article.summary}</p>
+              <div className="patient-media-card__footer">
                 <Link to={`${routes.patient.articles}/${article.articleId}`}>
-                  <Button type="link" style={{ paddingInline: 0 }}>
-                    {t('patient.articles.readMore')}
-                  </Button>
+                  <Button type="link">{t('patient.articles.readMore')}</Button>
                 </Link>
-              </Space>
+              </div>
             </Card>
-          ))
-        : null}
-    </Space>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }

@@ -100,9 +100,89 @@ describe('PatientExerciseSession', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: /Next exercise|تمرین بعدی/i }));
+    await user.click(screen.getByRole('button', { name: /Skip exercise|رد کردن تمرین/i }));
     expect(patientExerciseService.completeExercises).not.toHaveBeenCalled();
     expect(screen.getByText('Second')).toBeTruthy();
+  });
+
+  it('shows set progress with icon on the session page', () => {
+    renderWithProviders(
+      <PatientExerciseSession
+        open
+        doctorName="Dr. A"
+        exercises={[
+          exercise({
+            sets: 3,
+            reps: '10',
+            restSeconds: 15,
+            holdSeconds: 20,
+          }),
+          exercise({ userExerciseId: 'ue-2', title: 'Second' }),
+        ]}
+        onClose={vi.fn()}
+        onExerciseCompleted={vi.fn()}
+        onSessionFinishedWithCompletions={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByLabelText(/Set 1 of 3|ست 1 از 3/i)).toBeTruthy();
+    expect(screen.queryByText(/10 reps|10 تکرار/i)).toBeNull();
+  });
+
+  it('keeps video page during rest instead of a blank rest screen', async () => {
+    const user = userEvent.setup();
+
+    renderWithProviders(
+      <PatientExerciseSession
+        open
+        doctorName="Dr. A"
+        exercises={[
+          exercise({
+            sets: 2,
+            restSeconds: 20,
+            reps: '8',
+            title: 'Bridge',
+          }),
+          exercise({ userExerciseId: 'ue-2', title: 'Second' }),
+        ]}
+        onClose={vi.fn()}
+        onExerciseCompleted={vi.fn().mockResolvedValue(undefined)}
+        onSessionFinishedWithCompletions={vi.fn()}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: /Complete set|اتمام ست/i }));
+
+    expect(screen.getByText('Bridge')).toBeTruthy();
+    expect(screen.getByText(/Rest|استراحت/i)).toBeTruthy();
+    expect(screen.getByTestId('media-player')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Skip timer|رد کردن زمان‌سنج/i })).toBeTruthy();
+  });
+
+  it('does not enter rest on the last exercise between sets', async () => {
+    const user = userEvent.setup();
+
+    renderWithProviders(
+      <PatientExerciseSession
+        open
+        doctorName="Dr. A"
+        exercises={[
+          exercise({
+            sets: 2,
+            restSeconds: 20,
+            reps: '8',
+          }),
+        ]}
+        onClose={vi.fn()}
+        onExerciseCompleted={vi.fn().mockResolvedValue(undefined)}
+        onSessionFinishedWithCompletions={vi.fn()}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: /Complete set|اتمام ست/i }));
+
+    expect(screen.queryByText(/^Rest$|^استراحت$/i)).toBeNull();
+    expect(screen.getByLabelText(/Set 2 of 2|ست 2 از 2/i)).toBeTruthy();
   });
 
   it('opens instructions sheet from info button', async () => {

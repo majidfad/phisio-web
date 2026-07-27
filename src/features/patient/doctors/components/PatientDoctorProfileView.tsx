@@ -1,8 +1,9 @@
-import { Button, Card, Descriptions, Space, Tag } from 'antd';
+import { Button, Card, Descriptions, Tag } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState, AppResult } from '@/components/ui';
+import { ConfirmActionModal, LoadingState, AppResult } from '@/components/ui';
 import { useToast } from '@/hooks/useToast';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -20,6 +21,8 @@ interface PatientDoctorProfileViewProps {
   doctorId: string;
 }
 
+type PendingConfirm = 'cancel' | 'unlink' | null;
+
 export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewProps) {
   const { t } = useTranslation();
   const toast = useToast();
@@ -27,6 +30,7 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
   const requestLink = useRequestDoctorLink();
   const cancelRequest = useCancelDoctorRequest();
   const unlink = useUnlinkDoctor();
+  const [pendingConfirm, setPendingConfirm] = useState<PendingConfirm>(null);
 
   if (isLoading) {
     return <LoadingState tip={t('patient.doctors.loading')} />;
@@ -38,14 +42,14 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
         status="error"
         title={getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}
         extra={
-          <Space>
+          <>
             <Button type="primary" onClick={() => void refetch()}>
               {t('patient.doctors.retry')}
             </Button>
             <Link to={routes.patient.doctors}>
               <Button>{t('patient.doctors.backToDirectory')}</Button>
             </Link>
-          </Space>
+          </>
         }
       />
     );
@@ -63,33 +67,35 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
     }
   };
 
-  const handleCancel = async () => {
+  const handleCancelConfirm = async () => {
     try {
       await cancelRequest.mutateAsync(doctorId);
       toast.success(t('patient.doctors.success.cancelled'));
+      setPendingConfirm(null);
     } catch (submitError) {
       toast.error(getErrorMessage(submitError, t('patient.doctors.errors.cancelFailed')));
     }
   };
 
-  const handleUnlink = async () => {
+  const handleUnlinkConfirm = async () => {
     try {
       await unlink.mutateAsync(doctorId);
       toast.success(t('patient.doctors.success.unlinked'));
+      setPendingConfirm(null);
     } catch (submitError) {
       toast.error(getErrorMessage(submitError, t('patient.doctors.errors.unlinkFailed')));
     }
   };
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
-      <Link to={routes.patient.doctors}>
-        <Button type="link" style={{ paddingInline: 0 }}>
-          {t('patient.doctors.backToDirectory')}
-        </Button>
-      </Link>
+    <div className="patient-stack patient-stack--loose">
+      <div className="patient-media-card__footer">
+        <Link to={routes.patient.doctors}>
+          <Button type="link">{t('patient.doctors.backToDirectory')}</Button>
+        </Link>
+      </div>
 
-      <Card title={data.name}>
+      <Card className="patient-media-card" title={data.name}>
         <Descriptions column={1} size="small">
           <Descriptions.Item label={t('patient.doctors.fields.specialty')}>
             {data.specialty || '—'}
@@ -118,24 +124,61 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
           </Descriptions.Item>
         </Descriptions>
 
-        <Space wrap style={{ marginTop: 16 }}>
+        <div className="patient-media-card__actions">
           {status == null || status === DoctorPatientStatusCode.Rejected ? (
-            <Button type="primary" loading={isPending} onClick={() => void handleRequest()}>
+            <Button
+              type="primary"
+              size="large"
+              loading={isPending}
+              onClick={() => void handleRequest()}
+            >
               {t('patient.doctors.actions.request')}
             </Button>
           ) : null}
           {status === DoctorPatientStatusCode.Pending ? (
-            <Button danger loading={isPending} onClick={() => void handleCancel()}>
+            <Button
+              danger
+              size="large"
+              loading={isPending}
+              onClick={() => setPendingConfirm('cancel')}
+            >
               {t('patient.doctors.actions.cancelRequest')}
             </Button>
           ) : null}
           {status === DoctorPatientStatusCode.Approved ? (
-            <Button danger loading={isPending} onClick={() => void handleUnlink()}>
+            <Button
+              danger
+              size="large"
+              loading={isPending}
+              onClick={() => setPendingConfirm('unlink')}
+            >
               {t('patient.doctors.actions.unlink')}
             </Button>
           ) : null}
-        </Space>
+        </div>
       </Card>
-    </Space>
+
+      <ConfirmActionModal
+        open={pendingConfirm === 'cancel'}
+        title={t('patient.doctors.confirmCancelRequest.title')}
+        message={t('patient.doctors.confirmCancelRequest.message')}
+        confirmText={t('patient.doctors.confirmCancelRequest.confirm')}
+        cancelText={t('patient.doctors.confirmCancelRequest.cancel')}
+        confirming={cancelRequest.isPending}
+        onCancel={() => setPendingConfirm(null)}
+        onConfirm={() => void handleCancelConfirm()}
+      />
+
+      <ConfirmActionModal
+        open={pendingConfirm === 'unlink'}
+        title={t('patient.doctors.confirmUnlink.title')}
+        message={t('patient.doctors.confirmUnlink.message')}
+        confirmText={t('patient.doctors.confirmUnlink.confirm')}
+        cancelText={t('patient.doctors.confirmUnlink.cancel')}
+        confirming={unlink.isPending}
+        onCancel={() => setPendingConfirm(null)}
+        onConfirm={() => void handleUnlinkConfirm()}
+      />
+    </div>
   );
 }

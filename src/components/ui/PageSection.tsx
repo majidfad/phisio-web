@@ -1,7 +1,4 @@
-import { Typography } from 'antd';
 import type { ReactNode } from 'react';
-
-const { Title, Text } = Typography;
 
 interface PageSectionProps {
   title: string;
@@ -12,27 +9,13 @@ interface PageSectionProps {
 
 export function PageSection({ title, description, action, children }: PageSectionProps) {
   return (
-    <section style={{ marginTop: 28 }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: 16,
-          marginBottom: 16,
-        }}
-      >
+    <section className="page-section">
+      <div className="page-section__header">
         <div>
-          <Title level={5} style={{ margin: 0, fontWeight: 600 }}>
-            {title}
-          </Title>
-          {description ? (
-            <Text type="secondary" style={{ display: 'block', marginTop: 4, fontSize: 14 }}>
-              {description}
-            </Text>
-          ) : null}
+          <h2 className="page-section__title">{title}</h2>
+          {description ? <p className="page-section__description">{description}</p> : null}
         </div>
-        {action}
+        {action ? <div className="page-section__action">{action}</div> : null}
       </div>
       {children}
     </section>

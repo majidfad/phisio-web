@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
-import { LoadingState, PageContainer, AppResult } from '@/components/ui';
+import { LoadingState, PageContainer, AppResult, ConfirmActionModal } from '@/components/ui';
 import { AdminStatusTabs } from '@/features/admin/components/AdminStatusTabs';
 import { DeleteDoctorDialog } from '@/features/admin/doctors/components/DeleteDoctorDialog';
 import { DoctorFormModal } from '@/features/admin/doctors/components/DoctorFormModal';
@@ -40,6 +40,7 @@ export function DoctorsPage() {
   const [formMode, setFormMode] = useState<FormMode | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<DoctorDto | null>(null);
   const [doctorToDelete, setDoctorToDelete] = useState<DoctorDto | null>(null);
+  const [doctorToDeactivate, setDoctorToDeactivate] = useState<DoctorDto | null>(null);
   const [activatingDoctorId, setActivatingDoctorId] = useState<string | null>(null);
   const [deactivatingDoctorId, setDeactivatingDoctorId] = useState<string | null>(null);
 
@@ -106,13 +107,18 @@ export function DoctorsPage() {
     }
   };
 
-  const handleDeactivate = async (doctor: DoctorDto) => {
-    setDeactivatingDoctorId(doctor.id);
+  const handleDeactivateConfirm = async () => {
+    if (!doctorToDeactivate) {
+      return;
+    }
+
+    setDeactivatingDoctorId(doctorToDeactivate.id);
 
     try {
-      await deactivateDoctor.mutateAsync(doctor.id);
+      await deactivateDoctor.mutateAsync(doctorToDeactivate.id);
+      setDoctorToDeactivate(null);
     } catch {
-      // Error surfaced via query refetch
+      // Keep dialog open
     } finally {
       setDeactivatingDoctorId(null);
     }
@@ -163,7 +169,7 @@ export function DoctorsPage() {
           onEdit={openEditForm}
           onDelete={(doctor) => setDoctorToDelete(doctor)}
           onActivate={(doctor) => void handleActivate(doctor)}
-          onDeactivate={(doctor) => void handleDeactivate(doctor)}
+          onDeactivate={setDoctorToDeactivate}
         />
       ) : null}
 
@@ -182,6 +188,19 @@ export function DoctorsPage() {
         isDeleting={deleteDoctor.isPending}
         onClose={() => setDoctorToDelete(null)}
         onConfirm={() => void handleDeleteConfirm()}
+      />
+
+      <ConfirmActionModal
+        open={doctorToDeactivate !== null}
+        title={t('admin.doctors.deactivate.title')}
+        message={t('admin.doctors.deactivate.message', {
+          name: doctorToDeactivate?.name ?? '',
+        })}
+        confirmText={t('admin.doctors.deactivate.confirm')}
+        cancelText={t('admin.doctors.deactivate.cancel')}
+        confirming={deactivateDoctor.isPending}
+        onCancel={() => setDoctorToDeactivate(null)}
+        onConfirm={() => void handleDeactivateConfirm()}
       />
     </PageContainer>
   );

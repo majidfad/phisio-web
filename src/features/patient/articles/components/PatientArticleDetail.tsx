@@ -1,4 +1,4 @@
-import { Button, Card, Space, Typography } from 'antd';
+import { Button, Card } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -7,8 +7,6 @@ import { usePatientArticle } from '@/features/patient/articles/hooks/usePatientA
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { formatPersianDate } from '@/utils/persian-format';
-
-const { Paragraph, Text, Title } = Typography;
 
 interface PatientArticleDetailProps {
   articleId: string;
@@ -28,37 +26,33 @@ export function PatientArticleDetail({ articleId }: PatientArticleDetailProps) {
         status="error"
         title={getErrorMessage(error, t('patient.articles.errors.loadFailed'))}
         extra={
-          <Space>
-            <Button type="primary" onClick={() => void refetch()}>
+          <div className="patient-filter-bar">
+            <Button type="primary" size="large" onClick={() => void refetch()}>
               {t('patient.articles.retry')}
             </Button>
             <Link to={routes.patient.articles}>
-              <Button>{t('patient.articles.backToList')}</Button>
+              <Button size="large">{t('patient.articles.backToList')}</Button>
             </Link>
-          </Space>
+          </div>
         }
       />
     );
   }
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
-      <Link to={routes.patient.articles}>
-        <Button type="link" style={{ paddingInline: 0 }}>
-          {t('patient.articles.backToList')}
-        </Button>
-      </Link>
+    <div className="patient-stack patient-stack--loose">
+      <div className="patient-media-card__footer">
+        <Link to={routes.patient.articles}>
+          <Button type="link">{t('patient.articles.backToList')}</Button>
+        </Link>
+      </div>
 
-      <Card>
-        <Title level={3} style={{ marginTop: 0 }}>
-          {data.title}
-        </Title>
-        <Text type="secondary">{formatPersianDate(data.createdAt)}</Text>
-        <Paragraph type="secondary" style={{ marginTop: 12 }}>
-          {data.summary}
-        </Paragraph>
-        <Paragraph style={{ whiteSpace: 'pre-wrap', marginBottom: 0 }}>{data.body}</Paragraph>
+      <Card className="patient-media-card">
+        <h2 className="patient-media-card__title patient-media-card__title--lg">{data.title}</h2>
+        <span className="patient-media-card__meta">{formatPersianDate(data.createdAt)}</span>
+        <p className="patient-media-card__body">{data.summary}</p>
+        <p className="patient-media-card__body patient-media-card__body--prose">{data.body}</p>
       </Card>
-    </Space>
+    </div>
   );
 }

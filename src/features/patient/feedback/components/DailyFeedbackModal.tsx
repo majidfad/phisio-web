@@ -1,4 +1,4 @@
-import { Button, Drawer, Form, Grid, Input, Modal, Radio, Space, Typography } from 'antd';
+import { Button, Drawer, Form, Grid, Input, Modal, Radio, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/useToast';
 import { formatPersianNumber } from '@/utils/persian-format';
 import { getErrorMessage } from '@/utils/get-error-message';
 
-const { Text, Paragraph, Title } = Typography;
+const { Text, Paragraph } = Typography;
 
 interface DailyFeedbackModalProps {
   isOpen: boolean;
@@ -85,17 +85,15 @@ export function DailyFeedbackModal({
   );
 
   const content = (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+    <div className="patient-stack patient-stack--loose">
       <div className="workout-summary">
-        <Title level={4} style={{ margin: 0 }}>
-          {t('patient.feedback.greatJob')}
-        </Title>
-        <Paragraph style={{ marginBottom: 0 }}>
+        <h3 className="workout-summary__title">{t('patient.feedback.greatJob')}</h3>
+        <p className="workout-summary__text">
           {t('patient.feedback.summary', {
             count: formatPersianNumber(completedCount),
             doctorName: doctorName ?? '',
           })}
-        </Paragraph>
+        </p>
       </div>
 
       <div>
@@ -105,19 +103,13 @@ export function DailyFeedbackModal({
         <Radio.Group
           value={hardnessScore ?? undefined}
           onChange={(e) => setHardnessScore(e.target.value as number)}
-          style={{ width: '100%' }}
+          className="feedback-score-stack"
         >
-          <Space direction="vertical" size={8} style={{ width: '100%' }}>
-            {scoreOptions.map((score) => (
-              <Radio.Button
-                key={`hardness-${score}`}
-                value={score}
-                style={{ width: '100%', textAlign: 'center', height: 44, lineHeight: '44px' }}
-              >
-                {formatPersianNumber(score)} — {t(DAILY_FEEDBACK_HARDNESS_LABEL_KEYS[score - 1])}
-              </Radio.Button>
-            ))}
-          </Space>
+          {scoreOptions.map((score) => (
+            <Radio.Button key={`hardness-${score}`} value={score} className="feedback-score-option">
+              {formatPersianNumber(score)} — {t(DAILY_FEEDBACK_HARDNESS_LABEL_KEYS[score - 1])}
+            </Radio.Button>
+          ))}
         </Radio.Group>
       </div>
 
@@ -128,19 +120,17 @@ export function DailyFeedbackModal({
         <Radio.Group
           value={improvementScore ?? undefined}
           onChange={(e) => setImprovementScore(e.target.value as number)}
-          style={{ width: '100%' }}
+          className="feedback-score-stack"
         >
-          <Space direction="vertical" size={8} style={{ width: '100%' }}>
-            {scoreOptions.map((score) => (
-              <Radio.Button
-                key={`improvement-${score}`}
-                value={score}
-                style={{ width: '100%', textAlign: 'center', height: 44, lineHeight: '44px' }}
-              >
-                {formatPersianNumber(score)} — {t(DAILY_FEEDBACK_SCORE_LABEL_KEYS[score - 1])}
-              </Radio.Button>
-            ))}
-          </Space>
+          {scoreOptions.map((score) => (
+            <Radio.Button
+              key={`improvement-${score}`}
+              value={score}
+              className="feedback-score-option"
+            >
+              {formatPersianNumber(score)} — {t(DAILY_FEEDBACK_SCORE_LABEL_KEYS[score - 1])}
+            </Radio.Button>
+          ))}
         </Radio.Group>
       </div>
 
@@ -159,20 +149,21 @@ export function DailyFeedbackModal({
         })}
       </Text>
 
-      <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-        <Button onClick={handleClose} disabled={isSubmitting}>
+      <div className="patient-media-card__actions" style={{ justifyContent: 'flex-end' }}>
+        <Button size="large" onClick={handleClose} disabled={isSubmitting}>
           {t('patient.feedback.skip')}
         </Button>
         <Button
           type="primary"
+          size="large"
           loading={isSubmitting}
           disabled={hardnessScore === null || improvementScore === null}
           onClick={() => void handleSubmit()}
         >
           {t('patient.feedback.submit')}
         </Button>
-      </Space>
-    </Space>
+      </div>
+    </div>
   );
 
   if (isMobile) {

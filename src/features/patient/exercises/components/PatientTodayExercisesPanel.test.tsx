@@ -79,7 +79,7 @@ describe('PatientTodayExercisesPanel', () => {
 });
 
 describe('PatientTodayExercisesPanel checkbox', () => {
-  it('allows toggling exercise checkbox', async () => {
+  it('allows toggling exercise checkbox via more menu', async () => {
     const user = userEvent.setup();
 
     mockedUseExercises.mockReturnValue({
@@ -109,7 +109,8 @@ describe('PatientTodayExercisesPanel checkbox', () => {
 
     renderWithProviders(<PatientTodayExercisesPanel />);
 
-    await user.click(screen.getByRole('button', { name: /Mark manually|علامت‌گذاری دستی/i }));
+    await user.click(screen.getByRole('button', { name: /More actions|عملیات بیشتر/i }));
+    await user.click(await screen.findByText(/Mark manually|علامت‌گذاری دستی/i));
 
     const checkbox = screen.getByRole('checkbox', { name: 'Knee Extension' });
     expect(checkbox).not.toBeChecked();

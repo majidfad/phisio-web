@@ -28,4 +28,11 @@ describe('getVideoPreviewSource', () => {
       src: 'https://example.com/stretch.mp4',
     });
   });
+
+  it('uses video tag for relative upload paths', () => {
+    expect(getVideoPreviewSource('/uploads/exercises/neck.mp4')).toEqual({
+      kind: 'video',
+      src: '/uploads/exercises/neck.mp4',
+    });
+  });
 });

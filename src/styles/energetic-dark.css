@@ -4,11 +4,11 @@
   position: relative;
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 20px;
+  gap: var(--phisio-space-5);
   align-items: center;
-  margin-bottom: 28px;
-  padding: 26px 24px;
-  border: 1px solid var(--phisio-border);
+  margin-bottom: var(--phisio-space-6);
+  padding: var(--phisio-space-6) var(--phisio-space-5);
+  border: 1px solid var(--phisio-border-soft);
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-gradient-hero);
   box-shadow: var(--phisio-shadow-card);
@@ -33,32 +33,32 @@
 .energy-hero__badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: var(--phisio-space-2);
+  margin-bottom: var(--phisio-space-3);
   padding: 5px 12px;
-  border-radius: 999px;
+  border-radius: var(--phisio-radius-pill);
   background: var(--phisio-primary-soft);
   border: 1px solid var(--phisio-border-glow);
   color: var(--phisio-primary);
-  font-size: 12px;
+  font-size: var(--phisio-font-meta);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .energy-hero__title {
-  margin: 0 0 8px;
-  font-size: 24px;
-  font-weight: 800;
+  margin: 0 0 var(--phisio-space-2);
+  font-size: var(--phisio-font-title);
+  font-weight: 700;
   line-height: 1.25;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--phisio-text);
 }
 
 .energy-hero__description {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: var(--phisio-font-subtitle);
+  line-height: 1.55;
   color: var(--phisio-text-secondary);
 }
 
@@ -68,9 +68,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 96px;
-  height: 96px;
-  border-radius: 22px;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--phisio-radius-xl);
   background: var(--phisio-surface);
   border: 1px solid var(--phisio-border-glow);
   box-shadow: var(--phisio-shadow-card);
@@ -78,16 +78,22 @@
 
 .energy-stat-card.ant-card {
   background: var(--phisio-surface);
-  border: 1px solid var(--phisio-border);
+  border: 1px solid var(--phisio-border-soft);
+  border-radius: var(--phisio-radius-lg);
   box-shadow: var(--phisio-shadow-card);
+  height: 100%;
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
     border-color 0.22s ease;
 }
 
+.energy-stat-card.ant-card .ant-card-body {
+  padding: var(--phisio-space-5);
+}
+
 .energy-stat-card.ant-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--phisio-border-glow);
   box-shadow: var(--phisio-shadow-card);
 }
@@ -114,14 +120,29 @@
 }
 
 .energy-empty {
-  padding: 48px 20px;
+  padding: var(--phisio-space-8) var(--phisio-space-5);
   text-align: center;
+  border: 1px solid var(--phisio-border-soft);
+  border-radius: var(--phisio-radius-lg);
+  background: var(--phisio-surface);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .energy-empty__art {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--phisio-space-4);
+}
+
+.energy-empty__art-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--phisio-radius-xl);
+  background: var(--phisio-primary-soft);
+  border: 1px solid var(--phisio-border-glow);
 }
 
 .energy-empty__lucide,
@@ -129,20 +150,27 @@
 .app-result__icon,
 .energy-hero__lucide {
   color: var(--phisio-primary);
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .energy-empty__title {
   display: block;
-  margin-bottom: 8px;
-  font-size: 16px;
+  margin-bottom: var(--phisio-space-2);
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--phisio-text);
 }
 
 .energy-empty__description {
+  margin: 0 auto;
+  max-width: 36ch;
   color: var(--phisio-text-secondary);
-  font-size: 14px;
+  font-size: var(--phisio-font-body);
+  line-height: 1.55;
+}
+
+.energy-empty__action {
+  margin-top: var(--phisio-space-5);
 }
 
 /* Sidebar nav cards */
@@ -202,6 +230,23 @@
 .nav-card__label {
   flex: 1;
   text-align: start;
+  min-width: 0;
+}
+
+.nav-card--collapsed {
+  justify-content: center;
+  gap: 0;
+  margin-bottom: var(--phisio-space-2);
+  padding: var(--phisio-space-2);
+}
+
+.nav-card--collapsed:hover {
+  transform: none;
+}
+
+.nav-card--collapsed .nav-card__icon {
+  width: 40px;
+  height: 40px;
 }
 
 /* Mobile dock navigation */

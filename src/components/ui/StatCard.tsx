@@ -19,14 +19,14 @@ export function StatCard({ label, value, to, suffix, accent = 'default' }: StatC
         : '';
 
   const card = (
-    <Card className={`energy-stat-card ${accentClass}`.trim()} styles={{ body: { padding: 22 } }}>
+    <Card className={`energy-stat-card ${accentClass}`.trim()}>
       <Statistic title={label} value={value} suffix={suffix} />
     </Card>
   );
 
   if (to) {
     return (
-      <Link to={to} style={{ textDecoration: 'none', display: 'block' }}>
+      <Link to={to} className="energy-stat-card__link">
         {card}
       </Link>
     );

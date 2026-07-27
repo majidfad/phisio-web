@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { denseIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
-import { AppTable, AppEmpty, TableIconActions } from '@/components/ui';
+import { AppTable, WarmEmptyState, TableIconActions } from '@/components/ui';
 import { getCategoryDisplayName } from '@/features/admin/exercise-categories/utils/get-category-display-name';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { formatExerciseDate } from '@/features/admin/exercises/utils/format-exercise-date';
@@ -123,7 +123,7 @@ export function ExercisesTable({
 
   if (exercises.length === 0) {
     return (
-      <AppEmpty
+      <WarmEmptyState
         description={t(
           showInactiveView ? 'admin.exercises.emptyInactive' : 'admin.exercises.empty',
         )}

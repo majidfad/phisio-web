@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
 import { PageHeader } from '@/components/PageHeader';
-import { LoadingState, PageContainer, AppEmpty, AppResult } from '@/components/ui';
+import {
+  ConfirmActionModal,
+  LoadingState,
+  PageContainer,
+  AppResult,
+  WarmEmptyState,
+} from '@/components/ui';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { CatalogPickerModal } from '@/features/doctor/exercises/components/CatalogPickerModal';
 import { DoctorExerciseTextsModal } from '@/features/doctor/exercises/components/DoctorExerciseTextsModal';
@@ -31,6 +37,7 @@ export function DoctorExercisesPage() {
   const [difficulty, setDifficulty] = useState<number | undefined>();
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [textsModal, setTextsModal] = useState<TextsModalState>(null);
+  const [exerciseToArchive, setExerciseToArchive] = useState<DoctorExerciseDto | null>(null);
   const saveExercise = useSaveDoctorExercise();
   const archiveExercise = useArchiveDoctorExercise();
 
@@ -99,6 +106,19 @@ export function DoctorExercisesPage() {
     }
   };
 
+  const handleArchiveConfirm = async () => {
+    if (!exerciseToArchive) {
+      return;
+    }
+
+    try {
+      await archiveExercise.mutateAsync(exerciseToArchive.exerciseId);
+      setExerciseToArchive(null);
+    } catch {
+      // Keep dialog open
+    }
+  };
+
   return (
     <PageContainer>
       <PageHeader
@@ -107,6 +127,7 @@ export function DoctorExercisesPage() {
         action={
           <Button
             type="primary"
+            size="large"
             icon={<BookPlus {...appIconProps} />}
             onClick={() => setIsCatalogOpen(true)}
           >
@@ -115,65 +136,66 @@ export function DoctorExercisesPage() {
         }
       />
 
-      <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-        <Input
-          size="large"
-          allowClear
-          prefix={<Search {...appIconProps} />}
-          placeholder={t('doctor.exercises.searchPlaceholder')}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ maxWidth: 480 }}
-        />
-        <Select
-          allowClear
-          placeholder={t('doctor.exercises.equipment')}
-          value={equipment}
-          onChange={setEquipment}
-          options={Array.from({ length: 6 }, (_, index) => ({
-            value: index + 1,
-            label: t(`exerciseMeta.equipment.${index + 1}`),
-          }))}
-          style={{ minWidth: 160 }}
-        />
-        <Select
-          allowClear
-          placeholder={t('doctor.exercises.difficulty')}
-          value={difficulty}
-          onChange={setDifficulty}
-          options={Array.from({ length: 3 }, (_, index) => ({
-            value: index + 1,
-            label: t(`exerciseMeta.difficulty.${index + 1}`),
-          }))}
-          style={{ minWidth: 160 }}
-        />
+      <div className="patient-stack patient-stack--loose">
+        <div className="patient-filter-bar">
+          <Input
+            size="large"
+            allowClear
+            prefix={<Search {...appIconProps} />}
+            placeholder={t('doctor.exercises.searchPlaceholder')}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Select
+            allowClear
+            size="large"
+            placeholder={t('doctor.exercises.equipment')}
+            value={equipment}
+            onChange={setEquipment}
+            options={Array.from({ length: 6 }, (_, index) => ({
+              value: index + 1,
+              label: t(`exerciseMeta.equipment.${index + 1}`),
+            }))}
+          />
+          <Select
+            allowClear
+            size="large"
+            placeholder={t('doctor.exercises.difficulty')}
+            value={difficulty}
+            onChange={setDifficulty}
+            options={Array.from({ length: 3 }, (_, index) => ({
+              value: index + 1,
+              label: t(`exerciseMeta.difficulty.${index + 1}`),
+            }))}
+          />
+        </div>
+
+        {isLoading ? <LoadingState tip={t('doctor.exercises.loading')} /> : null}
+
+        {isError ? (
+          <AppResult
+            status="error"
+            title={getErrorMessage(error, t('doctor.exercises.errors.loadFailed'))}
+            extra={
+              <Button type="primary" size="large" onClick={() => void refetch()}>
+                {t('doctor.exercises.retry')}
+              </Button>
+            }
+          />
+        ) : null}
+
+        {!isLoading && !isError && visibleExercises.length === 0 ? (
+          <WarmEmptyState description={t('doctor.exercises.empty')} />
+        ) : null}
+
+        {!isLoading && !isError && visibleExercises.length > 0 ? (
+          <DoctorExercisesCatalog
+            exercises={visibleExercises}
+            onEdit={(exercise) => setTextsModal({ mode: 'edit', exercise })}
+            onArchive={setExerciseToArchive}
+          />
+        ) : null}
       </div>
-
-      {isLoading ? <LoadingState tip={t('doctor.exercises.loading')} /> : null}
-
-      {isError ? (
-        <AppResult
-          status="error"
-          title={getErrorMessage(error, t('doctor.exercises.errors.loadFailed'))}
-          extra={
-            <Button type="primary" onClick={() => void refetch()}>
-              {t('doctor.exercises.retry')}
-            </Button>
-          }
-        />
-      ) : null}
-
-      {!isLoading && !isError && visibleExercises.length === 0 ? (
-        <AppEmpty description={t('doctor.exercises.empty')} />
-      ) : null}
-
-      {!isLoading && !isError && visibleExercises.length > 0 ? (
-        <DoctorExercisesCatalog
-          exercises={visibleExercises}
-          onEdit={(exercise) => setTextsModal({ mode: 'edit', exercise })}
-          onArchive={(exercise) => void archiveExercise.mutateAsync(exercise.exerciseId)}
-        />
-      ) : null}
 
       <CatalogPickerModal
         open={isCatalogOpen}
@@ -187,6 +209,19 @@ export function DoctorExercisesPage() {
         isSubmitting={saveExercise.isPending}
         onClose={() => setTextsModal(null)}
         onSubmit={handleSaveTexts}
+      />
+
+      <ConfirmActionModal
+        open={exerciseToArchive !== null}
+        title={t('doctor.exercises.archive.title')}
+        message={t('doctor.exercises.archive.message', {
+          title: exerciseToArchive?.title ?? '',
+        })}
+        confirmText={t('doctor.exercises.archive.confirm')}
+        cancelText={t('doctor.exercises.archive.cancel')}
+        confirming={archiveExercise.isPending}
+        onCancel={() => setExerciseToArchive(null)}
+        onConfirm={() => void handleArchiveConfirm()}
       />
     </PageContainer>
   );

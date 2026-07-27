@@ -262,6 +262,12 @@
         "deleting": "Deleting…",
         "cancel": "Cancel"
       },
+      "deactivate": {
+        "title": "Deactivate doctor",
+        "message": "Deactivate \"{{name}}\"? They will no longer be able to sign in.",
+        "confirm": "Deactivate",
+        "cancel": "Cancel"
+      },
       "validation": {
         "nameRequired": "Name is required.",
         "nameMaxLength": "Name must be at most 200 characters.",
@@ -553,6 +559,12 @@
         "select": "Add",
         "empty": "No catalog exercises are available yet."
       },
+      "archive": {
+        "title": "Remove exercise",
+        "message": "Remove \"{{title}}\" from your library?",
+        "confirm": "Remove",
+        "cancel": "Cancel"
+      },
       "addToLibrary": {
         "action": "Add \"{{title}}\" to my library",
         "title": "Add exercise to my library",
@@ -589,6 +601,18 @@
       "reject": "Reject",
       "remove": "Remove",
       "removing": "Removing…",
+      "confirmRemove": {
+        "title": "Unlink patient",
+        "message": "Unlink \"{{name}}\" from your care list?",
+        "confirm": "Unlink",
+        "cancel": "Cancel"
+      },
+      "confirmReject": {
+        "title": "Reject request",
+        "message": "Reject the link request from \"{{name}}\"?",
+        "confirm": "Reject",
+        "cancel": "Cancel"
+      },
       "loading": "Loading…",
       "retry": "Retry",
       "empty": "No patients are linked to you yet.",
@@ -934,6 +958,18 @@
         "cancelRequest": "Cancel request",
         "unlink": "Unlink"
       },
+      "confirmCancelRequest": {
+        "title": "Cancel request",
+        "message": "Cancel your link request to this doctor?",
+        "confirm": "Cancel request",
+        "cancel": "Keep request"
+      },
+      "confirmUnlink": {
+        "title": "Unlink doctor",
+        "message": "Unlink from this doctor? Your exercise plan may no longer be available.",
+        "confirm": "Unlink",
+        "cancel": "Keep link"
+      },
       "banner": {
         "noDoctorTitle": "No doctor linked yet",
         "noDoctorDescription": "You can browse the exercise library and articles anytime. Find a doctor when you are ready for a personal plan.",
@@ -990,6 +1026,13 @@
       "completedToday": "Completed today",
       "showChecklist": "Mark manually",
       "hideChecklist": "Hide checklist",
+      "moreActions": "More actions",
+      "progressSummary": "{{done}} of {{total}} done",
+      "fromDoctor": "From {{doctorName}}",
+      "chip": {
+        "sets": "sets",
+        "reps": "reps"
+      },
       "dosage": {
         "sets": "{{count}} sets",
         "reps": "{{count}} reps",
@@ -1005,12 +1048,15 @@
         "progress": "Exercise {{current}} of {{total}}",
         "dosage": "Exercise dosage",
         "setOf": "of {{total}} sets",
+        "setProgress": "Set {{set}} of {{total}}",
         "reps": "Reps",
         "hold": "Hold (s)",
         "rest": "Rest (s)",
         "side": "Side",
         "holdPhase": "Hold",
         "restPhase": "Rest",
+        "restAfterSet": "After set {{set}} of {{total}}",
+        "restNextSet": "Next: set {{set}}",
         "setHint": "Set {{set}} of {{total}} — complete when ready",
         "completeSet": "Complete set",
         "skipTimer": "Skip timer",

@@ -1,5 +1,5 @@
 import { History, LayoutDashboard, Stethoscope, Trash2 } from 'lucide-react';
-import { Button, Grid, Space, Tooltip, Typography } from 'antd';
+import { Button, Card, Grid, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
@@ -7,8 +7,6 @@ import { denseIconProps } from '@/components/icons/app-icon';
 import { AppTable, WarmEmptyState } from '@/components/ui';
 import type { DoctorPatientDto } from '@/features/doctor/patients/types/doctor-patient';
 import { formatDisplayPhone } from '@/utils/persian-format';
-
-const { Text } = Typography;
 
 interface DoctorPatientsTableProps {
   patients: DoctorPatientDto[];
@@ -121,32 +119,25 @@ export function DoctorPatientsTable({
 
   if (isMobile) {
     return (
-      <div className="patient-card-list" role="list">
+      <div className="patient-stack" role="list">
         {patients.map((patient) => (
-          <article key={patient.patientId} className="patient-card" role="listitem">
-            <div className="patient-card__body">
-              <Text strong className="patient-card__name">
-                {patient.patientName}
-              </Text>
-              <Text type="secondary" dir="ltr" className="patient-card__meta">
-                {formatDisplayPhone(patient.phoneNumber)}
-              </Text>
-              <Text type="secondary" className="patient-card__meta">
-                {formatAssignedAt(patient.assignedAt)}
-              </Text>
-            </div>
-            <div className="patient-card__actions">
-              <Button size="small" onClick={() => onOpenOverview(patient)}>
+          <Card key={patient.patientId} className="patient-media-card" size="small" role="listitem">
+            <h3 className="patient-media-card__title">{patient.patientName}</h3>
+            <span className="patient-media-card__meta" dir="ltr">
+              {formatDisplayPhone(patient.phoneNumber)}
+            </span>
+            <span className="patient-media-card__meta">{formatAssignedAt(patient.assignedAt)}</span>
+            <div className="patient-media-card__actions">
+              <Button onClick={() => onOpenOverview(patient)}>
                 {t('doctor.patients.overview.open')}
               </Button>
-              <Button size="small" type="primary" onClick={() => onOpenExercisePlan(patient)}>
+              <Button type="primary" onClick={() => onOpenExercisePlan(patient)}>
                 {t('doctor.patients.exercisePlan.open')}
               </Button>
-              <Button size="small" onClick={() => onOpenExerciseHistory(patient)}>
+              <Button onClick={() => onOpenExerciseHistory(patient)}>
                 {t('doctor.patients.exerciseHistory.open')}
               </Button>
               <Button
-                size="small"
                 danger
                 loading={removingPatientId === patient.patientId}
                 onClick={() => onRemove(patient)}
@@ -154,7 +145,7 @@ export function DoctorPatientsTable({
                 {t('doctor.patients.remove')}
               </Button>
             </div>
-          </article>
+          </Card>
         ))}
       </div>
     );

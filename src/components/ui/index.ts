@@ -2,6 +2,7 @@ export { AppBrand } from './AppBrand';
 export { AppEmpty } from './AppEmpty';
 export { AppResult } from './AppResult';
 export { AppTable } from './AppTable';
+export { ConfirmActionModal } from './ConfirmActionModal';
 export { FocusCard } from './FocusCard';
 export { HeroCard } from './HeroCard';
 export { LoadingState } from './LoadingState';

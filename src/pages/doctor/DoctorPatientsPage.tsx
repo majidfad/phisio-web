@@ -1,8 +1,14 @@
-import { Button, Space, Table, Typography } from 'antd';
+import { Button, Space, Table } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoadingState, PageContainer, AppResult } from '@/components/ui';
+import {
+  ConfirmActionModal,
+  LoadingState,
+  PageContainer,
+  AppResult,
+  PageSection,
+} from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
 import { DoctorPatientsTable } from '@/features/doctor/patients/components/DoctorPatientsTable';
 import { PatientExerciseHistoryModal } from '@/features/doctor/patients/components/PatientExerciseHistoryModal';
@@ -40,6 +46,8 @@ export function DoctorPatientsPage() {
 
   const [removingPatientId, setRemovingPatientId] = useState<string | null>(null);
   const [actingRequestId, setActingRequestId] = useState<string | null>(null);
+  const [patientToRemove, setPatientToRemove] = useState<DoctorPatientDto | null>(null);
+  const [requestToReject, setRequestToReject] = useState<DoctorPatientRequestDto | null>(null);
   const [assignmentWizardPatient, setAssignmentWizardPatient] = useState<DoctorPatientDto | null>(
     null,
   );
@@ -48,12 +56,17 @@ export function DoctorPatientsPage() {
     null,
   );
 
-  const handleRemove = async (patient: DoctorPatientDto) => {
-    setRemovingPatientId(patient.patientId);
+  const handleRemoveConfirm = async () => {
+    if (!patientToRemove) {
+      return;
+    }
+
+    setRemovingPatientId(patientToRemove.patientId);
 
     try {
-      await removePatient.mutateAsync(patient.patientId);
+      await removePatient.mutateAsync(patientToRemove.patientId);
       toast.success(t('doctor.patients.success.removed'));
+      setPatientToRemove(null);
     } catch (removeError) {
       toast.error(getErrorMessage(removeError, t('doctor.patients.errors.removeFailed')));
     } finally {
@@ -74,12 +87,17 @@ export function DoctorPatientsPage() {
     }
   };
 
-  const handleReject = async (request: DoctorPatientRequestDto) => {
-    setActingRequestId(request.patientId);
+  const handleRejectConfirm = async () => {
+    if (!requestToReject) {
+      return;
+    }
+
+    setActingRequestId(requestToReject.patientId);
 
     try {
-      await rejectRequest.mutateAsync(request.patientId);
+      await rejectRequest.mutateAsync(requestToReject.patientId);
       toast.success(t('doctor.patients.success.rejected'));
+      setRequestToReject(null);
     } catch (rejectError) {
       toast.error(getErrorMessage(rejectError, t('doctor.patients.errors.rejectFailed')));
     } finally {
@@ -94,98 +112,97 @@ export function DoctorPatientsPage() {
         description={t('doctor.patients.description')}
       />
 
-      <Typography.Title level={5}>{t('doctor.patients.requestsTitle')}</Typography.Title>
+      <div className="patient-stack patient-stack--loose">
+        <PageSection title={t('doctor.patients.requestsTitle')}>
+          {isRequestsLoading ? <LoadingState tip={t('doctor.patients.loading')} /> : null}
 
-      {isRequestsLoading ? <LoadingState tip={t('doctor.patients.loading')} /> : null}
+          {isRequestsError ? (
+            <AppResult
+              status="error"
+              title={getErrorMessage(requestsError, t('doctor.patients.errors.loadRequestsFailed'))}
+              extra={
+                <Button type="primary" size="large" onClick={() => void refetchRequests()}>
+                  {t('doctor.patients.retry')}
+                </Button>
+              }
+            />
+          ) : null}
 
-      {isRequestsError ? (
-        <AppResult
-          status="error"
-          title={getErrorMessage(requestsError, t('doctor.patients.errors.loadRequestsFailed'))}
-          extra={
-            <Button type="primary" onClick={() => void refetchRequests()}>
-              {t('doctor.patients.retry')}
-            </Button>
-          }
-        />
-      ) : null}
+          {!isRequestsLoading && !isRequestsError ? (
+            <Table
+              rowKey="patientId"
+              dataSource={requests}
+              pagination={false}
+              locale={{ emptyText: t('doctor.patients.emptyRequests') }}
+              columns={[
+                {
+                  title: t('doctor.patients.columns.name'),
+                  dataIndex: 'patientName',
+                },
+                {
+                  title: t('doctor.patients.columns.phone'),
+                  dataIndex: 'phoneNumber',
+                  render: (value: string) => <span dir="ltr">{convertToPersianDigits(value)}</span>,
+                },
+                {
+                  title: t('doctor.patients.columns.requestedAt'),
+                  dataIndex: 'requestedAt',
+                  render: (value: string) => formatPersianDate(value),
+                },
+                {
+                  title: t('doctor.patients.columns.actions'),
+                  key: 'actions',
+                  render: (_, request) => (
+                    <Space>
+                      <Button
+                        type="primary"
+                        loading={actingRequestId === request.patientId}
+                        onClick={() => void handleApprove(request)}
+                      >
+                        {t('doctor.patients.approve')}
+                      </Button>
+                      <Button
+                        danger
+                        loading={actingRequestId === request.patientId}
+                        onClick={() => setRequestToReject(request)}
+                      >
+                        {t('doctor.patients.reject')}
+                      </Button>
+                    </Space>
+                  ),
+                },
+              ]}
+            />
+          ) : null}
+        </PageSection>
 
-      {!isRequestsLoading && !isRequestsError ? (
-        <Table
-          rowKey="patientId"
-          dataSource={requests}
-          pagination={false}
-          locale={{ emptyText: t('doctor.patients.emptyRequests') }}
-          style={{ marginBottom: 24 }}
-          columns={[
-            {
-              title: t('doctor.patients.columns.name'),
-              dataIndex: 'patientName',
-            },
-            {
-              title: t('doctor.patients.columns.phone'),
-              dataIndex: 'phoneNumber',
-              render: (value: string) => <span dir="ltr">{convertToPersianDigits(value)}</span>,
-            },
-            {
-              title: t('doctor.patients.columns.requestedAt'),
-              dataIndex: 'requestedAt',
-              render: (value: string) => formatPersianDate(value),
-            },
-            {
-              title: t('doctor.patients.columns.actions'),
-              key: 'actions',
-              render: (_, request) => (
-                <Space>
-                  <Button
-                    type="primary"
-                    size="small"
-                    loading={actingRequestId === request.patientId}
-                    onClick={() => void handleApprove(request)}
-                  >
-                    {t('doctor.patients.approve')}
-                  </Button>
-                  <Button
-                    danger
-                    size="small"
-                    loading={actingRequestId === request.patientId}
-                    onClick={() => void handleReject(request)}
-                  >
-                    {t('doctor.patients.reject')}
-                  </Button>
-                </Space>
-              ),
-            },
-          ]}
-        />
-      ) : null}
+        <PageSection title={t('doctor.patients.linkedTitle')}>
+          {isLoading ? <LoadingState tip={t('doctor.patients.loading')} /> : null}
 
-      <Typography.Title level={5}>{t('doctor.patients.linkedTitle')}</Typography.Title>
+          {isError ? (
+            <AppResult
+              status="error"
+              title={getErrorMessage(error, t('doctor.patients.errors.loadFailed'))}
+              extra={
+                <Button type="primary" size="large" onClick={() => void refetch()}>
+                  {t('doctor.patients.retry')}
+                </Button>
+              }
+            />
+          ) : null}
 
-      {isLoading ? <LoadingState tip={t('doctor.patients.loading')} /> : null}
-
-      {isError ? (
-        <AppResult
-          status="error"
-          title={getErrorMessage(error, t('doctor.patients.errors.loadFailed'))}
-          extra={
-            <Button type="primary" onClick={() => void refetch()}>
-              {t('doctor.patients.retry')}
-            </Button>
-          }
-        />
-      ) : null}
-
-      {!isLoading && !isError ? (
-        <DoctorPatientsTable
-          patients={patients}
-          removingPatientId={removingPatientId}
-          onRemove={(patient) => void handleRemove(patient)}
-          onOpenOverview={setOverviewPatient}
-          onOpenExercisePlan={setAssignmentWizardPatient}
-          onOpenExerciseHistory={setExerciseHistoryPatient}
-        />
-      ) : null}
+          {!isLoading && !isError ? (
+            <DoctorPatientsTable
+              patients={patients}
+              removingPatientId={removingPatientId}
+              onRemove={setPatientToRemove}
+              onOpenOverview={setOverviewPatient}
+              onOpenExercisePlan={setAssignmentWizardPatient}
+              onOpenExerciseHistory={setExerciseHistoryPatient}
+            />
+          ) : null}
+        </PageSection>
+      </div>
 
       <PatientOverviewDrawer patient={overviewPatient} onClose={() => setOverviewPatient(null)} />
 
@@ -198,6 +215,32 @@ export function DoctorPatientsPage() {
       <PatientExerciseHistoryModal
         patient={exerciseHistoryPatient}
         onClose={() => setExerciseHistoryPatient(null)}
+      />
+
+      <ConfirmActionModal
+        open={patientToRemove !== null}
+        title={t('doctor.patients.confirmRemove.title')}
+        message={t('doctor.patients.confirmRemove.message', {
+          name: patientToRemove?.patientName ?? '',
+        })}
+        confirmText={t('doctor.patients.confirmRemove.confirm')}
+        cancelText={t('doctor.patients.confirmRemove.cancel')}
+        confirming={removePatient.isPending}
+        onCancel={() => setPatientToRemove(null)}
+        onConfirm={() => void handleRemoveConfirm()}
+      />
+
+      <ConfirmActionModal
+        open={requestToReject !== null}
+        title={t('doctor.patients.confirmReject.title')}
+        message={t('doctor.patients.confirmReject.message', {
+          name: requestToReject?.patientName ?? '',
+        })}
+        confirmText={t('doctor.patients.confirmReject.confirm')}
+        cancelText={t('doctor.patients.confirmReject.cancel')}
+        confirming={rejectRequest.isPending}
+        onCancel={() => setRequestToReject(null)}
+        onConfirm={() => void handleRejectConfirm()}
       />
     </PageContainer>
   );

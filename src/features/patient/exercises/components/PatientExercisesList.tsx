@@ -1,7 +1,10 @@
-import { Button, Space, Typography } from 'antd';
+import { MoreHorizontal, Play } from 'lucide-react';
+import { Button, Dropdown, Space, Typography } from 'antd';
+import type { MenuProps } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { appIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import { DailyFeedbackModal } from '@/features/patient/feedback/components/DailyFeedbackModal';
 import { PatientExerciseListItem } from '@/features/patient/exercises/components/PatientExerciseListItem';
@@ -18,6 +21,7 @@ import {
 } from '@/features/patient/exercises/utils/exercise-checkbox-state';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
+import { formatPersianNumber } from '@/utils/persian-format';
 
 const { Text } = Typography;
 
@@ -43,8 +47,11 @@ export function PatientExercisesList({
   doctorGroups,
   onCompletionsSaved,
 }: PatientExercisesListProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const toast = useToast();
+  const isRtl = i18n.language.startsWith('fa');
+  const formatCount = (value: number) => (isRtl ? formatPersianNumber(value) : String(value));
+
   const [selectedExercise, setSelectedExercise] = useState<PatientExercisePlayback | null>(null);
   const [pendingSelectionIds, setPendingSelectionIds] = useState<Set<string>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -145,63 +152,109 @@ export function PatientExercisesList({
     });
   };
 
+  const moreMenuItems: MenuProps['items'] = [
+    {
+      key: 'checklist',
+      label: showChecklist
+        ? t('patient.exercises.hideChecklist')
+        : t('patient.exercises.showChecklist'),
+      onClick: () => setShowChecklist((value) => !value),
+    },
+  ];
+
   return (
     <>
-      <Space direction="vertical" size={20} style={{ width: '100%', marginTop: 16 }}>
-        <Button
-          type="link"
-          style={{ paddingInline: 0 }}
-          onClick={() => setShowChecklist((v) => !v)}
-        >
-          {showChecklist
-            ? t('patient.exercises.hideChecklist')
-            : t('patient.exercises.showChecklist')}
-        </Button>
+      <div className="workout-today">
+        <div className="workout-today__toolbar">
+          <Dropdown menu={{ items: moreMenuItems }} trigger={['click']} placement="bottomRight">
+            <Button
+              type="text"
+              className="workout-today__more touch-target"
+              icon={<MoreHorizontal {...appIconProps} />}
+              aria-label={t('patient.exercises.moreActions')}
+            />
+          </Dropdown>
+        </div>
 
-        {doctorGroups.map((group) => {
-          const incompleteCount = group.exercises.filter(
-            (exercise) => !exercise.completedToday,
-          ).length;
+        <Space direction="vertical" size={24} style={{ width: '100%' }}>
+          {doctorGroups.map((group) => {
+            const totalCount = group.exercises.length;
+            const doneCount = group.exercises.filter((exercise) => exercise.completedToday).length;
+            const incompleteCount = totalCount - doneCount;
+            const progressPercent =
+              totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
-          return (
-            <section key={group.doctorId} className="workout-doctor-group">
-              <div className="workout-doctor-group__header">
-                <Text strong>
-                  {t('patient.dashboard.treatingDoctor', { doctorName: group.doctorName })}
-                </Text>
-                {incompleteCount > 0 ? (
-                  <Button
-                    type="primary"
-                    size="large"
-                    onClick={() => startDoctorSession(group)}
-                    className="touch-target"
-                  >
-                    {t('patient.exercises.session.startForDoctor', {
-                      count: incompleteCount,
-                    })}
-                  </Button>
-                ) : (
-                  <Text type="secondary">{t('patient.exercises.session.doctorDone')}</Text>
-                )}
-              </div>
-              <div className="exercise-list" role="list">
-                {group.exercises.map((exercise) => (
-                  <div key={exercise.userExerciseId} role="listitem">
-                    <PatientExerciseListItem
-                      exercise={exercise}
-                      isChecked={isExerciseCheckboxChecked(exercise, sanitizedPendingIds)}
-                      isDisabled={!showChecklist || exercise.completedToday || isSubmitting}
-                      showCheckbox={showChecklist}
-                      onToggle={(item, checked) => handleToggle(item, checked)}
-                      onPlay={handlePlay}
-                    />
+            return (
+              <section key={group.doctorId} className="workout-doctor-group">
+                <div className="workout-hero">
+                  <div className="workout-hero__progress" aria-live="polite">
+                    <Text className="workout-hero__progress-text">
+                      {t('patient.exercises.progressSummary', {
+                        done: formatCount(doneCount),
+                        total: formatCount(totalCount),
+                      })}
+                    </Text>
+                    <div
+                      className="workout-hero__bar"
+                      role="progressbar"
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={progressPercent}
+                      aria-label={t('patient.exercises.progressSummary', {
+                        done: formatCount(doneCount),
+                        total: formatCount(totalCount),
+                      })}
+                    >
+                      <span
+                        className="workout-hero__bar-fill"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
-            </section>
-          );
-        })}
-      </Space>
+
+                  {incompleteCount > 0 ? (
+                    <Button
+                      type="primary"
+                      size="large"
+                      block
+                      icon={<Play size={18} strokeWidth={2.25} aria-hidden />}
+                      onClick={() => startDoctorSession(group)}
+                      className="workout-hero__start touch-target"
+                    >
+                      {t('patient.exercises.session.startForDoctor', {
+                        count: incompleteCount,
+                      })}
+                    </Button>
+                  ) : (
+                    <Text type="secondary" className="workout-hero__done">
+                      {t('patient.exercises.session.doctorDone')}
+                    </Text>
+                  )}
+
+                  <Text type="secondary" className="workout-hero__doctor">
+                    {t('patient.exercises.fromDoctor', { doctorName: group.doctorName })}
+                  </Text>
+                </div>
+
+                <div className="exercise-list" role="list">
+                  {group.exercises.map((exercise) => (
+                    <div key={exercise.userExerciseId} role="listitem">
+                      <PatientExerciseListItem
+                        exercise={exercise}
+                        isChecked={isExerciseCheckboxChecked(exercise, sanitizedPendingIds)}
+                        isDisabled={!showChecklist || exercise.completedToday || isSubmitting}
+                        showCheckbox={showChecklist}
+                        onToggle={(item, checked) => handleToggle(item, checked)}
+                        onPlay={handlePlay}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+        </Space>
+      </div>
 
       {showChecklist ? (
         <div className="patient-sticky-cta">

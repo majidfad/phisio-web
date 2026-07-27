@@ -9,15 +9,12 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, action }: PageHeaderProps) {
   return (
-    <div
-      className="page-header"
-      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 16 }}
-    >
+    <div className="page-header">
       <div>
         <h1 className="page-header__title">{title}</h1>
         {description ? <span className="page-header__description">{description}</span> : null}
       </div>
-      {action ? <div>{action}</div> : null}
+      {action ? <div className="page-header__action">{action}</div> : null}
     </div>
   );
 }

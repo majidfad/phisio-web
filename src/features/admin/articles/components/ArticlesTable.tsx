@@ -2,7 +2,7 @@ import { Button, Modal, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
+import { AppTable, TableIconActions, WarmEmptyState } from '@/components/ui';
 import type { ArticleDto } from '@/features/admin/articles/types/article';
 import { formatPersianDate } from '@/utils/persian-format';
 
@@ -82,22 +82,17 @@ export function ArticlesTable({
     },
   ];
 
-  return (
-    <AppTable
-      rowKey="articleId"
-      columns={columns}
-      dataSource={articles}
-      locale={{
-        emptyText: (
-          <AppEmpty
-            description={
-              showInactiveView ? t('admin.articles.emptyInactive') : t('admin.articles.empty')
-            }
-          />
-        ),
-      }}
-    />
-  );
+  if (articles.length === 0) {
+    return (
+      <WarmEmptyState
+        description={
+          showInactiveView ? t('admin.articles.emptyInactive') : t('admin.articles.empty')
+        }
+      />
+    );
+  }
+
+  return <AppTable rowKey="articleId" columns={columns} dataSource={articles} />;
 }
 
 interface DeleteArticleDialogProps {

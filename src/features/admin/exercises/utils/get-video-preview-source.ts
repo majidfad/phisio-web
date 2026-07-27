@@ -59,7 +59,8 @@ export function getVideoPreviewSource(
   if (
     mediaType === ExerciseMediaType.UploadedVideo ||
     mediaType === ExerciseMediaType.ExternalVideo ||
-    DIRECT_VIDEO_PATTERN.test(trimmed)
+    DIRECT_VIDEO_PATTERN.test(trimmed) ||
+    trimmed.startsWith('/uploads/')
   ) {
     return {
       kind: 'video',

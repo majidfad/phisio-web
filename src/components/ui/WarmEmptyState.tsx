@@ -20,7 +20,9 @@ export function WarmEmptyState({
   return (
     <div className="energy-empty">
       <div className="energy-empty__art" aria-hidden="true">
-        {icon ?? <LucideIcon size={48} strokeWidth={1.5} className="energy-empty__lucide" />}
+        <span className="energy-empty__art-badge">
+          {icon ?? <LucideIcon size={32} strokeWidth={1.75} className="energy-empty__lucide" />}
+        </span>
       </div>
       {title ? <span className="energy-empty__title">{title}</span> : null}
       <p className="energy-empty__description">{description}</p>

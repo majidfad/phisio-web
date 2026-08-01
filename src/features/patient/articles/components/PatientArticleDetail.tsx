@@ -40,7 +40,7 @@ export function PatientArticleDetail({ articleId }: PatientArticleDetailProps) {
   }
 
   return (
-    <div className="patient-stack patient-stack--loose">
+    <div className="patient-stack patient-stack--loose" style={{ paddingBottom: 88 }}>
       <div className="patient-media-card__footer">
         <Link to={routes.patient.articles}>
           <Button type="link">{t('patient.articles.backToList')}</Button>
@@ -48,9 +48,16 @@ export function PatientArticleDetail({ articleId }: PatientArticleDetailProps) {
       </div>
 
       <Card className="patient-media-card">
-        <h2 className="patient-media-card__title patient-media-card__title--lg">{data.title}</h2>
+        <bdi
+          className="patient-media-card__title patient-media-card__title--lg"
+          style={{ display: 'block', unicodeBidi: 'plaintext' }}
+        >
+          {data.title}
+        </bdi>
         <span className="patient-media-card__meta">{formatPersianDate(data.createdAt)}</span>
-        <p className="patient-media-card__body">{data.summary}</p>
+        <p className="patient-media-card__body patient-media-card__body--emphasis">
+          {data.summary}
+        </p>
         <p className="patient-media-card__body patient-media-card__body--prose">{data.body}</p>
       </Card>
     </div>

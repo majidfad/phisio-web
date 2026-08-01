@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phisio — Palette Preview (A / B / C)</title>
+    <style>
+      :root {
+        --font: Vazirmatn, Inter, system-ui, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: #e8eaee;
+        color: #0b1220;
+        line-height: 1.5;
+      }
+
+      .page {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 28px 20px 64px;
+      }
+
+      .intro {
+        margin-bottom: 28px;
+      }
+
+      .intro h1 {
+        margin: 0 0 8px;
+        font-size: 1.6rem;
+        letter-spacing: -0.02em;
+      }
+
+      .intro p {
+        margin: 0;
+        color: #5b6472;
+        font-size: 0.95rem;
+        max-width: 62ch;
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 20px 0 24px;
+      }
+
+      .tab {
+        border: 1px solid #cfd4dc;
+        background: #fff;
+        color: #0b1220;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font: inherit;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      .tab[aria-selected='true'] {
+        background: #0b1220;
+        color: #fff;
+        border-color: #0b1220;
+      }
+
+      .panels {
+        display: grid;
+        gap: 20px;
+      }
+
+      .panel {
+        display: none;
+      }
+
+      .panel.is-active {
+        display: block;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid #d7dbe3;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      }
+
+      .card h2 {
+        margin: 0 0 4px;
+        font-size: 1.2rem;
+      }
+
+      .card .tag {
+        display: inline-block;
+        margin-bottom: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 8px;
+        background: #eef0f4;
+        color: #5b6472;
+      }
+
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+      }
+
+      .swatch {
+        border: 1px solid #e2e5eb;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .swatch__chip {
+        height: 56px;
+      }
+
+      .swatch__meta {
+        padding: 8px 10px 10px;
+      }
+
+      .swatch__name {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .swatch__hex {
+        display: block;
+        font-size: 11px;
+        color: #5b6472;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        direction: ltr;
+        text-align: right;
+      }
+
+      .modes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 8px;
+      }
+
+      @media (max-width: 640px) {
+        .modes {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .mock {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid transparent;
+      }
+
+      .mock__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .mock__body {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .mock__title {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      .mock__sub {
+        margin: 0;
+        font-size: 12px;
+        opacity: 0.75;
+      }
+
+      .mock__stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .mock__stat {
+        border-radius: 12px;
+        padding: 10px;
+        border: 1px solid transparent;
+      }
+
+      .mock__stat strong {
+        display: block;
+        font-size: 1.15rem;
+        font-weight: 800;
+      }
+
+      .mock__stat span {
+        font-size: 11px;
+        opacity: 0.75;
+      }
+
+      .mock__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .mock__btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 16px;
+        font: inherit;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: default;
+        color: #fff;
+      }
+
+      .mock__btn--ghost {
+        background: transparent;
+        border: 1px solid currentColor;
+      }
+
+      .mock__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .mock__ring {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .note {
+        margin-top: 14px;
+        font-size: 13px;
+        color: #5b6472;
+      }
+
+      .all-view {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      @media (max-width: 1000px) {
+        .all-view {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .mini-card {
+        border-radius: 16px;
+        padding: 14px;
+        border: 1px solid #d7dbe3;
+        background: #fff;
+      }
+
+      .mini-card h3 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+      }
+
+      .mini-strip {
+        display: flex;
+        height: 36px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        border: 1px solid #e2e5eb;
+      }
+
+      .mini-strip span {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="intro">
+        <h1>پیش‌نمایش پالت رنگ Phisio</h1>
+        <p>
+          سه گزینه پیشنهادی برای جایگزینی پالت فعلی (یخ‌آبی + Azure/Mint نرم). هر پالت را در حالت روشن و
+          تاریک ببینید، سپس یکی را انتخاب کنید تا در توکن‌های واقعی اپ اعمال شود.
+        </p>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Palette options">
+        <button class="tab" role="tab" aria-selected="true" data-tab="all">مقایسه همه</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="a">A — Clinical Navy</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="b">B — Deep Teal</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="c">C — Ink + Signal</button>
+      </div>
+
+      <div class="panels">
+        <!-- ALL -->
+        <section class="panel is-active" id="panel-all" data-panel="all">
+          <div class="all-view">
+            <article class="mini-card">
+              <h3>A — Clinical Navy ★ پیشنهادی</h3>
+              <div class="mini-strip" aria-hidden="true">
+                <span style="background: #f7f8fa"></span>
+                <span style="background: #1d4ed8"></span>
+                <span style="background: #0f766e"></span>
+                <span style="background: #0b1220"></span>
+                <span style="background: #e2e5eb"></span>
+              </div>
+              <p class="note" style="margin: 0">خنثی تیز + آبی اکشن قوی. شبیه SaaS کلینیکی.</p>
+            </article>
+            <article class="mini-card">
+              <h3>B — Deep Teal</h3>
+              <div class="mini-strip" aria-hidden="true">
+                <span style="background: #f6f8f8"></span>
+                <span style="background: #0d9488"></span>
+                <span style="background: #1e3a5f"></span>
+                <span style="background: #0f172a"></span>
+                <span style="background: #d9e2e1"></span>
+              </div>
+              <p class="note" style="margin: 0">هویت سلامت با تیل عمیق؛ کمتر شبیه Tailwind آبی.</p>
+            </article>
+            <article class="mini-card">
+              <h3>C — Ink + Signal</h3>
+              <div class="mini-strip" aria-hidden="true">
+                <span style="background: #f5f5f4"></span>
+                <span style="background: #2563eb"></span>
+                <span style="background: #047857"></span>
+                <span style="background: #18181b"></span>
+                <span style="background: #e7e5e4"></span>
+              </div>
+              <p class="note" style="margin: 0">حداکثر کنتراست؛ پس‌زمینه سنگ‌گرم، رنگ فقط روی اکشن.</p>
+            </article>
+          </div>
+          <p class="note">برای جزئیات کامل هر پالت، تب مربوطه را باز کنید.</p>
+        </section>
+
+        <!-- A -->
+        <section class="panel" id="panel-a" data-panel="a">
+          <div class="grid">
+            <div class="card">
+              <span class="tag">OPTION A · RECOMMENDED</span>
+              <h2>Clinical Navy</h2>
+              <p class="note">خنثی خاکستری، آبی اکشن تیره‌تر، تیل فقط برای پیشرفت.</p>
+              <div class="swatches" style="margin-top: 14px">
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #f7f8fa"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Canvas</span
+                    ><span class="swatch__hex">#F7F8FA</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #ffffff; border-bottom: 1px solid #eee"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Surface</span
+                    ><span class="swatch__hex">#FFFFFF</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #1d4ed8"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Primary</span
+                    ><span class="swatch__hex">#1D4ED8</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #0f766e"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Accent</span
+                    ><span class="swatch__hex">#0F766E</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #0b1220"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Text</span><span class="swatch__hex">#0B1220</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #e2e5eb"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Border</span
+                    ><span class="swatch__hex">#E2E5EB</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #0c111b"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Dark canvas</span
+                    ><span class="swatch__hex">#0C111B</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #3b82f6"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Dark primary</span
+                    ><span class="swatch__hex">#3B82F6</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="modes">
+                <div
+                  class="mock"
+                  style="background: #f7f8fa; border-color: #e2e5eb; color: #0b1220"
+                >
+                  <div class="mock__bar" style="background: #fff; border-bottom: 1px solid #e2e5eb">
+                    <span>داشبورد بیمار</span>
+                    <span class="mock__pill" style="background: rgba(15, 118, 110, 0.12); color: #0f766e"
+                      >فعال</span
+                    >
+                  </div>
+                  <div class="mock__body">
+                    <div style="display: flex; gap: 12px; align-items: center">
+                      <div>
+                        <p class="mock__title">صبح بخیر، سارا</p>
+                        <p class="mock__sub">۳ از ۴ تمرین امروز</p>
+                      </div>
+                      <div
+                        class="mock__ring"
+                        style="
+                          background: conic-gradient(#0f766e 0 75%, #e2e5eb 0);
+                          color: #0b1220;
+                        "
+                      >
+                        <span
+                          style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: #fff;
+                            display: grid;
+                            place-items: center;
+                          "
+                          >۷۵٪</span
+                        >
+                      </div>
+                    </div>
+                    <div class="mock__stats">
+                      <div class="mock__stat" style="background: #fff; border-color: #e2e5eb">
+                        <strong style="color: #1d4ed8">۳</strong><span>تکمیل‌شده</span>
+                      </div>
+                      <div class="mock__stat" style="background: #fff; border-color: #e2e5eb">
+                        <strong style="color: #0f766e">۱</strong><span>باقی‌مانده</span>
+                      </div>
+                    </div>
+                    <div class="mock__row" style="background: #fff; border-color: #e2e5eb">
+                      <span style="font-size: 13px; font-weight: 700">کشش گردن</span>
+                      <button class="mock__btn" style="background: #1d4ed8">شروع</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="mock"
+                  style="background: #0c111b; border-color: rgba(255, 255, 255, 0.1); color: #f3f4f6"
+                >
+                  <div
+                    class="mock__bar"
+                    style="background: #151b28; border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+                  >
+                    <span>داشبورد بیمار</span>
+                    <span class="mock__pill" style="background: rgba(45, 212, 191, 0.16); color: #2dd4bf"
+                      >فعال</span
+                    >
+                  </div>
+                  <div class="mock__body">
+                    <div style="display: flex; gap: 12px; align-items: center">
+                      <div>
+                        <p class="mock__title">صبح بخیر، سارا</p>
+                        <p class="mock__sub">۳ از ۴ تمرین امروز</p>
+                      </div>
+                      <div
+                        class="mock__ring"
+                        style="
+                          background: conic-gradient(#2dd4bf 0 75%, #1e2636 0);
+                          color: #f3f4f6;
+                        "
+                      >
+                        <span
+                          style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: #151b28;
+                            display: grid;
+                            place-items: center;
+                          "
+                          >۷۵٪</span
+                        >
+                      </div>
+                    </div>
+                    <div class="mock__stats">
+                      <div
+                        class="mock__stat"
+                        style="background: #151b28; border-color: rgba(255, 255, 255, 0.1)"
+                      >
+                        <strong style="color: #3b82f6">۳</strong><span>تکمیل‌شده</span>
+                      </div>
+                      <div
+                        class="mock__stat"
+                        style="background: #151b28; border-color: rgba(255, 255, 255, 0.1)"
+                      >
+                        <strong style="color: #2dd4bf">۱</strong><span>باقی‌مانده</span>
+                      </div>
+                    </div>
+                    <div
+                      class="mock__row"
+                      style="background: #151b28; border-color: rgba(255, 255, 255, 0.1)"
+                    >
+                      <span style="font-size: 13px; font-weight: 700">کشش گردن</span>
+                      <button class="mock__btn" style="background: #3b82f6">شروع</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- B -->
+        <section class="panel" id="panel-b" data-panel="b">
+          <div class="grid">
+            <div class="card">
+              <span class="tag">OPTION B</span>
+              <h2>Deep Teal Brand</h2>
+              <p class="note">تیل عمیق به‌عنوان اکشن اصلی؛ نیوی برای ساختار و لینک‌ها.</p>
+              <div class="swatches" style="margin-top: 14px">
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #f6f8f8"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Canvas</span
+                    ><span class="swatch__hex">#F6F8F8</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #ffffff; border-bottom: 1px solid #eee"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Surface</span
+                    ><span class="swatch__hex">#FFFFFF</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #0d9488"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Primary</span
+                    ><span class="swatch__hex">#0D9488</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #1e3a5f"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Accent navy</span
+                    ><span class="swatch__hex">#1E3A5F</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #0f172a"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Text</span><span class="swatch__hex">#0F172A</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #d9e2e1"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Border</span
+                    ><span class="swatch__hex">#D9E2E1</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #0a1212"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Dark canvas</span
+                    ><span class="swatch__hex">#0A1212</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #2dd4bf"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Dark primary</span
+                    ><span class="swatch__hex">#2DD4BF</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="modes">
+                <div
+                  class="mock"
+                  style="background: #f6f8f8; border-color: #d9e2e1; color: #0f172a"
+                >
+                  <div class="mock__bar" style="background: #fff; border-bottom: 1px solid #d9e2e1">
+                    <span>داشبورد بیمار</span>
+                    <span class="mock__pill" style="background: rgba(30, 58, 95, 0.1); color: #1e3a5f"
+                      >فعال</span
+                    >
+                  </div>
+                  <div class="mock__body">
+                    <div style="display: flex; gap: 12px; align-items: center">
+                      <div>
+                        <p class="mock__title">صبح بخیر، سارا</p>
+                        <p class="mock__sub">۳ از ۴ تمرین امروز</p>
+                      </div>
+                      <div
+                        class="mock__ring"
+                        style="
+                          background: conic-gradient(#0d9488 0 75%, #d9e2e1 0);
+                          color: #0f172a;
+                        "
+                      >
+                        <span
+                          style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: #fff;
+                            display: grid;
+                            place-items: center;
+                          "
+                          >۷۵٪</span
+                        >
+                      </div>
+                    </div>
+                    <div class="mock__stats">
+                      <div class="mock__stat" style="background: #fff; border-color: #d9e2e1">
+                        <strong style="color: #0d9488">۳</strong><span>تکمیل‌شده</span>
+                      </div>
+                      <div class="mock__stat" style="background: #fff; border-color: #d9e2e1">
+                        <strong style="color: #1e3a5f">۱</strong><span>باقی‌مانده</span>
+                      </div>
+                    </div>
+                    <div class="mock__row" style="background: #fff; border-color: #d9e2e1">
+                      <span style="font-size: 13px; font-weight: 700">کشش گردن</span>
+                      <button class="mock__btn" style="background: #0d9488">شروع</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="mock"
+                  style="background: #0a1212; border-color: rgba(255, 255, 255, 0.1); color: #f1f5f9"
+                >
+                  <div
+                    class="mock__bar"
+                    style="background: #13201f; border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+                  >
+                    <span>داشبورد بیمار</span>
+                    <span class="mock__pill" style="background: rgba(147, 197, 253, 0.16); color: #93c5fd"
+                      >فعال</span
+                    >
+                  </div>
+                  <div class="mock__body">
+                    <div style="display: flex; gap: 12px; align-items: center">
+                      <div>
+                        <p class="mock__title">صبح بخیر، سارا</p>
+                        <p class="mock__sub">۳ از ۴ تمرین امروز</p>
+                      </div>
+                      <div
+                        class="mock__ring"
+                        style="
+                          background: conic-gradient(#2dd4bf 0 75%, #1a2a29 0);
+                          color: #f1f5f9;
+                        "
+                      >
+                        <span
+                          style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: #13201f;
+                            display: grid;
+                            place-items: center;
+                          "
+                          >۷۵٪</span
+                        >
+                      </div>
+                    </div>
+                    <div class="mock__stats">
+                      <div
+                        class="mock__stat"
+                        style="background: #13201f; border-color: rgba(255, 255, 255, 0.1)"
+                      >
+                        <strong style="color: #2dd4bf">۳</strong><span>تکمیل‌شده</span>
+                      </div>
+                      <div
+                        class="mock__stat"
+                        style="background: #13201f; border-color: rgba(255, 255, 255, 0.1)"
+                      >
+                        <strong style="color: #93c5fd">۱</strong><span>باقی‌مانده</span>
+                      </div>
+                    </div>
+                    <div
+                      class="mock__row"
+                      style="background: #13201f; border-color: rgba(255, 255, 255, 0.1)"
+                    >
+                      <span style="font-size: 13px; font-weight: 700">کشش گردن</span>
+                      <button class="mock__btn" style="background: #2dd4bf; color: #0a1212">شروع</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- C -->
+        <section class="panel" id="panel-c" data-panel="c">
+          <div class="grid">
+            <div class="card">
+              <span class="tag">OPTION C</span>
+              <h2>Ink + Signal Blue</h2>
+              <p class="note">پس‌زمینه سنگ‌گرم، کنتراست بالا؛ رنگ فقط روی دکمه و وضعیت.</p>
+              <div class="swatches" style="margin-top: 14px">
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #f5f5f4"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Canvas</span
+                    ><span class="swatch__hex">#F5F5F4</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #ffffff; border-bottom: 1px solid #eee"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Surface</span
+                    ><span class="swatch__hex">#FFFFFF</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #2563eb"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Primary</span
+                    ><span class="swatch__hex">#2563EB</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #047857"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Accent</span
+                    ><span class="swatch__hex">#047857</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #18181b"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Text</span><span class="swatch__hex">#18181B</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #e7e5e4"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Border</span
+                    ><span class="swatch__hex">#E7E5E4</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #09090b"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Dark canvas</span
+                    ><span class="swatch__hex">#09090B</span>
+                  </div>
+                </div>
+                <div class="swatch">
+                  <div class="swatch__chip" style="background: #60a5fa"></div>
+                  <div class="swatch__meta">
+                    <span class="swatch__name">Dark primary</span
+                    ><span class="swatch__hex">#60A5FA</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="modes">
+                <div
+                  class="mock"
+                  style="background: #f5f5f4; border-color: #e7e5e4; color: #18181b"
+                >
+                  <div class="mock__bar" style="background: #fff; border-bottom: 1px solid #e7e5e4">
+                    <span>داشبورد بیمار</span>
+                    <span class="mock__pill" style="background: rgba(4, 120, 87, 0.12); color: #047857"
+                      >فعال</span
+                    >
+                  </div>
+                  <div class="mock__body">
+                    <div style="display: flex; gap: 12px; align-items: center">
+                      <div>
+                        <p class="mock__title">صبح بخیر، سارا</p>
+                        <p class="mock__sub">۳ از ۴ تمرین امروز</p>
+                      </div>
+                      <div
+                        class="mock__ring"
+                        style="
+                          background: conic-gradient(#047857 0 75%, #e7e5e4 0);
+                          color: #18181b;
+                        "
+                      >
+                        <span
+                          style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: #fff;
+                            display: grid;
+                            place-items: center;
+                          "
+                          >۷۵٪</span
+                        >
+                      </div>
+                    </div>
+                    <div class="mock__stats">
+                      <div class="mock__stat" style="background: #fff; border-color: #e7e5e4">
+                        <strong style="color: #2563eb">۳</strong><span>تکمیل‌شده</span>
+                      </div>
+                      <div class="mock__stat" style="background: #fff; border-color: #e7e5e4">
+                        <strong style="color: #047857">۱</strong><span>باقی‌مانده</span>
+                      </div>
+                    </div>
+                    <div class="mock__row" style="background: #fff; border-color: #e7e5e4">
+                      <span style="font-size: 13px; font-weight: 700">کشش گردن</span>
+                      <button class="mock__btn" style="background: #2563eb">شروع</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="mock"
+                  style="background: #09090b; border-color: rgba(255, 255, 255, 0.1); color: #fafafa"
+                >
+                  <div
+                    class="mock__bar"
+                    style="background: #18181b; border-bottom: 1px solid rgba(255, 255, 255, 0.1)"
+                  >
+                    <span>داشبورد بیمار</span>
+                    <span class="mock__pill" style="background: rgba(52, 211, 153, 0.16); color: #34d399"
+                      >فعال</span
+                    >
+                  </div>
+                  <div class="mock__body">
+                    <div style="display: flex; gap: 12px; align-items: center">
+                      <div>
+                        <p class="mock__title">صبح بخیر، سارا</p>
+                        <p class="mock__sub">۳ از ۴ تمرین امروز</p>
+                      </div>
+                      <div
+                        class="mock__ring"
+                        style="
+                          background: conic-gradient(#34d399 0 75%, #27272a 0);
+                          color: #fafafa;
+                        "
+                      >
+                        <span
+                          style="
+                            width: 48px;
+                            height: 48px;
+                            border-radius: 50%;
+                            background: #18181b;
+                            display: grid;
+                            place-items: center;
+                          "
+                          >۷۵٪</span
+                        >
+                      </div>
+                    </div>
+                    <div class="mock__stats">
+                      <div
+                        class="mock__stat"
+                        style="background: #18181b; border-color: rgba(255, 255, 255, 0.1)"
+                      >
+                        <strong style="color: #60a5fa">۳</strong><span>تکمیل‌شده</span>
+                      </div>
+                      <div
+                        class="mock__stat"
+                        style="background: #18181b; border-color: rgba(255, 255, 255, 0.1)"
+                      >
+                        <strong style="color: #34d399">۱</strong><span>باقی‌مانده</span>
+                      </div>
+                    </div>
+                    <div
+                      class="mock__row"
+                      style="background: #18181b; border-color: rgba(255, 255, 255, 0.1)"
+                    >
+                      <span style="font-size: 13px; font-weight: 700">کشش گردن</span>
+                      <button class="mock__btn" style="background: #60a5fa; color: #09090b">شروع</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const tabs = document.querySelectorAll('.tab');
+      const panels = document.querySelectorAll('[data-panel]');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const id = tab.dataset.tab;
+          tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+          panels.forEach((panel) => {
+            panel.classList.toggle('is-active', panel.dataset.panel === id);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -4,7 +4,10 @@ import type { MenuProps } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useNavigate } from 'react-router-dom';
+
 import { appIconProps } from '@/components/icons/app-icon';
+import { WorkoutCompletionModal } from '@/components/ui';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import { DailyFeedbackModal } from '@/features/patient/feedback/components/DailyFeedbackModal';
 import { PatientExerciseListItem } from '@/features/patient/exercises/components/PatientExerciseListItem';
@@ -52,12 +55,15 @@ export function PatientExercisesList({
   const isRtl = i18n.language.startsWith('fa');
   const formatCount = (value: number) => (isRtl ? formatPersianNumber(value) : String(value));
 
+  const navigate = useNavigate();
   const [selectedExercise, setSelectedExercise] = useState<PatientExercisePlayback | null>(null);
   const [pendingSelectionIds, setPendingSelectionIds] = useState<Set<string>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeSession, setActiveSession] = useState<ActiveSession | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<FeedbackContext | null>(null);
   const [showChecklist, setShowChecklist] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [completedSessionCount, setCompletedSessionCount] = useState(0);
   const sessionKeyRef = useRef(0);
 
   const allExercises = useMemo(
@@ -284,6 +290,8 @@ export function PatientExercisesList({
           onExerciseCompleted={onCompletionsSaved}
           onSessionFinishedWithCompletions={(completedCount) => {
             toast.success(t('patient.exercises.completionsRecorded'));
+            setCompletedSessionCount(completedCount);
+            setShowCompletionModal(true);
             setFeedbackContext({
               doctorId: activeSession.doctorId,
               doctorName: activeSession.doctorName,
@@ -306,6 +314,18 @@ export function PatientExercisesList({
         doctorName={feedbackContext?.doctorName}
         completedCount={feedbackContext?.completedCount}
         onClose={() => setFeedbackContext(null)}
+      />
+
+      <WorkoutCompletionModal
+        open={showCompletionModal}
+        completedCount={completedSessionCount}
+        totalCount={allExercises.length}
+        streakDays={3}
+        onClose={() => setShowCompletionModal(false)}
+        onViewProgress={() => {
+          setShowCompletionModal(false);
+          void navigate('/patient/progress');
+        }}
       />
     </>
   );

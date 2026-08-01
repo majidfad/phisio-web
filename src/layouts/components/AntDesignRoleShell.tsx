@@ -94,7 +94,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
   const siderCollapsed = collapsed && !isMobile;
 
   const navCards = (
-    <nav aria-label={t(config.navAriaLabelKey)}>
+    <nav className="app-sider__nav" aria-label={t(config.navAriaLabelKey)}>
       {navItems.map((item) => (
         <NavCard
           key={item.key}
@@ -116,8 +116,8 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
           collapsible
           collapsed={collapsed}
           onCollapse={setCollapsed}
-          width={272}
-          collapsedWidth={80}
+          width={240}
+          collapsedWidth={72}
           className="app-sider"
           trigger={null}
         >
@@ -157,9 +157,10 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
               style={{
                 margin: 0,
                 border: '1px solid var(--phisio-border)',
-                background: 'var(--phisio-primary-soft)',
-                color: 'var(--phisio-primary)',
-                fontWeight: 700,
+                background: 'var(--phisio-bg-elevated)',
+                color: 'var(--phisio-text-secondary)',
+                fontWeight: 600,
+                borderRadius: 'var(--phisio-radius-sm)',
               }}
             >
               {t(config.roleLabelKey)}
@@ -169,29 +170,28 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <ThemeToggleButton />
             <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
-              <Button
-                type="text"
-                style={{
-                  height: 46,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  color: 'var(--phisio-text)',
-                }}
+              <button
+                type="button"
+                className="touch-target app-header__user"
+                aria-label={displayName}
               >
                 <Avatar
-                  size={34}
+                  size={32}
                   style={{
                     background: 'var(--phisio-primary-soft)',
                     color: 'var(--phisio-primary)',
-                    border: '1px solid var(--phisio-border-glow)',
                   }}
                   icon={<User {...appIconProps} />}
                 />
-                <Typography.Text ellipsis style={{ maxWidth: 140, color: 'inherit' }}>
-                  {displayName}
-                </Typography.Text>
-              </Button>
+                {!isMobile ? (
+                  <Typography.Text
+                    ellipsis
+                    style={{ maxWidth: 140, color: 'inherit', fontWeight: 600 }}
+                  >
+                    {displayName}
+                  </Typography.Text>
+                ) : null}
+              </button>
             </Dropdown>
           </div>
         </Header>
@@ -209,7 +209,13 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         width={300}
-        styles={{ body: { padding: '12px 16px 24px', background: 'var(--phisio-bg-elevated)' } }}
+        styles={{
+          body: { padding: '12px 12px 24px', background: 'var(--phisio-surface)' },
+          header: {
+            background: 'transparent',
+            borderBottom: '1px solid var(--phisio-border)',
+          },
+        }}
       >
         <AppBrand />
         {navCards}

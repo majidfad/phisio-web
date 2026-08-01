@@ -38,7 +38,7 @@ import {
 import { createDefaultDosage } from '@/features/doctor/patients/utils/dosage-presets';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
-import { formatPersianCalendarDateLong } from '@/utils/persian-format';
+import { formatPersianCalendarDateLong, formatPersianNumber } from '@/utils/persian-format';
 
 const { Text } = Typography;
 
@@ -213,7 +213,10 @@ export function ExerciseAssignmentWizard({
   };
 
   const footer = (
-    <Space wrap>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'flex-end' }}>
+      <Button disabled={saveProgram.isPending} onClick={handleClose}>
+        {t('doctor.patients.exercisePlan.wizard.cancel')}
+      </Button>
       {step > 1 ? (
         <Button
           disabled={saveProgram.isPending}
@@ -233,10 +236,7 @@ export function ExerciseAssignmentWizard({
             : t('doctor.patients.exercisePlan.wizard.confirm')}
         </Button>
       )}
-      <Button disabled={saveProgram.isPending} onClick={handleClose}>
-        {t('doctor.patients.exercisePlan.wizard.cancel')}
-      </Button>
-    </Space>
+    </div>
   );
 
   return (
@@ -252,11 +252,12 @@ export function ExerciseAssignmentWizard({
       width={720}
       destroyOnHidden
       centered
+      styles={{ body: { maxHeight: '70vh', overflowY: 'auto', paddingTop: 12 } }}
     >
       <Steps
         current={step - 1}
         size="small"
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 14 }}
         items={[
           { title: t('doctor.patients.exercisePlan.wizard.steps.period') },
           { title: t('doctor.patients.exercisePlan.wizard.steps.2') },
@@ -265,14 +266,14 @@ export function ExerciseAssignmentWizard({
       />
 
       {step === 1 ? (
-        <Space direction="vertical" size={16} style={{ width: '100%' }}>
+        <Space direction="vertical" size={12} style={{ width: '100%' }}>
           {editingProgram ? (
-            <Text type="secondary" style={{ display: 'block' }}>
+            <Text type="secondary" style={{ display: 'block', fontSize: 13 }}>
               {t('doctor.patients.exercisePlan.wizard.futureOnlyHint')}
             </Text>
           ) : null}
           <div>
-            <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            <Text strong style={{ display: 'block', marginBottom: 6, fontSize: 13 }}>
               {t('doctor.patients.exercisePlan.wizard.period.startDate')}
             </Text>
             <JalaliDatePicker
@@ -282,7 +283,7 @@ export function ExerciseAssignmentWizard({
             />
           </div>
           <div>
-            <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            <Text strong style={{ display: 'block', marginBottom: 6, fontSize: 13 }}>
               {t('doctor.patients.exercisePlan.wizard.period.duration')}
             </Text>
             <Select
@@ -295,14 +296,12 @@ export function ExerciseAssignmentWizard({
               }))}
             />
           </div>
+          <Text type="secondary" style={{ fontSize: 13 }}>
+            {t('doctor.patients.exercisePlan.wizard.period.endDate')}:{' '}
+            {formatPersianCalendarDateLong(endDate)}
+          </Text>
           <div>
-            <Text type="secondary">
-              {t('doctor.patients.exercisePlan.wizard.period.endDate')}:{' '}
-              {formatPersianCalendarDateLong(endDate)}
-            </Text>
-          </div>
-          <div>
-            <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            <Text strong style={{ display: 'block', marginBottom: 6, fontSize: 13 }}>
               {t('doctor.patients.exercisePlan.wizard.period.cadence')}
             </Text>
             <Radio.Group
@@ -322,14 +321,24 @@ export function ExerciseAssignmentWizard({
             />
           </div>
           {cadenceType === ExerciseProgramCadenceType.DaysOfWeek ? (
-            <Checkbox.Group
-              value={selectedWeekdays}
-              onChange={(values) => setSelectedWeekdays(values as number[])}
-              options={WEEKDAY_VALUES.map((day) => ({
-                value: day,
-                label: t(`doctor.patients.exercisePlan.wizard.weekdays.${day}`),
-              }))}
-            />
+            <div
+              style={{
+                padding: '10px 12px',
+                borderRadius: 'var(--phisio-radius-md)',
+                border: '1px solid var(--phisio-border)',
+                background: 'var(--phisio-bg-elevated)',
+              }}
+            >
+              <Checkbox.Group
+                value={selectedWeekdays}
+                onChange={(values) => setSelectedWeekdays(values as number[])}
+                options={WEEKDAY_VALUES.map((day) => ({
+                  value: day,
+                  label: t(`doctor.patients.exercisePlan.wizard.weekdays.${day}`),
+                }))}
+                style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 12px' }}
+              />
+            </div>
           ) : (
             <Space>
               <Text>{t('doctor.patients.exercisePlan.wizard.period.every')}</Text>
@@ -378,16 +387,31 @@ export function ExerciseAssignmentWizard({
       ) : null}
 
       {step === 3 && patient ? (
-        <Space direction="vertical" size={20} style={{ width: '100%' }}>
-          <div>
-            <Text type="secondary">
-              {t('doctor.patients.exercisePlan.wizard.confirmation.patient')}
-            </Text>{' '}
-            <Text strong>{patient.patientName}</Text>
+        <Space direction="vertical" size={12} style={{ width: '100%' }}>
+          <div
+            style={{
+              padding: '12px 14px',
+              borderRadius: 'var(--phisio-radius-md)',
+              border: '1px solid var(--phisio-border)',
+              background: 'var(--phisio-bg-elevated)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+            }}
+          >
+            <Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                {t('doctor.patients.exercisePlan.wizard.confirmation.patient')}{' '}
+              </Text>
+              <Text strong>{patient.patientName}</Text>
+            </Text>
+            <Text type="secondary" style={{ fontSize: 12 }}>
+              {formatPersianCalendarDateLong(startDate)} → {formatPersianCalendarDateLong(endDate)}
+            </Text>
+            <Text type="secondary" style={{ fontSize: 12 }}>
+              {formatPersianNumber(selectedExercises.length)} تمرین انتخاب‌شده
+            </Text>
           </div>
-          <Text type="secondary">
-            {formatPersianCalendarDateLong(startDate)} → {formatPersianCalendarDateLong(endDate)}
-          </Text>
           <ExerciseDosageFields
             exercises={selectedExercises}
             values={dosageByExerciseId}

@@ -23,16 +23,16 @@ export function EnergyWaveBg({ className, style, idSuffix = 'default' }: EnergyW
     >
       <defs>
         <linearGradient id={blueId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#2e5bcc" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#2e5bcc" stopOpacity="0" />
+          <stop offset="0%" stopColor="#0057ff" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#0057ff" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={greenId} x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#48c9b0" stopOpacity="0.32" />
-          <stop offset="100%" stopColor="#48c9b0" stopOpacity="0" />
+          <stop offset="0%" stopColor="#00875a" stopOpacity="0.34" />
+          <stop offset="100%" stopColor="#00875a" stopOpacity="0" />
         </linearGradient>
         <radialGradient id={meshId} cx="50%" cy="40%" r="65%">
-          <stop offset="0%" stopColor="#2e5bcc" stopOpacity="0.14" />
-          <stop offset="55%" stopColor="#1a2c44" stopOpacity="0" />
+          <stop offset="0%" stopColor="#0057ff" stopOpacity="0.12" />
+          <stop offset="55%" stopColor="#152238" stopOpacity="0" />
         </radialGradient>
         <filter id={`blur-${idSuffix}`} x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="18" />
@@ -57,11 +57,11 @@ export function EnergyWaveBg({ className, style, idSuffix = 'default' }: EnergyW
       />
       <path
         d="M0 148 C70 118 140 162 210 138 C280 114 340 156 400 132 V200 H0 Z"
-        fill="rgba(59, 130, 246, 0.1)"
+        fill="rgba(29, 78, 216, 0.1)"
       />
       <path
         d="M0 168 C90 150 160 176 250 160 C320 148 360 170 400 158"
-        stroke="rgba(59, 130, 246, 0.22)"
+        stroke="rgba(29, 78, 216, 0.28)"
         strokeWidth="1.5"
         fill="none"
       />

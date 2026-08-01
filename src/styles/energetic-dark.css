@@ -173,71 +173,76 @@
   margin-top: var(--phisio-space-5);
 }
 
-/* Sidebar nav cards */
+/* Sidebar nav — pro flat list (not card stack) */
 .nav-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   width: 100%;
-  margin-bottom: 8px;
-  padding: 14px 16px;
-  border: 1px solid var(--phisio-border);
-  border-radius: var(--phisio-radius);
-  background: var(--phisio-surface);
+  margin-bottom: 0;
+  padding: 9px 12px;
+  border: none;
+  border-radius: var(--phisio-radius-sm);
+  background: transparent;
   color: var(--phisio-text-secondary);
   text-decoration: none;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .nav-card:hover {
   color: var(--phisio-text);
-  border-color: var(--phisio-border-glow);
-  transform: translateX(2px);
+  background: var(--phisio-bg-elevated);
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .nav-card--active {
   color: var(--phisio-primary);
-  border-color: var(--phisio-border-glow);
-  background: var(--phisio-gradient-nav-active);
-  box-shadow: var(--phisio-shadow-card);
+  background: var(--phisio-primary-soft);
+  border: none;
+  box-shadow: none;
+  font-weight: 700;
 }
 
 .nav-card__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--phisio-primary-soft);
-  color: var(--phisio-primary);
-  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .nav-card--active .nav-card__icon {
-  background: var(--phisio-primary-muted);
-  box-shadow: var(--phisio-shadow-card);
+  background: transparent;
+  color: var(--phisio-primary);
+  box-shadow: none;
 }
 
 .nav-card__label {
   flex: 1;
   text-align: start;
   min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-card--collapsed {
   justify-content: center;
   gap: 0;
-  margin-bottom: var(--phisio-space-2);
-  padding: var(--phisio-space-2);
+  margin-bottom: 0;
+  padding: 10px;
 }
 
 .nav-card--collapsed:hover {
@@ -245,27 +250,28 @@
 }
 
 .nav-card--collapsed .nav-card__icon {
-  width: 40px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
 }
 
-/* Mobile dock navigation */
+/* Mobile dock navigation — solid bar */
 .dock-nav {
   position: fixed;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   display: flex;
   align-items: stretch;
-  gap: 6px;
-  padding: 8px;
-  padding-bottom: calc(8px + var(--safe-area-bottom));
-  border: 1px solid var(--phisio-border);
-  border-radius: 20px;
-  background: var(--phisio-header-bg);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--phisio-shadow-md);
+  gap: 2px;
+  padding: 6px 8px;
+  padding-bottom: calc(6px + var(--safe-area-bottom));
+  border: none;
+  border-top: 1px solid var(--phisio-border);
+  border-radius: 0;
+  background: var(--phisio-panel-bg);
+  backdrop-filter: none;
+  box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.06);
 }
 
 .dock-nav__item {
@@ -274,37 +280,41 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-height: 56px;
-  padding: 8px 4px;
+  gap: 2px;
+  min-height: 48px;
+  padding: 6px 2px;
   border: none;
-  border-radius: 14px;
+  border-radius: var(--phisio-radius-sm);
   background: transparent;
   color: var(--phisio-text-secondary);
   font-family: inherit;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   cursor: pointer;
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease;
+    color 0.15s ease,
+    background 0.15s ease;
 }
 
 .dock-nav__item:hover {
   color: var(--phisio-text);
-  background: var(--phisio-primary-soft);
+  background: var(--phisio-bg-elevated);
 }
 
 .dock-nav__item--active {
-  color: var(--phisio-primary);
-  background: var(--phisio-primary-soft);
-  box-shadow: var(--phisio-shadow-card);
+  color: var(--phisio-primary) !important;
+  background: var(--phisio-primary-soft) !important;
+  box-shadow: none !important;
+  transform: none;
+  font-weight: 700;
 }
 
 .dock-nav__icon {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dock-nav__label {
@@ -316,7 +326,7 @@
 
 @media (max-width: 400px) {
   .dock-nav__label {
-    font-size: 10px;
+    font-size: 9px;
   }
 }
 
@@ -372,22 +382,22 @@
 
 .auth-panel {
   width: 100%;
-  max-width: 440px;
+  max-width: 400px;
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-panel-bg);
-  backdrop-filter: blur(20px);
-  box-shadow: var(--phisio-shadow-md);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--phisio-shadow-card);
 }
 
 .auth-brand-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 16px;
-  border-radius: 20px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  border-radius: var(--phisio-radius-md);
   background: transparent;
   border: none;
   box-shadow: none;

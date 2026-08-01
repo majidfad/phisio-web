@@ -1,13 +1,15 @@
-import { Button, Form, Input, InputNumber, Select, Space, Typography } from 'antd';
+import { Button, Form, Input, InputNumber, Select } from 'antd';
+import { Dumbbell, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { TactileSlider } from '@/components/ui/TactileSlider';
 import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
 import type { AssignPatientExerciseItem } from '@/features/doctor/patients/types/patient-exercise-plan';
 import {
   applyDosagePreset,
   type DosagePresetId,
 } from '@/features/doctor/patients/utils/dosage-presets';
-import { ExerciseSide, type ExerciseSide as ExerciseSideType } from '@/features/exercises/types';
+import { ExerciseSide } from '@/features/exercises/types';
 
 interface ExerciseDosageFieldsProps {
   exercises: DoctorExerciseDto[];
@@ -29,7 +31,7 @@ export function ExerciseDosageFields({
   const { t } = useTranslation();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {exercises.map((exercise) => {
         const value = values[exercise.exerciseId] ?? {
           exerciseId: exercise.exerciseId,
@@ -44,49 +46,99 @@ export function ExerciseDosageFields({
           <section
             key={exercise.exerciseId}
             style={{
-              padding: 16,
-              borderRadius: 12,
+              padding: '14px 16px',
+              borderRadius: 'var(--phisio-radius-md)',
               border: '1px solid var(--phisio-border)',
-              background: 'var(--phisio-bg-elevated, #fff)',
+              background: 'var(--phisio-surface)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
             }}
           >
-            <strong style={{ display: 'block', marginBottom: 8, fontSize: 15 }}>
-              {exercise.title}
-            </strong>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                <div
+                  style={{
+                    padding: '7px',
+                    borderRadius: 'var(--phisio-radius-sm)',
+                    backgroundColor: 'var(--phisio-primary-soft)',
+                    color: 'var(--phisio-primary)',
+                    flexShrink: 0,
+                  }}
+                >
+                  <Dumbbell size={16} />
+                </div>
+                <bdi
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    color: 'var(--phisio-text)',
+                    unicodeBidi: 'plaintext',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {exercise.title}
+                </bdi>
+              </div>
+              {copiedFromLastIds?.has(exercise.exerciseId) ? (
+                <span
+                  style={{
+                    fontSize: '11px',
+                    color: 'var(--phisio-teal)',
+                    fontWeight: 600,
+                    flexShrink: 0,
+                  }}
+                >
+                  از نسخه قبلی
+                </span>
+              ) : null}
+            </div>
 
-            {copiedFromLastIds?.has(exercise.exerciseId) ? (
-              <Typography.Text type="secondary" style={{ display: 'block', marginBottom: 8 }}>
-                {t(`${dosageKey}.copiedFromLast`)}
-              </Typography.Text>
-            ) : null}
-
-            <Space wrap size={[8, 8]} style={{ marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: 'var(--phisio-text-secondary)',
+                }}
+              >
+                پیش‌فرض:
+              </span>
               {PRESET_IDS.map((presetId) => (
                 <Button
                   key={presetId}
                   size="small"
+                  icon={<Sparkles size={11} />}
+                  style={{
+                    borderRadius: 'var(--phisio-radius-sm)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                  }}
                   onClick={() => onChange(exercise.exerciseId, applyDosagePreset(value, presetId))}
                 >
                   {t(`${dosageKey}.presets.${presetId}`)}
                 </Button>
               ))}
-            </Space>
+            </div>
+
+            <TactileSlider
+              label="تعداد ست"
+              value={value.sets ?? 3}
+              min={1}
+              max={10}
+              unit="ست"
+              onChange={(sets) => update({ sets })}
+            />
 
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: 12,
+                gap: '10px',
               }}
             >
-              <Form.Item label={t(`${dosageKey}.sets`)} style={{ marginBottom: 0 }}>
-                <InputNumber
-                  min={1}
-                  value={value.sets}
-                  onChange={(sets) => update({ sets: sets ?? undefined })}
-                  style={{ width: '100%' }}
-                />
-              </Form.Item>
               <Form.Item label={t(`${dosageKey}.reps`)} style={{ marginBottom: 0 }}>
                 <Input
                   value={value.reps}
@@ -98,7 +150,8 @@ export function ExerciseDosageFields({
                 <InputNumber
                   min={0}
                   value={value.holdSeconds}
-                  onChange={(holdSeconds) => update({ holdSeconds: holdSeconds ?? undefined })}
+                  onChange={(seconds) => update({ holdSeconds: seconds ?? undefined })}
+                  addonAfter="ثانیه"
                   style={{ width: '100%' }}
                 />
               </Form.Item>
@@ -106,37 +159,22 @@ export function ExerciseDosageFields({
                 <InputNumber
                   min={0}
                   value={value.restSeconds}
-                  onChange={(restSeconds) => update({ restSeconds: restSeconds ?? undefined })}
+                  onChange={(seconds) => update({ restSeconds: seconds ?? undefined })}
+                  addonAfter="ثانیه"
                   style={{ width: '100%' }}
                 />
               </Form.Item>
               <Form.Item label={t(`${dosageKey}.side`)} style={{ marginBottom: 0 }}>
                 <Select
                   value={value.side}
-                  onChange={(side: ExerciseSideType) => update({ side })}
-                  options={[0, 1, 2, 3].map((side) => ({
-                    value: side,
-                    label: t(`exerciseMeta.side.${side}`),
-                  }))}
+                  onChange={(side) => update({ side })}
+                  options={[
+                    { value: ExerciseSide.None, label: t('exerciseMeta.side.None') },
+                    { value: ExerciseSide.Left, label: t('exerciseMeta.side.Left') },
+                    { value: ExerciseSide.Right, label: t('exerciseMeta.side.Right') },
+                    { value: ExerciseSide.Both, label: t('exerciseMeta.side.Both') },
+                  ]}
                   style={{ width: '100%' }}
-                />
-              </Form.Item>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
-              <Form.Item label={t(`${dosageKey}.patientCue`)} style={{ marginBottom: 0 }}>
-                <Input
-                  value={value.patientCue}
-                  onChange={(event) => update({ patientCue: event.target.value })}
-                  placeholder={t(`${dosageKey}.patientCue`)}
-                />
-              </Form.Item>
-              <Form.Item label={t(`${dosageKey}.clinicianNote`)} style={{ marginBottom: 0 }}>
-                <Input.TextArea
-                  value={value.clinicianNote}
-                  onChange={(event) => update({ clinicianNote: event.target.value })}
-                  placeholder={t(`${dosageKey}.clinicianNote`)}
-                  autoSize={{ minRows: 2, maxRows: 4 }}
                 />
               </Form.Item>
             </div>

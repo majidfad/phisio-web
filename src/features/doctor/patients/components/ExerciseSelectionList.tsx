@@ -51,7 +51,20 @@ export function ExerciseSelectionList({
                   disabled={isAssigned}
                   onChange={(event) => onToggle(exercise.exerciseId, event.target.checked)}
                 >
-                  <span className="exercise-select-item__title">{exercise.title}</span>
+                  <bdi
+                    className="exercise-select-item__title"
+                    style={{
+                      unicodeBidi: 'plaintext',
+                      display: 'inline-block',
+                      maxWidth: '100%',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      verticalAlign: 'bottom',
+                    }}
+                  >
+                    {exercise.title}
+                  </bdi>
                 </Checkbox>
               </div>
 

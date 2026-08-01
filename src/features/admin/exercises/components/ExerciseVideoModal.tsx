@@ -54,9 +54,17 @@ export function ExerciseVideoModal({
       width={800}
       destroyOnHidden
       centered
-      styles={{ body: { padding: 0 } }}
+      styles={{
+        header: {
+          background: 'transparent',
+          borderBottom: '1px solid var(--phisio-border)',
+          marginBottom: 0,
+          paddingInlineEnd: 16,
+        },
+        body: { padding: 0 },
+      }}
     >
-      <div style={{ padding: '0 24px 24px' }}>
+      <div style={{ padding: 0 }}>
         {preview ? (
           preview.kind === 'video' ? (
             <video
@@ -75,7 +83,13 @@ export function ExerciseVideoModal({
             <img
               src={preview.src}
               alt={title ?? ''}
-              style={{ width: '100%', maxHeight: '70vh', objectFit: 'contain', display: 'block' }}
+              style={{
+                width: '100%',
+                maxHeight: '70vh',
+                objectFit: 'contain',
+                display: 'block',
+                background: 'var(--phisio-bg)',
+              }}
             />
           ) : (
             <iframe
@@ -88,7 +102,9 @@ export function ExerciseVideoModal({
             />
           )
         ) : (
-          <Text type="secondary">{t('admin.exercises.video.unavailable')}</Text>
+          <div style={{ padding: '16px 24px 24px' }}>
+            <Text type="secondary">{t('admin.exercises.video.unavailable')}</Text>
+          </div>
         )}
       </div>
     </Modal>

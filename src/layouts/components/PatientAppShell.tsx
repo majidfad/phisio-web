@@ -163,11 +163,10 @@ export function PatientAppShell() {
               aria-label={displayName}
             >
               <Avatar
-                size={isMobile ? 36 : 38}
+                size={isMobile ? 32 : 34}
                 style={{
                   background: 'var(--phisio-primary-soft)',
                   color: 'var(--phisio-primary)',
-                  border: '1px solid var(--phisio-border)',
                 }}
                 icon={<User {...appIconProps} />}
               />
@@ -179,8 +178,8 @@ export function PatientAppShell() {
 
       <Layout>
         {!isMobile ? (
-          <Sider width={260} className="app-sider">
-            <nav aria-label={t(patientLayoutConfig.navAriaLabelKey)} style={{ paddingTop: 8 }}>
+          <Sider width={232} className="app-sider">
+            <nav className="app-sider__nav" aria-label={t(patientLayoutConfig.navAriaLabelKey)}>
               {allNavItems.map((item) => (
                 <NavCard
                   key={item.key}

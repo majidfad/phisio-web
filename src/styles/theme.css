@@ -25,47 +25,51 @@
 :root[data-theme='light'] {
   color-scheme: light;
 
-  --phisio-primary: #2e5bcc;
-  --phisio-primary-hover: #2548a8;
-  --phisio-primary-soft: rgba(46, 91, 204, 0.08);
-  --phisio-primary-muted: rgba(46, 91, 204, 0.2);
-  --phisio-accent: #2aa891;
-  --phisio-accent-soft: rgba(42, 168, 145, 0.12);
-  --phisio-teal: #2aa891;
+  /* Signal Blue — Option E */
+  --phisio-primary: #0057ff;
+  --phisio-primary-hover: #0046d1;
+  --phisio-primary-soft: rgba(0, 87, 255, 0.1);
+  --phisio-primary-muted: rgba(0, 87, 255, 0.2);
+  --phisio-accent: #00875a;
+  --phisio-accent-soft: rgba(0, 135, 90, 0.12);
+  --phisio-teal: #00875a;
   --phisio-danger: #dc2626;
-  --phisio-success: #059669;
-  --phisio-bg: #ffffff;
-  --phisio-bg-elevated: #f8fafc;
+  --phisio-success: #00875a;
+  --phisio-warning: #d97706;
+  --phisio-bg: #f7f8f9;
+  --phisio-bg-elevated: #ebecf0;
   --phisio-surface: #ffffff;
-  --phisio-surface-hover: #f1f5f9;
-  --phisio-text: #0f172a;
-  --phisio-text-secondary: #475569;
-  --phisio-border: #e2e8f0;
-  --phisio-border-glow: rgba(46, 91, 204, 0.35);
-  --phisio-header-bg: rgba(255, 255, 255, 0.92);
-  --phisio-panel-bg: rgba(255, 255, 255, 0.9);
-  --phisio-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --phisio-shadow-md: 0 6px 16px rgba(15, 23, 42, 0.08);
-  --phisio-shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06);
-  --phisio-shadow-glow-primary: 0 0 0 transparent;
-  --phisio-shadow-glow-accent: 0 0 0 transparent;
-  --phisio-btn-solid: #2e5bcc;
-  --phisio-btn-solid-hover: #2548a8;
-  --phisio-btn-gradient: #2e5bcc;
-  --phisio-btn-gradient-hover: #2548a8;
-  --phisio-brand-gradient: linear-gradient(180deg, #48c9b0 0%, #3498db 48%, #2e5bcc 100%);
+  --phisio-surface-hover: #f4f5f7;
+  --phisio-text: #091e42;
+  --phisio-text-secondary: #5e6c84;
+  --phisio-border: #dfe1e6;
+  --phisio-border-glow: rgba(0, 87, 255, 0.35);
+  --phisio-header-bg: #ffffff;
+  --phisio-panel-bg: #ffffff;
+  --phisio-shadow-sm: 0 1px 3px rgba(9, 30, 66, 0.05), 0 1px 2px rgba(9, 30, 66, 0.04);
+  --phisio-shadow-md: 0 10px 28px -6px rgba(9, 30, 66, 0.1), 0 4px 10px rgba(9, 30, 66, 0.04);
+  --phisio-shadow-card: 0 6px 18px -4px rgba(9, 30, 66, 0.08), 0 2px 6px rgba(9, 30, 66, 0.04);
+  --phisio-shadow-floating: 0 18px 36px -10px rgba(9, 30, 66, 0.14);
+  --phisio-shadow-button: 0 8px 18px -4px rgba(0, 87, 255, 0.35);
+  --phisio-shadow-glow-primary: 0 0 12px rgba(0, 87, 255, 0.22);
+  --phisio-shadow-glow-accent: 0 0 12px rgba(0, 135, 90, 0.18);
+  --phisio-btn-solid: #0057ff;
+  --phisio-btn-solid-hover: #0046d1;
+  --phisio-btn-gradient: linear-gradient(135deg, #0057ff 0%, #0046d1 100%);
+  --phisio-btn-gradient-hover: linear-gradient(135deg, #0046d1 0%, #003bb0 100%);
+  --phisio-brand-gradient: linear-gradient(135deg, #00875a 0%, #0057ff 100%);
   --phisio-gradient-auth:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(46, 91, 204, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(72, 201, 176, 0.06) 0%, transparent 55%),
-    linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0, 87, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(0, 135, 90, 0.06) 0%, transparent 55%),
+    linear-gradient(180deg, #f7f8f9 0%, #ebecf0 100%);
   --phisio-gradient-hero: linear-gradient(
     135deg,
-    rgba(46, 91, 204, 0.06) 0%,
-    rgba(248, 250, 252, 0.98) 50%,
-    rgba(72, 201, 176, 0.05) 100%
+    rgba(0, 87, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.98) 50%,
+    rgba(0, 135, 90, 0.05) 100%
   );
-  --phisio-gradient-focus: linear-gradient(135deg, #f8fafc 0%, rgba(72, 201, 176, 0.08) 100%);
+  --phisio-gradient-focus: linear-gradient(135deg, #ffffff 0%, rgba(0, 135, 90, 0.08) 100%);
   --phisio-gradient-card: #ffffff;
-  --phisio-gradient-nav-active: rgba(46, 91, 204, 0.08);
-  --phisio-gradient-success-card: linear-gradient(135deg, #ffffff 0%, rgba(42, 168, 145, 0.08) 100%);
+  --phisio-gradient-nav-active: rgba(0, 87, 255, 0.1);
+  --phisio-gradient-success-card: linear-gradient(135deg, #ffffff 0%, rgba(0, 135, 90, 0.08) 100%);
 }

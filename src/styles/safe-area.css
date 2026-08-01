@@ -3,8 +3,8 @@
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-left: env(safe-area-inset-left, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
-  /* Floating dock: bar + insets + bottom offset */
-  --patient-tab-bar-height: 96px;
+  /* Edge dock: bar height (no floating inset) */
+  --patient-tab-bar-height: 64px;
 }
 
 .safe-area-top {

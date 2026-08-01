@@ -28,7 +28,7 @@ export function PatientArticlesList() {
   }, [articles, searchQuery]);
 
   return (
-    <div className="patient-stack patient-stack--loose">
+    <div className="patient-stack patient-stack--loose" style={{ paddingBottom: 88 }}>
       <div className="patient-filter-bar">
         <Input.Search
           allowClear
@@ -61,11 +61,32 @@ export function PatientArticlesList() {
         <div className="patient-stack">
           {filteredArticles.map((article) => (
             <Card key={article.articleId} className="patient-media-card" size="small">
-              <h3 className="patient-media-card__title">{article.title}</h3>
+              <bdi
+                className="patient-media-card__title"
+                style={{
+                  display: 'block',
+                  unicodeBidi: 'plaintext',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {article.title}
+              </bdi>
               <span className="patient-media-card__meta">
                 {formatPersianDate(article.createdAt)}
               </span>
-              <p className="patient-media-card__body">{article.summary}</p>
+              <p
+                className="patient-media-card__body"
+                style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                }}
+              >
+                {article.summary}
+              </p>
               <div className="patient-media-card__footer">
                 <Link to={`${routes.patient.articles}/${article.articleId}`}>
                   <Button type="link">{t('patient.articles.readMore')}</Button>

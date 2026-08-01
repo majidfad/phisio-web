@@ -35,16 +35,16 @@ export function AuthLayout() {
           padding: '32px 20px',
         }}
       >
-        <div style={{ textAlign: 'center', marginBottom: 28, width: '100%', maxWidth: 440 }}>
+        <div style={{ textAlign: 'center', marginBottom: 20, width: '100%', maxWidth: 400 }}>
           <div className="auth-brand-icon">
-            <ZivanLogo size={64} />
+            <ZivanLogo size={56} />
           </div>
-          <Text style={{ fontSize: 15, color: 'var(--phisio-text-secondary)' }}>
+          <Text style={{ fontSize: 14, color: 'var(--phisio-text-secondary)' }}>
             {t('app.tagline')}
           </Text>
         </div>
 
-        <Card className="auth-panel" styles={{ body: { padding: '32px 28px' } }}>
+        <Card className="auth-panel" styles={{ body: { padding: '28px 24px' } }}>
           <Outlet />
         </Card>
       </Content>

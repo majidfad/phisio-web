@@ -7,10 +7,15 @@
   justify-content: space-between;
   height: var(--phisio-header-height);
   padding: 0 var(--phisio-content-padding);
-  background: var(--phisio-header-bg);
-  backdrop-filter: blur(12px);
+  background: var(--phisio-header-bg) !important;
+  backdrop-filter: none;
   border-bottom: 1px solid var(--phisio-border);
-  box-shadow: var(--phisio-shadow-sm);
+  box-shadow: none;
+}
+
+.app-header.ant-layout-header {
+  background: var(--phisio-header-bg) !important;
+  line-height: 1;
 }
 
 .app-header__brand {
@@ -30,20 +35,26 @@
 .app-header__user {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   border: none;
   background: transparent;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 2px 4px;
+  border-radius: var(--phisio-radius-sm);
   color: var(--phisio-text);
 }
 
+.app-header__user:hover {
+  background: var(--phisio-bg-elevated);
+}
+
 .app-header__user-name {
-  max-width: 120px;
+  max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
+  font-size: 13px;
 }
 
 .app-content {
@@ -60,13 +71,20 @@
 }
 
 .app-sider {
-  background: var(--phisio-bg-elevated) !important;
+  background: var(--phisio-surface) !important;
   border-inline-end: 1px solid var(--phisio-border) !important;
-  padding: var(--phisio-space-3) var(--phisio-space-3) var(--phisio-space-6) !important;
+  padding: var(--phisio-space-3) var(--phisio-space-2) var(--phisio-space-6) !important;
 }
 
 .app-sider.ant-layout-sider-collapsed {
   padding-inline: var(--phisio-space-2) !important;
+}
+
+.app-sider__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--phisio-space-2);
 }
 
 .app-sider__top {
@@ -150,7 +168,7 @@
 }
 
 .patient-content-with-tabs {
-  padding-bottom: 100px;
+  padding-bottom: calc(var(--patient-tab-bar-height) + var(--safe-area-bottom) + 12px);
 }
 
 .filter-bar {
@@ -214,9 +232,10 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--phisio-space-4);
-  margin-bottom: var(--phisio-space-6);
-  padding-bottom: var(--phisio-space-5);
-  border-bottom: 1px solid var(--phisio-border-soft);
+  margin-bottom: var(--phisio-space-5);
+  padding-bottom: var(--phisio-space-4);
+  border-bottom: 1px solid var(--phisio-border);
+  background: transparent;
 }
 
 .page-header__title {
@@ -248,7 +267,7 @@
 }
 
 .patient-stack--loose {
-  gap: var(--phisio-space-6);
+  gap: var(--phisio-space-4);
 }
 
 .patient-filter-bar {
@@ -268,14 +287,14 @@
 }
 
 .patient-media-card.ant-card {
-  border-radius: var(--phisio-radius-lg);
-  border: 1px solid var(--phisio-border-soft);
+  border-radius: var(--phisio-radius-md);
+  border: 1px solid var(--phisio-border);
   background: var(--phisio-surface);
-  box-shadow: var(--phisio-shadow-card);
+  box-shadow: var(--phisio-shadow-sm);
 }
 
 .patient-media-card.ant-card .ant-card-body {
-  padding: var(--phisio-space-4);
+  padding: var(--phisio-space-3) var(--phisio-space-4);
 }
 
 .patient-media-card__header {
@@ -288,14 +307,14 @@
 
 .patient-media-card__title {
   margin: 0 !important;
-  font-size: 1.05rem !important;
-  font-weight: 600 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
   line-height: 1.35 !important;
   color: var(--phisio-text) !important;
 }
 
 .patient-media-card__title--lg {
-  font-size: 1.35rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
 }
 
@@ -428,10 +447,15 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--phisio-space-3);
-  padding: var(--phisio-space-3);
-  border: 1px solid var(--phisio-border-soft);
-  border-radius: var(--phisio-radius-lg);
+  padding: 10px 12px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md);
   background: var(--phisio-surface);
+}
+
+.exercise-select-item:has(.ant-checkbox-checked) {
+  border-color: color-mix(in srgb, var(--phisio-primary) 45%, var(--phisio-border));
+  background: var(--phisio-primary-soft);
 }
 
 .exercise-select-item--assigned {
@@ -667,11 +691,11 @@
 }
 
 .role-layout--doctor .nav-card--active {
-  border-color: rgba(20, 184, 166, 0.45);
+  border-color: color-mix(in srgb, var(--phisio-teal) 45%, transparent);
 }
 
 .role-layout--patient .dock-nav__item--active {
-  color: var(--phisio-teal);
+  color: var(--phisio-primary);
 }
 
 /* Neutral status panels (replace colored Ant Alerts for persistent state) */
@@ -1036,7 +1060,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--phisio-primary);
+  background: var(--phisio-brand-gradient);
   transition: width 240ms ease;
 }
 
@@ -1471,11 +1495,12 @@
 
 .workout-session__cta-pill.ant-btn {
   flex: 1;
-  height: 54px;
+  height: 48px;
   max-width: 240px;
   font-weight: 600;
   border: 0;
-  box-shadow: 0 10px 28px color-mix(in srgb, #000 32%, transparent);
+  border-radius: var(--phisio-radius-pill) !important;
+  box-shadow: var(--phisio-shadow-button);
 }
 
 .workout-session--resting .workout-session__chrome--bottom {

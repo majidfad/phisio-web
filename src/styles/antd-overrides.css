@@ -1,4 +1,4 @@
-/* Energetic Dark — Ant Design overrides */
+/* Modern Fitness & Rehab App — Ant Design overrides */
 
 .ant-input,
 .ant-input-affix-wrapper,
@@ -41,20 +41,36 @@
 
 .ant-btn {
   font-weight: 600;
+  border-radius: var(--phisio-radius) !important;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ant-btn:active {
+  transform: scale(0.97);
 }
 
 .ant-btn-primary {
-  background: var(--phisio-btn-solid, var(--phisio-primary)) !important;
-  border: 1px solid var(--phisio-btn-solid, var(--phisio-primary)) !important;
+  background: var(--phisio-btn-gradient, var(--phisio-primary)) !important;
+  border: none !important;
   color: #fff !important;
-  box-shadow: none !important;
+  box-shadow: var(--phisio-shadow-button) !important;
+  border-radius: var(--phisio-radius-pill) !important;
 }
 
 .ant-btn-primary:not(:disabled):hover {
-  background: var(--phisio-btn-solid-hover, var(--phisio-primary-hover)) !important;
-  border-color: var(--phisio-btn-solid-hover, var(--phisio-primary-hover)) !important;
+  background: var(--phisio-btn-gradient-hover, var(--phisio-primary-hover)) !important;
   color: #fff !important;
-  box-shadow: none !important;
+  box-shadow: var(--phisio-shadow-button) !important;
+  transform: translateY(-1px);
+}
+
+.ant-btn-primary.ant-btn-sm {
+  border-radius: var(--phisio-radius-sm) !important;
 }
 
 .ant-btn-default {
@@ -67,12 +83,23 @@
 .ant-btn-default:not(:disabled):hover {
   border-color: var(--phisio-primary) !important;
   color: var(--phisio-primary) !important;
+  background: var(--phisio-surface-hover) !important;
+  transform: translateY(-1px);
+}
+
+.ant-btn-link {
+  border-radius: var(--phisio-radius-sm) !important;
+  box-shadow: none !important;
 }
 
 .ant-card {
   background: var(--phisio-surface) !important;
-  border: 1px solid var(--phisio-border);
-  box-shadow: var(--phisio-shadow-card);
+  border: 1px solid var(--phisio-border) !important;
+  border-radius: var(--phisio-radius-md, 16px) !important;
+  box-shadow: var(--phisio-shadow-sm) !important;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 /* Quiet Alerts — surface fill, semantic border/icon only (no pastel washes) */
@@ -86,7 +113,7 @@
 }
 
 .ant-alert-info {
-  border-color: rgba(46, 91, 204, 0.35) !important;
+  border-color: color-mix(in srgb, var(--phisio-primary) 40%, transparent) !important;
 }
 
 .ant-alert-warning {
@@ -115,37 +142,38 @@
   display: flex;
   align-items: center;
   margin-bottom: 0;
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--phisio-border);
-  background: var(--phisio-bg-elevated);
+  background: transparent !important;
 }
 
 .ant-modal .ant-modal-title {
   flex: 1;
   margin: 0;
-  padding-inline-end: 12px;
-  font-size: 16px;
+  padding: 0;
+  padding-inline-end: 0;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.4;
   text-align: start;
   color: var(--phisio-text);
 }
 
 .ant-modal .ant-modal-close {
-  top: 10px;
+  top: 12px;
   inset-inline-end: 12px;
   width: 32px;
   height: 32px;
   border-radius: 8px;
   color: var(--phisio-text-secondary);
   transition:
-    background 0.2s ease,
-    color 0.2s ease;
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .ant-modal .ant-modal-close:hover {
-  background: var(--phisio-primary-soft);
-  color: var(--phisio-primary);
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text);
 }
 
 .ant-modal .ant-modal-body {
@@ -153,21 +181,21 @@
 }
 
 .ant-drawer .ant-drawer-header {
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--phisio-border);
-  background: var(--phisio-bg-elevated);
+  background: transparent !important;
 }
 
 .ant-drawer .ant-drawer-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.4;
   text-align: start;
   color: var(--phisio-text);
 }
 
 .ant-drawer .ant-drawer-body {
-  background: var(--phisio-bg-elevated);
+  background: var(--phisio-surface);
 }
 
 /* Tables — remove fixed-column shadow artifacts */
@@ -251,9 +279,10 @@
 }
 
 .auth-form__title {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   text-align: center;
   font-weight: 700;
+  font-size: 1.25rem;
   color: var(--phisio-text);
 }
 

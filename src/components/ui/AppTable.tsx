@@ -1,13 +1,21 @@
 import type { TableProps } from 'antd';
 import { Table } from 'antd';
 
+type AppTableProps<RecordType extends object> = Omit<TableProps<RecordType>, 'scroll'> & {
+  /**
+   * Defaults to `{ x: 'max-content' }`.
+   * Pass `false` to disable horizontal scroll defaults.
+   */
+  scroll?: TableProps<RecordType>['scroll'] | false;
+};
+
 /**
  * Shared data table with a mobile-safe horizontal scroll container.
  * Defaults `scroll.x` to `max-content` so columns stay accessible on small screens
  * without expanding the page width. Pass `scroll={false}` or a custom `scroll`
  * object to override.
  */
-export function AppTable<RecordType extends object>(props: TableProps<RecordType>) {
+export function AppTable<RecordType extends object>(props: AppTableProps<RecordType>) {
   const { className, scroll, ...rest } = props;
   const resolvedScroll =
     scroll === undefined ? { x: 'max-content' as const } : scroll === false ? undefined : scroll;

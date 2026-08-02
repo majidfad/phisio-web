@@ -5,6 +5,7 @@ export type WorkoutPhase = 'work' | 'idle';
 interface UseWorkoutSetTimerOptions {
   totalSets: number;
   onExerciseComplete: () => Promise<boolean>;
+  /** Kept for caller compatibility; set progression no longer depends on this flag. */
   enabled: boolean;
   resetKey: string | number;
 }
@@ -16,9 +17,7 @@ interface TimerState {
 }
 
 type TimerAction =
-  | { type: 'RESET' }
-  | { type: 'COMPLETE_SET'; totalSets: number }
-  | { type: 'COMPLETION_FAILED' };
+  { type: 'RESET' } | { type: 'COMPLETE_SET'; totalSets: number } | { type: 'COMPLETION_FAILED' };
 
 function createInitialState(): TimerState {
   return {
@@ -77,7 +76,6 @@ function reducer(state: TimerState, action: TimerAction): TimerState {
 export function useWorkoutSetTimer({
   totalSets,
   onExerciseComplete,
-  enabled: _enabled,
   resetKey,
 }: UseWorkoutSetTimerOptions) {
   const [state, dispatch] = useReducer(reducer, undefined, createInitialState);

@@ -145,9 +145,7 @@ export function DoctorPatientsPage() {
                   title: t('doctor.patients.columns.phone'),
                   dataIndex: 'phoneNumber',
                   width: 150,
-                  render: (value: string) => (
-                    <span dir="ltr">{convertToPersianDigits(value)}</span>
-                  ),
+                  render: (value: string) => <span dir="ltr">{convertToPersianDigits(value)}</span>,
                 },
                 {
                   title: t('doctor.patients.columns.requestedAt'),

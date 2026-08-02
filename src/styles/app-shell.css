@@ -60,8 +60,9 @@
 .app-content {
   padding: var(--phisio-content-padding);
   width: 100%;
-  max-width: var(--phisio-content-max);
+  max-width: min(100%, var(--phisio-content-max));
   margin: 0 auto;
+  overflow-x: clip;
 }
 
 @media (min-width: 768px) {
@@ -146,6 +147,9 @@
 
 .app-page {
   animation: app-page-in 0.28s ease-out;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 @keyframes app-page-in {
@@ -264,6 +268,8 @@
   flex-direction: column;
   gap: var(--phisio-space-4);
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .patient-stack--loose {
@@ -548,6 +554,9 @@
 
 .page-section {
   margin-top: var(--phisio-space-6);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .page-section__header {

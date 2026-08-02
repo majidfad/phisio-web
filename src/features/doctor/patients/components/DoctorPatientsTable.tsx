@@ -1,5 +1,5 @@
 import { History, LayoutDashboard, Stethoscope, Trash2 } from 'lucide-react';
-import { Button, Card, Grid, Space, Tooltip } from 'antd';
+import { Button, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
@@ -39,21 +39,20 @@ export function DoctorPatientsTable({
   onOpenExerciseHistory,
 }: DoctorPatientsTableProps) {
   const { t } = useTranslation();
-  const screens = Grid.useBreakpoint();
-  const isMobile = !screens.md;
 
   const columns: ColumnsType<DoctorPatientDto> = [
     {
       title: t('doctor.patients.columns.name'),
       dataIndex: 'patientName',
       key: 'patientName',
-      ellipsis: true,
+      minWidth: 140,
     },
     {
       title: t('doctor.patients.columns.phone'),
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       width: 150,
+      minWidth: 140,
       render: (phone: string) => <span dir="ltr">{formatDisplayPhone(phone)}</span>,
     },
     {
@@ -61,12 +60,14 @@ export function DoctorPatientsTable({
       dataIndex: 'assignedAt',
       key: 'assignedAt',
       width: 130,
+      minWidth: 120,
       render: (value: string) => formatAssignedAt(value),
     },
     {
       title: t('doctor.patients.columns.actions'),
       key: 'actions',
       width: 200,
+      minWidth: 180,
       align: 'center',
       render: (_, patient) => (
         <Space size={4} className="table-icon-actions">
@@ -117,46 +118,11 @@ export function DoctorPatientsTable({
     return <WarmEmptyState description={t('doctor.patients.empty')} />;
   }
 
-  if (isMobile) {
-    return (
-      <div className="patient-stack" role="list">
-        {patients.map((patient) => (
-          <Card key={patient.patientId} className="patient-media-card" size="small" role="listitem">
-            <h3 className="patient-media-card__title">{patient.patientName}</h3>
-            <span className="patient-media-card__meta" dir="ltr">
-              {formatDisplayPhone(patient.phoneNumber)}
-            </span>
-            <span className="patient-media-card__meta">{formatAssignedAt(patient.assignedAt)}</span>
-            <div className="patient-media-card__actions">
-              <Button onClick={() => onOpenOverview(patient)}>
-                {t('doctor.patients.overview.open')}
-              </Button>
-              <Button type="primary" onClick={() => onOpenExercisePlan(patient)}>
-                {t('doctor.patients.exercisePlan.open')}
-              </Button>
-              <Button onClick={() => onOpenExerciseHistory(patient)}>
-                {t('doctor.patients.exerciseHistory.open')}
-              </Button>
-              <Button
-                danger
-                loading={removingPatientId === patient.patientId}
-                onClick={() => onRemove(patient)}
-              >
-                {t('doctor.patients.remove')}
-              </Button>
-            </div>
-          </Card>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <AppTable
       rowKey="patientId"
       columns={columns}
       dataSource={patients}
-      scroll={{ x: 'max-content' }}
       pagination={{ pageSize: 10, showSizeChanger: true }}
       size="middle"
     />

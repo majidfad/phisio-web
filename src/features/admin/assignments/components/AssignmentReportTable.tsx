@@ -1,5 +1,4 @@
-import { AppEmpty } from '@/components/ui';
-import { Table } from 'antd';
+import { AppEmpty, AppTable } from '@/components/ui';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
@@ -29,7 +28,6 @@ export function AssignmentReportTable({ rows }: AssignmentReportTableProps) {
     {
       title: t('admin.assignments.columns.exercises'),
       key: 'exercises',
-      ellipsis: true,
       render: (_, row) =>
         formatAssignmentExercises(row.exerciseNames, t('admin.assignments.noExercises')),
     },
@@ -40,7 +38,7 @@ export function AssignmentReportTable({ rows }: AssignmentReportTableProps) {
   }
 
   return (
-    <Table
+    <AppTable
       rowKey={(row, index) => `${row.patientName}-${row.doctorName}-${index}`}
       columns={columns}
       dataSource={rows}

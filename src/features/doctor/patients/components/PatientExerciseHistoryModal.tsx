@@ -1,5 +1,5 @@
-import { AppResult, LoadingState, WarmEmptyState } from '@/components/ui';
-import { Button, Card, Col, Modal, Row, Space, Statistic, Table, Tag, Typography } from 'antd';
+import { AppResult, AppTable, LoadingState, WarmEmptyState } from '@/components/ui';
+import { Button, Card, Col, Modal, Row, Space, Statistic, Tag, Typography } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -119,13 +119,12 @@ function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
         </section>
       ) : null}
 
-      <Table
+      <AppTable
         size="small"
         pagination={false}
         rowKey="userExerciseId"
         dataSource={day.exercises}
         columns={detailColumns}
-        scroll={{ x: true }}
       />
     </div>
   );
@@ -286,7 +285,7 @@ export function PatientExerciseHistoryModal({
               {!hasHistory ? (
                 <WarmEmptyState description={t('doctor.patients.exerciseHistory.empty')} />
               ) : (
-                <Table
+                <AppTable
                   rowKey="date"
                   columns={columns}
                   dataSource={data?.dailyHistory ?? []}

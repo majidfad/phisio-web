@@ -1,4 +1,4 @@
-import { Button, Space, Table } from 'antd';
+import { Button, Space } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import {
   LoadingState,
   PageContainer,
   AppResult,
+  AppTable,
   PageSection,
 } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
@@ -129,7 +130,7 @@ export function DoctorPatientsPage() {
           ) : null}
 
           {!isRequestsLoading && !isRequestsError ? (
-            <Table
+            <AppTable
               rowKey="patientId"
               dataSource={requests}
               pagination={false}
@@ -138,20 +139,26 @@ export function DoctorPatientsPage() {
                 {
                   title: t('doctor.patients.columns.name'),
                   dataIndex: 'patientName',
+                  minWidth: 140,
                 },
                 {
                   title: t('doctor.patients.columns.phone'),
                   dataIndex: 'phoneNumber',
-                  render: (value: string) => <span dir="ltr">{convertToPersianDigits(value)}</span>,
+                  width: 150,
+                  render: (value: string) => (
+                    <span dir="ltr">{convertToPersianDigits(value)}</span>
+                  ),
                 },
                 {
                   title: t('doctor.patients.columns.requestedAt'),
                   dataIndex: 'requestedAt',
+                  width: 140,
                   render: (value: string) => formatPersianDate(value),
                 },
                 {
                   title: t('doctor.patients.columns.actions'),
                   key: 'actions',
+                  width: 200,
                   render: (_, request) => (
                     <Space>
                       <Button

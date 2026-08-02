@@ -23,6 +23,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       title: t('doctor.dashboard.recentPatients.columns.name'),
       dataIndex: 'patientName',
       key: 'patientName',
+      minWidth: 160,
       render: (name: string) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div
@@ -35,6 +36,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              flexShrink: 0,
             }}
           >
             <User size={16} />
@@ -47,6 +49,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       title: t('doctor.dashboard.recentPatients.columns.phone'),
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
+      width: 150,
       render: (phone: string) => (
         <span dir="ltr" style={{ fontWeight: 600, color: 'var(--phisio-text-secondary)' }}>
           {formatDisplayPhone(phone)}
@@ -56,11 +59,13 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
     {
       title: 'وضعیت درمان',
       key: 'status',
+      width: 140,
       render: () => <StatusCapsule status="active" label="در حال درمان" />,
     },
     {
       title: 'عملیات',
       key: 'actions',
+      width: 120,
       render: () => (
         <Button
           type="link"
@@ -80,21 +85,12 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
   }
 
   return (
-    <div
-      style={{
-        borderRadius: 'var(--phisio-radius-md)',
-        overflow: 'hidden',
-        border: '1px solid var(--phisio-border)',
-        backgroundColor: 'var(--phisio-surface)',
-      }}
-    >
-      <AppTable
-        rowKey="patientId"
-        columns={columns}
-        dataSource={patients}
-        pagination={false}
-        size="middle"
-      />
-    </div>
+    <AppTable
+      rowKey="patientId"
+      columns={columns}
+      dataSource={patients}
+      pagination={false}
+      size="middle"
+    />
   );
 }

@@ -1,6 +1,6 @@
-import { AppEmpty } from '@/components/ui';
+import { AppEmpty, AppTable } from '@/components/ui';
 import { CirclePlay } from 'lucide-react';
-import { Button, Space, Table, Tag, Typography } from 'antd';
+import { Button, Space, Tag, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -38,10 +38,12 @@ export function PatientExercisePlanTable({ exercises }: PatientExercisePlanTable
       title: t('doctor.patients.exercisePlan.columns.title'),
       dataIndex: 'exerciseName',
       key: 'exerciseName',
+      minWidth: 140,
     },
     {
       title: t('doctor.patients.exercisePlan.columns.dosage'),
       key: 'dosage',
+      minWidth: 120,
       render: (_, exercise) => (
         <Space wrap size={[4, 4]}>
           {exercise.sets ? (
@@ -94,7 +96,7 @@ export function PatientExercisePlanTable({ exercises }: PatientExercisePlanTable
 
   return (
     <>
-      <Table
+      <AppTable
         rowKey="userExerciseId"
         columns={columns}
         dataSource={exercises}

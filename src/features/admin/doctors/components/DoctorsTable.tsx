@@ -135,7 +135,6 @@ export function DoctorsTable({
       rowKey="id"
       columns={columns}
       dataSource={doctors}
-      scroll={{ x: 'max-content' }}
       pagination={{ pageSize: 10, showSizeChanger: true }}
       size="middle"
     />

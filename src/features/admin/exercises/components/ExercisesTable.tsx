@@ -137,7 +137,6 @@ export function ExercisesTable({
         rowKey="exerciseId"
         columns={columns}
         dataSource={exercises}
-        scroll={{ x: 'max-content' }}
         pagination={{ pageSize: 10, showSizeChanger: true }}
         size="middle"
       />

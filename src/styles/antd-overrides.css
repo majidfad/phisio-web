@@ -198,12 +198,30 @@
   background: var(--phisio-surface);
 }
 
-/* Tables — remove fixed-column shadow artifacts */
-.app-table .ant-table {
+/* Tables — responsive scroll shell (theme tokens only) */
+.app-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius);
-  overflow: hidden;
   background: var(--phisio-surface);
+}
+
+.app-table-scroll .app-table.ant-table-wrapper,
+.app-table-scroll .ant-table-wrapper {
+  margin: 0;
+}
+
+.app-table .ant-table,
+.app-table-scroll .ant-table {
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
   box-shadow: none;
 }
 
@@ -217,9 +235,16 @@
 .ant-table-wrapper .ant-table {
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius);
-  overflow: hidden;
+  overflow: visible;
   background: var(--phisio-surface);
   box-shadow: none;
+}
+
+/* Nested inside the scroll shell — avoid double border */
+.app-table-scroll .ant-table-wrapper .ant-table {
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .ant-table-wrapper .ant-table-thead > tr > th {
@@ -231,6 +256,7 @@
   background: var(--phisio-bg-elevated) !important;
   padding: 10px 12px !important;
   text-align: start !important;
+  white-space: nowrap;
 }
 
 .ant-table-wrapper .ant-table-tbody > tr > td {

@@ -108,7 +108,6 @@ export function PatientsTable({
       rowKey="id"
       columns={columns}
       dataSource={patients}
-      scroll={{ x: 'max-content' }}
       pagination={{ pageSize: 10, showSizeChanger: true }}
       size="middle"
     />

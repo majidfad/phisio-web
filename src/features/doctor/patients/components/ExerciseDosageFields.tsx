@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { Dumbbell, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +9,6 @@ import {
   applyDosagePreset,
   type DosagePresetId,
 } from '@/features/doctor/patients/utils/dosage-presets';
-import { ExerciseSide } from '@/features/exercises/types';
 
 interface ExerciseDosageFieldsProps {
   exercises: DoctorExerciseDto[];
@@ -37,7 +36,6 @@ export function ExerciseDosageFields({
           exerciseId: exercise.exerciseId,
           sets: 3,
           reps: '10',
-          side: ExerciseSide.None,
         };
         const update = (patch: Partial<AssignPatientExerciseItem>) =>
           onChange(exercise.exerciseId, { ...value, ...patch });
@@ -132,52 +130,13 @@ export function ExerciseDosageFields({
               onChange={(sets) => update({ sets })}
             />
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: '10px',
-              }}
-            >
-              <Form.Item label={t(`${dosageKey}.reps`)} style={{ marginBottom: 0 }}>
-                <Input
-                  value={value.reps}
-                  onChange={(event) => update({ reps: event.target.value })}
-                  placeholder="10"
-                />
-              </Form.Item>
-              <Form.Item label={t(`${dosageKey}.hold`)} style={{ marginBottom: 0 }}>
-                <InputNumber
-                  min={0}
-                  value={value.holdSeconds}
-                  onChange={(seconds) => update({ holdSeconds: seconds ?? undefined })}
-                  addonAfter="ثانیه"
-                  style={{ width: '100%' }}
-                />
-              </Form.Item>
-              <Form.Item label={t(`${dosageKey}.rest`)} style={{ marginBottom: 0 }}>
-                <InputNumber
-                  min={0}
-                  value={value.restSeconds}
-                  onChange={(seconds) => update({ restSeconds: seconds ?? undefined })}
-                  addonAfter="ثانیه"
-                  style={{ width: '100%' }}
-                />
-              </Form.Item>
-              <Form.Item label={t(`${dosageKey}.side`)} style={{ marginBottom: 0 }}>
-                <Select
-                  value={value.side}
-                  onChange={(side) => update({ side })}
-                  options={[
-                    { value: ExerciseSide.None, label: t('exerciseMeta.side.None') },
-                    { value: ExerciseSide.Left, label: t('exerciseMeta.side.Left') },
-                    { value: ExerciseSide.Right, label: t('exerciseMeta.side.Right') },
-                    { value: ExerciseSide.Both, label: t('exerciseMeta.side.Both') },
-                  ]}
-                  style={{ width: '100%' }}
-                />
-              </Form.Item>
-            </div>
+            <Form.Item label={t(`${dosageKey}.reps`)} style={{ marginBottom: 0 }}>
+              <Input
+                value={value.reps}
+                onChange={(event) => update({ reps: event.target.value })}
+                placeholder="10"
+              />
+            </Form.Item>
           </section>
         );
       })}

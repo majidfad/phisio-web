@@ -24,9 +24,6 @@ export interface ExerciseProgramExerciseDto {
   exerciseName: string;
   sets: number | null;
   reps: string | null;
-  holdSeconds: number | null;
-  restSeconds: number | null;
-  side: 0 | 1 | 2 | 3;
   clinicianNote: string | null;
   patientCue: string | null;
 }

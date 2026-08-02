@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExerciseMediaPlayer } from '@/features/patient/exercises/components/ExerciseMediaPlayer';
-import { WorkoutRestRing } from '@/features/patient/exercises/components/WorkoutRestRing';
 import { useWorkoutSetTimer } from '@/features/patient/exercises/hooks/useWorkoutSetTimer';
 import { patientExerciseService } from '@/features/patient/exercises/services/patientExerciseService';
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
@@ -65,12 +64,7 @@ export function PatientExerciseSession({
   const isFirst = index <= 0;
   const totalSets = Math.max(current?.sets ?? 1, 1);
   const hasInfo = Boolean(
-    current?.instructions?.trim() ||
-    current?.patientCue?.trim() ||
-    current?.reps ||
-    current?.holdSeconds ||
-    current?.restSeconds ||
-    current?.side,
+    current?.instructions?.trim() || current?.patientCue?.trim() || current?.reps,
   );
 
   const sessionRef = useRef({
@@ -153,10 +147,7 @@ export function PatientExerciseSession({
   }, [advanceOrFinish, onExerciseCompleted, t, toast]);
 
   const timer = useWorkoutSetTimer({
-    holdSeconds: current?.holdSeconds ?? null,
-    restSeconds: current?.restSeconds ?? null,
     totalSets,
-    skipRest: isLast,
     enabled: open && Boolean(current) && !isCompleting,
     resetKey: `${current?.userExerciseId ?? 'none'}-${exerciseKey}`,
     onExerciseComplete: markDone,
@@ -175,17 +166,8 @@ export function PatientExerciseSession({
     if (current.reps) {
       parts.push(t('patient.exercises.dosage.reps', { count: current.reps }));
     }
-    if (current.holdSeconds) {
-      parts.push(t('patient.exercises.dosage.hold', { count: current.holdSeconds }));
-    }
-    if (current.restSeconds && !isLast && totalSets > 1) {
-      parts.push(t('patient.exercises.dosage.rest', { count: current.restSeconds }));
-    }
-    if (current.side) {
-      parts.push(t(`exerciseMeta.side.${current.side}`));
-    }
     return parts;
-  }, [current, formatCount, isLast, t, timer.currentSet, totalSets]);
+  }, [current, formatCount, t, timer.currentSet, totalSets]);
 
   const handleSkip = () => {
     if (isCompleting) {
@@ -214,17 +196,11 @@ export function PatientExerciseSession({
     return null;
   }
 
-  const resting = timer.phase === 'rest' && timer.secondsLeft !== null;
-  const holding = timer.phase === 'work' && timer.secondsLeft !== null;
   const PrevIcon = isRtl ? ArrowRight : ArrowLeft;
   const SkipIcon = isRtl ? SkipBack : SkipForward;
 
   return (
-    <div
-      className={`workout-session workout-session--overlay${resting ? ' workout-session--resting' : ''}`}
-      role="dialog"
-      aria-modal="true"
-    >
+    <div className="workout-session workout-session--overlay" role="dialog" aria-modal="true">
       {total === 0 || !current ? (
         <Text type="secondary" className="workout-session__empty">
           {t('patient.exercises.session.allDone')}
@@ -240,29 +216,9 @@ export function PatientExerciseSession({
               videoUrl={current.videoUrl}
               mediaType={current.mediaType}
               continuous
-              paused={resting}
               className="workout-session__media-el"
             />
           </div>
-
-          {resting ? <div className="workout-session__rest-veil" aria-hidden="true" /> : null}
-
-          {resting ? (
-            <div className="workout-session__rest-center">
-              <WorkoutRestRing
-                secondsLeft={timer.secondsLeft ?? 0}
-                totalSeconds={current.restSeconds ?? timer.secondsLeft ?? 1}
-                label={t('patient.exercises.session.restPhase')}
-                displaySeconds={formatCount(timer.secondsLeft ?? 0)}
-                nextLabel={t('patient.exercises.session.restNextSet', {
-                  set: formatCount(timer.currentSet + 1),
-                })}
-                skipLabel={t('patient.exercises.session.skipTimer')}
-                onSkip={timer.skipTimer}
-                skipDisabled={isCompleting}
-              />
-            </div>
-          ) : null}
 
           <header className="workout-session__chrome workout-session__chrome--top">
             <button
@@ -326,54 +282,43 @@ export function PatientExerciseSession({
                   {formatCount(totalSets)}
                 </span>
               </div>
-
-              {holding ? (
-                <div
-                  className="workout-session__count workout-session__count--hold"
-                  aria-live="polite"
-                >
-                  {formatCount(timer.secondsLeft ?? 0)}
-                </div>
-              ) : null}
             </div>
 
-            {!resting ? (
-              <div className="workout-session__transport">
-                <button
-                  type="button"
-                  className="workout-session__nav-ghost"
-                  onClick={handlePrev}
-                  disabled={isCompleting || isFirst}
-                  aria-label={t('patient.exercises.session.prev')}
-                >
-                  <PrevIcon size={24} strokeWidth={1.75} />
-                </button>
+            <div className="workout-session__transport">
+              <button
+                type="button"
+                className="workout-session__nav-ghost"
+                onClick={handlePrev}
+                disabled={isCompleting || isFirst}
+                aria-label={t('patient.exercises.session.prev')}
+              >
+                <PrevIcon size={24} strokeWidth={1.75} />
+              </button>
 
-                <Button
-                  type="primary"
-                  shape="round"
-                  size="large"
-                  className="workout-session__cta-pill"
-                  loading={isCompleting}
-                  onClick={timer.completeSetManually}
-                  icon={<Check size={18} strokeWidth={2} />}
-                >
-                  {timer.currentSet >= totalSets
-                    ? t('patient.exercises.session.markDone')
-                    : t('patient.exercises.session.completeSet')}
-                </Button>
+              <Button
+                type="primary"
+                shape="round"
+                size="large"
+                className="workout-session__cta-pill"
+                loading={isCompleting}
+                onClick={timer.completeSetManually}
+                icon={<Check size={18} strokeWidth={2} />}
+              >
+                {timer.currentSet >= totalSets
+                  ? t('patient.exercises.session.markDone')
+                  : t('patient.exercises.session.completeSet')}
+              </Button>
 
-                <button
-                  type="button"
-                  className="workout-session__nav-ghost"
-                  onClick={handleSkip}
-                  disabled={isCompleting}
-                  aria-label={t('patient.exercises.session.skip')}
-                >
-                  <SkipIcon size={24} strokeWidth={1.75} />
-                </button>
-              </div>
-            ) : null}
+              <button
+                type="button"
+                className="workout-session__nav-ghost"
+                onClick={handleSkip}
+                disabled={isCompleting}
+                aria-label={t('patient.exercises.session.skip')}
+              >
+                <SkipIcon size={24} strokeWidth={1.75} />
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -54,22 +54,7 @@ export function PatientExercisePlanTable({ exercises }: PatientExercisePlanTable
               {t('patient.exercises.dosage.reps', { count: exercise.reps })}
             </Tag>
           ) : null}
-          {exercise.holdSeconds ? (
-            <Tag className="exercise-dosage-chip">
-              {t('patient.exercises.dosage.hold', { count: exercise.holdSeconds })}
-            </Tag>
-          ) : null}
-          {exercise.restSeconds ? (
-            <Tag className="exercise-dosage-chip">
-              {t('patient.exercises.dosage.rest', { count: exercise.restSeconds })}
-            </Tag>
-          ) : null}
-          {exercise.side ? (
-            <Tag className="exercise-dosage-chip">{t(`exerciseMeta.side.${exercise.side}`)}</Tag>
-          ) : null}
-          {!exercise.sets && !exercise.reps && !exercise.holdSeconds && !exercise.restSeconds ? (
-            <Text type="secondary">—</Text>
-          ) : null}
+          {!exercise.sets && !exercise.reps ? <Text type="secondary">—</Text> : null}
         </Space>
       ),
     },

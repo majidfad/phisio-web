@@ -1,5 +1,3 @@
-import type { ExerciseSide } from '@/features/exercises/types';
-
 export interface PatientExerciseHistoryExerciseDto {
   userExerciseId: string;
   exerciseId: string;
@@ -7,9 +5,6 @@ export interface PatientExerciseHistoryExerciseDto {
   isCompleted: boolean;
   sets: number | null;
   reps: string | null;
-  holdSeconds: number | null;
-  restSeconds: number | null;
-  side: ExerciseSide;
   clinicianNote: string | null;
   patientCue: string | null;
 }

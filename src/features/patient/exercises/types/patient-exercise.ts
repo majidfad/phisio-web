@@ -1,4 +1,4 @@
-import type { ExerciseMediaType, ExerciseSide } from '@/features/exercises/types';
+import type { ExerciseMediaType } from '@/features/exercises/types';
 
 export interface PatientTodayExerciseItemDto {
   userExerciseId: string;
@@ -9,9 +9,6 @@ export interface PatientTodayExerciseItemDto {
   instructions: string | null;
   sets: number | null;
   reps: string | null;
-  holdSeconds: number | null;
-  restSeconds: number | null;
-  side: ExerciseSide;
   patientCue: string | null;
   scheduledDate: string;
   completedToday: boolean;

@@ -670,9 +670,6 @@
         "dosage": {
           "sets": "Sets",
           "reps": "Reps",
-          "hold": "Hold (s)",
-          "rest": "Rest (s)",
-          "side": "Side",
           "patientCue": "Patient cue",
           "clinicianNote": "Clinician note",
           "copiedFromLast": "Copied from last prescription",
@@ -875,9 +872,7 @@
       "completedToday": "Completed today",
       "dosage": {
         "sets": "{{count}} sets",
-        "reps": "{{count}} reps",
-        "hold": "Hold {{count}}s",
-        "rest": "Rest {{count}}s"
+        "reps": "{{count}} reps"
       },
       "remaining": "Remaining",
       "keepGoing": "Keep going — you're doing great!",
@@ -1035,9 +1030,7 @@
       },
       "dosage": {
         "sets": "{{count}} sets",
-        "reps": "{{count}} reps",
-        "hold": "Hold {{count}}s",
-        "rest": "Rest {{count}}s"
+        "reps": "{{count}} reps"
       },
       "session": {
         "title": "Workout session",
@@ -1050,16 +1043,8 @@
         "setOf": "of {{total}} sets",
         "setProgress": "Set {{set}} of {{total}}",
         "reps": "Reps",
-        "hold": "Hold (s)",
-        "rest": "Rest (s)",
-        "side": "Side",
-        "holdPhase": "Hold",
-        "restPhase": "Rest",
-        "restAfterSet": "After set {{set}} of {{total}}",
-        "restNextSet": "Next: set {{set}}",
         "setHint": "Set {{set}} of {{total}} — complete when ready",
         "completeSet": "Complete set",
-        "skipTimer": "Skip timer",
         "markDone": "Exercise done",
         "skip": "Skip exercise",
         "next": "Next exercise",
@@ -1068,7 +1053,6 @@
         "nextUp": "Next: {{title}}",
         "setsUnit": "{{count}} sets",
         "repsUnit": "{{count}} reps",
-        "holdUnit": "{{count}}s hold",
         "showInstructions": "Show instructions",
         "hideInstructions": "Hide instructions",
         "exit": "Exit",
@@ -1141,8 +1125,7 @@
       "5": "Weights",
       "6": "Other"
     },
-    "difficulty": { "1": "Easy", "2": "Moderate", "3": "Hard" },
-    "side": { "0": "Not applicable", "1": "Left", "2": "Right", "3": "Bilateral" }
+    "difficulty": { "1": "Easy", "2": "Moderate", "3": "Hard" }
   },
   "errors": {
     "unexpected": "An unexpected error occurred.",

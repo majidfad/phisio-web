@@ -1,15 +1,14 @@
 import type { AssignPatientExerciseItem } from '@/features/doctor/patients/types/patient-exercise-plan';
-import { ExerciseSide } from '@/features/exercises/types';
 
 export type DosagePresetId = 'strength' | 'stretch' | 'activation';
 
 export const DOSAGE_PRESETS: Record<
   DosagePresetId,
-  Pick<AssignPatientExerciseItem, 'sets' | 'reps' | 'holdSeconds' | 'restSeconds'>
+  Pick<AssignPatientExerciseItem, 'sets' | 'reps'>
 > = {
-  strength: { sets: 3, reps: '10', holdSeconds: undefined, restSeconds: 60 },
-  stretch: { sets: 2, reps: '1', holdSeconds: 30, restSeconds: 15 },
-  activation: { sets: 2, reps: '12', holdSeconds: undefined, restSeconds: 30 },
+  strength: { sets: 3, reps: '10' },
+  stretch: { sets: 2, reps: '1' },
+  activation: { sets: 2, reps: '12' },
 };
 
 export function createDefaultDosage(exerciseId: string): AssignPatientExerciseItem {
@@ -17,7 +16,6 @@ export function createDefaultDosage(exerciseId: string): AssignPatientExerciseIt
     exerciseId,
     sets: 3,
     reps: '10',
-    side: ExerciseSide.None,
   };
 }
 
@@ -30,7 +28,5 @@ export function applyDosagePreset(
     ...current,
     sets: preset.sets,
     reps: preset.reps,
-    holdSeconds: preset.holdSeconds,
-    restSeconds: preset.restSeconds,
   };
 }

@@ -16,7 +16,6 @@ import {
   formatPatientCommentDisplay,
   hasPatientFeedback,
 } from '@/features/doctor/patients/utils/exercise-history-feedback-display';
-import { ExerciseSide } from '@/features/exercises/types';
 import { getErrorMessage } from '@/utils/get-error-message';
 import {
   formatDisplayPhone,
@@ -64,15 +63,6 @@ function DayExpandedRow({ day }: { day: PatientExerciseHistoryDayDto }) {
           ) : null}
           {exercise.reps ? (
             <Tag>{t('patient.exercises.dosage.reps', { count: exercise.reps })}</Tag>
-          ) : null}
-          {exercise.holdSeconds != null ? (
-            <Tag>{t('patient.exercises.dosage.hold', { count: exercise.holdSeconds })}</Tag>
-          ) : null}
-          {exercise.restSeconds != null ? (
-            <Tag>{t('patient.exercises.dosage.rest', { count: exercise.restSeconds })}</Tag>
-          ) : null}
-          {exercise.side !== ExerciseSide.None ? (
-            <Tag>{t(`exerciseMeta.side.${exercise.side}`)}</Tag>
           ) : null}
         </Space>
       ),

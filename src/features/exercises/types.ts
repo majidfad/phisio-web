@@ -20,9 +20,6 @@ export type ExerciseEquipment = (typeof ExerciseEquipment)[keyof typeof Exercise
 export const ExerciseDifficulty = { Beginner: 1, Intermediate: 2, Advanced: 3 } as const;
 export type ExerciseDifficulty = (typeof ExerciseDifficulty)[keyof typeof ExerciseDifficulty];
 
-export const ExerciseSide = { None: 0, Left: 1, Right: 2, Both: 3 } as const;
-export type ExerciseSide = (typeof ExerciseSide)[keyof typeof ExerciseSide];
-
 export interface ExerciseMediaMetadata {
   mediaType: ExerciseMediaType;
   equipment: ExerciseEquipment;

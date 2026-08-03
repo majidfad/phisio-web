@@ -1,4 +1,4 @@
-import { Slider } from 'antd';
+import { ConfigProvider, Slider } from 'antd';
 
 interface TactileSliderProps {
   value: number;
@@ -11,6 +11,10 @@ interface TactileSliderProps {
   className?: string;
   disabled?: boolean;
 }
+
+const TRACK_HEIGHT = 6;
+const HANDLE_SIZE = 18;
+const HANDLE_SIZE_HOVER = 20;
 
 export function TactileSlider({
   value,
@@ -25,7 +29,7 @@ export function TactileSlider({
 }: TactileSliderProps) {
   return (
     <div
-      className={className}
+      className={['tactile-slider', className].filter(Boolean).join(' ')}
       style={{
         width: '100%',
         display: 'flex',
@@ -65,35 +69,36 @@ export function TactileSlider({
         </div>
       </div>
       <div style={{ padding: '0 4px' }}>
-        <Slider
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={onChange}
-          disabled={disabled}
-          tooltip={{ open: false }}
-          styles={{
-            track: {
-              background: 'var(--phisio-brand-gradient)',
-              height: 6,
-              borderRadius: 3,
-            },
-            rail: {
-              background: 'var(--phisio-bg-elevated)',
-              height: 6,
-              borderRadius: 3,
-            },
-            handle: {
-              borderColor: 'var(--phisio-primary)',
-              backgroundColor: 'var(--phisio-surface)',
-              width: 18,
-              height: 18,
-              marginTop: -6,
-              boxShadow: 'var(--phisio-shadow-sm)',
+        <ConfigProvider
+          theme={{
+            components: {
+              Slider: {
+                railSize: TRACK_HEIGHT,
+                handleSize: HANDLE_SIZE,
+                handleSizeHover: HANDLE_SIZE_HOVER,
+                handleColor: 'var(--phisio-primary)',
+                handleColorDisabled: 'var(--phisio-border)',
+                railBg: 'var(--phisio-bg-elevated)',
+                railHoverBg: 'var(--phisio-bg-elevated)',
+              },
             },
           }}
-        />
+        >
+          <Slider
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            tooltip={{ open: false }}
+            styles={{
+              track: {
+                background: 'var(--phisio-brand-gradient)',
+              },
+            }}
+          />
+        </ConfigProvider>
       </div>
     </div>
   );

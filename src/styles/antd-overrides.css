@@ -365,6 +365,18 @@
   color: var(--phisio-primary);
 }
 
+/* TactileSlider — circular handle (antd draws the thumb on ::after) */
+.tactile-slider .ant-slider-handle {
+  background: transparent;
+}
+
+.tactile-slider .ant-slider-handle::after {
+  background-color: var(--phisio-surface) !important;
+  box-shadow:
+    0 0 0 2px var(--phisio-primary),
+    var(--phisio-shadow-sm) !important;
+}
+
 .ant-progress-circle-trail {
   stroke: var(--phisio-bg-elevated) !important;
 }

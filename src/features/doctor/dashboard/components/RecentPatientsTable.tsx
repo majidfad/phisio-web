@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Grid } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ChevronLeft, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -14,33 +14,47 @@ interface RecentPatientsTableProps {
   patients: DoctorDashboardRecentPatientDto[];
 }
 
+const TABLE_SCROLL_X = 620;
+
+function PatientAvatar() {
+  return (
+    <div
+      style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        backgroundColor: 'var(--phisio-primary-soft)',
+        color: 'var(--phisio-primary)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}
+    >
+      <User size={16} />
+    </div>
+  );
+}
+
 export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md;
+
+  const openPatients = () => {
+    void navigate(routes.doctor.patients);
+  };
 
   const columns: ColumnsType<DoctorDashboardRecentPatientDto> = [
     {
       title: t('doctor.dashboard.recentPatients.columns.name'),
       dataIndex: 'patientName',
       key: 'patientName',
-      minWidth: 160,
+      width: 200,
       render: (name: string) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div
-            style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--phisio-primary-soft)',
-              color: 'var(--phisio-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <User size={16} />
-          </div>
+          <PatientAvatar />
           <span style={{ fontWeight: 600, color: 'var(--phisio-text)' }}>{name}</span>
         </div>
       ),
@@ -57,13 +71,18 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       ),
     },
     {
-      title: 'وضعیت درمان',
+      title: t('doctor.dashboard.recentPatients.columns.status'),
       key: 'status',
-      width: 140,
-      render: () => <StatusCapsule status="active" label="در حال درمان" />,
+      width: 150,
+      render: () => (
+        <StatusCapsule
+          status="active"
+          label={t('doctor.dashboard.recentPatients.statusActive')}
+        />
+      ),
     },
     {
-      title: 'عملیات',
+      title: t('doctor.dashboard.recentPatients.columns.actions'),
       key: 'actions',
       width: 120,
       render: () => (
@@ -72,9 +91,9 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
           size="small"
           icon={<ChevronLeft size={14} />}
           style={{ fontWeight: 600, paddingInline: 0 }}
-          onClick={() => void navigate(routes.doctor.patients)}
+          onClick={openPatients}
         >
-          مدیریت
+          {t('doctor.dashboard.recentPatients.manage')}
         </Button>
       ),
     },
@@ -84,6 +103,36 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
     return <AppEmpty description={t('doctor.dashboard.emptyPatients')} />;
   }
 
+  if (isMobile) {
+    return (
+      <div className="patient-card-list">
+        {patients.map((patient) => (
+          <button
+            key={patient.patientId}
+            type="button"
+            className="patient-card patient-card--tap"
+            onClick={openPatients}
+          >
+            <div className="patient-card__header">
+              <PatientAvatar />
+              <div className="patient-card__identity">
+                <span className="patient-card__name">{patient.patientName}</span>
+                <span className="patient-card__meta" dir="ltr">
+                  {formatDisplayPhone(patient.phoneNumber)}
+                </span>
+              </div>
+              <ChevronLeft size={18} className="patient-card__chevron" aria-hidden />
+            </div>
+            <StatusCapsule
+              status="active"
+              label={t('doctor.dashboard.recentPatients.statusActive')}
+            />
+          </button>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <AppTable
       rowKey="patientId"
@@ -91,6 +140,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       dataSource={patients}
       pagination={false}
       size="middle"
+      scroll={{ x: TABLE_SCROLL_X }}
     />
   );
 }

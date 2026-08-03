@@ -1104,17 +1104,56 @@
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius);
   background: var(--phisio-surface);
+  text-align: start;
+}
+
+.patient-card--tap {
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.patient-card--tap:hover,
+.patient-card--tap:focus-visible {
+  border-color: var(--phisio-border-glow);
+  background: var(--phisio-primary-soft);
+  outline: none;
+}
+
+.patient-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.patient-card__identity {
+  flex: 1;
+  min-width: 0;
 }
 
 .patient-card__name {
   display: block;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--phisio-text);
 }
 
 .patient-card__meta {
   display: block;
   margin-top: 4px;
   font-size: 13px;
+  font-weight: 600;
+  color: var(--phisio-text-secondary);
+}
+
+.patient-card__chevron {
+  flex-shrink: 0;
+  color: var(--phisio-primary);
 }
 
 .patient-card__actions {

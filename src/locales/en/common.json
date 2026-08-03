@@ -538,8 +538,12 @@
         "title": "Recent patients",
         "columns": {
           "name": "Patient name",
-          "phone": "Mobile number"
-        }
+          "phone": "Mobile number",
+          "status": "Treatment status",
+          "actions": "Actions"
+        },
+        "statusActive": "In treatment",
+        "manage": "Manage"
       },
       "emptyPatients": "No patients have been added to you yet."
     },

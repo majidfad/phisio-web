@@ -220,9 +220,20 @@
 .app-table-scroll .ant-table {
   border: none;
   border-radius: 0;
-  overflow: visible;
+  /* Keep overflow contained so wide columns scroll inside .app-table-scroll
+     instead of clipping against page overflow-x: clip */
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
+}
+
+.app-table-scroll .ant-table-content,
+.app-table-scroll .ant-table-body {
+  overflow-x: auto !important;
+}
+
+.app-table-scroll table {
+  min-width: max-content;
 }
 
 .app-table .ant-table-cell-fix-left-last::after,
@@ -235,7 +246,7 @@
 .ant-table-wrapper .ant-table {
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius);
-  overflow: visible;
+  overflow: hidden;
   background: var(--phisio-surface);
   box-shadow: none;
 }

@@ -75,10 +75,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       key: 'status',
       width: 150,
       render: () => (
-        <StatusCapsule
-          status="active"
-          label={t('doctor.dashboard.recentPatients.statusActive')}
-        />
+        <StatusCapsule status="active" label={t('doctor.dashboard.recentPatients.statusActive')} />
       ),
     },
     {

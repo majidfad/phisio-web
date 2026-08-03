@@ -14,10 +14,15 @@ import {
   useDeactivateDoctor,
   useDeleteDoctor,
   useDoctors,
+  useSetDoctorPassword,
   useUpdateDoctor,
 } from '@/features/admin/doctors/hooks/useDoctors';
 import type { DoctorFormSchemaValues } from '@/features/admin/doctors/schemas/doctor-form-schema';
 import type { DoctorDto } from '@/features/admin/doctors/types/doctor';
+import { AdminGeneratedPasswordModal } from '@/features/admin/password/components/AdminGeneratedPasswordModal';
+import { AdminSetPasswordModal } from '@/features/admin/password/components/AdminSetPasswordModal';
+import { toAdminSetPasswordRequest } from '@/features/admin/password/schemas/admin-password-schema';
+import type { AdminSetPasswordRequest } from '@/features/admin/password/types/admin-password';
 import type { AdminListFilter } from '@/features/admin/types/admin-list-filter';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -36,13 +41,17 @@ export function DoctorsPage() {
   const deleteDoctor = useDeleteDoctor();
   const activateDoctor = useActivateDoctor();
   const deactivateDoctor = useDeactivateDoctor();
+  const setDoctorPassword = useSetDoctorPassword();
 
   const [formMode, setFormMode] = useState<FormMode | null>(null);
   const [selectedDoctor, setSelectedDoctor] = useState<DoctorDto | null>(null);
   const [doctorToDelete, setDoctorToDelete] = useState<DoctorDto | null>(null);
   const [doctorToDeactivate, setDoctorToDeactivate] = useState<DoctorDto | null>(null);
+  const [doctorForPassword, setDoctorForPassword] = useState<DoctorDto | null>(null);
   const [activatingDoctorId, setActivatingDoctorId] = useState<string | null>(null);
   const [deactivatingDoctorId, setDeactivatingDoctorId] = useState<string | null>(null);
+  const [generatedPassword, setGeneratedPassword] = useState<string | null>(null);
+  const [generatedPasswordUserName, setGeneratedPasswordUserName] = useState('');
 
   const openCreateForm = () => {
     setSelectedDoctor(null);
@@ -59,8 +68,17 @@ export function DoctorsPage() {
     setSelectedDoctor(null);
   };
 
+  const showGeneratedPassword = (password: string | null | undefined, userName: string) => {
+    if (!password) {
+      return;
+    }
+
+    setGeneratedPasswordUserName(userName);
+    setGeneratedPassword(password);
+  };
+
   const handleFormSubmit = async (values: DoctorFormSchemaValues) => {
-    const payload = {
+    const profilePayload = {
       name: values.name.trim(),
       phoneNumber: values.phoneNumber.trim(),
       email: values.email.trim() === '' ? null : values.email.trim(),
@@ -71,12 +89,20 @@ export function DoctorsPage() {
 
     try {
       if (formMode === 'create') {
-        await createDoctor.mutateAsync(payload);
-      } else if (formMode === 'edit' && selectedDoctor) {
-        await updateDoctor.mutateAsync({ id: selectedDoctor.id, request: payload });
+        const passwordPayload = toAdminSetPasswordRequest(values);
+        const result = await createDoctor.mutateAsync({
+          ...profilePayload,
+          ...passwordPayload,
+        });
+        closeForm();
+        showGeneratedPassword(result.generatedPassword, result.doctor.name);
+        return;
       }
 
-      closeForm();
+      if (formMode === 'edit' && selectedDoctor) {
+        await updateDoctor.mutateAsync({ id: selectedDoctor.id, request: profilePayload });
+        closeForm();
+      }
     } catch (submitError) {
       toast.error(getErrorMessage(submitError, t('admin.doctors.errors.saveFailed')));
     }
@@ -121,6 +147,25 @@ export function DoctorsPage() {
       // Keep dialog open
     } finally {
       setDeactivatingDoctorId(null);
+    }
+  };
+
+  const handleSetPassword = async (request: AdminSetPasswordRequest) => {
+    if (!doctorForPassword) {
+      return;
+    }
+
+    try {
+      const result = await setDoctorPassword.mutateAsync({
+        id: doctorForPassword.id,
+        request,
+      });
+      const userName = doctorForPassword.name;
+      setDoctorForPassword(null);
+      toast.success(t('admin.password.success'));
+      showGeneratedPassword(result.generatedPassword, userName);
+    } catch (submitError) {
+      toast.error(getErrorMessage(submitError, t('admin.password.error')));
     }
   };
 
@@ -170,6 +215,7 @@ export function DoctorsPage() {
           onDelete={(doctor) => setDoctorToDelete(doctor)}
           onActivate={(doctor) => void handleActivate(doctor)}
           onDeactivate={setDoctorToDeactivate}
+          onChangePassword={setDoctorForPassword}
         />
       ) : null}
 
@@ -201,6 +247,21 @@ export function DoctorsPage() {
         confirming={deactivateDoctor.isPending}
         onCancel={() => setDoctorToDeactivate(null)}
         onConfirm={() => void handleDeactivateConfirm()}
+      />
+
+      <AdminSetPasswordModal
+        open={doctorForPassword !== null}
+        userName={doctorForPassword?.name ?? ''}
+        isSubmitting={setDoctorPassword.isPending}
+        onClose={() => setDoctorForPassword(null)}
+        onSubmit={handleSetPassword}
+      />
+
+      <AdminGeneratedPasswordModal
+        open={generatedPassword !== null}
+        password={generatedPassword}
+        userName={generatedPasswordUserName}
+        onClose={() => setGeneratedPassword(null)}
       />
     </PageContainer>
   );

@@ -1,14 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import type { AdminSetPasswordRequest } from '@/features/admin/password/types/admin-password';
 import {
   adminListFilterToIsEnabled,
   type AdminListFilter,
 } from '@/features/admin/types/admin-list-filter';
 
 import { doctorService } from '../services/doctorService';
-
 import type { CreateDoctorRequest, UpdateDoctorRequest } from '../types/doctor';
-
 import { doctorQueryKeys } from './doctor-query-keys';
 
 export function useDoctors(filter: AdminListFilter = 'active') {
@@ -16,7 +15,6 @@ export function useDoctors(filter: AdminListFilter = 'active') {
 
   return useQuery({
     queryKey: doctorQueryKeys.list(isEnabled),
-
     queryFn: () => doctorService.getAll(isEnabled),
   });
 }
@@ -24,9 +22,7 @@ export function useDoctors(filter: AdminListFilter = 'active') {
 export function useDoctor(id: string | undefined) {
   return useQuery({
     queryKey: doctorQueryKeys.detail(id ?? ''),
-
     queryFn: () => doctorService.getById(id!),
-
     enabled: Boolean(id),
   });
 }
@@ -36,7 +32,6 @@ export function useCreateDoctor() {
 
   return useMutation({
     mutationFn: (request: CreateDoctorRequest) => doctorService.create(request),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.lists() });
     },
@@ -49,10 +44,8 @@ export function useUpdateDoctor() {
   return useMutation({
     mutationFn: ({ id, request }: { id: string; request: UpdateDoctorRequest }) =>
       doctorService.update(id, request),
-
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.lists() });
-
       await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.detail(variables.id) });
     },
   });
@@ -63,7 +56,6 @@ export function useDeleteDoctor() {
 
   return useMutation({
     mutationFn: (id: string) => doctorService.delete(id),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.lists() });
     },
@@ -75,7 +67,6 @@ export function useActivateDoctor() {
 
   return useMutation({
     mutationFn: (id: string) => doctorService.activate(id),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.lists() });
     },
@@ -87,9 +78,15 @@ export function useDeactivateDoctor() {
 
   return useMutation({
     mutationFn: (id: string) => doctorService.deactivate(id),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: doctorQueryKeys.lists() });
     },
+  });
+}
+
+export function useSetDoctorPassword() {
+  return useMutation({
+    mutationFn: ({ id, request }: { id: string; request: AdminSetPasswordRequest }) =>
+      doctorService.setPassword(id, request),
   });
 }

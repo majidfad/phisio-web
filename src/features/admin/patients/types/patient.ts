@@ -13,6 +13,14 @@ export interface CreatePatientRequest {
   name: string;
   phoneNumber: string;
   email?: string | null;
+  password?: string;
+  confirmPassword?: string;
+  generatePassword?: boolean;
+}
+
+export interface CreatePatientResponse {
+  patient: PatientDto;
+  generatedPassword?: string | null;
 }
 
 export interface UpdatePatientRequest {

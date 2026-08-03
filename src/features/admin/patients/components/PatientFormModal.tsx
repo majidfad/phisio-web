@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Form, Input, Modal, Space, Typography } from 'antd';
 import { useEffect, useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { AdminPasswordFormFields } from '@/features/admin/password/components/AdminPasswordFormFields';
+import { EMPTY_ADMIN_PASSWORD_FIELDS } from '@/features/admin/password/schemas/admin-password-schema';
 import {
   createPatientFormSchema,
   type PatientFormSchemaValues,
@@ -43,8 +45,11 @@ export function PatientFormModal({
       name: '',
       phoneNumber: '',
       email: '',
+      ...EMPTY_ADMIN_PASSWORD_FIELDS,
     },
   });
+
+  const passwordMode = useWatch({ control, name: 'passwordMode' });
 
   useEffect(() => {
     if (!isOpen) {
@@ -55,6 +60,7 @@ export function PatientFormModal({
       name: patient?.name ?? '',
       phoneNumber: patient?.phoneNumber ?? '',
       email: patient?.email ?? '',
+      ...EMPTY_ADMIN_PASSWORD_FIELDS,
     });
   }, [isOpen, patient, reset]);
 
@@ -119,6 +125,14 @@ export function PatientFormModal({
             render={({ field }) => <Input {...field} type="email" autoComplete="email" />}
           />
         </Form.Item>
+
+        {mode === 'create' ? (
+          <AdminPasswordFormFields
+            control={control as never}
+            errors={errors}
+            passwordMode={passwordMode ?? 'generate'}
+          />
+        ) : null}
 
         <Form.Item style={{ marginBottom: 0 }}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>

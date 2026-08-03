@@ -137,6 +137,33 @@
         "deactivating": "Deactivating…"
       }
     },
+    "password": {
+      "modeLabel": "Password",
+      "modeGenerate": "Generate password",
+      "modeSet": "Set password",
+      "generateHint": "A temporary password will be generated and shown once after save.",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "setTitle": "Change password for {{name}}",
+      "submit": "Update password",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "success": "Password updated successfully.",
+      "error": "Unable to update password.",
+      "generatedTitle": "Temporary password",
+      "generatedWarning": "Copy this password now. It will not be shown again.",
+      "generatedHint": "Share this password securely with the user.",
+      "forUser": "User: {{name}}",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Unable to copy password.",
+      "validation": {
+        "passwordRequired": "Password is required.",
+        "confirmRequired": "Confirm password is required.",
+        "mismatch": "Password and confirmation do not match."
+      }
+    },
     "dashboard": {
       "title": "Admin Dashboard",
       "overview": "Overview",
@@ -182,7 +209,8 @@
       },
       "actions": {
         "edit": "Edit",
-        "delete": "Delete"
+        "delete": "Delete",
+        "changePassword": "Change password"
       },
       "form": {
         "createTitle": "Add patient",
@@ -237,7 +265,8 @@
       },
       "actions": {
         "edit": "Edit",
-        "delete": "Delete"
+        "delete": "Delete",
+        "changePassword": "Change password"
       },
       "form": {
         "createTitle": "Add doctor",

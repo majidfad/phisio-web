@@ -6,7 +6,7 @@ import { createDoctorFormSchema } from '@/features/admin/doctors/schemas/doctor-
 const schema = createDoctorFormSchema(i18n.t.bind(i18n));
 
 describe('createDoctorFormSchema', () => {
-  it('accepts valid doctor data', () => {
+  it('accepts valid doctor data with generate password', () => {
     const result = schema.safeParse({
       name: 'Dr. Ali',
       phoneNumber: '+989121234567',
@@ -14,6 +14,9 @@ describe('createDoctorFormSchema', () => {
       specialty: 'Orthopedics',
       medicalLicenseNumber: 'MD-12345',
       clinicAddress: 'Tehran, Clinic St',
+      passwordMode: 'generate',
+      password: '',
+      confirmPassword: '',
     });
 
     expect(result.success).toBe(true);
@@ -27,6 +30,9 @@ describe('createDoctorFormSchema', () => {
       specialty: 'Orthopedics',
       medicalLicenseNumber: 'MD-12345',
       clinicAddress: 'Tehran, Clinic St',
+      passwordMode: 'generate',
+      password: '',
+      confirmPassword: '',
     });
 
     expect(result.success).toBe(true);
@@ -40,6 +46,25 @@ describe('createDoctorFormSchema', () => {
       specialty: '',
       medicalLicenseNumber: '',
       clinicAddress: '',
+      passwordMode: 'generate',
+      password: '',
+      confirmPassword: '',
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it('requires password when mode is set', () => {
+    const result = schema.safeParse({
+      name: 'Dr. Ali',
+      phoneNumber: '+989121234567',
+      email: 'ali@example.com',
+      specialty: 'Orthopedics',
+      medicalLicenseNumber: 'MD-12345',
+      clinicAddress: 'Tehran, Clinic St',
+      passwordMode: 'set',
+      password: '',
+      confirmPassword: '',
     });
 
     expect(result.success).toBe(false);

@@ -1,8 +1,10 @@
-import { Button, Space, Tag } from 'antd';
+import { Button, Space, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { KeyRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
+import { denseIconProps } from '@/components/icons/app-icon';
+import { AppEmpty, AppTable, TableIconActions } from '@/components/ui';
 import type { DoctorDto } from '@/features/admin/doctors/types/doctor';
 import { formatDisplayPhone } from '@/utils/persian-format';
 
@@ -19,6 +21,7 @@ interface DoctorsTableProps {
   onDelete: (doctor: DoctorDto) => void;
   onActivate: (doctor: DoctorDto) => void;
   onDeactivate: (doctor: DoctorDto) => void;
+  onChangePassword: (doctor: DoctorDto) => void;
 }
 
 export function DoctorsTable({
@@ -32,6 +35,7 @@ export function DoctorsTable({
   onDelete,
   onActivate,
   onDeactivate,
+  onChangePassword,
 }: DoctorsTableProps) {
   const { t } = useTranslation();
 
@@ -89,7 +93,7 @@ export function DoctorsTable({
     {
       title: t('admin.doctors.columns.actions'),
       key: 'actions',
-      width: 170,
+      width: 210,
       align: 'center',
       render: (_, doctor) =>
         showInactiveView ? (
@@ -111,6 +115,15 @@ export function DoctorsTable({
             >
               {t('admin.common.actions.deactivate')}
             </Button>
+            <Tooltip title={t('admin.doctors.actions.changePassword')}>
+              <Button
+                type="text"
+                className="table-icon-actions__btn"
+                icon={<KeyRound {...denseIconProps} />}
+                aria-label={t('admin.doctors.actions.changePassword')}
+                onClick={() => onChangePassword(doctor)}
+              />
+            </Tooltip>
             <TableIconActions
               editLabel={t('admin.doctors.actions.edit')}
               deleteLabel={t('admin.doctors.actions.delete')}

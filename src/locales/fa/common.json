@@ -137,6 +137,33 @@
         "deactivating": "در حال غیرفعال‌سازی…"
       }
     },
+    "password": {
+      "modeLabel": "رمز عبور",
+      "modeGenerate": "تولید رمز عبور",
+      "modeSet": "تعیین رمز عبور",
+      "generateHint": "یک رمز موقت ساخته می‌شود و فقط یک‌بار پس از ذخیره نمایش داده می‌شود.",
+      "password": "رمز عبور",
+      "confirmPassword": "تکرار رمز عبور",
+      "setTitle": "تغییر رمز عبور {{name}}",
+      "submit": "به‌روزرسانی رمز عبور",
+      "saving": "در حال ذخیره…",
+      "cancel": "انصراف",
+      "close": "بستن",
+      "success": "رمز عبور با موفقیت به‌روزرسانی شد.",
+      "error": "به‌روزرسانی رمز عبور ناموفق بود.",
+      "generatedTitle": "رمز عبور موقت",
+      "generatedWarning": "همین حالا رمز را کپی کنید. دوباره نمایش داده نمی‌شود.",
+      "generatedHint": "این رمز را به‌صورت امن با کاربر به اشتراک بگذارید.",
+      "forUser": "کاربر: {{name}}",
+      "copy": "کپی",
+      "copied": "کپی شد",
+      "copyFailed": "کپی رمز عبور ناموفق بود.",
+      "validation": {
+        "passwordRequired": "رمز عبور الزامی است.",
+        "confirmRequired": "تکرار رمز عبور الزامی است.",
+        "mismatch": "رمز عبور و تکرار آن یکسان نیستند."
+      }
+    },
     "dashboard": {
       "title": "داشبورد مدیر",
       "overview": "نمای کلی",
@@ -182,7 +209,8 @@
       },
       "actions": {
         "edit": "ویرایش",
-        "delete": "حذف"
+        "delete": "حذف",
+        "changePassword": "تغییر رمز عبور"
       },
       "form": {
         "createTitle": "افزودن بیمار",
@@ -237,7 +265,8 @@
       },
       "actions": {
         "edit": "ویرایش",
-        "delete": "حذف"
+        "delete": "حذف",
+        "changePassword": "تغییر رمز عبور"
       },
       "form": {
         "createTitle": "افزودن پزشک",

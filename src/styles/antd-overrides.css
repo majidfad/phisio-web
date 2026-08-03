@@ -202,8 +202,9 @@
 .app-table-scroll {
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
-  overflow-y: visible;
+  /* Clip children to border-radius so header fill meets the rounded corners
+     (horizontal scroll lives on .ant-table-content below). */
+  overflow: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   border: 1px solid var(--phisio-border);
@@ -220,11 +221,15 @@
 .app-table-scroll .ant-table {
   border: none;
   border-radius: 0;
-  /* Keep overflow contained so wide columns scroll inside .app-table-scroll
-     instead of clipping against page overflow-x: clip */
   overflow: hidden;
   background: transparent;
   box-shadow: none;
+  width: 100%;
+}
+
+.app-table-scroll .ant-table-container,
+.app-table-scroll .ant-table-content {
+  width: 100%;
 }
 
 .app-table-scroll .ant-table-content,
@@ -232,8 +237,28 @@
   overflow-x: auto !important;
 }
 
+/* Fill the shell when content is narrow; grow past 100% when scroll.x forces width */
 .app-table-scroll table {
-  min-width: max-content;
+  min-width: 100% !important;
+}
+
+/* Paint header into the rounded top corners (RTL-safe logical radii) */
+.app-table-scroll .ant-table-thead > tr > th:first-child {
+  border-start-start-radius: calc(var(--phisio-radius) - 1px);
+}
+
+.app-table-scroll .ant-table-thead > tr > th:last-child {
+  border-start-end-radius: calc(var(--phisio-radius) - 1px);
+}
+
+/* Pagination sits inside the bordered scroll shell — give it breathing room */
+.app-table-scroll .ant-table-pagination.ant-pagination,
+.app-table-scroll .ant-table-pagination {
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--phisio-surface);
 }
 
 .app-table .ant-table-cell-fix-left-last::after,

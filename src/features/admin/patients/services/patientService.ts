@@ -1,6 +1,15 @@
 import { httpClient } from '@/api/http-client';
 
-import type { CreatePatientRequest, PatientDto, UpdatePatientRequest } from '../types/patient';
+import type {
+  AdminSetPasswordRequest,
+  AdminSetPasswordResponse,
+} from '../../password/types/admin-password';
+import type {
+  CreatePatientRequest,
+  CreatePatientResponse,
+  PatientDto,
+  UpdatePatientRequest,
+} from '../types/patient';
 
 const PATIENTS_BASE = '/admin/patients';
 
@@ -19,8 +28,8 @@ export const patientService = {
     return data;
   },
 
-  async create(request: CreatePatientRequest): Promise<PatientDto> {
-    const { data } = await httpClient.post<PatientDto>(PATIENTS_BASE, request);
+  async create(request: CreatePatientRequest): Promise<CreatePatientResponse> {
+    const { data } = await httpClient.post<CreatePatientResponse>(PATIENTS_BASE, request);
 
     return data;
   },
@@ -37,5 +46,17 @@ export const patientService = {
 
   async activate(id: string): Promise<void> {
     await httpClient.patch(`${PATIENTS_BASE}/${id}/activate`);
+  },
+
+  async setPassword(
+    id: string,
+    request: AdminSetPasswordRequest,
+  ): Promise<AdminSetPasswordResponse> {
+    const { data } = await httpClient.put<AdminSetPasswordResponse>(
+      `${PATIENTS_BASE}/${id}/password`,
+      request,
+    );
+
+    return data;
   },
 };

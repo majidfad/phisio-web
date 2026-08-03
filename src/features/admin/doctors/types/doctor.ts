@@ -17,6 +17,17 @@ export interface CreateDoctorRequest {
   specialty: string;
   medicalLicenseNumber: string;
   clinicAddress: string;
+  password?: string;
+  confirmPassword?: string;
+  generatePassword?: boolean;
 }
 
-export type UpdateDoctorRequest = CreateDoctorRequest;
+export interface CreateDoctorResponse {
+  doctor: DoctorDto;
+  generatedPassword?: string | null;
+}
+
+export type UpdateDoctorRequest = Omit<
+  CreateDoctorRequest,
+  'password' | 'confirmPassword' | 'generatePassword'
+>;

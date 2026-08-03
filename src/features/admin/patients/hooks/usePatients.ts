@@ -1,14 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import type { AdminSetPasswordRequest } from '@/features/admin/password/types/admin-password';
 import {
   adminListFilterToIsEnabled,
   type AdminListFilter,
 } from '@/features/admin/types/admin-list-filter';
 
 import { patientService } from '../services/patientService';
-
 import type { CreatePatientRequest, UpdatePatientRequest } from '../types/patient';
-
 import { patientQueryKeys } from './patient-query-keys';
 
 export function usePatients(filter: AdminListFilter = 'active') {
@@ -16,7 +15,6 @@ export function usePatients(filter: AdminListFilter = 'active') {
 
   return useQuery({
     queryKey: patientQueryKeys.list(isEnabled),
-
     queryFn: () => patientService.getAll(isEnabled),
   });
 }
@@ -24,9 +22,7 @@ export function usePatients(filter: AdminListFilter = 'active') {
 export function usePatient(id: string | undefined) {
   return useQuery({
     queryKey: patientQueryKeys.detail(id ?? ''),
-
     queryFn: () => patientService.getById(id!),
-
     enabled: Boolean(id),
   });
 }
@@ -36,7 +32,6 @@ export function useCreatePatient() {
 
   return useMutation({
     mutationFn: (request: CreatePatientRequest) => patientService.create(request),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: patientQueryKeys.lists() });
     },
@@ -49,10 +44,8 @@ export function useUpdatePatient() {
   return useMutation({
     mutationFn: ({ id, request }: { id: string; request: UpdatePatientRequest }) =>
       patientService.update(id, request),
-
     onSuccess: async (_data, variables) => {
       await queryClient.invalidateQueries({ queryKey: patientQueryKeys.lists() });
-
       await queryClient.invalidateQueries({ queryKey: patientQueryKeys.detail(variables.id) });
     },
   });
@@ -63,7 +56,6 @@ export function useDeletePatient() {
 
   return useMutation({
     mutationFn: (id: string) => patientService.delete(id),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: patientQueryKeys.lists() });
     },
@@ -75,9 +67,15 @@ export function useActivatePatient() {
 
   return useMutation({
     mutationFn: (id: string) => patientService.activate(id),
-
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: patientQueryKeys.lists() });
     },
+  });
+}
+
+export function useSetPatientPassword() {
+  return useMutation({
+    mutationFn: ({ id, request }: { id: string; request: AdminSetPasswordRequest }) =>
+      patientService.setPassword(id, request),
   });
 }

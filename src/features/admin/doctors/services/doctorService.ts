@@ -1,6 +1,15 @@
 import { httpClient } from '@/api/http-client';
 
-import type { CreateDoctorRequest, DoctorDto, UpdateDoctorRequest } from '../types/doctor';
+import type {
+  AdminSetPasswordRequest,
+  AdminSetPasswordResponse,
+} from '../../password/types/admin-password';
+import type {
+  CreateDoctorRequest,
+  CreateDoctorResponse,
+  DoctorDto,
+  UpdateDoctorRequest,
+} from '../types/doctor';
 
 const DOCTORS_BASE = '/admin/doctors';
 
@@ -19,8 +28,8 @@ export const doctorService = {
     return data;
   },
 
-  async create(request: CreateDoctorRequest): Promise<DoctorDto> {
-    const { data } = await httpClient.post<DoctorDto>(DOCTORS_BASE, request);
+  async create(request: CreateDoctorRequest): Promise<CreateDoctorResponse> {
+    const { data } = await httpClient.post<CreateDoctorResponse>(DOCTORS_BASE, request);
 
     return data;
   },
@@ -41,5 +50,17 @@ export const doctorService = {
 
   async deactivate(id: string): Promise<void> {
     await httpClient.patch(`${DOCTORS_BASE}/${id}/deactivate`);
+  },
+
+  async setPassword(
+    id: string,
+    request: AdminSetPasswordRequest,
+  ): Promise<AdminSetPasswordResponse> {
+    const { data } = await httpClient.put<AdminSetPasswordResponse>(
+      `${DOCTORS_BASE}/${id}/password`,
+      request,
+    );
+
+    return data;
   },
 };

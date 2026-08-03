@@ -1,7 +1,9 @@
-import { Button, Tag } from 'antd';
+import { Button, Space, Tag, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { KeyRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { denseIconProps } from '@/components/icons/app-icon';
 import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
 import type { PatientDto } from '@/features/admin/patients/types/patient';
 import {
@@ -20,6 +22,7 @@ interface PatientsTableProps {
   onEdit: (patient: PatientDto) => void;
   onDelete: (patient: PatientDto) => void;
   onActivate: (patient: PatientDto) => void;
+  onChangePassword: (patient: PatientDto) => void;
 }
 
 export function PatientsTable({
@@ -30,6 +33,7 @@ export function PatientsTable({
   onEdit,
   onDelete,
   onActivate,
+  onChangePassword,
 }: PatientsTableProps) {
   const { t } = useTranslation();
 
@@ -73,7 +77,7 @@ export function PatientsTable({
     {
       title: t('admin.patients.columns.actions'),
       key: 'actions',
-      width: 110,
+      width: 150,
       align: 'center',
       render: (_, patient) =>
         showInactiveView ? (
@@ -85,12 +89,23 @@ export function PatientsTable({
             {t('admin.common.actions.activate')}
           </Button>
         ) : (
-          <TableIconActions
-            editLabel={t('admin.patients.actions.edit')}
-            deleteLabel={t('admin.patients.actions.delete')}
-            onEdit={() => onEdit(patient)}
-            onDelete={() => onDelete(patient)}
-          />
+          <Space size={0}>
+            <Tooltip title={t('admin.patients.actions.changePassword')}>
+              <Button
+                type="text"
+                className="table-icon-actions__btn"
+                icon={<KeyRound {...denseIconProps} />}
+                aria-label={t('admin.patients.actions.changePassword')}
+                onClick={() => onChangePassword(patient)}
+              />
+            </Tooltip>
+            <TableIconActions
+              editLabel={t('admin.patients.actions.edit')}
+              deleteLabel={t('admin.patients.actions.delete')}
+              onEdit={() => onEdit(patient)}
+              onDelete={() => onDelete(patient)}
+            />
+          </Space>
         ),
     },
   ];

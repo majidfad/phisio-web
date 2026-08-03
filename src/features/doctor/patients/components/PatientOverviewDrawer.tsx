@@ -1,5 +1,5 @@
-import { ConfirmActionModal, LoadingState, AppResult, PageSection } from '@/components/ui';
-import { Button, Card, Drawer, Tag } from 'antd';
+import { ConfirmActionModal, LoadingState, AppResult, PageSection, StatusCapsule } from '@/components/ui';
+import { Button, Card, Drawer } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -123,31 +123,41 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
             <Card className="patient-media-card" size="small">
               <h3 className="patient-media-card__title">{t('doctor.patients.overview.stats')}</h3>
               <div className="exercise-row__chips doctor-overview__chips">
-                <Tag>
-                  {t('doctor.patients.overview.assigned', {
+                <StatusCapsule
+                  status="info"
+                  showDot={false}
+                  label={t('doctor.patients.overview.assigned', {
                     count: overview.summary.assignedExerciseCount,
                   })}
-                </Tag>
-                <Tag color="success">
-                  {t('doctor.patients.overview.completedDays', {
+                />
+                <StatusCapsule
+                  status="active"
+                  showDot={false}
+                  label={t('doctor.patients.overview.completedDays', {
                     count: overview.summary.completedDaysCount,
                   })}
-                </Tag>
-                <Tag color="warning">
-                  {t('doctor.patients.overview.missedDays', {
+                />
+                <StatusCapsule
+                  status="pending"
+                  showDot={false}
+                  label={t('doctor.patients.overview.missedDays', {
                     count: overview.summary.missedDaysCount,
                   })}
-                </Tag>
-                <Tag color="blue">
-                  {t('doctor.patients.overview.adherence', {
+                />
+                <StatusCapsule
+                  status="completed"
+                  showDot={false}
+                  label={t('doctor.patients.overview.adherence', {
                     percent: overview.summary.adherencePercentage,
                   })}
-                </Tag>
-                <Tag>
-                  {t('doctor.patients.overview.todayCount', {
+                />
+                <StatusCapsule
+                  status="info"
+                  showDot={false}
+                  label={t('doctor.patients.overview.todayCount', {
                     count: overview.activeExerciseCountToday,
                   })}
-                </Tag>
+                />
               </div>
             </Card>
 
@@ -192,7 +202,9 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
                       </span>
                       <div className="exercise-row__chips doctor-overview__chips">
                         {program.exercises.map((exercise) => (
-                          <Tag key={exercise.exerciseId}>{exercise.exerciseName}</Tag>
+                          <span key={exercise.exerciseId} className="exercise-meta-chip">
+                            {exercise.exerciseName}
+                          </span>
                         ))}
                       </div>
                       <div className="patient-media-card__actions">

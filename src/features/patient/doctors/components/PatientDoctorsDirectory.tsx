@@ -1,9 +1,9 @@
-import { Button, Card, Input, Select, Tag, Typography } from 'antd';
+import { Button, Card, Input, Select, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState, AppEmpty } from '@/components/ui';
+import { LoadingState, AppEmpty, StatusCapsule } from '@/components/ui';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -112,13 +112,19 @@ function RelationshipTag({ status }: { status: number | null }) {
   const { t } = useTranslation();
 
   if (status === DoctorPatientStatusCode.Approved) {
-    return <Tag color="success">{t('patient.doctors.status.approved')}</Tag>;
+    return (
+      <StatusCapsule status="active" label={t('patient.doctors.status.approved')} showDot={false} />
+    );
   }
   if (status === DoctorPatientStatusCode.Pending) {
-    return <Tag color="warning">{t('patient.doctors.status.pending')}</Tag>;
+    return (
+      <StatusCapsule status="pending" label={t('patient.doctors.status.pending')} showDot={false} />
+    );
   }
   if (status === DoctorPatientStatusCode.Rejected) {
-    return <Tag color="error">{t('patient.doctors.status.rejected')}</Tag>;
+    return (
+      <StatusCapsule status="cancelled" label={t('patient.doctors.status.rejected')} showDot={false} />
+    );
   }
-  return <Tag>{t('patient.doctors.status.none')}</Tag>;
+  return <StatusCapsule status="info" label={t('patient.doctors.status.none')} showDot={false} />;
 }

@@ -159,7 +159,7 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
                       <Bar
                         dataKey="adherence"
                         name={t('doctor.patients.stats.charts.adherenceSeries')}
-                        fill="var(--phisio-primary, #1677ff)"
+                        fill="var(--phisio-primary)"
                         radius={[4, 4, 0, 0]}
                       />
                     </BarChart>
@@ -185,7 +185,7 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
                         dataKey="completed"
                         stackId="session"
                         name={t('doctor.patients.stats.charts.completedSeries')}
-                        fill="var(--phisio-success, #52c41a)"
+                        fill="var(--phisio-success)"
                       />
                       <Bar
                         dataKey="remaining"
@@ -216,7 +216,7 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
                         type="monotone"
                         dataKey="improvement"
                         name={t('doctor.patients.stats.charts.improvementSeries')}
-                        stroke="var(--phisio-primary, #1677ff)"
+                        stroke="var(--phisio-primary)"
                         strokeWidth={2}
                         dot={{ r: 3 }}
                         connectNulls
@@ -225,7 +225,7 @@ export function PatientExerciseStatsPanel({ patientId, variant }: PatientExercis
                         type="monotone"
                         dataKey="hardness"
                         name={t('doctor.patients.stats.charts.hardnessSeries')}
-                        stroke="var(--phisio-warning, #fa8c16)"
+                        stroke="var(--phisio-warning)"
                         strokeWidth={2}
                         dot={{ r: 3 }}
                         connectNulls

@@ -39,6 +39,18 @@ export function AuthLayout() {
           <div className="auth-brand-icon">
             <ZivanLogo size={56} />
           </div>
+          <Text
+            style={{
+              display: 'block',
+              fontSize: '1.5rem',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              color: 'var(--phisio-text)',
+              marginBottom: 4,
+            }}
+          >
+            {t('app.name')}
+          </Text>
           <Text style={{ fontSize: 14, color: 'var(--phisio-text-secondary)' }}>
             {t('app.tagline')}
           </Text>

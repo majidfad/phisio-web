@@ -1,8 +1,8 @@
-import { Button, Modal, Tag } from 'antd';
+import { Button, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions, WarmEmptyState } from '@/components/ui';
+import { AppTable, StatusCapsule, TableIconActions, WarmEmptyState } from '@/components/ui';
 import type { ArticleDto } from '@/features/admin/articles/types/article';
 import { formatPersianDate } from '@/utils/persian-format';
 
@@ -53,7 +53,9 @@ export function ArticlesTable({
             title: t('admin.articles.columns.status'),
             key: 'status',
             width: 120,
-            render: () => <Tag color="warning">{t('admin.common.status.inactive')}</Tag>,
+            render: () => (
+              <StatusCapsule status="cancelled" label={t('admin.common.status.inactive')} showDot={false} />
+            ),
           } as ColumnsType<ArticleDto>[number],
         ]
       : []),

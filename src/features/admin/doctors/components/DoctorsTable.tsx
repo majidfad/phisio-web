@@ -1,10 +1,10 @@
-import { Button, Space, Tag, Tooltip } from 'antd';
+import { Button, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { KeyRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { denseIconProps } from '@/components/icons/app-icon';
-import { AppEmpty, AppTable, TableIconActions } from '@/components/ui';
+import { AppEmpty, AppTable, StatusCapsule, TableIconActions } from '@/components/ui';
 import type { DoctorDto } from '@/features/admin/doctors/types/doctor';
 import { formatDisplayPhone } from '@/utils/persian-format';
 
@@ -86,7 +86,9 @@ export function DoctorsTable({
             title: t('admin.exercises.columns.status'),
             key: 'status',
             width: 130,
-            render: () => <Tag color="warning">{t('admin.common.status.pending')}</Tag>,
+            render: () => (
+              <StatusCapsule status="pending" label={t('admin.common.status.pending')} showDot={false} />
+            ),
           } as ColumnsType<DoctorDto>[number],
         ]
       : []),

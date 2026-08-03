@@ -1,5 +1,6 @@
 import { Button, Modal } from 'antd';
-import { Award, CheckCircle2, Flame } from 'lucide-react';
+import { Award, CheckCircle2, Clock3, Flame } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 import { convertToPersianDigits } from '@/utils/persian-format';
 
@@ -8,6 +9,7 @@ interface WorkoutCompletionModalProps {
   completedCount: number;
   totalCount: number;
   streakDays?: number;
+  durationMinutes?: number;
   onClose: () => void;
   onViewProgress: () => void;
 }
@@ -17,9 +19,13 @@ export function WorkoutCompletionModal({
   completedCount,
   totalCount,
   streakDays = 3,
+  durationMinutes,
   onClose,
   onViewProgress,
 }: WorkoutCompletionModalProps) {
+  const minutes =
+    durationMinutes ?? Math.max(completedCount * 4, completedCount > 0 ? 5 : 0);
+
   return (
     <Modal
       open={open}
@@ -86,65 +92,28 @@ export function WorkoutCompletionModal({
           style={{
             width: '100%',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '10px',
+            gridTemplateColumns: '1fr 1fr 1fr',
+            gap: '8px',
           }}
         >
-          <div
-            style={{
-              padding: '12px',
-              borderRadius: 'var(--phisio-radius-md)',
-              backgroundColor: 'var(--phisio-bg-elevated)',
-              border: '1px solid var(--phisio-border)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: 'var(--phisio-primary)',
-              }}
-            >
-              <Award size={16} />
-              <span style={{ fontSize: '11px', fontWeight: 600 }}>تکمیل شده</span>
-            </div>
-            <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--phisio-text)' }}>
-              {convertToPersianDigits(completedCount)} از {convertToPersianDigits(totalCount)}
-            </span>
-          </div>
-
-          <div
-            style={{
-              padding: '12px',
-              borderRadius: 'var(--phisio-radius-md)',
-              backgroundColor: 'var(--phisio-bg-elevated)',
-              border: '1px solid var(--phisio-border)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: 'var(--phisio-warning)',
-              }}
-            >
-              <Flame size={16} />
-              <span style={{ fontSize: '11px', fontWeight: 600 }}>زنجیره تمرین</span>
-            </div>
-            <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--phisio-text)' }}>
-              {convertToPersianDigits(streakDays)} روز
-            </span>
-          </div>
+          <StatMini
+            icon={<Clock3 size={15} />}
+            label="مدت"
+            value={`${convertToPersianDigits(minutes)} دقیقه`}
+            accent="var(--phisio-primary)"
+          />
+          <StatMini
+            icon={<Award size={15} />}
+            label="تمرین"
+            value={`${convertToPersianDigits(completedCount)} از ${convertToPersianDigits(totalCount)}`}
+            accent="var(--phisio-teal)"
+          />
+          <StatMini
+            icon={<Flame size={15} />}
+            label="زنجیره"
+            value={`${convertToPersianDigits(streakDays)} روز`}
+            accent="var(--phisio-warning)"
+          />
         </div>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -157,26 +126,61 @@ export function WorkoutCompletionModal({
               borderRadius: 'var(--phisio-radius-pill)',
               fontWeight: 600,
             }}
-            onClick={onClose}
+            onClick={onViewProgress}
           >
-            بازگشت به داشبورد
+            مشاهده جزئیات
           </Button>
           <Button
             size="large"
             block
             style={{
               height: '40px',
-              borderRadius: 'var(--phisio-radius-md)',
+              borderRadius: 'var(--phisio-radius)',
               fontWeight: 600,
               borderColor: 'var(--phisio-border)',
               color: 'var(--phisio-text)',
             }}
-            onClick={onViewProgress}
+            onClick={onClose}
           >
-            مشاهده روند پیشرفت
+            بستن
           </Button>
         </div>
       </div>
     </Modal>
+  );
+}
+
+function StatMini({
+  icon,
+  label,
+  value,
+  accent,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  accent: string;
+}) {
+  return (
+    <div
+      style={{
+        padding: '10px 6px',
+        borderRadius: 'var(--phisio-radius-md)',
+        backgroundColor: 'var(--phisio-bg-elevated)',
+        border: '1px solid var(--phisio-border)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '4px',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: accent }}>
+        {icon}
+        <span style={{ fontSize: 10, fontWeight: 600 }}>{label}</span>
+      </div>
+      <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--phisio-text)' }}>
+        {value}
+      </span>
+    </div>
   );
 }

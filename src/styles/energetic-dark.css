@@ -36,9 +36,9 @@
   gap: var(--phisio-space-2);
   margin-bottom: var(--phisio-space-3);
   padding: 5px 12px;
-  border-radius: var(--phisio-radius-pill);
+  border-radius: var(--phisio-radius-sm);
   background: var(--phisio-primary-soft);
-  border: 1px solid var(--phisio-border-glow);
+  border: 1px solid var(--phisio-border);
   color: var(--phisio-primary);
   font-size: var(--phisio-font-meta);
   font-weight: 700;
@@ -72,7 +72,7 @@
   height: 88px;
   border-radius: var(--phisio-radius-xl);
   background: var(--phisio-surface);
-  border: 1px solid var(--phisio-border-glow);
+  border: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-card);
 }
 
@@ -94,8 +94,8 @@
 
 .energy-stat-card.ant-card:hover {
   transform: translateY(-2px);
-  border-color: var(--phisio-border-glow);
-  box-shadow: var(--phisio-shadow-card);
+  border-color: var(--phisio-border);
+  box-shadow: var(--phisio-shadow-md);
 }
 
 .energy-stat-card--accent.ant-card {
@@ -108,14 +108,14 @@
 
 .energy-focus-card.ant-card {
   background: var(--phisio-gradient-focus);
-  border: 1px solid rgba(34, 197, 94, 0.35);
+  border: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-card);
   cursor: pointer;
 }
 
 .energy-progress-card.ant-card {
   background: var(--phisio-surface);
-  border: 1px solid var(--phisio-border-glow);
+  border: 1px solid var(--phisio-border);
   box-shadow: var(--phisio-shadow-card);
 }
 
@@ -142,7 +142,7 @@
   height: 72px;
   border-radius: var(--phisio-radius-xl);
   background: var(--phisio-primary-soft);
-  border: 1px solid var(--phisio-border-glow);
+  border: 1px solid var(--phisio-border);
 }
 
 .energy-empty__lucide,
@@ -276,13 +276,14 @@
 
 .dock-nav__item {
   flex: 1;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
   min-height: 48px;
-  padding: 6px 2px;
+  padding: 8px 2px 6px;
   border: none;
   border-radius: var(--phisio-radius-sm);
   background: transparent;
@@ -298,15 +299,25 @@
 
 .dock-nav__item:hover {
   color: var(--phisio-text);
-  background: var(--phisio-bg-elevated);
+  background: transparent;
 }
 
 .dock-nav__item--active {
   color: var(--phisio-primary) !important;
-  background: var(--phisio-primary-soft) !important;
+  background: transparent !important;
   box-shadow: none !important;
   transform: none;
   font-weight: 700;
+}
+
+.dock-nav__item--active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: 22%;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--phisio-primary);
 }
 
 .dock-nav__icon {
@@ -386,7 +397,7 @@
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
   background: var(--phisio-panel-bg);
-  backdrop-filter: blur(16px);
+  backdrop-filter: none;
   box-shadow: var(--phisio-shadow-card);
 }
 

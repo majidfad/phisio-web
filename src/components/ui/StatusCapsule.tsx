@@ -27,21 +27,21 @@ const STATUS_STYLES: Record<
     dot: 'var(--phisio-primary)',
   },
   pending: {
-    bg: 'rgba(245, 158, 11, 0.12)',
+    bg: 'color-mix(in srgb, var(--phisio-warning) 14%, transparent)',
     text: 'var(--phisio-warning)',
-    border: 'rgba(245, 158, 11, 0.25)',
+    border: 'color-mix(in srgb, var(--phisio-warning) 28%, transparent)',
     dot: 'var(--phisio-warning)',
   },
   review: {
-    bg: 'rgba(245, 158, 11, 0.12)',
+    bg: 'color-mix(in srgb, var(--phisio-warning) 14%, transparent)',
     text: 'var(--phisio-warning)',
-    border: 'rgba(245, 158, 11, 0.25)',
+    border: 'color-mix(in srgb, var(--phisio-warning) 28%, transparent)',
     dot: 'var(--phisio-warning)',
   },
   cancelled: {
-    bg: 'rgba(239, 68, 68, 0.12)',
+    bg: 'color-mix(in srgb, var(--phisio-danger) 14%, transparent)',
     text: 'var(--phisio-danger)',
-    border: 'rgba(239, 68, 68, 0.25)',
+    border: 'color-mix(in srgb, var(--phisio-danger) 28%, transparent)',
     dot: 'var(--phisio-danger)',
   },
   info: {

@@ -1,12 +1,12 @@
 import { CirclePlay } from 'lucide-react';
-import { Button, Modal, Space, Tag } from 'antd';
+import { Button, Modal, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { denseIconProps } from '@/components/icons/app-icon';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
-import { AppTable, WarmEmptyState, TableIconActions } from '@/components/ui';
+import { AppTable, StatusCapsule, WarmEmptyState, TableIconActions } from '@/components/ui';
 import { getCategoryDisplayName } from '@/features/admin/exercise-categories/utils/get-category-display-name';
 import type { ExerciseDto } from '@/features/admin/exercises/types/exercise';
 import { formatExerciseDate } from '@/features/admin/exercises/utils/format-exercise-date';
@@ -49,9 +49,9 @@ export function ExercisesTable({
         exercise.categories?.length ? (
           <Space size={[4, 4]} wrap>
             {exercise.categories.map((category) => (
-              <Tag key={category.exerciseCategoryId}>
+              <span key={category.exerciseCategoryId} className="exercise-meta-chip">
                 {getCategoryDisplayName(category, i18n.language)}
-              </Tag>
+              </span>
             ))}
           </Space>
         ) : (
@@ -91,9 +91,9 @@ export function ExercisesTable({
       width: 110,
       render: () =>
         showInactiveView ? (
-          <Tag>{t('admin.common.status.inactive')}</Tag>
+          <StatusCapsule status="cancelled" label={t('admin.common.status.inactive')} showDot={false} />
         ) : (
-          <Tag color="success">{t('admin.exercises.status.active')}</Tag>
+          <StatusCapsule status="active" label={t('admin.exercises.status.active')} showDot={false} />
         ),
     },
     {

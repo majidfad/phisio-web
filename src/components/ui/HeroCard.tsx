@@ -34,7 +34,7 @@ export function HeroCard({
 
   return (
     <section
-      className="energy-hero"
+      className="hero-card"
       style={{
         position: 'relative',
         overflow: 'hidden',
@@ -47,7 +47,7 @@ export function HeroCard({
       aria-label={title}
     >
       <EnergyWaveBg
-        className="energy-hero__wave"
+        className="hero-card__wave"
         idSuffix={illustration}
         style={{
           position: 'absolute',

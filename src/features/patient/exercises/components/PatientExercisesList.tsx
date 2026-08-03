@@ -1,5 +1,5 @@
 import { MoreHorizontal, Play } from 'lucide-react';
-import { Button, Dropdown, Space, Typography } from 'antd';
+import { Button, Dropdown, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
-import { WorkoutCompletionModal } from '@/components/ui';
+import { HeroCard, WorkoutCompletionModal } from '@/components/ui';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import { DailyFeedbackModal } from '@/features/patient/feedback/components/DailyFeedbackModal';
 import { PatientExerciseListItem } from '@/features/patient/exercises/components/PatientExerciseListItem';
@@ -26,7 +26,6 @@ import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { formatPersianNumber } from '@/utils/persian-format';
 
-const { Text } = Typography;
 
 interface PatientExercisesListProps {
   doctorGroups: PatientDoctorExerciseGroupDto[];
@@ -182,7 +181,7 @@ export function PatientExercisesList({
           </Dropdown>
         </div>
 
-        <Space direction="vertical" size={24} style={{ width: '100%' }}>
+        <Space direction="vertical" size={16} style={{ width: '100%' }}>
           {doctorGroups.map((group) => {
             const totalCount = group.exercises.length;
             const doneCount = group.exercises.filter((exercise) => exercise.completedToday).length;
@@ -192,32 +191,22 @@ export function PatientExercisesList({
 
             return (
               <section key={group.doctorId} className="workout-doctor-group">
-                <div className="workout-hero">
-                  <div className="workout-hero__progress" aria-live="polite">
-                    <Text className="workout-hero__progress-text">
-                      {t('patient.exercises.progressSummary', {
-                        done: formatCount(doneCount),
-                        total: formatCount(totalCount),
-                      })}
-                    </Text>
-                    <div
-                      className="workout-hero__bar"
-                      role="progressbar"
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-valuenow={progressPercent}
-                      aria-label={t('patient.exercises.progressSummary', {
-                        done: formatCount(doneCount),
-                        total: formatCount(totalCount),
-                      })}
-                    >
-                      <span
-                        className="workout-hero__bar-fill"
-                        style={{ width: `${progressPercent}%` }}
-                      />
-                    </div>
-                  </div>
-
+                <HeroCard
+                  illustration="recovery"
+                  badge={t('patient.exercises.fromDoctor', { doctorName: group.doctorName })}
+                  title={t('patient.exercises.progressSummary', {
+                    done: formatCount(doneCount),
+                    total: formatCount(totalCount),
+                  })}
+                  description={
+                    incompleteCount > 0
+                      ? t('patient.exercises.session.startForDoctor', {
+                          count: incompleteCount,
+                        })
+                      : t('patient.exercises.session.doctorDone')
+                  }
+                  progressPercent={progressPercent}
+                >
                   {incompleteCount > 0 ? (
                     <Button
                       type="primary"
@@ -231,16 +220,8 @@ export function PatientExercisesList({
                         count: incompleteCount,
                       })}
                     </Button>
-                  ) : (
-                    <Text type="secondary" className="workout-hero__done">
-                      {t('patient.exercises.session.doctorDone')}
-                    </Text>
-                  )}
-
-                  <Text type="secondary" className="workout-hero__doctor">
-                    {t('patient.exercises.fromDoctor', { doctorName: group.doctorName })}
-                  </Text>
-                </div>
+                  ) : null}
+                </HeroCard>
 
                 <div className="exercise-list" role="list">
                   {group.exercises.map((exercise) => (

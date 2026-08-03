@@ -1,19 +1,25 @@
 import {
-  Activity,
   Book,
-  BookOpen,
   CheckCircle2,
   ChevronLeft,
+  CircleDashed,
   Play,
   Stethoscope,
 } from 'lucide-react';
-import { Button } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
-import { ExerciseProgressRing, LoadingState, PageContainer, WarmEmptyState } from '@/components/ui';
+import {
+  HeroCard,
+  LoadingState,
+  PageContainer,
+  StatCard,
+  WarmEmptyState,
+} from '@/components/ui';
 import { StatusCapsule } from '@/components/ui/StatusCapsule';
+import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useActiveDoctor } from '@/features/patient/doctors/hooks/useActiveDoctor';
 import { usePatientTodayExercises } from '@/features/patient/exercises/hooks/usePatientExercises';
@@ -55,7 +61,6 @@ export function PatientDashboard() {
           display: 'flex',
           flexDirection: 'column',
           gap: '16px',
-          paddingBottom: '88px',
         }}
         aria-label={t('patient.dashboard.todayOverview')}
       >
@@ -123,7 +128,7 @@ export function PatientDashboard() {
                     color: 'var(--phisio-text-secondary)',
                   }}
                 >
-                  پزشک معالج
+                  {t('patient.dashboard.treatingDoctor', { defaultValue: 'پزشک معالج' })}
                 </span>
                 <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--phisio-text)' }}>
                   {activeDoctor.name}
@@ -171,13 +176,6 @@ export function PatientDashboard() {
                 >
                   {t('patient.dashboard.goToLibrary')}
                 </Button>
-                <Button
-                  size="large"
-                  icon={<BookOpen {...appIconProps} />}
-                  onClick={() => void navigate(routes.patient.articles)}
-                >
-                  {t('patient.dashboard.goToArticles')}
-                </Button>
               </div>
             }
           />
@@ -192,65 +190,28 @@ export function PatientDashboard() {
 
         {!isLoading && !isDoctorsLoading && hasExercises ? (
           <>
-            <div
-              style={{
-                borderRadius: 'var(--phisio-radius-lg)',
-                padding: '20px 16px',
-                backgroundColor: 'var(--phisio-surface)',
-                border: '1px solid var(--phisio-border)',
-                boxShadow: 'var(--phisio-shadow-sm)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                gap: '12px',
-              }}
+            <HeroCard
+              illustration="recovery"
+              badge={t('patient.dashboard.todayOverview')}
+              title={t('patient.exercises.progressSummary', {
+                done: formatPersianNumber(completed),
+                total: formatPersianNumber(total),
+              })}
+              description={
+                allDone
+                  ? t('patient.dashboard.allDone')
+                  : t('patient.dashboard.remainingExercises', {
+                      defaultValue: `${formatPersianNumber(remaining)} تمرین باقی مانده`,
+                      count: formatPersianNumber(remaining),
+                    })
+              }
+              progressPercent={percent}
             >
-              <ExerciseProgressRing
-                percent={percent}
-                size={112}
-                strokeWidth={9}
-                label={`${formatPersianNumber(percent)}٪`}
-                sublabel="پیشرفت امروز"
-              />
-
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '2px',
-                }}
-              >
-                <span
-                  style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--phisio-text)' }}
-                >
-                  {`انجام‌شده امروز: ${formatPersianNumber(completed)} از ${formatPersianNumber(total)}`}
-                </span>
-                <span
-                  style={{
-                    fontSize: 'var(--phisio-font-meta)',
-                    fontWeight: 500,
-                    color: 'var(--phisio-text-secondary)',
-                  }}
-                >
-                  {allDone
-                    ? 'تمام تمرین‌های امروز تکمیل شد'
-                    : `${formatPersianNumber(remaining)} تمرین باقی مانده`}
-                </span>
-              </div>
-
               {allDone ? (
                 <Button
                   size="large"
                   type="primary"
-                  style={{
-                    width: '100%',
-                    maxWidth: '300px',
-                    height: '44px',
-                    borderRadius: 'var(--phisio-radius-pill)',
-                    fontWeight: 600,
-                  }}
+                  block
                   onClick={() => void navigate(routes.patient.progress)}
                 >
                   {t('patient.dashboard.viewProgress')}
@@ -259,20 +220,35 @@ export function PatientDashboard() {
                 <Button
                   type="primary"
                   size="large"
+                  block
                   icon={<Play size={16} fill="currentColor" />}
-                  style={{
-                    width: '100%',
-                    maxWidth: '300px',
-                    height: '44px',
-                    borderRadius: 'var(--phisio-radius-pill)',
-                    fontWeight: 600,
-                  }}
                   onClick={() => void navigate(routes.patient.exercises)}
                 >
-                  {completed > 0 ? 'ادامه جلسه امروز' : 'شروع جلسه امروز'}
+                  {completed > 0
+                    ? t('patient.dashboard.continueSession', { defaultValue: 'ادامه جلسه امروز' })
+                    : t('patient.dashboard.startSession', { defaultValue: 'شروع جلسه امروز' })}
                 </Button>
               )}
-            </div>
+            </HeroCard>
+
+            <Row gutter={[10, 10]}>
+              <Col xs={12}>
+                <StatCard
+                  label={t('patient.dashboard.completedStat', { defaultValue: 'تکمیل‌شده' })}
+                  value={formatPersianNumber(completed)}
+                  icon={<CheckCircle2 size={18} />}
+                  accent="mint"
+                />
+              </Col>
+              <Col xs={12}>
+                <StatCard
+                  label={t('patient.dashboard.remainingStat', { defaultValue: 'باقی‌مانده' })}
+                  value={formatPersianNumber(remaining)}
+                  icon={<CircleDashed size={18} />}
+                  accent="blue"
+                />
+              </Col>
+            </Row>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <h3
@@ -283,114 +259,79 @@ export function PatientDashboard() {
                   margin: 0,
                 }}
               >
-                تمرین‌های امروز شما
+                {t('patient.dashboard.todayExercises', { defaultValue: 'تمرین‌های امروز شما' })}
               </h3>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {exercises.map((item) => (
-                  <div
-                    key={item.userExerciseId}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      borderRadius: 'var(--phisio-radius-md)',
-                      backgroundColor: 'var(--phisio-surface)',
-                      border: '1px solid var(--phisio-border)',
-                      direction: 'rtl',
-                    }}
-                  >
+              <div className="exercise-list" role="list">
+                {exercises.map((item) => {
+                  const preview = getVideoPreviewSource(item.videoUrl, item.mediaType);
+                  const youtubeId =
+                    preview?.kind === 'iframe' && preview.src.includes('/embed/')
+                      ? (preview.src.split('/embed/')[1]?.split(/[?/]/)[0] ?? null)
+                      : null;
+                  const thumbSrc =
+                    preview?.kind === 'image'
+                      ? preview.src
+                      : youtubeId
+                        ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+                        : null;
+                  const metaParts: string[] = [];
+                  if (item.sets) metaParts.push(`${formatPersianNumber(item.sets)} ست`);
+                  if (item.reps) {
+                    metaParts.push(`${convertToPersianDigits(item.reps)} تکرار`);
+                  }
+
+                  return (
                     <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        flex: 1,
-                        minWidth: 0,
-                      }}
+                      key={item.userExerciseId}
+                      role="listitem"
+                      className={`exercise-row${item.completedToday ? ' exercise-row--completed' : ''}`}
                     >
-                      <div
-                        style={{
-                          width: '42px',
-                          height: '42px',
-                          minWidth: '42px',
-                          borderRadius: 'var(--phisio-radius-sm)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          backgroundColor: item.completedToday
-                            ? 'var(--phisio-accent-soft)'
-                            : 'var(--phisio-primary-soft)',
-                          color: item.completedToday
-                            ? 'var(--phisio-teal)'
-                            : 'var(--phisio-primary)',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {item.completedToday ? <CheckCircle2 size={22} /> : <Activity size={22} />}
+                      <div className="exercise-row__thumb" aria-hidden={!thumbSrc}>
+                        {thumbSrc ? <img src={thumbSrc} alt="" /> : null}
+                        {item.completedToday ? (
+                          <span className="exercise-row__thumb-overlay">
+                            <span className="exercise-row__thumb-done">
+                              <CheckCircle2 size={18} strokeWidth={2.5} />
+                            </span>
+                          </span>
+                        ) : null}
                       </div>
 
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '2px',
-                          flex: 1,
-                          minWidth: 0,
-                        }}
-                      >
+                      <div className="exercise-row__body">
                         <bdi
-                          style={{
-                            fontSize: '14px',
-                            fontWeight: 700,
-                            color: 'var(--phisio-text)',
-                            lineHeight: 1.3,
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            unicodeBidi: 'plaintext',
-                            display: 'block',
-                          }}
+                          className={`exercise-row__name${item.completedToday ? ' exercise-row__name--done' : ''}`}
                         >
                           {item.title}
                         </bdi>
-                        <span
-                          style={{
-                            fontSize: '12px',
-                            fontWeight: 500,
-                            color: 'var(--phisio-text-secondary)',
-                          }}
-                        >
-                          {item.sets ? `${formatPersianNumber(item.sets)} ست` : ''}
-                          {item.reps ? ` × ${convertToPersianDigits(item.reps)} تکرار` : ''}
-                        </span>
+                        {metaParts.length > 0 ? (
+                          <span className="exercise-row__meta">{metaParts.join(' · ')}</span>
+                        ) : null}
+                      </div>
+
+                      <div className="exercise-row__action">
+                        {item.completedToday ? (
+                          <StatusCapsule
+                            status="completed"
+                            label={t('patient.exercises.completedToday')}
+                            showDot={false}
+                          />
+                        ) : (
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            className="exercise-row__play"
+                            icon={<Play size={16} fill="currentColor" />}
+                            onClick={() => void navigate(routes.patient.exercises)}
+                            aria-label={t('patient.dashboard.startExercise', {
+                              defaultValue: 'شروع',
+                            })}
+                          />
+                        )}
                       </div>
                     </div>
-
-                    <div style={{ flexShrink: 0, marginInlineStart: '8px' }}>
-                      {item.completedToday ? (
-                        <StatusCapsule status="completed" label="تکمیل شد" showDot={false} />
-                      ) : (
-                        <Button
-                          type="primary"
-                          size="middle"
-                          icon={<Play size={14} fill="currentColor" />}
-                          style={{
-                            borderRadius: 'var(--phisio-radius-pill)',
-                            height: '34px',
-                            padding: '0 14px',
-                            fontWeight: 600,
-                            fontSize: '13px',
-                          }}
-                          onClick={() => void navigate(routes.patient.exercises)}
-                        >
-                          شروع
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </>

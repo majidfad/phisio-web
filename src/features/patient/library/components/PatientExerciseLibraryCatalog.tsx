@@ -1,6 +1,6 @@
-import { AppEmpty, StatusCapsule } from '@/components/ui';
-import { CirclePlay, Dumbbell, Filter } from 'lucide-react';
-import { Card, Col, Row } from 'antd';
+import { AppEmpty } from '@/components/ui';
+import { Dumbbell, Filter, Play } from 'lucide-react';
+import { Button } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -70,27 +70,30 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
           <Filter size={13} />
           <span>فیلتر</span>
         </div>
-        <FilterChip
-          label="همه"
-          active={activeCategoryId === 'all'}
+        <button
+          type="button"
+          className={`kit-filter-chip${activeCategoryId === 'all' ? ' kit-filter-chip--active' : ''}`}
           onClick={() => setActiveCategoryId('all')}
-        />
+        >
+          همه
+        </button>
         {categories.map((cat) => (
-          <FilterChip
+          <button
             key={cat.id}
-            label={cat.title}
-            active={activeCategoryId === cat.id}
+            type="button"
+            className={`kit-filter-chip${activeCategoryId === cat.id ? ' kit-filter-chip--active' : ''}`}
             onClick={() => setActiveCategoryId(cat.id)}
-          />
+          >
+            <bdi style={{ unicodeBidi: 'plaintext' }}>{cat.title}</bdi>
+          </button>
         ))}
       </div>
 
       {filtered.length === 0 ? (
         <AppEmpty description={t('patient.library.empty')} />
       ) : (
-        <Row gutter={[12, 12]}>
+        <div className="exercise-list" role="list">
           {filtered.map((exercise) => {
-            const hasDescription = Boolean(exercise.description?.trim());
             const preview = getVideoPreviewSource(exercise.videoUrl, exercise.mediaType);
             const hasVideo = Boolean(preview);
             const youtubeId =
@@ -105,140 +108,64 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
                   : null;
             const categoryLabel =
               exercise.categories?.[0]?.nameFa || exercise.categories?.[0]?.nameEn;
+            const difficulty = t(`exerciseMeta.difficulty.${exercise.difficulty}`, {
+              defaultValue: String(exercise.difficulty),
+            });
+            const meta = [categoryLabel, difficulty].filter(Boolean).join(' · ');
 
             return (
-              <Col key={exercise.exerciseId} xs={24} sm={12} lg={8}>
-                <Card
-                  style={{
-                    borderRadius: 'var(--phisio-radius-md)',
-                    overflow: 'hidden',
-                    backgroundColor: 'var(--phisio-surface)',
-                    border: '1px solid var(--phisio-border)',
-                    boxShadow: 'var(--phisio-shadow-sm)',
-                  }}
-                  styles={{ body: { padding: '12px' } }}
+              <div key={exercise.exerciseId} role="listitem" className="exercise-row">
+                <button
+                  type="button"
+                  className="exercise-row__thumb"
+                  disabled={!hasVideo}
+                  onClick={() => hasVideo && setSelectedExercise(exercise)}
+                  aria-label={
+                    hasVideo
+                      ? t('patient.library.video.play', { title: exercise.title })
+                      : exercise.title
+                  }
                 >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      height: '140px',
-                      borderRadius: 'var(--phisio-radius-sm)',
-                      overflow: 'hidden',
-                      backgroundColor: 'var(--phisio-bg-elevated)',
-                      marginBottom: '10px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {thumbSrc ? (
-                      <img
-                        src={thumbSrc}
-                        alt=""
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          color: 'var(--phisio-text-secondary)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          gap: '4px',
-                        }}
-                      >
-                        <Dumbbell size={28} opacity={0.45} />
-                        <span style={{ fontSize: '11px', fontWeight: 600 }}>بدون پیش‌نمایش</span>
-                      </div>
-                    )}
-
-                    {hasVideo ? (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedExercise(exercise)}
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          backgroundColor: 'rgba(15, 23, 42, 0.35)',
-                          border: 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#fff',
-                          cursor: 'pointer',
-                        }}
-                        aria-label={t('patient.library.video.play', { title: exercise.title })}
-                      >
-                        <CirclePlay size={40} strokeWidth={1.75} />
-                      </button>
-                    ) : null}
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <bdi
-                      style={{
-                        fontSize: '14px',
-                        fontWeight: 700,
-                        color: 'var(--phisio-text)',
-                        margin: 0,
-                        unicodeBidi: 'plaintext',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: 'block',
-                      }}
-                    >
-                      {exercise.title}
-                    </bdi>
-                    {hasDescription ? (
-                      <p
-                        style={{
-                          fontSize: '12px',
-                          fontWeight: 400,
-                          color: 'var(--phisio-text-secondary)',
-                          margin: 0,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {exercise.description}
-                      </p>
-                    ) : null}
-                    <div
+                  {thumbSrc ? (
+                    <img src={thumbSrc} alt="" />
+                  ) : (
+                    <span
                       style={{
                         display: 'flex',
+                        width: '100%',
+                        height: '100%',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginTop: '6px',
-                        gap: '8px',
+                        justifyContent: 'center',
+                        color: 'var(--phisio-text-secondary)',
+                        background: 'var(--phisio-bg-elevated)',
                       }}
                     >
-                      {categoryLabel ? (
-                        <StatusCapsule status="info" label={categoryLabel} showDot={false} />
-                      ) : (
-                        <StatusCapsule status="info" label="تمرین" showDot={false} />
-                      )}
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          color: 'var(--phisio-text-secondary)',
-                        }}
-                      >
-                        {t(`exerciseMeta.difficulty.${exercise.difficulty}`, {
-                          defaultValue: String(exercise.difficulty),
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
+                      <Dumbbell size={22} opacity={0.5} />
+                    </span>
+                  )}
+                </button>
+
+                <div className="exercise-row__body">
+                  <bdi className="exercise-row__name">{exercise.title}</bdi>
+                  {meta ? <span className="exercise-row__meta">{meta}</span> : null}
+                </div>
+
+                <div className="exercise-row__action">
+                  {hasVideo ? (
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      className="exercise-row__play"
+                      icon={<Play size={16} fill="currentColor" />}
+                      onClick={() => setSelectedExercise(exercise)}
+                      aria-label={t('patient.library.video.play', { title: exercise.title })}
+                    />
+                  ) : null}
+                </div>
+              </div>
             );
           })}
-        </Row>
+        </div>
       )}
 
       <ExerciseVideoModal
@@ -248,37 +175,5 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
         onClose={() => setSelectedExercise(null)}
       />
     </>
-  );
-}
-
-function FilterChip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        padding: '5px 12px',
-        borderRadius: 'var(--phisio-radius-sm)',
-        fontSize: '12px',
-        fontWeight: 600,
-        border: '1px solid',
-        borderColor: active ? 'var(--phisio-primary)' : 'var(--phisio-border)',
-        backgroundColor: active ? 'var(--phisio-primary-soft)' : 'var(--phisio-surface)',
-        color: active ? 'var(--phisio-primary)' : 'var(--phisio-text)',
-        cursor: 'pointer',
-        whiteSpace: 'nowrap',
-        flexShrink: 0,
-      }}
-    >
-      <bdi style={{ unicodeBidi: 'plaintext' }}>{label}</bdi>
-    </button>
   );
 }

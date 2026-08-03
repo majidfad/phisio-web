@@ -1,4 +1,5 @@
 import {
+  Activity,
   Book,
   BookOpen,
   BarChart3,
@@ -6,7 +7,6 @@ import {
   Home,
   Lock,
   LogOut,
-  Stethoscope,
   Users,
   User,
 } from 'lucide-react';
@@ -58,7 +58,7 @@ export function PatientAppShell() {
       },
       {
         key: routes.patient.exercises,
-        icon: <Stethoscope {...appIconProps} />,
+        icon: <Activity {...appIconProps} />,
         label: t('layout.nav.myExercises'),
       },
       {

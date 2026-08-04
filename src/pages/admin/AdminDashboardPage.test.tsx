@@ -28,7 +28,8 @@ describe('AdminDashboardPage', () => {
     renderWithProviders(<AdminDashboardPage />);
 
     expect(screen.getByText('Welcome back, Admin User')).toBeInTheDocument();
-    expect(screen.getByText('Doctors')).toBeInTheDocument();
-    expect(screen.getByText('Patients')).toBeInTheDocument();
+    expect(screen.getAllByText('Doctors').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Patients').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('CMS quick access')).toBeInTheDocument();
   });
 });

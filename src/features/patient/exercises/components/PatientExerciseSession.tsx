@@ -9,7 +9,7 @@ import { patientExerciseService } from '@/features/patient/exercises/services/pa
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
-import { formatPersianNumber } from '@/utils/persian-format';
+import { formatPersianNumber, convertToPersianDigits } from '@/utils/persian-format';
 
 const { Text, Paragraph } = Typography;
 
@@ -164,10 +164,14 @@ export function PatientExerciseSession({
       }),
     ];
     if (current.reps) {
-      parts.push(t('patient.exercises.dosage.reps', { count: current.reps }));
+      parts.push(
+        t('patient.exercises.dosage.reps', {
+          count: isRtl ? convertToPersianDigits(current.reps) : current.reps,
+        }),
+      );
     }
     return parts;
-  }, [current, formatCount, t, timer.currentSet, totalSets]);
+  }, [current, formatCount, isRtl, t, timer.currentSet, totalSets]);
 
   const handleSkip = () => {
     if (isCompleting) {
@@ -267,7 +271,9 @@ export function PatientExerciseSession({
 
           <div className="workout-session__chrome workout-session__chrome--bottom">
             <div className="workout-session__meta">
-              <h2 className="workout-session__title">{current.title}</h2>
+              <h2 className="workout-session__title">
+                <bdi style={{ unicodeBidi: 'plaintext' }}>{current.title}</bdi>
+              </h2>
               <div
                 className="workout-session__set-badge"
                 aria-label={t('patient.exercises.session.setProgress', {
@@ -275,12 +281,25 @@ export function PatientExerciseSession({
                   total: formatCount(totalSets),
                 })}
               >
-                <Layers size={16} strokeWidth={2} aria-hidden="true" />
+                <Layers size={15} strokeWidth={2} aria-hidden="true" />
                 <span>
-                  {formatCount(timer.currentSet)}
-                  <span className="workout-session__set-sep">/</span>
-                  {formatCount(totalSets)}
+                  {t('patient.exercises.session.setProgress', {
+                    set: formatCount(timer.currentSet),
+                    total: formatCount(totalSets),
+                  })}
                 </span>
+                {current.reps ? (
+                  <>
+                    <span className="workout-session__set-sep" aria-hidden="true">
+                      ·
+                    </span>
+                    <span>
+                      {t('patient.exercises.dosage.reps', {
+                        count: isRtl ? convertToPersianDigits(current.reps) : current.reps,
+                      })}
+                    </span>
+                  </>
+                ) : null}
               </div>
             </div>
 
@@ -292,17 +311,16 @@ export function PatientExerciseSession({
                 disabled={isCompleting || isFirst}
                 aria-label={t('patient.exercises.session.prev')}
               >
-                <PrevIcon size={24} strokeWidth={1.75} />
+                <PrevIcon size={22} strokeWidth={1.75} />
               </button>
 
               <Button
                 type="primary"
-                shape="round"
                 size="large"
                 className="workout-session__cta-pill"
                 loading={isCompleting}
                 onClick={timer.completeSetManually}
-                icon={<Check size={18} strokeWidth={2} />}
+                icon={<Check size={18} strokeWidth={2.25} />}
               >
                 {timer.currentSet >= totalSets
                   ? t('patient.exercises.session.markDone')
@@ -316,9 +334,20 @@ export function PatientExerciseSession({
                 disabled={isCompleting}
                 aria-label={t('patient.exercises.session.skip')}
               >
-                <SkipIcon size={24} strokeWidth={1.75} />
+                <SkipIcon size={22} strokeWidth={1.75} />
               </button>
             </div>
+
+            <button
+              type="button"
+              className="workout-session__text-action"
+              onClick={handleSkip}
+              disabled={isCompleting}
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              {t('patient.exercises.session.skip')}
+            </button>
           </div>
         </div>
       )}
@@ -333,10 +362,12 @@ export function PatientExerciseSession({
           />
           <div className="workout-session__info-sheet">
             <div className="workout-session__info-header">
-              <h3 className="workout-session__info-title">{current.title}</h3>
+              <h3 className="workout-session__info-title">
+                <bdi style={{ unicodeBidi: 'plaintext' }}>{current.title}</bdi>
+              </h3>
               <button
                 type="button"
-                className="workout-session__glass-btn workout-session__glass-btn--on-sheet"
+                className="workout-session__sheet-close"
                 onClick={() => setInfoOpen(false)}
                 aria-label={t('patient.exercises.session.hideInstructions')}
               >
@@ -344,7 +375,13 @@ export function PatientExerciseSession({
               </button>
             </div>
             {infoDosageParts.length > 0 ? (
-              <Text className="workout-session__info-dosage">{infoDosageParts.join(' · ')}</Text>
+              <div className="workout-session__info-chips">
+                {infoDosageParts.map((part) => (
+                  <span key={part} className="workout-session__info-chip">
+                    {part}
+                  </span>
+                ))}
+              </div>
             ) : null}
             {current.patientCue ? (
               <Paragraph className="workout-session__cue">{current.patientCue}</Paragraph>

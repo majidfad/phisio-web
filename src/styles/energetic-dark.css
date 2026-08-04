@@ -387,16 +387,69 @@
 }
 
 .auth-shell {
+  position: relative;
   min-height: 100vh;
-  background: var(--phisio-gradient-auth);
+  background: var(--phisio-bg) !important;
+  background-image: none !important;
+  overflow: hidden;
+}
+
+.auth-shell.ant-layout,
+.auth-shell .ant-layout-content {
+  background: transparent !important;
+}
+
+.auth-shell__topbar {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  inset-inline-end: 12px;
+  z-index: 2;
+}
+
+.auth-shell__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 100vh;
+  padding: 48px 20px 32px;
+}
+
+.auth-brand {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.auth-brand__name {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--phisio-text);
+}
+
+.auth-brand__tagline {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--phisio-text-secondary);
 }
 
 .auth-panel {
   width: 100%;
   max-width: 400px;
+  padding: 28px 24px;
   border: 1px solid var(--phisio-border);
   border-radius: var(--phisio-radius-lg);
-  background: var(--phisio-panel-bg);
+  background: var(--phisio-surface);
   backdrop-filter: none;
   box-shadow: var(--phisio-shadow-card);
 }
@@ -405,9 +458,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 12px;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 8px;
   border-radius: var(--phisio-radius-md);
   background: transparent;
   border: none;

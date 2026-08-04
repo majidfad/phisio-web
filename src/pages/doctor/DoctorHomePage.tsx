@@ -1,5 +1,5 @@
 import { Activity, ChevronLeft, Plus, Users, UserCheck } from 'lucide-react';
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -21,51 +21,31 @@ export function DoctorHomePage() {
   const displayName = user?.name ?? t('layout.defaultUser');
 
   return (
-    <PageContainer>
-      <section
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          paddingBottom: '80px',
-        }}
-        aria-label="داشبورد اختصاصی پزشک"
-      >
+    <PageContainer className="clinic-dashboard-page">
+      <section className="clinic-dashboard" aria-label={t('doctor.dashboard.managementAria')}>
         <HeroCard
-          badge="پنل پزشک"
-          title={`خوش آمدید، ${displayName}`}
-          description="مدیریت بیماران، پایبندی روزانه و تجویز برنامه تمرینی"
+          badge={t('doctor.dashboard.badge')}
+          title={t('doctor.dashboard.greeting', { name: displayName })}
+          description={t('doctor.dashboard.heroDescription')}
           illustration="care"
         >
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="clinic-dashboard__hero-actions">
             <Button
               type="primary"
               size="large"
               icon={<Plus size={16} />}
-              style={{
-                borderRadius: 'var(--phisio-radius-pill)',
-                height: '40px',
-                padding: '0 18px',
-                fontWeight: 600,
-              }}
+              className="clinic-dashboard__cta-primary"
               onClick={() => void navigate(routes.doctor.patients)}
             >
-              تجویز نسخه جدید
+              {t('doctor.dashboard.actions.prescribe')}
             </Button>
             <Button
               size="large"
               icon={<Users size={16} />}
-              style={{
-                borderRadius: 'var(--phisio-radius-md)',
-                height: '40px',
-                padding: '0 18px',
-                fontWeight: 600,
-                borderColor: 'var(--phisio-border)',
-                color: 'var(--phisio-text)',
-              }}
+              className="clinic-dashboard__cta-secondary"
               onClick={() => void navigate(routes.doctor.patients)}
             >
-              فهرست بیماران
+              {t('doctor.dashboard.actions.myPatients')}
             </Button>
           </div>
         </HeroCard>
@@ -86,165 +66,83 @@ export function DoctorHomePage() {
 
         {!isLoading && !isError && dashboard ? (
           <>
-            <Row gutter={[12, 12]}>
+            <Row gutter={[12, 12]} className="clinic-dashboard__stats">
               <Col xs={24} sm={12}>
                 <StatCard
-                  label="بیماران تحت نظر"
+                  label={t('doctor.dashboard.summary.patientsUnderCare')}
                   value={formatPersianNumber(dashboard.patientsCount)}
-                  suffix="نفر"
+                  suffix={t('doctor.dashboard.summary.peopleSuffix')}
                   icon={<Users size={20} />}
                   accent="blue"
                 />
               </Col>
               <Col xs={24} sm={12}>
                 <StatCard
-                  label="بیماران اخیر"
+                  label={t('doctor.dashboard.summary.recentPatients')}
                   value={formatPersianNumber(dashboard.recentPatients.length)}
-                  suffix="نفر"
+                  suffix={t('doctor.dashboard.summary.peopleSuffix')}
                   icon={<UserCheck size={20} />}
                   accent="mint"
                 />
               </Col>
             </Row>
 
-            <Card
-              style={{
-                borderRadius: 'var(--phisio-radius-md)',
-                backgroundColor: 'var(--phisio-surface)',
-                border: '1px solid var(--phisio-border)',
-                boxShadow: 'var(--phisio-shadow-sm)',
-              }}
-              styles={{ body: { padding: '16px' } }}
-            >
-              <h3
-                style={{
-                  fontSize: '1.125rem',
-                  fontWeight: 700,
-                  color: 'var(--phisio-text)',
-                  marginBottom: '12px',
-                  marginTop: 0,
-                }}
-              >
-                دسترسی سریع
-              </h3>
-              <Row gutter={[10, 10]}>
-                <Col xs={24} sm={12}>
-                  <Link
-                    to={routes.doctor.patients}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      borderRadius: 'var(--phisio-radius-md)',
-                      backgroundColor: 'var(--phisio-bg-elevated)',
-                      border: '1px solid var(--phisio-border)',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div
-                        style={{
-                          padding: '8px',
-                          borderRadius: 'var(--phisio-radius-sm)',
-                          backgroundColor: 'var(--phisio-primary-soft)',
-                          color: 'var(--phisio-primary)',
-                        }}
-                      >
-                        <Users size={18} />
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span
-                          style={{ fontSize: '14px', fontWeight: 600, color: 'var(--phisio-text)' }}
-                        >
-                          بیماران و درخواست‌ها
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 'var(--phisio-font-meta)',
-                            color: 'var(--phisio-text-secondary)',
-                          }}
-                        >
-                          سوابق و تایید اتصال
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronLeft size={16} style={{ color: 'var(--phisio-text-secondary)' }} />
-                  </Link>
-                </Col>
-                <Col xs={24} sm={12}>
-                  <Link
-                    to={routes.doctor.exercises}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      borderRadius: 'var(--phisio-radius-md)',
-                      backgroundColor: 'var(--phisio-bg-elevated)',
-                      border: '1px solid var(--phisio-border)',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div
-                        style={{
-                          padding: '8px',
-                          borderRadius: 'var(--phisio-radius-sm)',
-                          backgroundColor: 'var(--phisio-accent-soft)',
-                          color: 'var(--phisio-teal)',
-                        }}
-                      >
-                        <Activity size={18} />
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span
-                          style={{ fontSize: '14px', fontWeight: 600, color: 'var(--phisio-text)' }}
-                        >
-                          بانک تمرینات
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 'var(--phisio-font-meta)',
-                            color: 'var(--phisio-text-secondary)',
-                          }}
-                        >
-                          حرکات و ویدیوها
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronLeft size={16} style={{ color: 'var(--phisio-text-secondary)' }} />
-                  </Link>
-                </Col>
-              </Row>
-            </Card>
+            <section className="clinic-dashboard__panel" aria-labelledby="doctor-quick-access">
+              <h2 id="doctor-quick-access" className="clinic-dashboard__section-title">
+                {t('doctor.dashboard.quickAccess')}
+              </h2>
+              <div className="clinic-dashboard__links">
+                <Link to={routes.doctor.patients} className="clinic-dashboard__link">
+                  <span className="clinic-dashboard__link-main">
+                    <span className="clinic-dashboard__link-icon clinic-dashboard__link-icon--blue">
+                      <Users size={18} />
+                    </span>
+                    <span className="clinic-dashboard__link-text">
+                      <span className="clinic-dashboard__link-title">
+                        {t('doctor.dashboard.links.patients')}
+                      </span>
+                      <span className="clinic-dashboard__link-desc">
+                        {t('doctor.dashboard.links.patientsDesc')}
+                      </span>
+                    </span>
+                  </span>
+                  <ChevronLeft size={16} className="clinic-dashboard__link-chevron" aria-hidden />
+                </Link>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: '1.125rem',
-                    fontWeight: 700,
-                    color: 'var(--phisio-text)',
-                    margin: 0,
-                  }}
-                >
-                  بیماران اخیر
-                </h3>
+                <Link to={routes.doctor.exercises} className="clinic-dashboard__link">
+                  <span className="clinic-dashboard__link-main">
+                    <span className="clinic-dashboard__link-icon clinic-dashboard__link-icon--teal">
+                      <Activity size={18} />
+                    </span>
+                    <span className="clinic-dashboard__link-text">
+                      <span className="clinic-dashboard__link-title">
+                        {t('doctor.dashboard.links.exercises')}
+                      </span>
+                      <span className="clinic-dashboard__link-desc">
+                        {t('doctor.dashboard.links.exercisesDesc')}
+                      </span>
+                    </span>
+                  </span>
+                  <ChevronLeft size={16} className="clinic-dashboard__link-chevron" aria-hidden />
+                </Link>
+              </div>
+            </section>
+
+            <section className="clinic-dashboard__recent" aria-labelledby="doctor-recent-patients">
+              <div className="clinic-dashboard__recent-header">
+                <h2 id="doctor-recent-patients" className="clinic-dashboard__section-title">
+                  {t('doctor.dashboard.recentPatients.title')}
+                </h2>
                 <StatusCapsule
                   status="info"
-                  label={`${formatPersianNumber(dashboard.recentPatients.length)} نفر`}
+                  label={t('doctor.dashboard.recentPatients.count', {
+                    count: formatPersianNumber(dashboard.recentPatients.length),
+                  })}
                   showDot={false}
                 />
               </div>
               <RecentPatientsTable patients={dashboard.recentPatients} />
-            </div>
+            </section>
           </>
         ) : null}
       </section>

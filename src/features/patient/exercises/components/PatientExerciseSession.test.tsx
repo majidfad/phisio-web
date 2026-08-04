@@ -121,7 +121,7 @@ describe('PatientExerciseSession', () => {
     );
 
     expect(screen.getByLabelText(/Set 1 of 3|ست 1 از 3/i)).toBeTruthy();
-    expect(screen.queryByText(/10 reps|10 تکرار/i)).toBeNull();
+    expect(screen.getByText(/10 reps|10 تکرار/i)).toBeTruthy();
   });
 
   it('advances set progress without rest UI', async () => {

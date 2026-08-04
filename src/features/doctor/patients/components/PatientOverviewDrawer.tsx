@@ -1,4 +1,10 @@
-import { ConfirmActionModal, LoadingState, AppResult, PageSection, StatusCapsule } from '@/components/ui';
+import {
+  ConfirmActionModal,
+  LoadingState,
+  AppResult,
+  PageSection,
+  StatusCapsule,
+} from '@/components/ui';
 import { Button, Card, Drawer } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

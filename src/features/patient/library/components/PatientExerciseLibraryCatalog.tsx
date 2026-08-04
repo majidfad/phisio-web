@@ -1,6 +1,5 @@
 import { AppEmpty } from '@/components/ui';
 import { Dumbbell, Filter, Play } from 'lucide-react';
-import { Button } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -44,38 +43,20 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
   return (
     <>
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          overflowX: 'auto',
-          paddingBottom: '6px',
-          marginBottom: '14px',
-        }}
+        className="library-today__filters"
+        role="toolbar"
+        aria-label={t('patient.library.filterLabel')}
       >
-        <div
-          style={{
-            padding: '6px 10px',
-            borderRadius: 'var(--phisio-radius-sm)',
-            backgroundColor: 'var(--phisio-bg-elevated)',
-            color: 'var(--phisio-text-secondary)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '12px',
-            fontWeight: 600,
-            flexShrink: 0,
-          }}
-        >
-          <Filter size={13} />
-          <span>فیلتر</span>
-        </div>
+        <span className="library-today__filter-label">
+          <Filter size={13} aria-hidden />
+          {t('patient.library.filterLabel')}
+        </span>
         <button
           type="button"
           className={`kit-filter-chip${activeCategoryId === 'all' ? ' kit-filter-chip--active' : ''}`}
           onClick={() => setActiveCategoryId('all')}
         >
-          همه
+          {t('patient.library.filterAll')}
         </button>
         {categories.map((cat) => (
           <button
@@ -92,79 +73,83 @@ export function PatientExerciseLibraryCatalog({ exercises }: PatientExerciseLibr
       {filtered.length === 0 ? (
         <AppEmpty description={t('patient.library.empty')} />
       ) : (
-        <div className="exercise-list" role="list">
-          {filtered.map((exercise) => {
-            const preview = getVideoPreviewSource(exercise.videoUrl, exercise.mediaType);
-            const hasVideo = Boolean(preview);
-            const youtubeId =
-              preview?.kind === 'iframe' && preview.src.includes('/embed/')
-                ? (preview.src.split('/embed/')[1]?.split(/[?/]/)[0] ?? null)
-                : null;
-            const thumbSrc =
-              preview?.kind === 'image'
-                ? preview.src
-                : youtubeId
-                  ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-                  : null;
-            const categoryLabel =
-              exercise.categories?.[0]?.nameFa || exercise.categories?.[0]?.nameEn;
-            const difficulty = t(`exerciseMeta.difficulty.${exercise.difficulty}`, {
-              defaultValue: String(exercise.difficulty),
-            });
-            const meta = [categoryLabel, difficulty].filter(Boolean).join(' · ');
+        <div className="library-today__list">
+          <h2 className="library-today__section-title">{t('patient.library.listTitle')}</h2>
 
-            return (
-              <div key={exercise.exerciseId} role="listitem" className="exercise-row">
-                <button
-                  type="button"
-                  className="exercise-row__thumb"
-                  disabled={!hasVideo}
-                  onClick={() => hasVideo && setSelectedExercise(exercise)}
+          <div className="exercise-list" role="list">
+            {filtered.map((exercise) => {
+              const preview = getVideoPreviewSource(exercise.videoUrl, exercise.mediaType);
+              const hasVideo = Boolean(preview);
+              const youtubeId =
+                preview?.kind === 'iframe' && preview.src.includes('/embed/')
+                  ? (preview.src.split('/embed/')[1]?.split(/[?/]/)[0] ?? null)
+                  : null;
+              const thumbSrc =
+                preview?.kind === 'image'
+                  ? preview.src
+                  : youtubeId
+                    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+                    : null;
+              const categoryLabel =
+                exercise.categories?.[0]?.nameFa || exercise.categories?.[0]?.nameEn;
+              const difficulty = t(`exerciseMeta.difficulty.${exercise.difficulty}`, {
+                defaultValue: String(exercise.difficulty),
+              });
+              const meta = [categoryLabel, difficulty].filter(Boolean).join(' · ');
+
+              const openVideo = () => {
+                if (hasVideo) setSelectedExercise(exercise);
+              };
+
+              return (
+                <div
+                  key={exercise.exerciseId}
+                  role={hasVideo ? 'button' : 'listitem'}
+                  tabIndex={hasVideo ? 0 : undefined}
+                  className={`exercise-row${hasVideo ? ' exercise-row--clickable' : ''}`}
+                  onClick={hasVideo ? openVideo : undefined}
+                  onKeyDown={
+                    hasVideo
+                      ? (event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            openVideo();
+                          }
+                        }
+                      : undefined
+                  }
                   aria-label={
                     hasVideo
                       ? t('patient.library.video.play', { title: exercise.title })
                       : exercise.title
                   }
                 >
-                  {thumbSrc ? (
-                    <img src={thumbSrc} alt="" />
-                  ) : (
-                    <span
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        height: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'var(--phisio-text-secondary)',
-                        background: 'var(--phisio-bg-elevated)',
-                      }}
-                    >
-                      <Dumbbell size={22} opacity={0.5} />
-                    </span>
-                  )}
-                </button>
+                  <div className="exercise-row__thumb" aria-hidden="true">
+                    {thumbSrc ? (
+                      <img src={thumbSrc} alt="" />
+                    ) : (
+                      <span className="exercise-row__thumb-fallback">
+                        <Dumbbell size={22} opacity={0.5} />
+                      </span>
+                    )}
+                  </div>
 
-                <div className="exercise-row__body">
-                  <bdi className="exercise-row__name">{exercise.title}</bdi>
-                  {meta ? <span className="exercise-row__meta">{meta}</span> : null}
-                </div>
+                  <div className="exercise-row__body">
+                    <bdi className="exercise-row__name">{exercise.title}</bdi>
+                    {meta ? <span className="exercise-row__meta">{meta}</span> : null}
+                  </div>
 
-                <div className="exercise-row__action">
-                  {hasVideo ? (
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      className="exercise-row__play"
-                      icon={<Play size={16} fill="currentColor" />}
-                      onClick={() => setSelectedExercise(exercise)}
-                      aria-label={t('patient.library.video.play', { title: exercise.title })}
-                    />
-                  ) : null}
+                  <div className="exercise-row__action" aria-hidden="true">
+                    {hasVideo ? (
+                      <span className="exercise-row__play">
+                        <Play size={16} fill="currentColor" />
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
 

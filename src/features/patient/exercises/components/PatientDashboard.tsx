@@ -1,23 +1,10 @@
-import {
-  Book,
-  CheckCircle2,
-  ChevronLeft,
-  CircleDashed,
-  Play,
-  Stethoscope,
-} from 'lucide-react';
+import { Book, CheckCircle2, ChevronLeft, CircleDashed, Play, Stethoscope } from 'lucide-react';
 import { Button, Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
-import {
-  HeroCard,
-  LoadingState,
-  PageContainer,
-  StatCard,
-  WarmEmptyState,
-} from '@/components/ui';
+import { HeroCard, LoadingState, PageContainer, StatCard, WarmEmptyState } from '@/components/ui';
 import { StatusCapsule } from '@/components/ui/StatusCapsule';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -54,98 +41,29 @@ export function PatientDashboard() {
   const encouragement = getEncouragementMessage(t, percent, total, hasLinkedDoctor);
 
   return (
-    <PageContainer>
-      <section
-        className="home-today"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-        }}
-        aria-label={t('patient.dashboard.todayOverview')}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          <h1
-            style={{
-              fontSize: 'var(--phisio-font-title)',
-              fontWeight: 700,
-              letterSpacing: '-0.02em',
-              color: 'var(--phisio-text)',
-              margin: 0,
-              lineHeight: 1.35,
-            }}
-          >
+    <PageContainer className="patient-home-page">
+      <section className="home-today" aria-label={t('patient.dashboard.todayOverview')}>
+        <header className="home-today__intro">
+          <h1 className="home-today__title">
             {t('patient.dashboard.greetingWithName', { name: displayName, greeting })}
           </h1>
-          <p
-            style={{
-              fontSize: 'var(--phisio-font-meta)',
-              color: 'var(--phisio-text-secondary)',
-              margin: 0,
-            }}
-          >
-            {encouragement}
-          </p>
-        </div>
+          <p className="home-today__subtitle">{encouragement}</p>
+        </header>
 
         {hasLinkedDoctor && activeDoctor ? (
-          <Link
-            to={routes.patient.doctors}
-            className="hover-lift"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '10px 14px',
-              borderRadius: 'var(--phisio-radius-md)',
-              backgroundColor: 'var(--phisio-surface)',
-              border: '1px solid var(--phisio-border)',
-              boxShadow: 'var(--phisio-shadow-sm)',
-              textDecoration: 'none',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: 'var(--phisio-radius-sm)',
-                  backgroundColor: 'var(--phisio-primary-soft)',
-                  color: 'var(--phisio-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
+          <Link to={routes.patient.doctors} className="home-doctor-chip">
+            <div className="home-doctor-chip__main">
+              <span className="home-doctor-chip__icon">
                 <Stethoscope size={18} />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    color: 'var(--phisio-text-secondary)',
-                  }}
-                >
+              </span>
+              <span className="home-doctor-chip__text">
+                <span className="home-doctor-chip__label">
                   {t('patient.dashboard.treatingDoctor', { defaultValue: 'پزشک معالج' })}
                 </span>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--phisio-text)' }}>
-                  {activeDoctor.name}
-                </span>
-              </div>
+                <span className="home-doctor-chip__name">{activeDoctor.name}</span>
+              </span>
             </div>
-            <span
-              style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--phisio-primary)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '2px',
-                flexShrink: 0,
-              }}
-            >
+            <span className="home-doctor-chip__action">
               {t('patient.doctors.banner.manage')} <ChevronLeft size={16} />
             </span>
           </Link>
@@ -161,7 +79,7 @@ export function PatientDashboard() {
             title={t('patient.doctors.banner.noDoctorTitle')}
             description={t('patient.dashboard.noDoctorEncouragement')}
             action={
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '12px' }}>
+              <div className="home-today__empty-actions">
                 <Button
                   type="primary"
                   size="large"
@@ -231,7 +149,7 @@ export function PatientDashboard() {
               )}
             </HeroCard>
 
-            <Row gutter={[10, 10]}>
+            <Row gutter={[12, 12]} className="home-today__stats">
               <Col xs={12}>
                 <StatCard
                   label={t('patient.dashboard.completedStat', { defaultValue: 'تکمیل‌شده' })}
@@ -250,15 +168,8 @@ export function PatientDashboard() {
               </Col>
             </Row>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <h3
-                style={{
-                  fontSize: '1.125rem',
-                  fontWeight: 700,
-                  color: 'var(--phisio-text)',
-                  margin: 0,
-                }}
-              >
+            <div className="home-today__list">
+              <h3 className="home-today__section-title">
                 {t('patient.dashboard.todayExercises', { defaultValue: 'تمرین‌های امروز شما' })}
               </h3>
 
@@ -281,13 +192,32 @@ export function PatientDashboard() {
                     metaParts.push(`${convertToPersianDigits(item.reps)} تکرار`);
                   }
 
+                  const openSession = () => {
+                    void navigate(routes.patient.exercises);
+                  };
+
                   return (
                     <div
                       key={item.userExerciseId}
-                      role="listitem"
-                      className={`exercise-row${item.completedToday ? ' exercise-row--completed' : ''}`}
+                      role="button"
+                      tabIndex={0}
+                      className={`exercise-row exercise-row--clickable${item.completedToday ? ' exercise-row--completed' : ''}`}
+                      onClick={openSession}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          openSession();
+                        }
+                      }}
+                      aria-label={
+                        item.completedToday
+                          ? item.title
+                          : t('patient.dashboard.startExercise', {
+                              defaultValue: 'شروع',
+                            })
+                      }
                     >
-                      <div className="exercise-row__thumb" aria-hidden={!thumbSrc}>
+                      <div className="exercise-row__thumb" aria-hidden="true">
                         {thumbSrc ? <img src={thumbSrc} alt="" /> : null}
                         {item.completedToday ? (
                           <span className="exercise-row__thumb-overlay">
@@ -309,7 +239,7 @@ export function PatientDashboard() {
                         ) : null}
                       </div>
 
-                      <div className="exercise-row__action">
+                      <div className="exercise-row__action" aria-hidden="true">
                         {item.completedToday ? (
                           <StatusCapsule
                             status="completed"
@@ -317,16 +247,9 @@ export function PatientDashboard() {
                             showDot={false}
                           />
                         ) : (
-                          <Button
-                            type="primary"
-                            shape="circle"
-                            className="exercise-row__play"
-                            icon={<Play size={16} fill="currentColor" />}
-                            onClick={() => void navigate(routes.patient.exercises)}
-                            aria-label={t('patient.dashboard.startExercise', {
-                              defaultValue: 'شروع',
-                            })}
-                          />
+                          <span className="exercise-row__play">
+                            <Play size={16} fill="currentColor" />
+                          </span>
                         )}
                       </div>
                     </div>

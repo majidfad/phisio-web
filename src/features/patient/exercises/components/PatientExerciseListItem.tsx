@@ -1,5 +1,4 @@
 import { Check, Play } from 'lucide-react';
-import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 import { StatusCapsule } from '@/components/ui/StatusCapsule';
@@ -64,9 +63,23 @@ export function PatientExerciseListItem({
 
   return (
     <div
-      className={`exercise-row touch-active${exercise.completedToday ? ' exercise-row--completed' : ''}${isChecked ? ' exercise-row--selected' : ''}`}
-      role="group"
-      aria-label={exercise.title}
+      className={`exercise-row touch-active${hasMedia ? ' exercise-row--clickable' : ''}${exercise.completedToday ? ' exercise-row--completed' : ''}${isChecked ? ' exercise-row--selected' : ''}`}
+      role={hasMedia ? 'button' : 'group'}
+      tabIndex={hasMedia ? 0 : undefined}
+      aria-label={
+        hasMedia ? t('patient.exercises.video.watch', { title: exercise.title }) : exercise.title
+      }
+      onClick={hasMedia ? handleOpen : undefined}
+      onKeyDown={
+        hasMedia
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleOpen();
+              }
+            }
+          : undefined
+      }
     >
       {showCheckbox ? (
         <button
@@ -75,30 +88,25 @@ export function PatientExerciseListItem({
           disabled={isDisabled}
           aria-pressed={isChecked}
           aria-label={exercise.title}
-          onClick={() => onToggle(exercise, !isChecked)}
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggle(exercise, !isChecked);
+          }}
         >
           {isChecked ? <Check size={14} strokeWidth={2.5} /> : null}
         </button>
       ) : null}
 
-      <button
-        type="button"
-        className="exercise-row__thumb"
-        onClick={handleOpen}
-        disabled={!hasMedia}
-        aria-label={
-          hasMedia ? t('patient.exercises.video.watch', { title: exercise.title }) : exercise.title
-        }
-      >
+      <div className="exercise-row__thumb" aria-hidden="true">
         {thumbSrc ? <img src={thumbSrc} alt="" /> : null}
         {exercise.completedToday ? (
-          <span className="exercise-row__thumb-overlay" aria-hidden="true">
+          <span className="exercise-row__thumb-overlay">
             <span className="exercise-row__thumb-done">
               <Check size={18} strokeWidth={2.5} />
             </span>
           </span>
         ) : null}
-      </button>
+      </div>
 
       <div className="exercise-row__body">
         <bdi
@@ -111,7 +119,7 @@ export function PatientExerciseListItem({
         ) : null}
       </div>
 
-      <div className="exercise-row__action">
+      <div className="exercise-row__action" aria-hidden="true">
         {exercise.completedToday ? (
           <StatusCapsule
             status="completed"
@@ -119,15 +127,9 @@ export function PatientExerciseListItem({
             showDot={false}
           />
         ) : hasMedia ? (
-          <Button
-            type="primary"
-            shape="circle"
-            size="middle"
-            className="exercise-row__play"
-            icon={<Play size={16} fill="currentColor" />}
-            onClick={handleOpen}
-            aria-label={t('patient.exercises.video.watch', { title: exercise.title })}
-          />
+          <span className="exercise-row__play">
+            <Play size={16} fill="currentColor" />
+          </span>
         ) : null}
       </div>
     </div>

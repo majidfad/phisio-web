@@ -1,5 +1,5 @@
 import { Activity, BookOpen, ChevronLeft, Plus, Shield, Users, UserCheck } from 'lucide-react';
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -12,47 +12,41 @@ import { formatPersianNumber } from '@/utils/persian-format';
 
 const CMS_LINKS = [
   {
-    label: 'پزشکان',
-    desc: 'مدارک و مجوز',
+    labelKey: 'admin.dashboard.cms.doctors',
+    descKey: 'admin.dashboard.cms.doctorsDesc',
     to: routes.admin.doctors,
     accent: 'blue' as const,
     icon: UserCheck,
   },
   {
-    label: 'بیماران',
-    desc: 'کاربری و پرونده',
+    labelKey: 'admin.dashboard.cms.patients',
+    descKey: 'admin.dashboard.cms.patientsDesc',
     to: routes.admin.patients,
     accent: 'mint' as const,
     icon: Users,
   },
   {
-    label: 'تمرینات',
-    desc: 'ویدیو و محتوا',
+    labelKey: 'admin.dashboard.cms.exercises',
+    descKey: 'admin.dashboard.cms.exercisesDesc',
     to: routes.admin.exercises,
     accent: 'peach' as const,
     icon: Activity,
   },
   {
-    label: 'دسته‌بندی',
-    desc: 'گروه حرکات',
+    labelKey: 'admin.dashboard.cms.categories',
+    descKey: 'admin.dashboard.cms.categoriesDesc',
     to: routes.admin.exerciseCategories,
     accent: 'blue' as const,
     icon: Shield,
   },
   {
-    label: 'مقالات',
-    desc: 'محتوای آموزشی',
+    labelKey: 'admin.dashboard.cms.articles',
+    descKey: 'admin.dashboard.cms.articlesDesc',
     to: routes.admin.articles,
     accent: 'mint' as const,
     icon: BookOpen,
   },
 ];
-
-const ACCENT_STYLE = {
-  blue: { bg: 'var(--phisio-primary-soft)', color: 'var(--phisio-primary)' },
-  mint: { bg: 'var(--phisio-accent-soft)', color: 'var(--phisio-teal)' },
-  peach: { bg: 'rgba(245, 158, 11, 0.12)', color: 'var(--phisio-warning)' },
-} as const;
 
 export function AdminDashboardPage() {
   const { t } = useTranslation();
@@ -63,51 +57,31 @@ export function AdminDashboardPage() {
   const displayName = user?.name ?? t('layout.defaultUser');
 
   return (
-    <PageContainer>
-      <section
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          paddingBottom: '80px',
-        }}
-        aria-label="پنل مدیریتی سامانه"
-      >
+    <PageContainer className="clinic-dashboard-page">
+      <section className="clinic-dashboard" aria-label={t('admin.dashboard.managementAria')}>
         <HeroCard
-          badge="مدیریت سیستم"
+          badge={t('admin.dashboard.badge')}
           title={t('admin.dashboard.greeting', { name: displayName })}
-          description="نظارت بر پزشکان، بیماران، تمرینات و محتوای آموزشی"
+          description={t('admin.dashboard.heroDescription')}
           illustration="admin"
         >
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="clinic-dashboard__hero-actions">
             <Button
               type="primary"
               size="large"
               icon={<Plus size={16} />}
-              style={{
-                borderRadius: 'var(--phisio-radius-pill)',
-                height: '40px',
-                padding: '0 18px',
-                fontWeight: 600,
-              }}
+              className="clinic-dashboard__cta-primary"
               onClick={() => void navigate(routes.admin.exercises)}
             >
-              افزودن تمرین
+              {t('admin.dashboard.actions.addExercise')}
             </Button>
             <Button
               size="large"
               icon={<Shield size={16} />}
-              style={{
-                borderRadius: 'var(--phisio-radius-md)',
-                height: '40px',
-                padding: '0 18px',
-                fontWeight: 600,
-                borderColor: 'var(--phisio-border)',
-                color: 'var(--phisio-text)',
-              }}
+              className="clinic-dashboard__cta-secondary"
               onClick={() => void navigate(routes.admin.doctors)}
             >
-              تایید پزشکان
+              {t('admin.dashboard.actions.approveDoctors')}
             </Button>
           </div>
         </HeroCard>
@@ -128,7 +102,7 @@ export function AdminDashboardPage() {
 
         {!isLoading && !isError && stats ? (
           <>
-            <Row gutter={[12, 12]}>
+            <Row gutter={[12, 12]} className="clinic-dashboard__stats">
               <Col xs={24} sm={8}>
                 <StatCard
                   label={t('admin.dashboard.summary.patients')}
@@ -158,83 +132,36 @@ export function AdminDashboardPage() {
               </Col>
             </Row>
 
-            <Card
-              style={{
-                borderRadius: 'var(--phisio-radius-md)',
-                backgroundColor: 'var(--phisio-surface)',
-                border: '1px solid var(--phisio-border)',
-                boxShadow: 'var(--phisio-shadow-sm)',
-              }}
-              styles={{ body: { padding: '16px' } }}
-            >
-              <h3
-                style={{
-                  fontSize: '1.125rem',
-                  fontWeight: 700,
-                  color: 'var(--phisio-text)',
-                  margin: '0 0 12px',
-                }}
-              >
-                دسترسی سریع CMS
-              </h3>
-
-              <Row gutter={[10, 10]}>
+            <section className="clinic-dashboard__panel" aria-labelledby="admin-quick-access">
+              <h2 id="admin-quick-access" className="clinic-dashboard__section-title">
+                {t('admin.dashboard.quickAccess')}
+              </h2>
+              <div className="clinic-dashboard__links clinic-dashboard__links--grid">
                 {CMS_LINKS.map((item) => {
                   const ItemIcon = item.icon;
-                  const tone = ACCENT_STYLE[item.accent];
                   return (
-                    <Col key={item.to} xs={24} sm={12} md={8}>
-                      <Link
-                        to={item.to}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '12px 14px',
-                          borderRadius: 'var(--phisio-radius-md)',
-                          backgroundColor: 'var(--phisio-bg-elevated)',
-                          border: '1px solid var(--phisio-border)',
-                          textDecoration: 'none',
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <div
-                            style={{
-                              padding: '8px',
-                              borderRadius: 'var(--phisio-radius-sm)',
-                              backgroundColor: tone.bg,
-                              color: tone.color,
-                            }}
-                          >
-                            <ItemIcon size={18} />
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span
-                              style={{
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                color: 'var(--phisio-text)',
-                              }}
-                            >
-                              {item.label}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: 'var(--phisio-font-meta)',
-                                color: 'var(--phisio-text-secondary)',
-                              }}
-                            >
-                              {item.desc}
-                            </span>
-                          </div>
-                        </div>
-                        <ChevronLeft size={16} style={{ color: 'var(--phisio-text-secondary)' }} />
-                      </Link>
-                    </Col>
+                    <Link key={item.to} to={item.to} className="clinic-dashboard__link">
+                      <span className="clinic-dashboard__link-main">
+                        <span
+                          className={`clinic-dashboard__link-icon clinic-dashboard__link-icon--${item.accent}`}
+                        >
+                          <ItemIcon size={18} />
+                        </span>
+                        <span className="clinic-dashboard__link-text">
+                          <span className="clinic-dashboard__link-title">{t(item.labelKey)}</span>
+                          <span className="clinic-dashboard__link-desc">{t(item.descKey)}</span>
+                        </span>
+                      </span>
+                      <ChevronLeft
+                        size={16}
+                        className="clinic-dashboard__link-chevron"
+                        aria-hidden
+                      />
+                    </Link>
                   );
                 })}
-              </Row>
-            </Card>
+              </div>
+            </section>
           </>
         ) : null}
       </section>

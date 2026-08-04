@@ -20,6 +20,8 @@
     "registering": "در حال ثبت نام…",
     "registerLink": "ثبت نام",
     "signInLink": "ورود",
+    "noAccountPrompt": "حساب ندارید؟",
+    "haveAccountPrompt": "حساب دارید؟",
     "registrationSuccess": "ثبت نام با موفقیت انجام شد.",
     "registrationSuccessPatient": "ثبت نام با موفقیت انجام شد. اکنون می‌توانید وارد شوید.",
     "registrationSuccessDoctor": "ثبت نام شما با موفقیت انجام شد و در انتظار تأیید مدیر است.",
@@ -167,11 +169,12 @@
     "dashboard": {
       "title": "داشبورد مدیر",
       "overview": "نمای کلی",
-      "badge": "مدیریت",
+      "badge": "مدیریت سیستم",
       "greeting": "خوش آمدید، {{name}}",
-      "heroDescription": "کلینیک، بیماران و تمرین‌ها را از یک فضای آرام مدیریت کنید.",
+      "heroDescription": "نظارت بر پزشکان، بیماران، تمرینات و محتوای آموزشی",
       "summaryTitle": "خلاصه وضعیت",
       "quickActions": "اقدامات سریع",
+      "quickAccess": "دسترسی سریع CMS",
       "managementAria": "مدیریت سیستم",
       "summary": {
         "doctors": "پزشکان",
@@ -183,7 +186,21 @@
         "manageDoctors": "مدیریت پزشکان",
         "managePatients": "مدیریت بیماران",
         "manageExercises": "مدیریت تمرین‌ها",
-        "assignExercises": "اختصاص تمرین‌ها"
+        "assignExercises": "اختصاص تمرین‌ها",
+        "addExercise": "افزودن تمرین",
+        "approveDoctors": "تایید پزشکان"
+      },
+      "cms": {
+        "doctors": "پزشکان",
+        "doctorsDesc": "مدارک و مجوز",
+        "patients": "بیماران",
+        "patientsDesc": "کاربری و پرونده",
+        "exercises": "تمرینات",
+        "exercisesDesc": "ویدیو و محتوا",
+        "categories": "دسته‌بندی",
+        "categoriesDesc": "گروه حرکات",
+        "articles": "مقالات",
+        "articlesDesc": "محتوای آموزشی"
       },
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
@@ -545,21 +562,33 @@
     "dashboard": {
       "title": "داشبورد پزشک",
       "overview": "نمای کلی",
-      "badge": "پزشک",
+      "badge": "پنل پزشک",
       "greeting": "خوش آمدید، {{name}}",
-      "heroDescription": "بیماران و برنامه‌های تمرینی شما، مرتب و آماده مراقبت.",
+      "heroDescription": "مدیریت بیماران، پایبندی روزانه و تجویز برنامه تمرینی",
       "summaryTitle": "خلاصه وضعیت",
       "quickActions": "اقدامات سریع",
+      "quickAccess": "دسترسی سریع",
       "managementAria": "مدیریت بیماران و تمرین‌ها",
       "summary": {
-        "patients": "تعداد بیماران من"
+        "patients": "تعداد بیماران من",
+        "patientsUnderCare": "بیماران تحت نظر",
+        "recentPatients": "بیماران اخیر",
+        "peopleSuffix": "نفر"
       },
       "actions": {
-        "myPatients": "بیماران من",
-        "exercises": "تمرین‌ها"
+        "myPatients": "فهرست بیماران",
+        "exercises": "تمرین‌ها",
+        "prescribe": "تجویز نسخه جدید"
+      },
+      "links": {
+        "patients": "بیماران و درخواست‌ها",
+        "patientsDesc": "سوابق و تایید اتصال",
+        "exercises": "بانک تمرینات",
+        "exercisesDesc": "حرکات و ویدیوها"
       },
       "recentPatients": {
-        "title": "آخرین بیماران",
+        "title": "بیماران اخیر",
+        "count": "{{count}} نفر",
         "columns": {
           "name": "نام بیمار",
           "phone": "شماره موبایل",
@@ -924,11 +953,16 @@
     },
     "library": {
       "title": "کتابخانه تمرین",
+      "subtitle": "تمرین‌های عمومی برای مشاهده و یادگیری",
       "description": "تمرین‌های عمومی که حتی بدون اتصال به پزشک هم می‌توانید ببینید.",
       "searchPlaceholder": "جستجوی تمرین",
+      "listTitle": "فهرست تمرین‌ها",
+      "filterLabel": "فیلتر",
+      "filterAll": "همه",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
       "empty": "هنوز تمرینی موجود نیست.",
+      "emptySearch": "تمرینی با این جستجو پیدا نشد.",
       "video": {
         "play": "پخش ویدیوی «{{title}}»",
         "none": "—"
@@ -1032,6 +1066,9 @@
     },
     "exercises": {
       "todayTitle": "تمرین‌های امروز",
+      "programTitle": "برنامه من",
+      "programSubtitle": "تمرین‌های تجویزشده امروز",
+      "todayListTitle": "تمرین‌های امروز",
       "title": "تمرین‌های من",
       "description": "تمرین‌های اختصاص‌داده‌شده به شما",
       "loading": "در حال بارگذاری…",
@@ -1051,7 +1088,8 @@
       "showChecklist": "علامت‌گذاری دستی",
       "hideChecklist": "بستن فهرست",
       "moreActions": "عملیات بیشتر",
-      "progressSummary": "{{done}} از {{total}} انجام شده",
+      "progressSummary": "{{done}} از {{total}} تمرین",
+      "remainingCount": "{{count}} تمرین باقی‌مانده",
       "fromDoctor": "از {{doctorName}}",
       "chip": {
         "sets": "ست",
@@ -1064,7 +1102,7 @@
       "session": {
         "title": "جلسه تمرین",
         "start": "شروع جلسه امروز",
-        "startForDoctor": "شروع تمرین ({{count}})",
+        "startForDoctor": "شروع جلسه برای {{count}} تمرین",
         "doctorDone": "تمرین‌های امروز انجام شد",
         "withDoctor": "تمرین‌های {{doctorName}}",
         "progress": "تمرین {{current}} از {{total}}",

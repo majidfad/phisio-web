@@ -1,16 +1,6 @@
 import { JalaliDatePicker } from '@/components/JalaliDatePicker';
 import { AppResult } from '@/components/ui';
-import {
-  Button,
-  InputNumber,
-  Modal,
-  Radio,
-  Select,
-  Space,
-  Spin,
-  Steps,
-  Typography,
-} from 'antd';
+import { Button, InputNumber, Modal, Radio, Select, Space, Spin, Steps, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

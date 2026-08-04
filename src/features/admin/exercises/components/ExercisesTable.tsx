@@ -91,9 +91,17 @@ export function ExercisesTable({
       width: 110,
       render: () =>
         showInactiveView ? (
-          <StatusCapsule status="cancelled" label={t('admin.common.status.inactive')} showDot={false} />
+          <StatusCapsule
+            status="cancelled"
+            label={t('admin.common.status.inactive')}
+            showDot={false}
+          />
         ) : (
-          <StatusCapsule status="active" label={t('admin.exercises.status.active')} showDot={false} />
+          <StatusCapsule
+            status="active"
+            label={t('admin.exercises.status.active')}
+            showDot={false}
+          />
         ),
     },
     {

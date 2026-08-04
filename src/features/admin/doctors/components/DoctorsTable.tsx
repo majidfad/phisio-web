@@ -87,7 +87,11 @@ export function DoctorsTable({
             key: 'status',
             width: 130,
             render: () => (
-              <StatusCapsule status="pending" label={t('admin.common.status.pending')} showDot={false} />
+              <StatusCapsule
+                status="pending"
+                label={t('admin.common.status.pending')}
+                showDot={false}
+              />
             ),
           } as ColumnsType<DoctorDto>[number],
         ]

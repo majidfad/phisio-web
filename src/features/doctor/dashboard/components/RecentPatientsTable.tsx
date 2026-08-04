@@ -18,19 +18,7 @@ const TABLE_SCROLL_X = 620;
 
 function PatientAvatar() {
   return (
-    <div
-      style={{
-        width: '32px',
-        height: '32px',
-        borderRadius: '50%',
-        backgroundColor: 'var(--phisio-primary-soft)',
-        color: 'var(--phisio-primary)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-      }}
-    >
+    <div className="patient-avatar" aria-hidden="true">
       <User size={16} />
     </div>
   );

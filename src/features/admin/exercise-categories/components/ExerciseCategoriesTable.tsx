@@ -67,7 +67,11 @@ export function ExerciseCategoriesTable({
             key: 'status',
             width: 120,
             render: () => (
-              <StatusCapsule status="cancelled" label={t('admin.common.status.inactive')} showDot={false} />
+              <StatusCapsule
+                status="cancelled"
+                label={t('admin.common.status.inactive')}
+                showDot={false}
+              />
             ),
           } as ColumnsType<ExerciseCategoryDto>[number],
         ]

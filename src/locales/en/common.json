@@ -20,6 +20,8 @@
     "registering": "Registering…",
     "registerLink": "Register",
     "signInLink": "Sign in",
+    "noAccountPrompt": "Don't have an account?",
+    "haveAccountPrompt": "Already have an account?",
     "registrationSuccess": "Registration completed successfully.",
     "registrationSuccessPatient": "Registration completed successfully. You can now login.",
     "registrationSuccessDoctor": "Registration submitted successfully and is waiting for administrator approval.",
@@ -167,11 +169,12 @@
     "dashboard": {
       "title": "Admin Dashboard",
       "overview": "Overview",
-      "badge": "Admin",
+      "badge": "System admin",
       "greeting": "Welcome back, {{name}}",
-      "heroDescription": "Manage your clinic, patients, and exercises from one calm workspace.",
+      "heroDescription": "Oversee doctors, patients, exercises, and educational content",
       "summaryTitle": "At a glance",
       "quickActions": "Quick actions",
+      "quickAccess": "CMS quick access",
       "managementAria": "Admin management",
       "summary": {
         "doctors": "Doctors",
@@ -183,7 +186,21 @@
         "manageDoctors": "Manage Doctors",
         "managePatients": "Manage Patients",
         "manageExercises": "Manage Exercises",
-        "assignExercises": "Assign Exercises"
+        "assignExercises": "Assign Exercises",
+        "addExercise": "Add exercise",
+        "approveDoctors": "Approve doctors"
+      },
+      "cms": {
+        "doctors": "Doctors",
+        "doctorsDesc": "Credentials and access",
+        "patients": "Patients",
+        "patientsDesc": "Accounts and records",
+        "exercises": "Exercises",
+        "exercisesDesc": "Video and content",
+        "categories": "Categories",
+        "categoriesDesc": "Movement groups",
+        "articles": "Articles",
+        "articlesDesc": "Educational content"
       },
       "loading": "Loading…",
       "retry": "Retry",
@@ -545,18 +562,29 @@
     "dashboard": {
       "title": "Doctor dashboard",
       "overview": "Overview",
-      "badge": "Doctor",
+      "badge": "Doctor panel",
       "greeting": "Welcome back, {{name}}",
-      "heroDescription": "Your patients and exercise plans, organized for focused care.",
+      "heroDescription": "Manage patients, daily adherence, and prescribe exercise programs",
       "summaryTitle": "At a glance",
       "quickActions": "Quick actions",
+      "quickAccess": "Quick access",
       "managementAria": "Patient and exercise management",
       "summary": {
-        "patients": "My patients"
+        "patients": "My patients",
+        "patientsUnderCare": "Patients under care",
+        "recentPatients": "Recent patients",
+        "peopleSuffix": "people"
       },
       "actions": {
-        "myPatients": "My patients",
-        "exercises": "Exercises"
+        "myPatients": "Patient list",
+        "exercises": "Exercises",
+        "prescribe": "New prescription"
+      },
+      "links": {
+        "patients": "Patients & requests",
+        "patientsDesc": "Records and link approvals",
+        "exercises": "Exercise bank",
+        "exercisesDesc": "Movements and videos"
       },
       "loading": "Loading…",
       "retry": "Retry",
@@ -565,6 +593,7 @@
       },
       "recentPatients": {
         "title": "Recent patients",
+        "count": "{{count}} people",
         "columns": {
           "name": "Patient name",
           "phone": "Mobile number",
@@ -928,11 +957,16 @@
     },
     "library": {
       "title": "Exercise library",
+      "subtitle": "Browse general exercises anytime",
       "description": "General exercises you can browse anytime — even without a linked doctor.",
       "searchPlaceholder": "Search exercises",
+      "listTitle": "Exercise list",
+      "filterLabel": "Filter",
+      "filterAll": "All",
       "loading": "Loading…",
       "retry": "Retry",
       "empty": "No exercises are available yet.",
+      "emptySearch": "No exercises match this search.",
       "video": {
         "play": "Play video for \"{{title}}\"",
         "none": "—"
@@ -1036,6 +1070,9 @@
     },
     "exercises": {
       "todayTitle": "Today's exercises",
+      "programTitle": "My program",
+      "programSubtitle": "Today's prescribed exercises",
+      "todayListTitle": "Today's exercises",
       "title": "My exercises",
       "description": "Exercises assigned to you",
       "loading": "Loading…",
@@ -1055,7 +1092,8 @@
       "showChecklist": "Mark manually",
       "hideChecklist": "Hide checklist",
       "moreActions": "More actions",
-      "progressSummary": "{{done}} of {{total}} done",
+      "progressSummary": "{{done}} of {{total}} exercises",
+      "remainingCount": "{{count}} exercises remaining",
       "fromDoctor": "From {{doctorName}}",
       "chip": {
         "sets": "sets",
@@ -1068,7 +1106,7 @@
       "session": {
         "title": "Workout session",
         "start": "Start today's session",
-        "startForDoctor": "Start workout ({{count}})",
+        "startForDoctor": "Start session for {{count}} exercises",
         "doctorDone": "All done for today",
         "withDoctor": "Exercises from {{doctorName}}",
         "progress": "Exercise {{current}} of {{total}}",

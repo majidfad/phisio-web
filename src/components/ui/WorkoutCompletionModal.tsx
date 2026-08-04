@@ -23,8 +23,7 @@ export function WorkoutCompletionModal({
   onClose,
   onViewProgress,
 }: WorkoutCompletionModalProps) {
-  const minutes =
-    durationMinutes ?? Math.max(completedCount * 4, completedCount > 0 ? 5 : 0);
+  const minutes = durationMinutes ?? Math.max(completedCount * 4, completedCount > 0 ? 5 : 0);
 
   return (
     <Modal
@@ -123,7 +122,7 @@ export function WorkoutCompletionModal({
             block
             style={{
               height: '44px',
-              borderRadius: 'var(--phisio-radius-pill)',
+              borderRadius: 'var(--phisio-radius)',
               fontWeight: 600,
             }}
             onClick={onViewProgress}

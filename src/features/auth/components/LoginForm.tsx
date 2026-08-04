@@ -12,7 +12,7 @@ import { routes } from '@/routes/routes';
 import { getHomeRouteForUser } from '@/routes/utils/role-access';
 import { getErrorMessage } from '@/utils/get-error-message';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export function LoginForm() {
   const { t } = useTranslation();
@@ -52,12 +52,13 @@ export function LoginForm() {
   });
 
   return (
-    <form onSubmit={onSubmit} noValidate style={{ width: '100%' }}>
-      <Title level={4} className="auth-form__title">
-        {t('auth.signInButton')}
-      </Title>
+    <form onSubmit={onSubmit} noValidate className="auth-form">
+      <div className="auth-form__header">
+        <h1 className="auth-form__title">{t('auth.signIn')}</h1>
+        <p className="auth-form__subtitle">{t('auth.signInDescription')}</p>
+      </div>
 
-      <Form layout="vertical" component={false}>
+      <Form layout="vertical" component={false} className="auth-form__fields">
         <Form.Item
           label={t('auth.phoneNumber')}
           validateStatus={errors.phoneNumber ? 'error' : undefined}
@@ -94,14 +95,20 @@ export function LoginForm() {
         </Form.Item>
       </Form>
 
-      <Button type="primary" htmlType="submit" block size="large" loading={isSubmitting}>
+      <Button
+        type="primary"
+        htmlType="submit"
+        block
+        size="large"
+        loading={isSubmitting}
+        className="auth-form__submit"
+      >
         {isSubmitting ? t('auth.signingIn') : t('auth.signInButton')}
       </Button>
 
       <div className="auth-form__footer">
-        <Link to={routes.register}>
-          <Text type="secondary">{t('auth.registerLink')}</Text>
-        </Link>
+        <Text type="secondary">{t('auth.noAccountPrompt')} </Text>
+        <Link to={routes.register}>{t('auth.registerLink')}</Link>
       </div>
     </form>
   );

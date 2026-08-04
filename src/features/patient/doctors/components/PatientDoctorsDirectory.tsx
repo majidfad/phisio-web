@@ -123,7 +123,11 @@ function RelationshipTag({ status }: { status: number | null }) {
   }
   if (status === DoctorPatientStatusCode.Rejected) {
     return (
-      <StatusCapsule status="cancelled" label={t('patient.doctors.status.rejected')} showDot={false} />
+      <StatusCapsule
+        status="cancelled"
+        label={t('patient.doctors.status.rejected')}
+        showDot={false}
+      />
     );
   }
   return <StatusCapsule status="info" label={t('patient.doctors.status.none')} showDot={false} />;

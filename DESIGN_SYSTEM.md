@@ -68,9 +68,9 @@ Line height ~1.5–1.6. Avoid emojis in UI chrome.
 
 ## 4. Geometry & density
 
-1. **Pill geometry** (`9999px`): primary CTAs and `StatusCapsule` only. Secondary / default Ant buttons use `--phisio-radius` (`14px`). Small primary uses `--phisio-radius-sm`.
+1. **Pill geometry** (`9999px`): `StatusCapsule`, circular play controls, and chip/toggle pills only. Primary and secondary rectangular Ant buttons use `--phisio-radius` (`14px`). Small primary uses `--phisio-radius-sm`.
 2. **Cards**: default `--phisio-radius-md` (`16px`). Hero `--phisio-radius-lg` (`20px`). Modal shell `--phisio-radius-xl` (`28px`).
-3. **Global Ant overrides** (`antd-overrides.css`): do not force pill on every `.ant-btn` — only `.ant-btn-primary`.
+3. **Global Ant overrides** (`antd-overrides.css`): rectangular buttons (primary + default) use `--phisio-radius` (`14px`). Circular icon buttons stay round.
 4. **Section gap**: `16–20px` (not `24–32` everywhere). List row gap `10–12px`.
 5. **Elevation**: list rows → border + optional `--phisio-shadow-sm`. Section cards → `--phisio-shadow-sm` / `--phisio-shadow-card` sparingly. No glow stacks on idle UI.
 6. **Hover**: `.hover-lift` only on interactive cards; keep motion subtle (`-2px`).

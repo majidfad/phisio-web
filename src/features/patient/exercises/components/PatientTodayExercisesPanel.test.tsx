@@ -112,13 +112,13 @@ describe('PatientTodayExercisesPanel checkbox', () => {
     await user.click(screen.getByRole('button', { name: /More actions|عملیات بیشتر/i }));
     await user.click(await screen.findByText(/Mark manually|علامت‌گذاری دستی/i));
 
-    const checkbox = screen.getByRole('checkbox', { name: 'Knee Extension' });
-    expect(checkbox).not.toBeChecked();
+    const toggle = screen.getByRole('button', { name: 'Knee Extension' });
+    expect(toggle).toHaveAttribute('aria-pressed', 'false');
 
-    await user.click(checkbox);
+    await user.click(toggle);
 
     await waitFor(() => {
-      expect(checkbox).toBeChecked();
+      expect(toggle).toHaveAttribute('aria-pressed', 'true');
     });
   });
 });

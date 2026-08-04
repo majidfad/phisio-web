@@ -131,7 +131,11 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
                 showDot={false}
               />
             ) : (
-              <StatusCapsule status="info" label={t('patient.doctors.status.none')} showDot={false} />
+              <StatusCapsule
+                status="info"
+                label={t('patient.doctors.status.none')}
+                showDot={false}
+              />
             )}
           </Descriptions.Item>
         </Descriptions>

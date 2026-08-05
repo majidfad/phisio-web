@@ -118,6 +118,63 @@
       "more": "بیشتر"
     }
   },
+  "notifications": {
+    "title": "اعلان‌ها",
+    "empty": "هنوز اعلانی ندارید.",
+    "markAllRead": "خواندن همه",
+    "types": {
+      "PatientLinkRequested": {
+        "title": "درخواست بیمار جدید",
+        "body": "{{patientName}} درخواست اتصال به شما را ارسال کرد."
+      },
+      "LinkApproved": {
+        "title": "اتصال تأیید شد",
+        "body": "{{doctorName}} درخواست مراقبت شما را پذیرفت."
+      },
+      "LinkRejected": {
+        "title": "اتصال رد شد",
+        "body": "{{doctorName}} درخواست مراقبت شما را رد کرد."
+      },
+      "PatientRemoved": {
+        "title": "اتصال پایان یافت",
+        "body": "{{doctorName}} شما را از فهرست بیماران حذف کرد."
+      },
+      "ExercisesAssigned": {
+        "title": "تمرین جدید اختصاص داده شد",
+        "body_one": "{{doctorName}} ۱ تمرین برای شما اختصاص داد.",
+        "body_other": "{{doctorName}} {{count}} تمرین برای شما اختصاص داد.",
+        "body": "{{doctorName}} تمرین‌هایی برای شما اختصاص داد."
+      },
+      "ProgramCreated": {
+        "title": "برنامه تمرینی جدید",
+        "body": "{{doctorName}} یک برنامه تمرینی برای شما ساخت."
+      },
+      "ExercisesCompleted": {
+        "title": "تمرین‌ها انجام شد",
+        "body_one": "{{patientName}} ۱ تمرین را انجام داد.",
+        "body_other": "{{patientName}} {{count}} تمرین را انجام داد.",
+        "body": "{{patientName}} تمرین‌ها را انجام داد."
+      },
+      "DailyFeedbackReceived": {
+        "title": "بازخورد روزانه",
+        "body": "{{patientName}} بازخورد امروز را ارسال کرد."
+      },
+      "DoctorPendingActivation": {
+        "title": "ثبت‌نام پزشک جدید",
+        "body": "{{doctorName}} ثبت‌نام کرده و منتظر تأیید است."
+      },
+      "DoctorActivated": {
+        "title": "حساب تأیید شد",
+        "body": "حساب پزشک شما تأیید شد. اکنون می‌توانید وارد شوید."
+      },
+      "ExerciseReminder": {
+        "title": "یادآوری تمرین",
+        "body_one": "امروز ۱ تمرین برای شما برنامه‌ریزی شده است.",
+        "body_other": "امروز {{count}} تمرین برای شما برنامه‌ریزی شده است.",
+        "body": "امروز تمرین‌هایی برای شما برنامه‌ریزی شده است."
+      }
+    }
+  },
   "admin": {
     "common": {
       "inDevelopment": "در حال توسعه",
@@ -922,6 +979,54 @@
     }
   },
   "patient": {
+    "reminderSettings": {
+      "menu": "یادآوری تمرین",
+      "title": "یادآوری تمرین",
+      "description": "یادآوری را مثل اپ‌های تمرینی تنظیم کنید: ساعت، الگوی تکرار و یادآوری دوم در صورت انجام‌نشدن.",
+      "enabled": "فعال‌سازی یادآوری",
+      "time": "ساعت یادآوری",
+      "timeHint": "بر اساس ساعت ایران (Asia/Tehran). فقط وقتی تمرین ناتمام دارید ارسال می‌شود.",
+      "save": "ذخیره",
+      "cancel": "انصراف",
+      "success": "تنظیمات یادآوری ذخیره شد.",
+      "error": "ذخیره تنظیمات یادآوری ممکن نشد.",
+      "repeat": {
+        "label": "تکرار",
+        "daily": "هر روز",
+        "daysOfWeek": "روزهای هفته",
+        "interval": "با فاصله",
+        "weekdaysLabel": "روزهای فعال",
+        "intervalLabel": "هر چند روز یک‌بار",
+        "intervalHint": "شمارش از روزی که تنظیمات را ذخیره می‌کنید شروع می‌شود.",
+        "every": "هر",
+        "days": "روز"
+      },
+      "followUp": {
+        "enabled": "یادآوری دوم اگر انجام نشد",
+        "hint": "اگر تمرین‌های امروز ناتمام بماند، یک یادآوری دیگر در همان روز ارسال می‌شود.",
+        "time": "ساعت یادآوری دوم"
+      },
+      "weekdays": {
+        "0": "ی",
+        "1": "د",
+        "2": "س",
+        "3": "چ",
+        "4": "پ",
+        "5": "ج",
+        "6": "ش"
+      },
+      "summary": {
+        "off": "یادآوری‌ها خاموش است.",
+        "daily": "هر روز ساعت {{time}} در صورت تمرین ناتمام.",
+        "daysOfWeek": "{{days}} ساعت {{time}} در صورت تمرین ناتمام.",
+        "interval": "هر {{count}} روز ساعت {{time}} در صورت تمرین ناتمام.",
+        "daySeparator": "، "
+      },
+      "errors": {
+        "noWeekdays": "حداقل یک روز هفته را انتخاب کنید.",
+        "followUpAfterPrimary": "ساعت یادآوری دوم باید بعد از یادآوری اول باشد."
+      }
+    },
     "dashboard": {
       "treatingDoctor": "پزشک معالج: {{doctorName}}",
       "badge": "بهبودی شما",

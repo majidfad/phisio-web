@@ -118,6 +118,63 @@
       "more": "More"
     }
   },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "markAllRead": "Mark all read",
+    "types": {
+      "PatientLinkRequested": {
+        "title": "New patient request",
+        "body": "{{patientName}} requested to link with you."
+      },
+      "LinkApproved": {
+        "title": "Link approved",
+        "body": "{{doctorName}} accepted your care request."
+      },
+      "LinkRejected": {
+        "title": "Link declined",
+        "body": "{{doctorName}} declined your care request."
+      },
+      "PatientRemoved": {
+        "title": "Care link ended",
+        "body": "{{doctorName}} removed you from their patient list."
+      },
+      "ExercisesAssigned": {
+        "title": "New exercises assigned",
+        "body_one": "{{doctorName}} assigned 1 exercise for you.",
+        "body_other": "{{doctorName}} assigned {{count}} exercises for you.",
+        "body": "{{doctorName}} assigned exercises for you."
+      },
+      "ProgramCreated": {
+        "title": "New exercise program",
+        "body": "{{doctorName}} created an exercise program for you."
+      },
+      "ExercisesCompleted": {
+        "title": "Exercises completed",
+        "body_one": "{{patientName}} completed 1 exercise.",
+        "body_other": "{{patientName}} completed {{count}} exercises.",
+        "body": "{{patientName}} completed exercises."
+      },
+      "DailyFeedbackReceived": {
+        "title": "Daily feedback",
+        "body": "{{patientName}} submitted today's feedback."
+      },
+      "DoctorPendingActivation": {
+        "title": "New doctor registration",
+        "body": "{{doctorName}} registered and is waiting for approval."
+      },
+      "DoctorActivated": {
+        "title": "Account approved",
+        "body": "Your doctor account has been approved. You can now sign in."
+      },
+      "ExerciseReminder": {
+        "title": "Exercise reminder",
+        "body_one": "You have 1 exercise scheduled for today.",
+        "body_other": "You have {{count}} exercises scheduled for today.",
+        "body": "You have exercises scheduled for today."
+      }
+    }
+  },
   "admin": {
     "common": {
       "inDevelopment": "Under development",
@@ -922,6 +979,54 @@
     }
   },
   "patient": {
+    "reminderSettings": {
+      "menu": "Exercise reminders",
+      "title": "Exercise reminders",
+      "description": "Set your workout reminder like a training app — choose the time, repeat pattern, and an optional follow-up nudge.",
+      "enabled": "Enable reminders",
+      "time": "Reminder time",
+      "timeHint": "Based on Iran time (Asia/Tehran). Reminders are sent only when you still have unfinished exercises.",
+      "save": "Save",
+      "cancel": "Cancel",
+      "success": "Reminder settings saved.",
+      "error": "Unable to save reminder settings.",
+      "repeat": {
+        "label": "Repeat",
+        "daily": "Daily",
+        "daysOfWeek": "Weekdays",
+        "interval": "Interval",
+        "weekdaysLabel": "Active days",
+        "intervalLabel": "Every N days",
+        "intervalHint": "Counting starts from the day you save these settings.",
+        "every": "Every",
+        "days": "days"
+      },
+      "followUp": {
+        "enabled": "Send a follow-up if not done",
+        "hint": "A second reminder later the same day when exercises are still incomplete.",
+        "time": "Follow-up time"
+      },
+      "weekdays": {
+        "0": "Sun",
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat"
+      },
+      "summary": {
+        "off": "Reminders are turned off.",
+        "daily": "Daily at {{time}} when exercises remain.",
+        "daysOfWeek": "{{days}} at {{time}} when exercises remain.",
+        "interval": "Every {{count}} days at {{time}} when exercises remain.",
+        "daySeparator": ", "
+      },
+      "errors": {
+        "noWeekdays": "Select at least one weekday.",
+        "followUpAfterPrimary": "Follow-up time must be later than the first reminder."
+      }
+    },
     "dashboard": {
       "treatingDoctor": "Treating doctor: {{doctorName}}",
       "badge": "Your recovery",

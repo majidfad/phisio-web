@@ -2192,3 +2192,99 @@
   -webkit-backdrop-filter: none;
   border-color: var(--phisio-border);
 }
+
+.notification-panel {
+  width: min(360px, calc(100vw - 24px));
+  max-height: min(420px, 70vh);
+  display: flex;
+  flex-direction: column;
+  background: var(--phisio-surface);
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md);
+  box-shadow: var(--phisio-shadow-md, 0 12px 32px rgba(0, 0, 0, 0.12));
+  overflow: hidden;
+}
+
+.notification-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--phisio-border);
+}
+
+.notification-panel__list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notification-panel__state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  padding: 16px;
+}
+
+.notification-panel__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--phisio-border);
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.notification-panel__item:hover {
+  background: var(--phisio-bg-elevated);
+}
+
+.notification-panel__item.is-unread {
+  background: color-mix(in srgb, var(--phisio-primary-soft) 55%, transparent);
+}
+
+.notification-panel__item-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--phisio-text);
+}
+
+.notification-panel__item-body {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--phisio-text-secondary);
+}
+
+.notification-panel__item-time {
+  font-size: 0.75rem;
+  color: var(--phisio-text-muted, var(--phisio-text-secondary));
+}
+
+.reminder-settings__summary {
+  padding: 10px 12px;
+  border-radius: var(--phisio-radius-md);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.reminder-settings__weekdays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--phisio-radius-md);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+}
+
+

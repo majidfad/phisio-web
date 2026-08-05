@@ -74,10 +74,7 @@ export function NotificationBell() {
             </div>
           ) : notifications.length === 0 ? (
             <div className="notification-panel__state">
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description={t('notifications.empty')}
-              />
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('notifications.empty')} />
             </div>
           ) : (
             notifications.map((item) => {

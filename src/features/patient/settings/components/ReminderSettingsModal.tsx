@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
@@ -21,6 +21,7 @@ import {
 } from '@/features/patient/settings/hooks/usePatientReminderSettings';
 import {
   ALL_DAYS_MASK,
+  type PatientReminderSettingsDto,
   ReminderRepeatMode,
   WEEKDAY_VALUES,
   buildDaysOfWeekMask,
@@ -39,32 +40,46 @@ function parseTime(value: string | undefined, fallback: string): Dayjs {
   return parsed.isValid() ? parsed : dayjs(fallback, 'HH:mm');
 }
 
-export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalProps) {
+interface ReminderSettingsFormProps {
+  data: PatientReminderSettingsDto;
+  formDisabled: boolean;
+  saving: boolean;
+  onClose: () => void;
+  onSave: (payload: {
+    exerciseRemindersEnabled: boolean;
+    preferredReminderTime: string;
+    timeZoneId: string;
+    repeatMode: ReminderRepeatMode;
+    daysOfWeekMask: number;
+    intervalDays: number;
+    followUpEnabled: boolean;
+    followUpReminderTime: string;
+  }) => Promise<void>;
+}
+
+function ReminderSettingsForm({
+  data,
+  formDisabled,
+  saving,
+  onClose,
+  onSave,
+}: ReminderSettingsFormProps) {
   const { t } = useTranslation();
   const toast = useToast();
-  const { data, isLoading } = usePatientReminderSettings(open);
-  const updateSettings = useUpdatePatientReminderSettings();
 
-  const [enabled, setEnabled] = useState(true);
-  const [time, setTime] = useState<Dayjs>(() => dayjs('09:00', 'HH:mm'));
-  const [repeatMode, setRepeatMode] = useState<ReminderRepeatMode>(ReminderRepeatMode.Daily);
-  const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([...WEEKDAY_VALUES]);
-  const [intervalDays, setIntervalDays] = useState(2);
-  const [followUpEnabled, setFollowUpEnabled] = useState(false);
-  const [followUpTime, setFollowUpTime] = useState<Dayjs>(() => dayjs('18:00', 'HH:mm'));
-
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-    setEnabled(data.exerciseRemindersEnabled);
-    setTime(parseTime(data.preferredReminderTime, '09:00'));
-    setRepeatMode(data.repeatMode ?? ReminderRepeatMode.Daily);
-    setSelectedWeekdays(daysFromMask(data.daysOfWeekMask || ALL_DAYS_MASK));
-    setIntervalDays(data.intervalDays || 2);
-    setFollowUpEnabled(data.followUpEnabled);
-    setFollowUpTime(parseTime(data.followUpReminderTime, '18:00'));
-  }, [data]);
+  const [enabled, setEnabled] = useState(data.exerciseRemindersEnabled);
+  const [time, setTime] = useState<Dayjs>(() => parseTime(data.preferredReminderTime, '09:00'));
+  const [repeatMode, setRepeatMode] = useState<ReminderRepeatMode>(
+    data.repeatMode ?? ReminderRepeatMode.Daily,
+  );
+  const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>(() =>
+    daysFromMask(data.daysOfWeekMask || ALL_DAYS_MASK),
+  );
+  const [intervalDays, setIntervalDays] = useState(data.intervalDays || 2);
+  const [followUpEnabled, setFollowUpEnabled] = useState(data.followUpEnabled);
+  const [followUpTime, setFollowUpTime] = useState<Dayjs>(() =>
+    parseTime(data.followUpReminderTime, '18:00'),
+  );
 
   const summary = useMemo(() => {
     if (!enabled) {
@@ -98,48 +113,28 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
       return;
     }
 
-    if (
-      enabled &&
-      followUpEnabled &&
-      followUpTime.isBefore(time.add(1, 'minute'))
-    ) {
+    if (enabled && followUpEnabled && followUpTime.isBefore(time.add(1, 'minute'))) {
       toast.error(t('patient.reminderSettings.errors.followUpAfterPrimary'));
       return;
     }
 
-    try {
-      await updateSettings.mutateAsync({
-        exerciseRemindersEnabled: enabled,
-        preferredReminderTime: time.format('HH:mm'),
-        timeZoneId: data?.timeZoneId ?? 'Asia/Tehran',
-        repeatMode,
-        daysOfWeekMask:
-          repeatMode === ReminderRepeatMode.Daily
-            ? ALL_DAYS_MASK
-            : buildDaysOfWeekMask(selectedWeekdays),
-        intervalDays: Math.max(1, intervalDays),
-        followUpEnabled,
-        followUpReminderTime: followUpTime.format('HH:mm'),
-      });
-      toast.success(t('patient.reminderSettings.success'));
-      onClose();
-    } catch (error) {
-      toast.error(getErrorMessage(error, t('patient.reminderSettings.error')));
-    }
+    await onSave({
+      exerciseRemindersEnabled: enabled,
+      preferredReminderTime: time.format('HH:mm'),
+      timeZoneId: data.timeZoneId ?? 'Asia/Tehran',
+      repeatMode,
+      daysOfWeekMask:
+        repeatMode === ReminderRepeatMode.Daily
+          ? ALL_DAYS_MASK
+          : buildDaysOfWeekMask(selectedWeekdays),
+      intervalDays: Math.max(1, intervalDays),
+      followUpEnabled,
+      followUpReminderTime: followUpTime.format('HH:mm'),
+    });
   };
 
-  const formDisabled = isLoading || updateSettings.isPending;
-
   return (
-    <Modal
-      title={t('patient.reminderSettings.title')}
-      open={open}
-      onCancel={onClose}
-      footer={null}
-      destroyOnHidden
-      centered
-      width={440}
-    >
+    <>
       <Typography.Paragraph type="secondary" style={{ marginBottom: 12 }}>
         {t('patient.reminderSettings.description')}
       </Typography.Paragraph>
@@ -151,7 +146,10 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
           <Switch checked={enabled} onChange={setEnabled} />
         </Form.Item>
 
-        <Form.Item label={t('patient.reminderSettings.time')} extra={t('patient.reminderSettings.timeHint')}>
+        <Form.Item
+          label={t('patient.reminderSettings.time')}
+          extra={t('patient.reminderSettings.timeHint')}
+        >
           <TimePicker
             value={time}
             onChange={(value) => {
@@ -240,11 +238,7 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
           label={t('patient.reminderSettings.followUp.enabled')}
           extra={t('patient.reminderSettings.followUp.hint')}
         >
-          <Switch
-            checked={followUpEnabled}
-            onChange={setFollowUpEnabled}
-            disabled={!enabled}
-          />
+          <Switch checked={followUpEnabled} onChange={setFollowUpEnabled} disabled={!enabled} />
         </Form.Item>
 
         {followUpEnabled ? (
@@ -269,7 +263,7 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
             <Button
               type="primary"
               icon={<Bell {...appIconProps} />}
-              loading={updateSettings.isPending}
+              loading={saving}
               onClick={() => void handleSave()}
             >
               {t('patient.reminderSettings.save')}
@@ -277,6 +271,46 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
           </Space>
         </Form.Item>
       </Form>
+    </>
+  );
+}
+
+export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalProps) {
+  const { t } = useTranslation();
+  const toast = useToast();
+  const { data, isLoading } = usePatientReminderSettings(open);
+  const updateSettings = useUpdatePatientReminderSettings();
+
+  const handleSave = async (payload: Parameters<ReminderSettingsFormProps['onSave']>[0]) => {
+    try {
+      await updateSettings.mutateAsync(payload);
+      toast.success(t('patient.reminderSettings.success'));
+      onClose();
+    } catch (error) {
+      toast.error(getErrorMessage(error, t('patient.reminderSettings.error')));
+    }
+  };
+
+  return (
+    <Modal
+      title={t('patient.reminderSettings.title')}
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      destroyOnHidden
+      centered
+      width={440}
+      loading={isLoading && !data}
+    >
+      {data ? (
+        <ReminderSettingsForm
+          data={data}
+          formDisabled={isLoading || updateSettings.isPending}
+          saving={updateSettings.isPending}
+          onClose={onClose}
+          onSave={handleSave}
+        />
+      ) : null}
     </Modal>
   );
 }

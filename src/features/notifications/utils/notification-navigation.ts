@@ -30,9 +30,7 @@ export function getNotificationHref(
     case 'LinkApproved':
     case 'LinkRejected':
     case 'PatientRemoved':
-      return data.doctorId
-        ? `${routes.patient.doctors}/${data.doctorId}`
-        : routes.patient.doctors;
+      return data.doctorId ? `${routes.patient.doctors}/${data.doctorId}` : routes.patient.doctors;
 
     case 'ExercisesAssigned':
     case 'ProgramCreated':

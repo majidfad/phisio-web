@@ -86,10 +86,7 @@ export function mapMeResponseToUser(
   const fallbackRole = existingUser?.role ?? 'Patient';
   const apiRoles = normalizeUserRoles(response.roles, fallbackRole);
   const roles = [
-    ...new Set([
-      ...(existingUser ? [normalizeUserRole(existingUser.role)] : []),
-      ...apiRoles,
-    ]),
+    ...new Set([...(existingUser ? [normalizeUserRole(existingUser.role)] : []), ...apiRoles]),
   ];
   const primaryRole = resolvePrimaryRole(roles, fallbackRole);
 

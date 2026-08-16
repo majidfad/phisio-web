@@ -230,24 +230,23 @@ describe('protected request authentication ordering', () => {
     ['ClinicManager', '09122222222', 'doctor-home'],
     ['Doctor', '09133333333', 'doctor-home'],
     ['Patient', '09144444444', 'patient-home'],
-  ] as const)('preserves %s login and authenticates its protected requests', async (
-    _role,
-    phone,
-    home,
-  ) => {
-    renderApp();
-    await login(phone);
-    await waitFor(() => expect(screen.getByText(home)).toBeInTheDocument());
-    await waitFor(() =>
-      expect(requests.some(({ url }) => url.includes('/notifications/unread-count'))).toBe(true),
-    );
+  ] as const)(
+    'preserves %s login and authenticates its protected requests',
+    async (_role, phone, home) => {
+      renderApp();
+      await login(phone);
+      await waitFor(() => expect(screen.getByText(home)).toBeInTheDocument());
+      await waitFor(() =>
+        expect(requests.some(({ url }) => url.includes('/notifications/unread-count'))).toBe(true),
+      );
 
-    const profile = profiles[phone];
-    const protectedRequests = requests.filter(({ url }) => url.includes('/notifications/'));
-    expect(protectedRequests.length).toBeGreaterThan(0);
-    for (const request of protectedRequests) {
-      expect(request.persistedToken).toBe(profile.token);
-      expect(request.authorization).toBe(`Bearer ${profile.token}`);
-    }
-  });
+      const profile = profiles[phone];
+      const protectedRequests = requests.filter(({ url }) => url.includes('/notifications/'));
+      expect(protectedRequests.length).toBeGreaterThan(0);
+      for (const request of protectedRequests) {
+        expect(request.persistedToken).toBe(profile.token);
+        expect(request.authorization).toBe(`Bearer ${profile.token}`);
+      }
+    },
+  );
 });

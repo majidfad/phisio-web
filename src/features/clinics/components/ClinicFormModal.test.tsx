@@ -12,9 +12,7 @@ const doctors = [
   { id: otherDoctorId, name: 'Reza Karimi' },
 ];
 
-function renderModal(
-  overrides: Partial<React.ComponentProps<typeof ClinicFormModal>> = {},
-) {
+function renderModal(overrides: Partial<React.ComponentProps<typeof ClinicFormModal>> = {}) {
   const props: React.ComponentProps<typeof ClinicFormModal> = {
     isOpen: true,
     mode: 'create',
@@ -45,7 +43,10 @@ describe('ClinicFormModal clinic manager selector', () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     renderModal({ onSubmit });
 
-    await user.type(document.querySelector<HTMLInputElement>('input[name="name"]')!, 'North Clinic');
+    await user.type(
+      document.querySelector<HTMLInputElement>('input[name="name"]')!,
+      'North Clinic',
+    );
     await user.type(
       document.querySelector<HTMLTextAreaElement>('textarea[name="address"]')!,
       'Tehran',
@@ -64,9 +65,7 @@ describe('ClinicFormModal clinic manager selector', () => {
     await user.click(screen.getByRole('button', { name: 'Create clinic' }));
 
     await waitFor(() =>
-      expect(onSubmit).toHaveBeenCalledWith(
-        expect.objectContaining({ clinicManagerId: doctorId }),
-      ),
+      expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ clinicManagerId: doctorId })),
     );
   });
 
@@ -75,7 +74,10 @@ describe('ClinicFormModal clinic manager selector', () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     renderModal({ onSubmit });
 
-    await user.type(document.querySelector<HTMLInputElement>('input[name="name"]')!, 'North Clinic');
+    await user.type(
+      document.querySelector<HTMLInputElement>('input[name="name"]')!,
+      'North Clinic',
+    );
     await user.type(
       document.querySelector<HTMLTextAreaElement>('textarea[name="address"]')!,
       'Tehran',
@@ -95,12 +97,7 @@ describe('ClinicFormModal clinic manager selector', () => {
     expect(await screen.findByText('No doctors found.')).toBeInTheDocument();
 
     rerender(
-      <ClinicFormModal
-        {...props}
-        doctors={[]}
-        isDoctorsError
-        onRetryDoctors={onRetryDoctors}
-      />,
+      <ClinicFormModal {...props} doctors={[]} isDoctorsError onRetryDoctors={onRetryDoctors} />,
     );
 
     expect(screen.getByText('Failed to load doctors.')).toBeInTheDocument();

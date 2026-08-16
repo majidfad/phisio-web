@@ -183,11 +183,7 @@ export function ClinicFormModal({
                   onChange={(value) => field.onChange(value ?? '')}
                   onBlur={field.onBlur}
                   notFoundContent={
-                    isLoadingDoctors ? (
-                      <Spin size="small" />
-                    ) : (
-                      t('clinics.form.clinicManagerEmpty')
-                    )
+                    isLoadingDoctors ? <Spin size="small" /> : t('clinics.form.clinicManagerEmpty')
                   }
                   options={doctors.map((doctor) => ({
                     value: doctor.id,

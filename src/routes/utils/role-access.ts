@@ -8,8 +8,7 @@ export function hasRequiredRole(user: AuthenticatedUser, role: UserRole): boolea
   }
 
   return (
-    role === 'Doctor'
-    && (user.role === 'ClinicManager' || user.roles.includes('ClinicManager'))
+    role === 'Doctor' && (user.role === 'ClinicManager' || user.roles.includes('ClinicManager'))
   );
 }
 

@@ -30,9 +30,7 @@ const otherClinicDoctor: ClinicDoctorCandidateDto = {
   isClinicManager: true,
 };
 
-function renderModal(
-  overrides: Partial<React.ComponentProps<typeof AddClinicDoctorModal>> = {},
-) {
+function renderModal(overrides: Partial<React.ComponentProps<typeof AddClinicDoctorModal>> = {}) {
   const props: React.ComponentProps<typeof AddClinicDoctorModal> = {
     isOpen: true,
     isSubmitting: false,

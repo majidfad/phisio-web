@@ -47,7 +47,9 @@ export function normalizeUserRoles(values: unknown[], fallback: UserRole = 'Pati
   const unique = [...new Set(normalized)];
   const roles = unique.length > 0 ? unique : [fallback];
 
-  return roles.includes('ClinicManager') && !roles.includes('Doctor') ? [...roles, 'Doctor'] : roles;
+  return roles.includes('ClinicManager') && !roles.includes('Doctor')
+    ? [...roles, 'Doctor']
+    : roles;
 }
 
 export function resolvePrimaryRole(roles: UserRole[], fallback: UserRole = 'Patient'): UserRole {

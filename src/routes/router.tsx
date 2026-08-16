@@ -1,6 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { AdminLayout, AuthLayout, DoctorLayout, PatientLayout, RootLayout } from '@/layouts';
+import {
+  AdminLayout,
+  AuthLayout,
+  ClinicManagerLayout,
+  DoctorLayout,
+  PatientLayout,
+  RootLayout,
+} from '@/layouts';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { ArticlesPage } from '@/pages/admin/ArticlesPage';
 import { AssignmentsPage } from '@/pages/admin/AssignmentsPage';
@@ -8,6 +15,8 @@ import { DoctorsPage } from '@/pages/admin/DoctorsPage';
 import { ExerciseCategoriesPage } from '@/pages/admin/ExerciseCategoriesPage';
 import { ExercisesPage } from '@/pages/admin/ExercisesPage';
 import { PatientsPage } from '@/pages/admin/PatientsPage';
+import { ClinicDetailsPage } from '@/pages/clinics/ClinicDetailsPage';
+import { ClinicsPage } from '@/pages/clinics/ClinicsPage';
 import { UnauthorizedPage } from '@/pages/errors/UnauthorizedPage';
 import { DoctorExercisesPage } from '@/pages/doctor/DoctorExercisesPage';
 import { DoctorHomePage } from '@/pages/doctor/DoctorHomePage';
@@ -79,6 +88,14 @@ export const router = createBrowserRouter([
                 element: <PatientsPage />,
               },
               {
+                path: 'clinics',
+                element: <ClinicsPage />,
+              },
+              {
+                path: 'clinics/:clinicId',
+                element: <ClinicDetailsPage />,
+              },
+              {
                 path: 'exercises',
                 element: <ExercisesPage />,
               },
@@ -99,6 +116,25 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        element: <ProtectedRoute role="ClinicManager" />,
+        children: [
+          {
+            path: routes.clinicManager.root,
+            element: <ClinicManagerLayout />,
+            children: [
+              {
+                index: true,
+                element: <ClinicsPage />,
+              },
+              {
+                path: ':clinicId',
+                element: <ClinicDetailsPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
         element: <ProtectedRoute role="Doctor" />,
         children: [
           {
@@ -108,6 +144,14 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 element: <DoctorHomePage />,
+              },
+              {
+                path: 'clinics',
+                element: <ClinicsPage />,
+              },
+              {
+                path: 'clinics/:clinicId',
+                element: <ClinicDetailsPage />,
               },
               {
                 path: 'patients',

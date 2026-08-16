@@ -3,13 +3,12 @@ import { Button, Form, Input, Typography } from 'antd';
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { createLoginSchema, type LoginFormValues } from '@/features/auth/schemas/login-schema';
 import { useToast } from '@/hooks/useToast';
 import { routes } from '@/routes/routes';
-import { getHomeRouteForUser } from '@/routes/utils/role-access';
 import { getErrorMessage } from '@/utils/get-error-message';
 
 const { Text } = Typography;
@@ -18,7 +17,6 @@ export function LoginForm() {
   const { t } = useTranslation();
   const toast = useToast();
   const { login } = useAuth();
-  const navigate = useNavigate();
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
 
   const {
@@ -35,12 +33,10 @@ export function LoginForm() {
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      const user = await login({
+      await login({
         phoneNumber: values.phoneNumber.trim(),
         password: values.password,
       });
-
-      navigate(getHomeRouteForUser(user), { replace: true });
     } catch (error) {
       const message = getErrorMessage(error, t('auth.unableToSignIn'));
       toast.error(

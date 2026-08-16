@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
+import { useAuthenticatedQueryEnabled } from '@/features/auth/hooks/useAuthenticatedQueryEnabled';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import {
   useMarkAllNotificationsRead,
@@ -40,11 +41,12 @@ function formatRelativeTime(iso: string, locale: string): string {
 export function NotificationBell() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const notificationsEnabled = useAuthenticatedQueryEnabled();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const { data: unreadCount = 0 } = useUnreadNotificationCount(Boolean(user));
-  const { data: notifications = [], isLoading } = useNotifications(open && Boolean(user));
+  const { data: unreadCount = 0 } = useUnreadNotificationCount(notificationsEnabled);
+  const { data: notifications = [], isLoading } = useNotifications(open && notificationsEnabled);
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllNotificationsRead();
 

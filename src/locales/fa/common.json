@@ -92,17 +92,20 @@
     "defaultUser": "کاربر",
     "roles": {
       "admin": "مدیر",
+      "clinicManager": "مدیر مطب",
       "doctor": "پزشک",
       "patient": "بیمار"
     },
     "navAria": {
       "admin": "ناوبری مدیر",
+      "clinicManager": "ناوبری مدیر مطب",
       "doctor": "ناوبری پزشک",
       "patient": "ناوبری بیمار"
     },
     "nav": {
       "dashboard": "داشبورد",
       "overview": "نمای کلی",
+      "clinics": "مطب‌ها",
       "doctors": "پزشکان",
       "users": "کاربران",
       "patients": "بیماران",
@@ -172,6 +175,125 @@
         "body_one": "امروز ۱ تمرین برای شما برنامه‌ریزی شده است.",
         "body_other": "امروز {{count}} تمرین برای شما برنامه‌ریزی شده است.",
         "body": "امروز تمرین‌هایی برای شما برنامه‌ریزی شده است."
+      }
+    }
+  },
+  "clinics": {
+    "title": "مطب‌ها",
+    "description": "مشاهده، ایجاد و مدیریت مطب‌ها",
+    "addButton": "ایجاد مطب",
+    "searchPlaceholder": "جستجوی مطب…",
+    "loading": "در حال بارگذاری…",
+    "retry": "تلاش دوباره",
+    "empty": "هنوز مطبی ثبت نشده است.",
+    "emptyInactive": "مطب غیرفعالی یافت نشد.",
+    "emptySearch": "مطبی با این جستجو پیدا نشد.",
+    "notSet": "—",
+    "columns": {
+      "name": "نام",
+      "address": "آدرس",
+      "phones": "شماره تلفن",
+      "createdAt": "تاریخ ایجاد",
+      "status": "وضعیت",
+      "actions": "عملیات"
+    },
+    "actions": {
+      "view": "مشاهده جزئیات",
+      "edit": "ویرایش",
+      "disable": "غیرفعال کردن"
+    },
+    "form": {
+      "createTitle": "ایجاد مطب",
+      "editTitle": "ویرایش مطب",
+      "name": "نام مطب",
+      "address": "آدرس",
+      "phones": "شماره تلفن‌ها",
+      "addPhone": "افزودن شماره تلفن",
+      "removePhone": "حذف شماره تلفن",
+      "clinicManagerId": "مدیر مطب",
+      "clinicManagerHint": "مدیر مطب را انتخاب کنید.",
+      "clinicManagerPlaceholder": "نام پزشک را جستجو کنید",
+      "clinicManagerEmpty": "پزشکی یافت نشد.",
+      "clinicManagerLoadFailed": "بارگذاری پزشکان انجام نشد.",
+      "managerUnchanged": "مدیر مطب از این فرم قابل تغییر نیست.",
+      "create": "ایجاد مطب",
+      "save": "ذخیره تغییرات",
+      "saving": "در حال ذخیره…",
+      "cancel": "انصراف"
+    },
+    "disable": {
+      "title": "غیرفعال کردن مطب",
+      "message": "مطب «{{name}}» غیرفعال شود؟ دیگر در فهرست فعال‌ها نمایش داده نمی‌شود.",
+      "confirm": "غیرفعال کردن",
+      "cancel": "انصراف"
+    },
+    "validation": {
+      "nameRequired": "نام مطب الزامی است.",
+      "nameMaxLength": "نام مطب حداکثر ۲۰۰ کاراکتر باشد.",
+      "addressRequired": "آدرس الزامی است.",
+      "addressMaxLength": "آدرس حداکثر ۵۰۰ کاراکتر باشد.",
+      "phoneMaxLength": "شماره تلفن حداکثر ۲۰ کاراکتر باشد.",
+      "phoneInvalid": "فرمت شماره تلفن نامعتبر است.",
+      "clinicManagerRequired": "انتخاب مدیر مطب الزامی است.",
+      "guidInvalid": "شناسه معتبر وارد کنید."
+    },
+    "success": {
+      "created": "مطب با موفقیت ایجاد شد.",
+      "updated": "مطب با موفقیت به‌روزرسانی شد.",
+      "disabled": "مطب با موفقیت غیرفعال شد."
+    },
+    "errors": {
+      "loadFailed": "بارگذاری مطب‌ها انجام نشد.",
+      "saveFailed": "ذخیره مطب انجام نشد.",
+      "disableFailed": "غیرفعال کردن مطب انجام نشد."
+    },
+    "details": {
+      "title": "اطلاعات مطب",
+      "description": "اطلاعات مطب و پزشکان عضو",
+      "back": "بازگشت به مطب‌ها",
+      "name": "نام",
+      "address": "آدرس",
+      "phones": "شماره تلفن‌ها",
+      "doctorCount": "تعداد پزشکان",
+      "status": "وضعیت"
+    },
+    "doctors": {
+      "title": "پزشکان مطب",
+      "description": "پزشکان عضو این مطب",
+      "add": "افزودن پزشک",
+      "adding": "در حال افزودن…",
+      "addTitle": "افزودن پزشک به مطب",
+      "selectDoctor": "انتخاب پزشک",
+      "selectDoctorPlaceholder": "نام پزشک را جستجو کنید",
+      "emptyCandidates": "پزشک دیگری برای افزودن یافت نشد.",
+      "addHint": "مدیر مطب پس از عضویت قابل حذف نیست.",
+      "loading": "در حال بارگذاری…",
+      "empty": "هنوز پزشکی به این مطب اضافه نشده است.",
+      "remove": "حذف",
+      "removeTitle": "حذف پزشک",
+      "removeMessage": "«{{name}}» از این مطب حذف شود؟",
+      "managerBadge": "مدیر مطب",
+      "cannotRemoveManager": "مدیر مطب را نمی‌توان از مطب حذف کرد.",
+      "columns": {
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "specialty": "تخصص",
+        "role": "نقش",
+        "actions": "عملیات"
+      },
+      "success": {
+        "added": "پزشک به مطب اضافه شد.",
+        "removed": "پزشک از مطب حذف شد."
+      },
+      "validation": {
+        "doctorRequired": "انتخاب پزشک الزامی است."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری پزشکان مطب انجام نشد.",
+        "candidatesLoadFailed": "بارگذاری فهرست پزشکان انجام نشد.",
+        "alreadyAssigned": "این پزشک قبلاً به مطب اضافه شده است.",
+        "addFailed": "افزودن پزشک انجام نشد.",
+        "removeFailed": "حذف پزشک انجام نشد."
       }
     }
   },
@@ -248,6 +370,8 @@
         "approveDoctors": "تایید پزشکان"
       },
       "cms": {
+        "clinics": "مطب‌ها",
+        "clinicsDesc": "سوابق مطب و پزشکان",
         "doctors": "پزشکان",
         "doctorsDesc": "مدارک و مجوز",
         "patients": "بیماران",
@@ -328,12 +452,15 @@
       "empty": "پزشکی ثبت نشده است.",
       "emptyInactive": "پزشکی در انتظار تأیید وجود ندارد.",
       "notSet": "—",
+      "notClinicManager": "مدیر مطب نیست",
+      "clinicManagerWithoutClinics": "مدیر مطب",
       "columns": {
         "name": "نام",
         "phone": "شماره تلفن",
         "specialty": "تخصص",
         "license": "شماره نظام پزشکی",
         "address": "آدرس مطب",
+        "clinicManager": "مدیر مطب",
         "createdAt": "تاریخ ثبت",
         "actions": "عملیات"
       },
@@ -1096,7 +1223,7 @@
       "description": "پزشکان را ببینید، پروفایل را مشاهده کنید و درخواست اتصال بفرستید.",
       "profileTitle": "پروفایل پزشک",
       "profileDescription": "جزئیات را ببینید و وضعیت اتصال را مدیریت کنید.",
-      "searchPlaceholder": "جستجو بر اساس نام، تخصص یا کلینیک",
+      "searchPlaceholder": "جستجو بر اساس نام، تخصص یا مطب",
       "specialtyFilter": "تخصص",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
@@ -1106,7 +1233,7 @@
       "fields": {
         "specialty": "تخصص",
         "license": "شماره نظام پزشکی",
-        "clinic": "آدرس کلینیک",
+        "clinic": "آدرس مطب",
         "phone": "تلفن",
         "status": "وضعیت اتصال"
       },

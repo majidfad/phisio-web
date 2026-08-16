@@ -8,6 +8,8 @@ export interface DoctorDto {
   createdAt: string;
   email?: string | null;
   isEnabled: boolean;
+  isClinicManager?: boolean;
+  managedClinicNames?: string[];
 }
 
 export interface CreateDoctorRequest {

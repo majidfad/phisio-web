@@ -6,7 +6,6 @@ import { LoginForm } from '@/features/auth/components/LoginForm';
 import { renderWithProviders } from '@/test/render';
 
 const mockLogin = vi.fn();
-const mockNavigate = vi.fn();
 
 vi.mock('@/features/auth/hooks/useAuth', () => ({
   useAuth: () => ({
@@ -17,13 +16,16 @@ vi.mock('@/features/auth/hooks/useAuth', () => ({
   }),
 }));
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
+async function submitLogin() {
+  const user = userEvent.setup();
+  renderWithProviders(<LoginForm />);
+
+  await user.type(screen.getByPlaceholderText('09121234567'), '09123456789');
+  const passwordInput = document.querySelector('input[name="password"]');
+  expect(passwordInput).toBeTruthy();
+  await user.type(passwordInput!, 'password123');
+  await user.click(screen.getByRole('button', { name: 'Sign in' }));
+}
 
 describe('LoginForm', () => {
   beforeEach(() => {
@@ -39,24 +41,17 @@ describe('LoginForm', () => {
     expect(await screen.findByText('Phone number is required.')).toBeInTheDocument();
   });
 
-  it('calls login on valid submit', async () => {
-    const user = userEvent.setup();
+  it('submits credentials and lets auth state drive navigation', async () => {
     mockLogin.mockResolvedValue({
       userId: '1',
       role: 'Patient',
-      name: 'Test',
+      name: 'Patient',
       phoneNumber: '09123456789',
       email: null,
       roles: ['Patient'],
     });
 
-    renderWithProviders(<LoginForm />);
-
-    await user.type(screen.getByPlaceholderText('09121234567'), '09123456789');
-    const passwordInput = document.querySelector('input[name="password"]');
-    expect(passwordInput).toBeTruthy();
-    await user.type(passwordInput!, 'password123');
-    await user.click(screen.getByRole('button', { name: 'Sign in' }));
+    await submitLogin();
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith({

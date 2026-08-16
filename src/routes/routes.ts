@@ -7,13 +7,18 @@ export const routes = {
     root: '/admin',
     doctors: '/admin/doctors',
     patients: '/admin/patients',
+    clinics: '/admin/clinics',
     exercises: '/admin/exercises',
     exerciseCategories: '/admin/exercise-categories',
     articles: '/admin/articles',
     assignments: '/admin/assignments',
   },
+  clinicManager: {
+    root: '/clinic-manager',
+  },
   doctor: {
     root: '/doctor',
+    clinics: '/doctor/clinics',
     patients: '/doctor/patients',
     exercises: '/doctor/exercises',
   },
@@ -35,11 +40,14 @@ export type AppRoutePath =
   | typeof routes.admin.root
   | typeof routes.admin.doctors
   | typeof routes.admin.patients
+  | typeof routes.admin.clinics
   | typeof routes.admin.exercises
   | typeof routes.admin.exerciseCategories
   | typeof routes.admin.articles
   | typeof routes.admin.assignments
+  | typeof routes.clinicManager.root
   | typeof routes.doctor.root
+  | typeof routes.doctor.clinics
   | typeof routes.doctor.patients
   | typeof routes.doctor.exercises
   | typeof routes.patient.root

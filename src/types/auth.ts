@@ -1,9 +1,10 @@
-export type UserRole = 'Doctor' | 'Patient' | 'Admin';
+export type UserRole = 'Doctor' | 'Patient' | 'Admin' | 'ClinicManager';
 
 export const UserRole = {
   Doctor: 'Doctor',
   Patient: 'Patient',
   Admin: 'Admin',
+  ClinicManager: 'ClinicManager',
 } as const satisfies Record<UserRole, UserRole>;
 
 export interface LoginRequest {
@@ -16,6 +17,7 @@ export const UserRoleCode = {
   Doctor: 1,
   Patient: 2,
   Admin: 3,
+  ClinicManager: 4,
 } as const satisfies Record<UserRole, number>;
 
 export interface RegisterRequest {

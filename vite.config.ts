@@ -75,6 +75,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // Proxy to the HTTPS Kestrel endpoint. Targeting HTTP (5111) returns a
+      // 307 to :7132; the browser then retries cross-origin and drops Authorization.
       '/api': {
         target: 'https://localhost:7132',
         changeOrigin: true,

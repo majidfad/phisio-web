@@ -45,6 +45,24 @@ describe('authSessionStore', () => {
     expect(storage.get(env.authTokenStorageKey)).toBe('jwt-token');
   });
 
+  it('returns the newly saved token even if persistent storage is stale', () => {
+    authSessionStore.save({
+      accessToken: 'fresh-token',
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      user: sampleUser,
+    });
+    storage.set(
+      env.authSessionStorageKey,
+      JSON.stringify({
+        accessToken: 'stale-token',
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+        user: sampleUser,
+      }),
+    );
+
+    expect(authSessionStore.getAccessToken()).toBe('fresh-token');
+  });
+
   it('clears persisted session data', () => {
     authSessionStore.save({
       accessToken: 'jwt-token',

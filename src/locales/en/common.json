@@ -92,17 +92,20 @@
     "defaultUser": "User",
     "roles": {
       "admin": "Admin",
+      "clinicManager": "Clinic manager",
       "doctor": "Doctor",
       "patient": "Patient"
     },
     "navAria": {
       "admin": "Admin navigation",
+      "clinicManager": "Clinic manager navigation",
       "doctor": "Doctor navigation",
       "patient": "Patient navigation"
     },
     "nav": {
       "dashboard": "Dashboard",
       "overview": "Overview",
+      "clinics": "Clinics",
       "doctors": "Doctors",
       "users": "Users",
       "patients": "Patients",
@@ -172,6 +175,125 @@
         "body_one": "You have 1 exercise scheduled for today.",
         "body_other": "You have {{count}} exercises scheduled for today.",
         "body": "You have exercises scheduled for today."
+      }
+    }
+  },
+  "clinics": {
+    "title": "Clinics",
+    "description": "View, create, and manage clinics",
+    "addButton": "Create clinic",
+    "searchPlaceholder": "Search clinics…",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "empty": "No clinics registered yet.",
+    "emptyInactive": "No disabled clinics found.",
+    "emptySearch": "No clinics match this search.",
+    "notSet": "—",
+    "columns": {
+      "name": "Name",
+      "address": "Address",
+      "phones": "Phone numbers",
+      "createdAt": "Created at",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View details",
+      "edit": "Edit",
+      "disable": "Disable"
+    },
+    "form": {
+      "createTitle": "Create clinic",
+      "editTitle": "Edit clinic",
+      "name": "Clinic name",
+      "address": "Address",
+      "phones": "Phone numbers",
+      "addPhone": "Add phone number",
+      "removePhone": "Remove phone number",
+      "clinicManagerId": "Clinic manager",
+      "clinicManagerHint": "Select the clinic manager.",
+      "clinicManagerPlaceholder": "Search by doctor name",
+      "clinicManagerEmpty": "No doctors found.",
+      "clinicManagerLoadFailed": "Failed to load doctors.",
+      "managerUnchanged": "The clinic manager cannot be changed from this form.",
+      "create": "Create clinic",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "disable": {
+      "title": "Disable clinic",
+      "message": "Disable \"{{name}}\"? It will no longer appear in the active list.",
+      "confirm": "Disable",
+      "cancel": "Cancel"
+    },
+    "validation": {
+      "nameRequired": "Clinic name is required.",
+      "nameMaxLength": "Clinic name must be at most 200 characters.",
+      "addressRequired": "Address is required.",
+      "addressMaxLength": "Address must be at most 500 characters.",
+      "phoneMaxLength": "Phone number must be at most 20 characters.",
+      "phoneInvalid": "Phone number format is invalid.",
+      "clinicManagerRequired": "Clinic manager is required.",
+      "guidInvalid": "Enter a valid ID."
+    },
+    "success": {
+      "created": "Clinic created successfully.",
+      "updated": "Clinic updated successfully.",
+      "disabled": "Clinic disabled successfully."
+    },
+    "errors": {
+      "loadFailed": "Failed to load clinics.",
+      "saveFailed": "Failed to save clinic.",
+      "disableFailed": "Failed to disable clinic."
+    },
+    "details": {
+      "title": "Clinic details",
+      "description": "Clinic information and assigned doctors",
+      "back": "Back to clinics",
+      "name": "Name",
+      "address": "Address",
+      "phones": "Phone numbers",
+      "doctorCount": "Doctor count",
+      "status": "Status"
+    },
+    "doctors": {
+      "title": "Clinic doctors",
+      "description": "Doctors assigned to this clinic",
+      "add": "Add doctor",
+      "adding": "Adding…",
+      "addTitle": "Add doctor to clinic",
+      "selectDoctor": "Select a doctor",
+      "selectDoctorPlaceholder": "Search by doctor name",
+      "emptyCandidates": "No other doctors are available to add.",
+      "addHint": "The clinic manager cannot be removed after they are assigned.",
+      "loading": "Loading…",
+      "empty": "No doctors are assigned to this clinic yet.",
+      "remove": "Remove",
+      "removeTitle": "Remove doctor",
+      "removeMessage": "Remove \"{{name}}\" from this clinic?",
+      "managerBadge": "Clinic manager",
+      "cannotRemoveManager": "The clinic manager cannot be removed from the clinic.",
+      "columns": {
+        "name": "Name",
+        "phone": "Phone number",
+        "specialty": "Specialty",
+        "role": "Role",
+        "actions": "Actions"
+      },
+      "success": {
+        "added": "Doctor added to the clinic.",
+        "removed": "Doctor removed from the clinic."
+      },
+      "validation": {
+        "doctorRequired": "Select a doctor."
+      },
+      "errors": {
+        "loadFailed": "Failed to load clinic doctors.",
+        "candidatesLoadFailed": "Failed to load available doctors.",
+        "alreadyAssigned": "This doctor is already assigned to the clinic.",
+        "addFailed": "Failed to add doctor.",
+        "removeFailed": "Failed to remove doctor."
       }
     }
   },
@@ -248,6 +370,8 @@
         "approveDoctors": "Approve doctors"
       },
       "cms": {
+        "clinics": "Clinics",
+        "clinicsDesc": "Clinic records and doctors",
         "doctors": "Doctors",
         "doctorsDesc": "Credentials and access",
         "patients": "Patients",
@@ -328,12 +452,15 @@
       "empty": "No doctors registered yet.",
       "emptyInactive": "No doctors pending approval.",
       "notSet": "—",
+      "notClinicManager": "Not a clinic manager",
+      "clinicManagerWithoutClinics": "Clinic manager",
       "columns": {
         "name": "Name",
         "phone": "Phone number",
         "specialty": "Specialty",
         "license": "Medical license",
         "address": "Clinic address",
+        "clinicManager": "Clinic manager",
         "createdAt": "Created at",
         "actions": "Actions"
       },

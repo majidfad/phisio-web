@@ -1,4 +1,13 @@
-import { Activity, BookOpen, ChevronLeft, Plus, Shield, Users, UserCheck } from 'lucide-react';
+import {
+  Activity,
+  BookOpen,
+  Building2,
+  ChevronLeft,
+  Plus,
+  Shield,
+  Users,
+  UserCheck,
+} from 'lucide-react';
 import { Button, Col, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +20,13 @@ import { getErrorMessage } from '@/utils/get-error-message';
 import { formatPersianNumber } from '@/utils/persian-format';
 
 const CMS_LINKS = [
+  {
+    labelKey: 'admin.dashboard.cms.clinics',
+    descKey: 'admin.dashboard.cms.clinicsDesc',
+    to: routes.admin.clinics,
+    accent: 'blue' as const,
+    icon: Building2,
+  },
   {
     labelKey: 'admin.dashboard.cms.doctors',
     descKey: 'admin.dashboard.cms.doctorsDesc',

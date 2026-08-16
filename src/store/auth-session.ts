@@ -19,11 +19,11 @@ function getLocalStorage(): Storage | null {
   }
 }
 
-function readFromStorage(): StoredAuthSession | null {
+function readFromLocalStorage(): StoredAuthSession | null {
   const storage = getLocalStorage();
 
   if (!storage) {
-    return memorySession.value;
+    return null;
   }
 
   try {
@@ -50,16 +50,34 @@ function readFromStorage(): StoredAuthSession | null {
       };
     }
 
-    return memorySession.value;
+    return null;
   } catch {
+    return null;
+  }
+}
+
+function getSession(): StoredAuthSession | null {
+  if (memorySession.value) {
     return memorySession.value;
   }
+
+  const stored = readFromLocalStorage();
+
+  if (stored) {
+    memorySession.value = stored;
+  }
+
+  return stored;
 }
 
 function writeToStorage(session: StoredAuthSession | null): void {
   memorySession.value = session;
 
   const storage = getLocalStorage();
+
+  // #region agent log
+  fetch('http://127.0.0.1:7278/ingest/3c071380-e9ac-4d92-a57f-e1db8fecd063',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'65b285'},body:JSON.stringify({sessionId:'65b285',runId:'run1',hypothesisId:'H4',location:'src/store/auth-session.ts:73',message:session?'session write':'session erase',data:{hasStorage:Boolean(storage),tokenLength:session?.accessToken?.length??0,role:session?.user?.role??null,sessionKey:env.authSessionStorageKey,stack:new Error().stack?.split('\n').slice(1,6).join(' | ')},timestamp:Date.now()})}).catch(()=>{});
+  // #endregion
 
   if (!storage) {
     return;
@@ -74,6 +92,10 @@ function writeToStorage(session: StoredAuthSession | null): void {
 
     storage.setItem(env.authSessionStorageKey, JSON.stringify(session));
     storage.setItem(env.authTokenStorageKey, session.accessToken);
+
+    // #region agent log
+    fetch('http://127.0.0.1:7278/ingest/3c071380-e9ac-4d92-a57f-e1db8fecd063',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'65b285'},body:JSON.stringify({sessionId:'65b285',runId:'run1',hypothesisId:'H4',location:'src/store/auth-session.ts:89',message:'session persisted readback',data:{readBackLength:storage.getItem(env.authSessionStorageKey)?.length??0,legacyTokenLength:storage.getItem(env.authTokenStorageKey)?.length??0},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
   } catch {
     // Fall back to in-memory storage when localStorage is unavailable.
   }
@@ -102,7 +124,7 @@ function isExpired(expiresAt: string): boolean {
  */
 export const authSessionStore = {
   get(): StoredAuthSession | null {
-    return readFromStorage();
+    return getSession();
   },
 
   save(session: StoredAuthSession): void {
@@ -115,11 +137,11 @@ export const authSessionStore = {
   },
 
   getAccessToken(): string | null {
-    return readFromStorage()?.accessToken ?? null;
+    return getSession()?.accessToken ?? null;
   },
 
   hasValidSession(): boolean {
-    const session = readFromStorage();
+    const session = getSession();
 
     if (!session?.accessToken) {
       return false;

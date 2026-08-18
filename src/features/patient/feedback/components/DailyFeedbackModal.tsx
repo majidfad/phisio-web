@@ -1,3 +1,4 @@
+import { CheckCircle2 } from 'lucide-react';
 import { Button, Drawer, Form, Grid, Input, Modal, Radio, Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -87,6 +88,21 @@ export function DailyFeedbackModal({
   const content = (
     <div className="patient-stack patient-stack--loose">
       <div className="workout-summary">
+        <div
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: '50%',
+            backgroundColor: 'var(--phisio-accent-soft)',
+            color: 'var(--phisio-teal)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 10,
+          }}
+        >
+          <CheckCircle2 size={26} strokeWidth={2} />
+        </div>
         <h3 className="workout-summary__title">{t('patient.feedback.greatJob')}</h3>
         <p className="workout-summary__text">
           {t('patient.feedback.summary', {
@@ -189,6 +205,7 @@ export function DailyFeedbackModal({
       footer={null}
       width={480}
       centered
+      style={{ borderRadius: 'var(--phisio-radius-xl)', overflow: 'hidden' }}
     >
       {content}
     </Modal>

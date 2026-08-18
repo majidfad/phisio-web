@@ -19,11 +19,11 @@ function getLocalStorage(): Storage | null {
   }
 }
 
-function readFromStorage(): StoredAuthSession | null {
+function readFromLocalStorage(): StoredAuthSession | null {
   const storage = getLocalStorage();
 
   if (!storage) {
-    return memorySession.value;
+    return null;
   }
 
   try {
@@ -50,10 +50,24 @@ function readFromStorage(): StoredAuthSession | null {
       };
     }
 
-    return memorySession.value;
+    return null;
   } catch {
+    return null;
+  }
+}
+
+function getSession(): StoredAuthSession | null {
+  if (memorySession.value) {
     return memorySession.value;
   }
+
+  const stored = readFromLocalStorage();
+
+  if (stored) {
+    memorySession.value = stored;
+  }
+
+  return stored;
 }
 
 function writeToStorage(session: StoredAuthSession | null): void {
@@ -102,7 +116,7 @@ function isExpired(expiresAt: string): boolean {
  */
 export const authSessionStore = {
   get(): StoredAuthSession | null {
-    return readFromStorage();
+    return getSession();
   },
 
   save(session: StoredAuthSession): void {
@@ -115,11 +129,11 @@ export const authSessionStore = {
   },
 
   getAccessToken(): string | null {
-    return readFromStorage()?.accessToken ?? null;
+    return getSession()?.accessToken ?? null;
   },
 
   hasValidSession(): boolean {
-    const session = readFromStorage();
+    const session = getSession();
 
     if (!session?.accessToken) {
       return false;

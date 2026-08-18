@@ -1,4 +1,4 @@
-import { Stethoscope, User, ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Stethoscope, User } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Typography } from 'antd';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ import { RegisterForm } from '@/features/auth/components/RegisterForm';
 import type { RegistrationRole } from '@/features/auth/schemas/register-schema';
 import { routes } from '@/routes/routes';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export function RegisterPage() {
   const { t } = useTranslation();
@@ -20,22 +20,11 @@ export function RegisterPage() {
   }
 
   return (
-    <div style={{ width: '100%' }}>
-      <Title level={4} className="auth-form__title">
-        {t('auth.registerTitle')}
-      </Title>
-
-      <Text
-        type="secondary"
-        style={{
-          display: 'block',
-          textAlign: 'center',
-          marginBottom: 16,
-          fontSize: 'var(--phisio-font-meta)',
-        }}
-      >
-        {t('auth.selectRoleDescription')}
-      </Text>
+    <div className="auth-form">
+      <div className="auth-form__header">
+        <h1 className="auth-form__title">{t('auth.registerTitle')}</h1>
+        <p className="auth-form__subtitle">{t('auth.selectRoleDescription')}</p>
+      </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <RoleChoiceCard
@@ -55,9 +44,8 @@ export function RegisterPage() {
       </div>
 
       <div className="auth-form__footer">
-        <Link to={routes.login}>
-          <Text type="secondary">{t('auth.signInLink')}</Text>
-        </Link>
+        <Text type="secondary">{t('auth.haveAccountPrompt')} </Text>
+        <Link to={routes.login}>{t('auth.signInLink')}</Link>
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
-import { WarmEmptyState } from '@/components/ui';
-import { CirclePlay } from 'lucide-react';
-import { Button, Checkbox, Tag } from 'antd';
+import { Check, Play } from 'lucide-react';
+import { Button } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { appIconProps } from '@/components/icons/app-icon';
+import { StatusCapsule, WarmEmptyState } from '@/components/ui';
 import { ExerciseVideoModal } from '@/features/admin/exercises/components/ExerciseVideoModal';
 import type { DoctorExerciseDto } from '@/features/doctor/exercises/types/doctor-exercise';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
@@ -33,59 +32,85 @@ export function ExerciseSelectionList({
 
   return (
     <>
-      <div className="patient-stack">
+      <div className="exercise-list" role="list">
         {exercises.map((exercise) => {
           const isAssigned =
             !allowAssignedSelection && assignedExerciseIds.has(exercise.exerciseId);
           const isSelected = selectedExerciseIds.has(exercise.exerciseId);
-          const hasVideo = Boolean(getVideoPreviewSource(exercise.videoUrl, exercise.mediaType));
+          const preview = getVideoPreviewSource(exercise.videoUrl, exercise.mediaType);
+          const hasVideo = Boolean(preview);
+          const youtubeId =
+            preview?.kind === 'iframe' && preview.src.includes('/embed/')
+              ? (preview.src.split('/embed/')[1]?.split(/[?/]/)[0] ?? null)
+              : null;
+          const thumbSrc =
+            preview?.kind === 'image'
+              ? preview.src
+              : youtubeId
+                ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+                : null;
 
           return (
             <div
               key={exercise.exerciseId}
-              className={`exercise-select-item${isAssigned ? ' exercise-select-item--assigned' : ''}`}
+              role="listitem"
+              className={`exercise-row${isSelected ? ' exercise-row--selected' : ''}${isAssigned ? ' exercise-row--completed' : ''}`}
             >
-              <div className="exercise-select-item__main">
-                <Checkbox
-                  checked={isSelected}
-                  disabled={isAssigned}
-                  onChange={(event) => onToggle(exercise.exerciseId, event.target.checked)}
-                >
-                  <bdi
-                    className="exercise-select-item__title"
-                    style={{
-                      unicodeBidi: 'plaintext',
-                      display: 'inline-block',
-                      maxWidth: '100%',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      verticalAlign: 'bottom',
-                    }}
-                  >
-                    {exercise.title}
-                  </bdi>
-                </Checkbox>
+              <button
+                type="button"
+                className={`kit-select-toggle${isSelected ? ' kit-select-toggle--on' : ''}`}
+                disabled={isAssigned}
+                aria-pressed={isSelected}
+                aria-label={exercise.title}
+                onClick={() => onToggle(exercise.exerciseId, !isSelected)}
+              >
+                {isSelected ? <Check size={14} strokeWidth={2.5} /> : null}
+              </button>
+
+              <button
+                type="button"
+                className="exercise-row__thumb"
+                disabled={!hasVideo}
+                onClick={() => hasVideo && setPreviewExercise(exercise)}
+                aria-label={
+                  hasVideo
+                    ? t('doctor.patients.exercisePlan.video.play', { title: exercise.title })
+                    : exercise.title
+                }
+              >
+                {thumbSrc ? <img src={thumbSrc} alt="" /> : null}
+              </button>
+
+              <div className="exercise-row__body">
+                <bdi className="exercise-row__name">{exercise.title}</bdi>
+                {isAssigned ? (
+                  <StatusCapsule
+                    status="info"
+                    showDot={false}
+                    label={t('doctor.patients.exercisePlan.add.alreadyAssigned')}
+                  />
+                ) : (
+                  <span className="exercise-row__meta">
+                    {t(`exerciseMeta.difficulty.${exercise.difficulty}`, {
+                      defaultValue: String(exercise.difficulty),
+                    })}
+                  </span>
+                )}
               </div>
 
-              <div className="exercise-select-item__actions">
-                {isAssigned ? (
-                  <Tag>{t('doctor.patients.exercisePlan.add.alreadyAssigned')}</Tag>
-                ) : null}
+              <div className="exercise-row__action">
                 {hasVideo ? (
                   <Button
-                    type="text"
-                    icon={<CirclePlay {...appIconProps} />}
+                    type="primary"
+                    shape="circle"
+                    className="exercise-row__play"
+                    icon={<Play size={16} fill="currentColor" />}
                     aria-label={t('doctor.patients.exercisePlan.video.play', {
                       title: exercise.title,
                     })}
                     onClick={() => setPreviewExercise(exercise)}
                   />
-                ) : (
-                  <span className="doctor-history-patient__label">
-                    {t('doctor.patients.exercisePlan.video.none')}
-                  </span>
-                )}
+                ) : null}
               </div>
             </div>
           );

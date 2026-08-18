@@ -1,5 +1,4 @@
-/* Modern Fitness & Rehab App — Ant Design overrides */
-
+/* Form controls — single solid surface; height on the outer shell only */
 .ant-input,
 .ant-input-affix-wrapper,
 .ant-input-number,
@@ -9,10 +8,53 @@
   background: var(--phisio-bg-elevated) !important;
   border-color: var(--phisio-border) !important;
   color: var(--phisio-text) !important;
+  border-radius: var(--phisio-radius) !important;
   transition:
     background 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
+}
+
+.ant-input:not(textarea),
+.ant-input-number,
+.ant-picker,
+.ant-select-selector {
+  height: var(--phisio-control-height) !important;
+  min-height: var(--phisio-control-height) !important;
+}
+
+.ant-input-affix-wrapper {
+  height: var(--phisio-control-height) !important;
+  min-height: var(--phisio-control-height) !important;
+  max-height: var(--phisio-control-height) !important;
+  padding-block: 0 !important;
+  padding-inline: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.ant-input-number,
+.ant-picker,
+.ant-select-selector {
+  padding-inline: 14px !important;
+}
+
+.ant-input-lg:not(textarea),
+.ant-input-affix-wrapper-lg,
+.ant-select-lg .ant-select-selector,
+.ant-picker-large {
+  height: var(--phisio-control-height-lg) !important;
+  min-height: var(--phisio-control-height-lg) !important;
+  max-height: var(--phisio-control-height-lg) !important;
+  border-radius: var(--phisio-radius) !important;
+}
+
+.ant-input-search .ant-input-group-addon .ant-btn {
+  border-radius: 0 var(--phisio-radius) var(--phisio-radius) 0 !important;
+}
+
+[dir='rtl'] .ant-input-search .ant-input-group-addon .ant-btn {
+  border-radius: var(--phisio-radius) 0 0 var(--phisio-radius) !important;
 }
 
 .ant-input:hover,
@@ -21,7 +63,7 @@
 .ant-picker:hover,
 .ant-select:not(.ant-select-disabled):hover .ant-select-selector,
 .ant-input-textarea textarea:hover {
-  border-color: var(--phisio-border-glow) !important;
+  border-color: var(--phisio-primary) !important;
 }
 
 .ant-input:focus,
@@ -34,9 +76,63 @@
   box-shadow: 0 0 0 2px var(--phisio-primary-muted) !important;
 }
 
+/* Password / search: only the wrapper has fill + height; inner field is transparent */
+.ant-input-affix-wrapper > input.ant-input,
 .ant-input-affix-wrapper .ant-input {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding-block: 0 !important;
   background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
   box-shadow: none !important;
+}
+
+.ant-input-affix-wrapper .ant-input:hover,
+.ant-input-affix-wrapper .ant-input:focus {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Force one solid fill on password (kills nested dual-tone from Ant dark tokens) */
+.ant-input-affix-wrapper.ant-input-password,
+.ant-input-affix-wrapper.ant-input-password.ant-input-outlined,
+.ant-input-affix-wrapper.ant-input-password.ant-input-filled {
+  background: var(--phisio-bg-elevated) !important;
+  background-color: var(--phisio-bg-elevated) !important;
+  background-image: none !important;
+}
+
+.ant-input-affix-wrapper.ant-input-password input.ant-input,
+.ant-input-affix-wrapper.ant-input-password .ant-input,
+.ant-input-affix-wrapper.ant-input-password input {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.ant-input-password-icon,
+.ant-input-prefix,
+.ant-input-suffix {
+  color: var(--phisio-text-secondary);
+}
+
+/* Autofill can paint a second background over password fields */
+.ant-input-affix-wrapper input.ant-input:-webkit-autofill,
+.ant-input-affix-wrapper input.ant-input:-webkit-autofill:hover,
+.ant-input-affix-wrapper input.ant-input:-webkit-autofill:focus,
+.ant-input:-webkit-autofill,
+.ant-input:-webkit-autofill:hover,
+.ant-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--phisio-text) !important;
+  caret-color: var(--phisio-text);
+  transition: background-color 99999s ease-out;
+  box-shadow: 0 0 0 1000px var(--phisio-bg-elevated) inset !important;
 }
 
 .ant-btn {
@@ -55,17 +151,22 @@
 }
 
 .ant-btn-primary {
-  background: var(--phisio-btn-gradient, var(--phisio-primary)) !important;
+  background: var(--phisio-primary) !important;
   border: none !important;
   color: #fff !important;
-  box-shadow: var(--phisio-shadow-button) !important;
-  border-radius: var(--phisio-radius-pill) !important;
+  box-shadow: none !important;
+  border-radius: var(--phisio-radius) !important;
+}
+
+.ant-btn-primary.ant-btn-circle,
+.ant-btn-primary.ant-btn-icon-only.ant-btn-circle {
+  border-radius: 50% !important;
 }
 
 .ant-btn-primary:not(:disabled):hover {
-  background: var(--phisio-btn-gradient-hover, var(--phisio-primary-hover)) !important;
+  background: var(--phisio-primary-hover) !important;
   color: #fff !important;
-  box-shadow: var(--phisio-shadow-button) !important;
+  box-shadow: none !important;
   transform: translateY(-1px);
 }
 
@@ -106,27 +207,29 @@
 .ant-alert {
   background: var(--phisio-surface) !important;
   border: 1px solid var(--phisio-border) !important;
+  border-radius: var(--phisio-radius) !important;
 }
 
 .ant-alert-success {
-  border-color: rgba(52, 211, 153, 0.4) !important;
+  border-color: color-mix(in srgb, var(--phisio-success) 45%, var(--phisio-border)) !important;
 }
 
 .ant-alert-info {
-  border-color: color-mix(in srgb, var(--phisio-primary) 40%, transparent) !important;
+  border-color: color-mix(in srgb, var(--phisio-primary) 40%, var(--phisio-border)) !important;
 }
 
 .ant-alert-warning {
-  border-color: rgba(251, 191, 36, 0.4) !important;
+  border-color: color-mix(in srgb, var(--phisio-warning) 45%, var(--phisio-border)) !important;
 }
 
 .ant-alert-error {
-  border-color: rgba(248, 113, 113, 0.45) !important;
+  border-color: color-mix(in srgb, var(--phisio-danger) 45%, var(--phisio-border)) !important;
 }
 
 .ant-message-notice-content {
   background: var(--phisio-surface) !important;
   border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md) !important;
   box-shadow: var(--phisio-shadow-md);
   color: var(--phisio-text);
 }
@@ -134,6 +237,7 @@
 .ant-modal .ant-modal-content {
   background: var(--phisio-surface);
   border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-xl) !important;
   box-shadow: var(--phisio-shadow-md);
   overflow: hidden;
 }
@@ -164,7 +268,7 @@
   inset-inline-end: 12px;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--phisio-radius-sm);
   color: var(--phisio-text-secondary);
   transition:
     background 0.15s ease,
@@ -208,7 +312,7 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   border: 1px solid var(--phisio-border);
-  border-radius: var(--phisio-radius);
+  border-radius: var(--phisio-radius-md);
   background: var(--phisio-surface);
 }
 
@@ -244,11 +348,11 @@
 
 /* Paint header into the rounded top corners (RTL-safe logical radii) */
 .app-table-scroll .ant-table-thead > tr > th:first-child {
-  border-start-start-radius: calc(var(--phisio-radius) - 1px);
+  border-start-start-radius: calc(var(--phisio-radius-md) - 1px);
 }
 
 .app-table-scroll .ant-table-thead > tr > th:last-child {
-  border-start-end-radius: calc(var(--phisio-radius) - 1px);
+  border-start-end-radius: calc(var(--phisio-radius-md) - 1px);
 }
 
 /* Pagination sits inside the bordered scroll shell — give it breathing room */
@@ -270,7 +374,7 @@
 
 .ant-table-wrapper .ant-table {
   border: 1px solid var(--phisio-border);
-  border-radius: var(--phisio-radius);
+  border-radius: var(--phisio-radius-md);
   overflow: hidden;
   background: var(--phisio-surface);
   box-shadow: none;
@@ -308,7 +412,7 @@
 .table-icon-actions__btn {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--phisio-radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -323,7 +427,7 @@
 }
 
 .table-icon-actions__btn--delete:hover {
-  background: rgba(248, 113, 113, 0.12) !important;
+  background: color-mix(in srgb, var(--phisio-danger) 12%, transparent) !important;
 }
 
 .ant-empty {
@@ -334,27 +438,166 @@
   padding: 4px;
   background: var(--phisio-bg-elevated);
   border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius) !important;
+}
+
+.ant-segmented .ant-segmented-item-selected {
+  color: var(--phisio-primary) !important;
+  font-weight: 600;
 }
 
 .ant-form-item-label > label {
   font-weight: 500;
-}
-
-.auth-form__title {
-  margin: 0 0 12px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.25rem;
   color: var(--phisio-text);
 }
 
-.auth-form__footer {
+.ant-pagination .ant-pagination-item {
+  border-radius: var(--phisio-radius-sm) !important;
+  border-color: var(--phisio-border) !important;
+  background: var(--phisio-surface) !important;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  border-color: var(--phisio-primary) !important;
+  background: var(--phisio-primary-soft) !important;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: var(--phisio-primary) !important;
+  font-weight: 700;
+}
+
+.ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  border-radius: var(--phisio-radius-sm) !important;
+  border-color: var(--phisio-border) !important;
+  background: var(--phisio-surface) !important;
+  color: var(--phisio-text) !important;
+}
+
+.ant-switch.ant-switch-checked {
+  background: var(--phisio-primary) !important;
+}
+
+.ant-tabs .ant-tabs-tab {
+  color: var(--phisio-text-secondary);
+  font-weight: 500;
+}
+
+.ant-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--phisio-primary) !important;
+  font-weight: 700;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  background: var(--phisio-primary) !important;
+}
+
+.ant-tooltip .ant-tooltip-inner {
+  border-radius: var(--phisio-radius-sm) !important;
+}
+
+.ant-popover .ant-popover-inner {
+  background: var(--phisio-surface) !important;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md) !important;
+  box-shadow: var(--phisio-shadow-md);
+}
+
+.ant-select-dropdown {
+  background: var(--phisio-surface) !important;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md) !important;
+  padding: 6px !important;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background: var(--phisio-primary-soft) !important;
+  color: var(--phisio-primary) !important;
+  font-weight: 600;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background: var(--phisio-primary-soft) !important;
+}
+
+.ant-picker-dropdown .ant-picker-panel-container {
+  background: var(--phisio-surface) !important;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md) !important;
+  box-shadow: var(--phisio-shadow-md);
+}
+
+.auth-form__title {
+  margin: 0;
   text-align: center;
-  margin-top: 16px;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--phisio-text);
+}
+
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-form__header {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.auth-form__subtitle {
+  margin: 6px 0 0;
+  font-size: var(--phisio-font-meta);
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--phisio-text-secondary);
+}
+
+.auth-form__fields .ant-form-item {
+  margin-bottom: 14px;
+}
+
+.auth-form__fields .ant-input,
+.auth-form__fields .ant-input-affix-wrapper,
+.auth-form__fields .ant-input-affix-wrapper.ant-input-password {
+  background: var(--phisio-bg-elevated) !important;
+  background-color: var(--phisio-bg-elevated) !important;
+  background-image: none !important;
+}
+
+.auth-form__fields .ant-input-affix-wrapper > input.ant-input,
+.auth-form__fields .ant-input-affix-wrapper.ant-input-password input,
+.auth-form__fields .ant-input-affix-wrapper.ant-input-password .ant-input {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.auth-form__submit.ant-btn {
+  margin-top: 4px;
+  height: var(--phisio-control-height-lg) !important;
+  font-weight: 700;
+}
+
+.auth-form__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 18px;
+  text-align: center;
 }
 
 .auth-form__footer a {
   color: var(--phisio-primary);
+  font-weight: 700;
 }
 
 .auth-form__alert {
@@ -389,10 +632,22 @@
 .ant-dropdown .ant-dropdown-menu {
   background: var(--phisio-surface);
   border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md) !important;
+  padding: 6px !important;
+  box-shadow: var(--phisio-shadow-md);
+}
+
+.ant-dropdown .ant-dropdown-menu-item-selected {
+  background: var(--phisio-primary-soft) !important;
+  color: var(--phisio-primary) !important;
 }
 
 .ant-tag {
   border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-sm) !important;
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text-secondary);
+  font-weight: 600;
 }
 
 .ant-result-title {
@@ -401,4 +656,18 @@
 
 .ant-result-subtitle {
   color: var(--phisio-text-secondary) !important;
+}
+
+.ant-btn-lg {
+  height: var(--phisio-control-height-lg) !important;
+  font-size: 15px !important;
+}
+
+.ant-btn-sm {
+  height: var(--phisio-control-height-sm) !important;
+  font-size: 13px !important;
+}
+
+.ant-btn:not(.ant-btn-circle):not(.ant-btn-icon-only):not(.ant-btn-sm):not(.ant-btn-lg) {
+  min-height: var(--phisio-control-height);
 }

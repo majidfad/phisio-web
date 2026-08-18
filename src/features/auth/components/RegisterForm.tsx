@@ -16,7 +16,7 @@ import { routes } from '@/routes/routes';
 import { UserRoleCode } from '@/types/auth';
 import { getErrorMessage } from '@/utils/get-error-message';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface RegisterFormProps {
   role: RegistrationRole;
@@ -72,12 +72,14 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
   });
 
   return (
-    <form onSubmit={onSubmit} noValidate style={{ width: '100%' }}>
-      <Title level={4} className="auth-form__title">
-        {isDoctor ? t('auth.registerDoctorTitle') : t('auth.registerPatientTitle')}
-      </Title>
+    <form onSubmit={onSubmit} noValidate className="auth-form">
+      <div className="auth-form__header">
+        <h1 className="auth-form__title">
+          {isDoctor ? t('auth.registerDoctorTitle') : t('auth.registerPatientTitle')}
+        </h1>
+      </div>
 
-      <Form layout="vertical" component={false}>
+      <Form layout="vertical" component={false} className="auth-form__fields">
         <Form.Item
           label={t('auth.fullName')}
           validateStatus={errors.name ? 'error' : undefined}
@@ -168,7 +170,14 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
         ) : null}
       </Form>
 
-      <Button type="primary" htmlType="submit" block size="large" loading={isSubmitting}>
+      <Button
+        type="primary"
+        htmlType="submit"
+        block
+        size="large"
+        loading={isSubmitting}
+        className="auth-form__submit"
+      >
         {isSubmitting ? t('auth.registering') : t('auth.registerButton')}
       </Button>
 
@@ -177,9 +186,8 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
       </Button>
 
       <div className="auth-form__footer">
-        <Link to={routes.login}>
-          <Text type="secondary">{t('auth.signInLink')}</Text>
-        </Link>
+        <Text type="secondary">{t('auth.haveAccountPrompt')} </Text>
+        <Link to={routes.login}>{t('auth.signInLink')}</Link>
       </div>
     </form>
   );

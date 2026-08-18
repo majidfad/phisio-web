@@ -1,17 +1,6 @@
 import { JalaliDatePicker } from '@/components/JalaliDatePicker';
 import { AppResult } from '@/components/ui';
-import {
-  Button,
-  Checkbox,
-  InputNumber,
-  Modal,
-  Radio,
-  Select,
-  Space,
-  Spin,
-  Steps,
-  Typography,
-} from 'antd';
+import { Button, InputNumber, Modal, Radio, Select, Space, Spin, Steps, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -324,17 +313,31 @@ export function ExerciseAssignmentWizard({
                 borderRadius: 'var(--phisio-radius-md)',
                 border: '1px solid var(--phisio-border)',
                 background: 'var(--phisio-bg-elevated)',
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 8,
               }}
             >
-              <Checkbox.Group
-                value={selectedWeekdays}
-                onChange={(values) => setSelectedWeekdays(values as number[])}
-                options={WEEKDAY_VALUES.map((day) => ({
-                  value: day,
-                  label: t(`doctor.patients.exercisePlan.wizard.weekdays.${day}`),
-                }))}
-                style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 12px' }}
-              />
+              {WEEKDAY_VALUES.map((day) => {
+                const active = selectedWeekdays.includes(day);
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    className={`kit-filter-chip${active ? ' kit-filter-chip--active' : ''}`}
+                    aria-pressed={active}
+                    onClick={() => {
+                      setSelectedWeekdays((current) =>
+                        current.includes(day)
+                          ? current.filter((value) => value !== day)
+                          : [...current, day].sort((a, b) => a - b),
+                      );
+                    }}
+                  >
+                    {t(`doctor.patients.exercisePlan.wizard.weekdays.${day}`)}
+                  </button>
+                );
+              })}
             </div>
           ) : (
             <Space>

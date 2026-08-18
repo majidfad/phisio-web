@@ -7,6 +7,7 @@ import {
   PanelLeftOpen,
   BookOpen,
   BarChart3,
+  Building2,
   Tags,
   Users,
   User,
@@ -21,6 +22,7 @@ import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { NotificationBell } from '@/features/notifications';
 import { convertToPersianDigits } from '@/utils/persian-format';
 
 import type { RoleLayoutConfig } from '../config/role-layout-config.types';
@@ -29,6 +31,7 @@ const { Header, Content, Sider } = Layout;
 
 const NAV_ICONS: Record<string, ReactNode> = {
   dashboard: <LayoutDashboard {...appIconProps} />,
+  clinics: <Building2 {...appIconProps} />,
   doctors: <Users {...appIconProps} />,
   patients: <User {...appIconProps} />,
   articles: <BookOpen {...appIconProps} />,
@@ -168,6 +171,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <NotificationBell />
             <ThemeToggleButton />
             <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
               <button

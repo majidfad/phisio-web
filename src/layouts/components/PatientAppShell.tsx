@@ -1,4 +1,6 @@
 import {
+  Activity,
+  Bell,
   Book,
   BookOpen,
   BarChart3,
@@ -6,7 +8,6 @@ import {
   Home,
   Lock,
   LogOut,
-  Stethoscope,
   Users,
   User,
 } from 'lucide-react';
@@ -21,6 +22,8 @@ import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { NotificationBell } from '@/features/notifications';
+import { ReminderSettingsModal } from '@/features/patient/settings/components/ReminderSettingsModal';
 import { patientLayoutConfig } from '@/layouts/config/role-layout-config';
 import { routes } from '@/routes/routes';
 import { convertToPersianDigits } from '@/utils/persian-format';
@@ -43,6 +46,7 @@ export function PatientAppShell() {
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.lg;
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [reminderSettingsOpen, setReminderSettingsOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
 
   const displayName =
@@ -58,7 +62,7 @@ export function PatientAppShell() {
       },
       {
         key: routes.patient.exercises,
-        icon: <Stethoscope {...appIconProps} />,
+        icon: <Activity {...appIconProps} />,
         label: t('layout.nav.myExercises'),
       },
       {
@@ -136,6 +140,12 @@ export function PatientAppShell() {
 
   const userMenuItems = [
     {
+      key: 'reminder-settings',
+      icon: <Bell {...appIconProps} />,
+      label: t('patient.reminderSettings.menu'),
+      onClick: () => setReminderSettingsOpen(true),
+    },
+    {
       key: 'change-password',
       icon: <Lock {...appIconProps} />,
       label: t('layout.changePassword'),
@@ -155,6 +165,7 @@ export function PatientAppShell() {
       <Header className="app-header safe-area-top">
         <AppBrand size={isMobile ? 32 : 36} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <NotificationBell />
           {!isMobile ? <ThemeToggleButton /> : null}
           <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
             <button
@@ -235,9 +246,35 @@ export function PatientAppShell() {
           <ThemeToggleButton />
           <span>{t('layout.appearance')}</span>
         </div>
+        <List
+          style={{ marginTop: 8 }}
+          dataSource={[
+            {
+              key: 'reminder-settings',
+              icon: <Bell {...appIconProps} />,
+              label: t('patient.reminderSettings.menu'),
+              onClick: () => {
+                setMoreOpen(false);
+                setReminderSettingsOpen(true);
+              },
+            },
+          ]}
+          renderItem={(item) => (
+            <List.Item
+              className="patient-more-drawer__item touch-target touch-active"
+              onClick={item.onClick}
+            >
+              <List.Item.Meta avatar={item.icon} title={item.label} />
+            </List.Item>
+          )}
+        />
       </Drawer>
 
       <ChangePasswordModal open={changePasswordOpen} onClose={() => setChangePasswordOpen(false)} />
+      <ReminderSettingsModal
+        open={reminderSettingsOpen}
+        onClose={() => setReminderSettingsOpen(false)}
+      />
     </Layout>
   );
 }

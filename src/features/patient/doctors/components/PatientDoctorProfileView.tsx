@@ -1,9 +1,9 @@
-import { Button, Card, Descriptions, Tag } from 'antd';
+import { Button, Card, Descriptions } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { ConfirmActionModal, LoadingState, AppResult } from '@/components/ui';
+import { ConfirmActionModal, LoadingState, AppResult, StatusCapsule } from '@/components/ui';
 import { useToast } from '@/hooks/useToast';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -113,13 +113,29 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
           </Descriptions.Item>
           <Descriptions.Item label={t('patient.doctors.fields.status')}>
             {status === DoctorPatientStatusCode.Approved ? (
-              <Tag color="success">{t('patient.doctors.status.approved')}</Tag>
+              <StatusCapsule
+                status="active"
+                label={t('patient.doctors.status.approved')}
+                showDot={false}
+              />
             ) : status === DoctorPatientStatusCode.Pending ? (
-              <Tag color="warning">{t('patient.doctors.status.pending')}</Tag>
+              <StatusCapsule
+                status="pending"
+                label={t('patient.doctors.status.pending')}
+                showDot={false}
+              />
             ) : status === DoctorPatientStatusCode.Rejected ? (
-              <Tag color="error">{t('patient.doctors.status.rejected')}</Tag>
+              <StatusCapsule
+                status="cancelled"
+                label={t('patient.doctors.status.rejected')}
+                showDot={false}
+              />
             ) : (
-              <Tag>{t('patient.doctors.status.none')}</Tag>
+              <StatusCapsule
+                status="info"
+                label={t('patient.doctors.status.none')}
+                showDot={false}
+              />
             )}
           </Descriptions.Item>
         </Descriptions>

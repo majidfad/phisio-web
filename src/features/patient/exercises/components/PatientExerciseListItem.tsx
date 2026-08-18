@@ -1,12 +1,10 @@
-import { Check, CirclePlay } from 'lucide-react';
-import { Checkbox, Typography } from 'antd';
+import { Check, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { StatusCapsule } from '@/components/ui/StatusCapsule';
 import { getVideoPreviewSource } from '@/features/admin/exercises/utils/get-video-preview-source';
 import type { PatientTodayExerciseItemDto } from '@/features/patient/exercises/types/patient-exercise';
 import { formatPersianNumber } from '@/utils/persian-format';
-
-const { Text } = Typography;
 
 interface PatientExerciseListItemProps {
   exercise: PatientTodayExerciseItemDto;
@@ -49,6 +47,14 @@ export function PatientExerciseListItem({
         ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
         : null;
 
+  const metaParts: string[] = [];
+  if (exercise.sets) {
+    metaParts.push(`${formatCount(exercise.sets)} ${t('patient.exercises.chip.sets')}`);
+  }
+  if (exercise.reps) {
+    metaParts.push(`${formatReps(exercise.reps)} ${t('patient.exercises.chip.reps')}`);
+  }
+
   const handleOpen = () => {
     if (hasMedia) {
       onPlay(exercise);
@@ -57,63 +63,74 @@ export function PatientExerciseListItem({
 
   return (
     <div
-      className={`exercise-row touch-active${exercise.completedToday ? ' exercise-row--completed' : ''}`}
-      role="group"
-      aria-label={exercise.title}
+      className={`exercise-row touch-active${hasMedia ? ' exercise-row--clickable' : ''}${exercise.completedToday ? ' exercise-row--completed' : ''}${isChecked ? ' exercise-row--selected' : ''}`}
+      role={hasMedia ? 'button' : 'group'}
+      tabIndex={hasMedia ? 0 : undefined}
+      aria-label={
+        hasMedia ? t('patient.exercises.video.watch', { title: exercise.title }) : exercise.title
+      }
+      onClick={hasMedia ? handleOpen : undefined}
+      onKeyDown={
+        hasMedia
+          ? (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleOpen();
+              }
+            }
+          : undefined
+      }
     >
       {showCheckbox ? (
-        <Checkbox
-          checked={isChecked}
+        <button
+          type="button"
+          className={`kit-select-toggle${isChecked ? ' kit-select-toggle--on' : ''}`}
           disabled={isDisabled}
-          onChange={(e) => onToggle(exercise, e.target.checked)}
-          className="exercise-row__check"
+          aria-pressed={isChecked}
           aria-label={exercise.title}
-        />
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggle(exercise, !isChecked);
+          }}
+        >
+          {isChecked ? <Check size={14} strokeWidth={2.5} /> : null}
+        </button>
       ) : null}
 
-      <button
-        type="button"
-        className="exercise-row__thumb"
-        onClick={handleOpen}
-        disabled={!hasMedia}
-        aria-label={
-          hasMedia ? t('patient.exercises.video.watch', { title: exercise.title }) : exercise.title
-        }
-      >
+      <div className="exercise-row__thumb" aria-hidden="true">
         {thumbSrc ? <img src={thumbSrc} alt="" /> : null}
-        <span className="exercise-row__thumb-overlay" aria-hidden="true">
-          {exercise.completedToday ? (
+        {exercise.completedToday ? (
+          <span className="exercise-row__thumb-overlay">
             <span className="exercise-row__thumb-done">
               <Check size={18} strokeWidth={2.5} />
             </span>
-          ) : hasMedia ? (
-            <CirclePlay size={28} strokeWidth={1.75} />
-          ) : null}
-        </span>
-      </button>
+          </span>
+        ) : null}
+      </div>
 
       <div className="exercise-row__body">
-        <Text
-          strong
+        <bdi
           className={`exercise-row__name${exercise.completedToday ? ' exercise-row__name--done' : ''}`}
         >
           {exercise.title}
-        </Text>
+        </bdi>
+        {metaParts.length > 0 ? (
+          <span className="exercise-row__meta">{metaParts.join(' · ')}</span>
+        ) : null}
+      </div>
 
-        <div className="exercise-row__chips">
-          {exercise.sets ? (
-            <span className="exercise-chip">
-              <span className="exercise-chip__value">{formatCount(exercise.sets)}</span>
-              <span className="exercise-chip__label">{t('patient.exercises.chip.sets')}</span>
-            </span>
-          ) : null}
-          {exercise.reps ? (
-            <span className="exercise-chip">
-              <span className="exercise-chip__value">{formatReps(exercise.reps)}</span>
-              <span className="exercise-chip__label">{t('patient.exercises.chip.reps')}</span>
-            </span>
-          ) : null}
-        </div>
+      <div className="exercise-row__action" aria-hidden="true">
+        {exercise.completedToday ? (
+          <StatusCapsule
+            status="completed"
+            label={t('patient.exercises.completedToday')}
+            showDot={false}
+          />
+        ) : hasMedia ? (
+          <span className="exercise-row__play">
+            <Play size={16} fill="currentColor" />
+          </span>
+        ) : null}
       </div>
     </div>
   );

@@ -38,9 +38,9 @@
 - Use CSS variables `var(--phisio-*)` for all brand colors
 - Primary blue only for CTAs, active nav, links, focus
 - Teal only for progress / health / success / active status
-- Pill radius (`9999px` / `--phisio-radius-pill`) **only** on: primary CTA buttons + status capsules
+- Pill radius (`9999px` / `--phisio-radius-pill`) **only** on: status capsules, circular play controls, and chip/toggle pills — **not** rectangular primary buttons
+- Primary + secondary rectangular buttons: `--phisio-radius` (14px)
 - Cards / panels: `--phisio-radius-md` (16px); hero: `--phisio-radius-lg` (20px); modals: `--phisio-radius-xl` (28px)
-- Secondary / default buttons: `--phisio-radius` (14px), outline or ghost — **not** pill
 - Solid header / sider / bottom dock — **no** glass / backdrop blur on chrome
 - Section gaps `16–20px`; list row gaps `10–12px`
 - One primary action per section
@@ -107,7 +107,7 @@ Implement or reuse these. Prefer existing primitives under `src/components/ui/`.
 
 | Variant | Look | Code path |
 | :--- | :--- | :--- |
-| Primary | Solid `--phisio-primary`, white label, **pill** | Ant `Button type="primary"` + `antd-overrides.css` |
+| Primary | Solid `--phisio-primary`, white label, radius **14px** | Ant `Button type="primary"` + `antd-overrides.css` |
 | Secondary | Surface + `--phisio-border`, text `--phisio-text` or primary on hover, radius **14px** | Ant `Button` default |
 | Ghost / text | No fill, primary text | Ant `Button type="link"` or text link |
 
@@ -190,7 +190,7 @@ Component: `WorkoutCompletionModal`
 - Quiet teal check circle (not emoji)
 - Title + short subtitle in FA from i18n / existing copy
 - Summary stats in elevated mini-cards
-- Primary pill CTA + secondary 14px outline button
+- Primary CTA (14px radius) + secondary 14px outline button
 - No celebratory confetti / emoji titles
 
 ### 4.10 Also required (not numbered on kit but used everywhere)
@@ -211,7 +211,7 @@ Component: `WorkoutCompletionModal`
 | :--- | :--- |
 | Patient | Mobile-first; solid dock; content max width; dock clearance |
 | Doctor / Admin | Desktop; solid sider + header; flat `.nav-card` list (not card stack); active = primary soft |
-| Auth | Solid surface card; calm canvas; `ZivanLogo` + app name; one primary pill CTA |
+| Auth | Solid surface card; calm canvas; `ZivanLogo` + app name; one primary CTA |
 
 Workout session may use limited glass **only** on controls over video. Everything else solid.
 
@@ -261,7 +261,8 @@ teal only for progress/health. No Tailwind. Prefer existing ui/ primitives.
 
 - [ ] Kit PNG component language matches (not old Signal Blue / glass demos)  
 - [ ] Only `var(--phisio-*)` for brand colors (no stray hex)  
-- [ ] Pill only on primary CTA + status capsules  
+- [ ] Rectangular primary buttons use `--phisio-radius` (14px), not pill
+- [ ] Pill only on status capsules / circular play / chip toggles 
 - [ ] Secondary controls use 14px radius  
 - [ ] Dock/header/sider solid; no backdrop blur  
 - [ ] Section gaps ≤ 20px; list gaps ~10–12px  

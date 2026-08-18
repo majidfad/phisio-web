@@ -1,5 +1,6 @@
 import { Archive, CirclePlay, Pencil } from 'lucide-react';
-import { Button, Card, Tag } from 'antd';
+import { StatusCapsule } from '@/components/ui';
+import { Button, Card } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
@@ -74,12 +75,14 @@ export function DoctorExerciseCard({
         {hasDescription ? <p className="patient-media-card__body">{exercise.description}</p> : null}
 
         <div className="exercise-row__chips doctor-overview__chips">
-          <Tag className="exercise-dosage-chip">
+          <span className="exercise-meta-chip">
             {t(`exerciseMeta.equipment.${exercise.equipment}`)}
-          </Tag>
-          <Tag className="exercise-dosage-chip" color="blue">
-            {t(`exerciseMeta.difficulty.${exercise.difficulty}`)}
-          </Tag>
+          </span>
+          <StatusCapsule
+            status="info"
+            showDot={false}
+            label={t(`exerciseMeta.difficulty.${exercise.difficulty}`)}
+          />
         </div>
       </div>
     </Card>

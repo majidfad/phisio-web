@@ -10,7 +10,10 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"vite.config.ts\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"vite.config.ts\"",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "presentation:screenshots": "node scripts/presentation/capture-screenshots.mjs",
+    "presentation:pdf": "node scripts/presentation/generate-pdfs.mjs",
+    "presentation:build": "node scripts/presentation/build-presentation.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.4.0",
@@ -45,6 +48,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "happy-dom": "^20.10.6",
+    "playwright": "^1.62.1",
     "prettier": "^3.8.4",
     "sharp": "^0.35.3",
     "typescript": "~6.0.2",

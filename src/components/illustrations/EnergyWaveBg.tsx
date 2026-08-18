@@ -6,6 +6,7 @@ interface EnergyWaveBgProps {
   idSuffix?: string;
 }
 
+/** Decorative wash using kit CSS variables so light/dark both stay on-brand. */
 export function EnergyWaveBg({ className, style, idSuffix = 'default' }: EnergyWaveBgProps) {
   const blueId = `energy-wave-blue-${idSuffix}`;
   const greenId = `energy-wave-green-${idSuffix}`;
@@ -23,16 +24,16 @@ export function EnergyWaveBg({ className, style, idSuffix = 'default' }: EnergyW
     >
       <defs>
         <linearGradient id={blueId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0057ff" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#0057ff" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--phisio-primary)" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="var(--phisio-primary)" stopOpacity="0" />
         </linearGradient>
         <linearGradient id={greenId} x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#00875a" stopOpacity="0.34" />
-          <stop offset="100%" stopColor="#00875a" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--phisio-teal)" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="var(--phisio-teal)" stopOpacity="0" />
         </linearGradient>
         <radialGradient id={meshId} cx="50%" cy="40%" r="65%">
-          <stop offset="0%" stopColor="#0057ff" stopOpacity="0.12" />
-          <stop offset="55%" stopColor="#152238" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--phisio-primary)" stopOpacity="0.1" />
+          <stop offset="55%" stopColor="var(--phisio-surface)" stopOpacity="0" />
         </radialGradient>
         <filter id={`blur-${idSuffix}`} x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="18" />
@@ -57,11 +58,11 @@ export function EnergyWaveBg({ className, style, idSuffix = 'default' }: EnergyW
       />
       <path
         d="M0 148 C70 118 140 162 210 138 C280 114 340 156 400 132 V200 H0 Z"
-        fill="rgba(29, 78, 216, 0.1)"
+        fill="var(--phisio-primary-soft)"
       />
       <path
         d="M0 168 C90 150 160 176 250 160 C320 148 360 170 400 158"
-        stroke="rgba(29, 78, 216, 0.28)"
+        stroke="var(--phisio-primary-muted)"
         strokeWidth="1.5"
         fill="none"
       />

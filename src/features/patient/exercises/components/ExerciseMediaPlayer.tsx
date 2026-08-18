@@ -126,8 +126,8 @@ export function ExerciseMediaPlayer({
           maxHeight: continuous ? undefined : maxHeight,
           objectFit: continuous ? 'contain' : 'cover',
           display: 'block',
-          borderRadius: continuous ? 0 : 12,
-          background: '#0b1220',
+          borderRadius: continuous ? 0 : 'var(--phisio-radius)',
+          background: 'var(--phisio-bg)',
         }}
         controls={!continuous}
         controlsList={continuous ? undefined : 'nodownload'}
@@ -156,8 +156,8 @@ export function ExerciseMediaPlayer({
           maxHeight: continuous ? undefined : maxHeight,
           objectFit: 'contain',
           display: 'block',
-          borderRadius: continuous ? 0 : 12,
-          background: '#0b1220',
+          borderRadius: continuous ? 0 : 'var(--phisio-radius)',
+          background: 'var(--phisio-bg)',
         }}
       />
     );
@@ -175,9 +175,9 @@ export function ExerciseMediaPlayer({
         aspectRatio: continuous ? undefined : '16 / 9',
         border: 'none',
         display: 'block',
-        borderRadius: continuous ? 0 : 12,
+        borderRadius: continuous ? 0 : 'var(--phisio-radius)',
         maxHeight: continuous ? undefined : maxHeight,
-        background: '#0b1220',
+        background: 'var(--phisio-bg)',
       }}
       src={iframeSrc}
       title={title}

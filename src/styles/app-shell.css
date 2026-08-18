@@ -459,7 +459,8 @@
   background: var(--phisio-surface);
 }
 
-.exercise-select-item:has(.ant-checkbox-checked) {
+.exercise-select-item--selected,
+.exercise-select-item:has(.kit-select-toggle--on) {
   border-color: color-mix(in srgb, var(--phisio-primary) 45%, var(--phisio-border));
   background: var(--phisio-primary-soft);
 }
@@ -615,19 +616,29 @@
   height: var(--phisio-control-height-lg);
   line-height: calc(var(--phisio-control-height-lg) - 2px);
   text-align: center;
-  border-radius: var(--phisio-radius) !important;
-  font-weight: 500;
+  border-radius: var(--phisio-radius-pill) !important;
+  font-weight: 600;
+  border-color: var(--phisio-border) !important;
+  background: var(--phisio-surface) !important;
+  color: var(--phisio-text) !important;
 }
 
 .feedback-score-option.ant-radio-button-wrapper:not(:first-child)::before {
   display: none;
 }
 
+.feedback-score-option.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  border-color: var(--phisio-primary) !important;
+  background: var(--phisio-primary-soft) !important;
+  color: var(--phisio-primary) !important;
+}
+
 .workout-summary {
-  padding: var(--phisio-space-3) var(--phisio-space-4);
+  padding: var(--phisio-space-4);
   border-radius: var(--phisio-radius-lg);
-  background: color-mix(in srgb, var(--phisio-primary) 12%, transparent);
-  border: 1px solid var(--phisio-border-soft);
+  background: var(--phisio-surface);
+  border: 1px solid var(--phisio-border);
+  box-shadow: var(--phisio-shadow-sm);
 }
 
 .workout-summary__title {
@@ -658,7 +669,7 @@
   padding: 0;
   border: 0;
   overflow: hidden;
-  background: #0b1220;
+  background: var(--phisio-bg);
   cursor: pointer;
 }
 
@@ -680,7 +691,7 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  background: color-mix(in srgb, #000 28%, transparent);
+  background: color-mix(in srgb, var(--phisio-bg) 40%, transparent);
 }
 
 .library-card__body {
@@ -695,12 +706,18 @@
 }
 
 .role-layout--admin .nav-card--active .nav-card__icon {
-  color: var(--phisio-accent);
-  background: var(--phisio-accent-soft);
+  color: var(--phisio-primary);
+  background: var(--phisio-primary-soft);
+}
+
+.role-layout--clinic-manager .nav-card--active .nav-card__icon {
+  color: var(--phisio-primary);
+  background: var(--phisio-primary-soft);
 }
 
 .role-layout--doctor .nav-card--active {
-  border-color: color-mix(in srgb, var(--phisio-teal) 45%, transparent);
+  border-color: color-mix(in srgb, var(--phisio-primary) 35%, transparent);
+  background: var(--phisio-primary-soft);
 }
 
 .role-layout--patient .dock-nav__item--active {
@@ -820,23 +837,95 @@
 .exercise-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  margin-top: var(--phisio-space-4);
 }
 
 .exercise-row {
   display: flex;
   align-items: center;
-  gap: var(--phisio-space-4);
+  gap: var(--phisio-space-3);
   padding: var(--phisio-space-3);
-  border: 1px solid var(--phisio-border-soft);
-  border-radius: var(--phisio-radius-lg);
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md);
   background: var(--phisio-surface);
+  box-shadow: var(--phisio-shadow-sm);
+}
+
+.exercise-row--clickable {
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.exercise-row--clickable:hover {
+  border-color: color-mix(in srgb, var(--phisio-primary) 35%, var(--phisio-border));
+  transform: translateY(-1px);
+}
+
+.exercise-row--clickable:focus-visible {
+  outline: 2px solid var(--phisio-primary);
+  outline-offset: 2px;
 }
 
 .exercise-row--completed {
-  opacity: 0.72;
+  opacity: 0.85;
   border-color: color-mix(in srgb, var(--phisio-accent) 28%, var(--phisio-border));
   background: color-mix(in srgb, var(--phisio-accent) 6%, var(--phisio-surface));
+}
+
+.exercise-row--selected {
+  border-color: color-mix(in srgb, var(--phisio-primary) 40%, var(--phisio-border));
+  background: color-mix(in srgb, var(--phisio-primary) 8%, var(--phisio-surface));
+}
+
+.kit-select-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-pill);
+  background: var(--phisio-surface);
+  color: #fff;
+  cursor: pointer;
+}
+
+.kit-select-toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.kit-select-toggle--on {
+  border-color: var(--phisio-primary);
+  background: var(--phisio-primary);
+}
+
+.kit-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 4px 12px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-pill);
+  background: var(--phisio-surface);
+  color: var(--phisio-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.kit-filter-chip--active {
+  border-color: var(--phisio-primary);
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
 }
 
 .exercise-row__check {
@@ -848,62 +937,79 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--phisio-space-2);
+  gap: 2px;
 }
 
 .exercise-row__name {
-  font-size: 15px !important;
-  line-height: 1.4 !important;
-  margin: 0 !important;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--phisio-text);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  unicode-bidi: plaintext;
+  display: block;
 }
 
 .exercise-row__name--done {
-  color: var(--phisio-text-secondary) !important;
-}
-
-.exercise-row__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--phisio-space-2);
-}
-
-.exercise-chip {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--phisio-space-1);
-  padding: var(--phisio-space-1) 10px;
-  border-radius: var(--phisio-radius-pill);
-  background: color-mix(in srgb, var(--phisio-primary) 8%, var(--phisio-bg));
-  color: var(--phisio-text);
-  font-size: 12px;
-  line-height: 1.2;
-}
-
-.exercise-chip__value {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.exercise-chip__label {
   color: var(--phisio-text-secondary);
-  font-weight: 400;
+}
+
+.exercise-row__meta {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--phisio-text-secondary);
+}
+
+.exercise-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--phisio-radius-sm);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.exercise-row__action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.exercise-row__play,
+.exercise-row__play.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  padding: 0 !important;
+  border: 0;
+  border-radius: var(--phisio-radius-pill) !important;
+  background: var(--phisio-primary);
+  color: #fff;
+  flex-shrink: 0;
 }
 
 .exercise-row__thumb {
   position: relative;
   flex-shrink: 0;
-  width: 88px;
-  height: 88px;
+  width: 72px;
+  height: 72px;
   padding: 0;
   border: 0;
-  border-radius: var(--phisio-radius-md);
+  border-radius: var(--phisio-radius);
   overflow: hidden;
-  background: #0b1220;
-  cursor: pointer;
-}
-
-.exercise-row__thumb:disabled {
-  cursor: default;
+  background: var(--phisio-bg);
+  display: block;
 }
 
 .exercise-row__thumb img {
@@ -913,6 +1019,16 @@
   display: block;
 }
 
+.exercise-row__thumb-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: var(--phisio-text-secondary);
+  background: var(--phisio-bg-elevated);
+}
+
 .exercise-row__thumb-overlay {
   position: absolute;
   inset: 0;
@@ -920,7 +1036,7 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  background: color-mix(in srgb, #000 28%, transparent);
+  background: color-mix(in srgb, var(--phisio-bg) 40%, transparent);
 }
 
 .exercise-row__thumb-done {
@@ -947,22 +1063,28 @@
 .home-today {
   display: flex;
   flex-direction: column;
-  gap: var(--phisio-space-4);
+  gap: 16px;
+}
+
+.home-today__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .home-today__title {
   margin: 0;
-  font-size: var(--phisio-font-title);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1.3;
   color: var(--phisio-text);
 }
 
 .home-today__subtitle {
-  display: block;
-  margin: var(--phisio-space-2) 0 0;
-  font-size: var(--phisio-font-subtitle);
+  margin: 0;
+  font-size: var(--phisio-font-meta);
+  font-weight: 500;
   line-height: 1.55;
   color: var(--phisio-text-secondary);
 }
@@ -971,30 +1093,180 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--phisio-space-3);
-  padding: 10px 14px;
-  border: 1px solid var(--phisio-border-soft);
-  border-radius: var(--phisio-radius-pill);
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md);
   background: var(--phisio-surface);
+  box-shadow: var(--phisio-shadow-sm);
   color: inherit;
   text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    transform 0.2s ease;
+}
+
+.home-doctor-chip:hover {
+  border-color: color-mix(in srgb, var(--phisio-primary) 35%, var(--phisio-border));
+  transform: translateY(-1px);
+}
+
+.home-doctor-chip__main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.home-doctor-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--phisio-radius-sm);
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
+}
+
+.home-doctor-chip__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
 }
 
 .home-doctor-chip__label {
-  font-size: var(--phisio-font-meta);
+  font-size: 11px;
   font-weight: 600;
+  color: var(--phisio-text-secondary);
+}
+
+.home-doctor-chip__name {
+  font-size: 14px;
+  font-weight: 700;
   color: var(--phisio-text);
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .home-doctor-chip__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   flex-shrink: 0;
-  font-size: var(--phisio-font-meta);
+  font-size: 13px;
   font-weight: 700;
   color: var(--phisio-primary);
+}
+
+.home-today__empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.home-today__stats .ant-card {
+  height: 100%;
+}
+
+.home-today__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.home-today__section-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--phisio-text);
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--phisio-radius-lg);
+  padding: 18px 18px 16px;
+  background: var(--phisio-surface);
+  border: 1px solid var(--phisio-border);
+  box-shadow: var(--phisio-shadow-sm);
+}
+
+.hero-card__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-card__copy {
+  min-width: 0;
+}
+
+.hero-card__badge {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--phisio-primary);
+  background: var(--phisio-primary-soft);
+  border-radius: var(--phisio-radius-sm);
+}
+
+.hero-card__title {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--phisio-text);
+}
+
+.hero-card__description {
+  margin: 0;
+  font-size: var(--phisio-font-meta);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--phisio-text-secondary);
+}
+
+.hero-card__actions {
+  margin-top: 14px;
+}
+
+.hero-card__ring {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-card__icon {
+  flex-shrink: 0;
+  padding: 12px;
+  border-radius: var(--phisio-radius-md);
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
+}
+
+@media (max-width: 380px) {
+  .hero-card__body {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero-card__actions {
+    width: 100%;
+  }
 }
 
 .home-session-card {
@@ -1020,6 +1292,174 @@
   flex-wrap: wrap;
   gap: var(--phisio-space-2);
   justify-content: center;
+}
+
+.program-today {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.program-today__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.program-today__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.program-today__title {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  color: var(--phisio-text);
+}
+
+.program-today__subtitle {
+  margin: 0;
+  font-size: var(--phisio-font-meta);
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--phisio-text-secondary);
+}
+
+.program-today__more.ant-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--phisio-text-secondary);
+  border-radius: var(--phisio-radius-pill);
+  background: var(--phisio-surface);
+  border: 1px solid var(--phisio-border);
+}
+
+.program-today__more.ant-btn:hover {
+  color: var(--phisio-primary);
+  border-color: color-mix(in srgb, var(--phisio-primary) 35%, var(--phisio-border));
+}
+
+.program-today__loading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.program-today__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.program-today__group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.program-today__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.program-today__section-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--phisio-text);
+}
+
+.program-today__start.ant-btn {
+  height: var(--phisio-control-height-lg);
+  font-weight: 700;
+  border-radius: var(--phisio-radius);
+}
+
+.library-today {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.library-today__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.library-today__title {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  color: var(--phisio-text);
+}
+
+.library-today__subtitle {
+  margin: 0;
+  font-size: var(--phisio-font-meta);
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--phisio-text-secondary);
+}
+
+.library-today__search .ant-input-affix-wrapper {
+  border-radius: var(--phisio-radius);
+  background: var(--phisio-bg-elevated);
+  border-color: var(--phisio-border);
+  box-shadow: none;
+}
+
+.library-today__search .ant-input-affix-wrapper-focused,
+.library-today__search .ant-input-affix-wrapper:focus-within {
+  border-color: var(--phisio-primary);
+  box-shadow: 0 0 0 3px var(--phisio-primary-muted);
+}
+
+.library-today__filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.library-today__filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: var(--phisio-radius-sm);
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.library-today__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.library-today__section-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--phisio-text);
 }
 
 .workout-today {
@@ -1076,7 +1516,7 @@
 .workout-hero__start.ant-btn {
   height: var(--phisio-control-height-lg);
   font-weight: 600;
-  border-radius: var(--phisio-radius-pill);
+  border-radius: var(--phisio-radius);
 }
 
 .workout-hero__doctor,
@@ -1120,7 +1560,7 @@
 
 .patient-card--tap:hover,
 .patient-card--tap:focus-visible {
-  border-color: var(--phisio-border-glow);
+  border-color: var(--phisio-primary);
   background: var(--phisio-primary-soft);
   outline: none;
 }
@@ -1164,6 +1604,186 @@
 
 .patient-card__actions .ant-btn {
   flex: 1 1 calc(50% - 8px);
+}
+
+.clinic-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.clinic-dashboard__hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.clinic-dashboard__cta-primary.ant-btn {
+  height: 40px;
+  padding-inline: 18px;
+  font-weight: 700;
+  border-radius: var(--phisio-radius);
+}
+
+.clinic-dashboard__cta-secondary.ant-btn {
+  height: 40px;
+  padding-inline: 18px;
+  font-weight: 600;
+  border-radius: var(--phisio-radius);
+  border-color: var(--phisio-border);
+  color: var(--phisio-text);
+}
+
+.clinic-dashboard__stats .ant-card {
+  height: 100%;
+}
+
+.clinic-dashboard__panel {
+  padding: 16px;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md);
+  background: var(--phisio-surface);
+  box-shadow: var(--phisio-shadow-sm);
+}
+
+.clinic-dashboard__section-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--phisio-text);
+}
+
+.clinic-dashboard__panel .clinic-dashboard__section-title {
+  margin-bottom: 12px;
+}
+
+.clinic-dashboard__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 576px) {
+  .clinic-dashboard__links:not(.clinic-dashboard__links--grid) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .clinic-dashboard__links--grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .clinic-dashboard__links--grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.clinic-dashboard__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--phisio-radius-md);
+  background: var(--phisio-bg-elevated);
+  border: 1px solid var(--phisio-border);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    transform 0.2s ease;
+}
+
+.clinic-dashboard__link:hover {
+  border-color: color-mix(in srgb, var(--phisio-primary) 35%, var(--phisio-border));
+  transform: translateY(-1px);
+}
+
+.clinic-dashboard__link-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.clinic-dashboard__link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--phisio-radius-sm);
+}
+
+.clinic-dashboard__link-icon--blue {
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
+}
+
+.clinic-dashboard__link-icon--teal,
+.clinic-dashboard__link-icon--mint {
+  background: var(--phisio-accent-soft);
+  color: var(--phisio-teal);
+}
+
+.clinic-dashboard__link-icon--peach {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--phisio-warning);
+}
+
+.clinic-dashboard__link-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.clinic-dashboard__link-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--phisio-text);
+}
+
+.clinic-dashboard__link-desc {
+  font-size: var(--phisio-font-meta);
+  font-weight: 500;
+  color: var(--phisio-text-secondary);
+}
+
+.clinic-dashboard__link-chevron {
+  flex-shrink: 0;
+  color: var(--phisio-text-secondary);
+}
+
+.clinic-dashboard__recent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clinic-dashboard__recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.patient-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--phisio-radius-pill);
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
 }
 
 /* Guided session */
@@ -1245,7 +1865,7 @@
 .workout-session__media {
   position: absolute;
   inset: 0;
-  background: #0b1220;
+  background: var(--phisio-bg);
 }
 
 .workout-session__media-el {
@@ -1297,16 +1917,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, #fff 22%, transparent);
+  border-radius: var(--phisio-radius-pill);
   color: #fff;
-  background: color-mix(in srgb, #fff 14%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: color-mix(in srgb, #fff 18%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   cursor: pointer;
   flex: none;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.workout-session__glass-btn:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .workout-session__glass-btn:disabled {
@@ -1315,8 +1940,8 @@
 }
 
 .workout-session__glass-spacer {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   flex: none;
 }
 
@@ -1324,69 +1949,68 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
   flex: 1;
   min-width: 0;
 }
 
 .workout-session__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: color-mix(in srgb, #fff 35%, transparent);
+  width: 7px;
+  height: 7px;
+  border-radius: var(--phisio-radius-pill);
+  background: color-mix(in srgb, #fff 32%, transparent);
   transition:
     width 200ms ease,
     background 200ms ease;
 }
 
 .workout-session__dot--done {
-  background: color-mix(in srgb, #fff 55%, transparent);
+  background: var(--phisio-teal);
 }
 
 .workout-session__dot--active {
-  width: 18px;
-  background: #fff;
+  width: 20px;
+  background: var(--phisio-primary);
 }
 
 .workout-session__meta {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   text-align: center;
   color: #fff;
 }
 
 .workout-session__title {
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: 500;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 1.3;
   color: #fff;
-  text-shadow: 0 1px 8px color-mix(in srgb, #000 35%, transparent);
+  text-shadow: 0 1px 10px color-mix(in srgb, #000 40%, transparent);
 }
 
 .workout-session__set-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 2px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--phisio-radius-pill);
+  border: 1px solid color-mix(in srgb, #fff 16%, transparent);
+  font-size: 0.88rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: #fff;
-  background: color-mix(in srgb, #000 35%, transparent);
+  background: color-mix(in srgb, #000 42%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  text-shadow: none;
 }
 
 .workout-session__set-sep {
-  margin-inline: 2px;
-  opacity: 0.7;
-  font-weight: 400;
+  opacity: 0.65;
+  font-weight: 500;
 }
 
 .workout-session__info-dosage {
@@ -1396,11 +2020,30 @@
   color: var(--phisio-text);
 }
 
+.workout-session__info-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.workout-session__info-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: var(--phisio-radius-sm);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .workout-session__transport {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
   max-width: 420px;
   margin-inline: auto;
@@ -1412,12 +2055,19 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  border: 0;
-  border-radius: 999px;
-  color: color-mix(in srgb, #fff 88%, transparent);
-  background: transparent;
+  border: 1px solid color-mix(in srgb, #fff 18%, transparent);
+  border-radius: var(--phisio-radius-pill);
+  color: #fff;
+  background: color-mix(in srgb, #fff 14%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   flex: none;
+  transition: transform 0.15s ease;
+}
+
+.workout-session__nav-ghost:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .workout-session__nav-ghost:disabled {
@@ -1427,22 +2077,25 @@
 
 .workout-session__cta-pill.ant-btn {
   flex: 1;
-  height: 48px;
-  max-width: 240px;
-  font-weight: 600;
+  height: 50px;
+  max-width: 260px;
+  font-weight: 700;
   border: 0;
-  border-radius: var(--phisio-radius-pill) !important;
-  box-shadow: var(--phisio-shadow-button);
+  border-radius: var(--phisio-radius) !important;
+  box-shadow: none;
 }
 
 .workout-session__text-action {
+  align-self: center;
   border: 0;
   background: transparent;
-  color: var(--phisio-primary);
-  font-size: 0.95rem;
-  font-weight: 400;
+  color: color-mix(in srgb, #fff 78%, transparent);
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 4px 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .workout-session__text-action:disabled {
@@ -1459,6 +2112,7 @@
 
 .workout-session__doctor-note {
   display: block;
+  margin-top: 8px;
   font-size: 0.8rem;
 }
 
@@ -1486,9 +2140,9 @@
   z-index: 1;
   max-height: 70vh;
   overflow: auto;
-  padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
-  border-radius: 20px 20px 0 0;
-  background: var(--phisio-bg);
+  padding: 22px 20px calc(22px + env(safe-area-inset-bottom, 0px));
+  border-radius: var(--phisio-radius-xl) var(--phisio-radius-xl) 0 0;
+  background: var(--phisio-surface);
   color: var(--phisio-text);
   box-shadow: 0 -8px 32px color-mix(in srgb, #000 18%, transparent);
   animation: workout-info-up 220ms ease-out;
@@ -1515,12 +2169,127 @@
 
 .workout-session__info-title {
   margin: 0;
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 1.35;
+  color: var(--phisio-text);
+}
+
+.workout-session__sheet-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-pill);
+  color: var(--phisio-text);
+  background: var(--phisio-bg-elevated);
+  cursor: pointer;
 }
 
 .workout-session__glass-btn--on-sheet {
   color: var(--phisio-text);
-  background: color-mix(in srgb, var(--phisio-text) 8%, transparent);
+  background: var(--phisio-bg-elevated);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-color: var(--phisio-border);
 }
+
+.notification-panel {
+  width: min(360px, calc(100vw - 24px));
+  max-height: min(420px, 70vh);
+  display: flex;
+  flex-direction: column;
+  background: var(--phisio-surface);
+  border: 1px solid var(--phisio-border);
+  border-radius: var(--phisio-radius-md);
+  box-shadow: var(--phisio-shadow-md, 0 12px 32px rgba(0, 0, 0, 0.12));
+  overflow: hidden;
+}
+
+.notification-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--phisio-border);
+}
+
+.notification-panel__list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notification-panel__state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  padding: 16px;
+}
+
+.notification-panel__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--phisio-border);
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.notification-panel__item:hover {
+  background: var(--phisio-bg-elevated);
+}
+
+.notification-panel__item.is-unread {
+  background: color-mix(in srgb, var(--phisio-primary-soft) 55%, transparent);
+}
+
+.notification-panel__item-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--phisio-text);
+}
+
+.notification-panel__item-body {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--phisio-text-secondary);
+}
+
+.notification-panel__item-time {
+  font-size: 0.75rem;
+  color: var(--phisio-text-muted, var(--phisio-text-secondary));
+}
+
+.reminder-settings__summary {
+  padding: 10px 12px;
+  border-radius: var(--phisio-radius-md);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+  color: var(--phisio-text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.reminder-settings__weekdays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--phisio-radius-md);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+}
+
+

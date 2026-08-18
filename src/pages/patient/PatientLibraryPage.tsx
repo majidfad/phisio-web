@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
-import { PageHeader } from '@/components/PageHeader';
 import { LoadingState, PageContainer, AppEmpty, AppResult } from '@/components/ui';
 import { PatientExerciseLibraryCatalog } from '@/features/patient/library/components/PatientExerciseLibraryCatalog';
 import { usePatientExerciseLibrary } from '@/features/patient/library/hooks/usePatientExerciseLibrary';
@@ -29,14 +28,14 @@ export function PatientLibraryPage() {
   }, [exercises, searchQuery]);
 
   return (
-    <PageContainer>
-      <PageHeader
-        title={t('patient.library.title')}
-        description={t('patient.library.description')}
-      />
+    <PageContainer className="patient-library-page">
+      <section className="library-today" aria-label={t('patient.library.title')}>
+        <header className="library-today__intro">
+          <h1 className="library-today__title">{t('patient.library.title')}</h1>
+          <p className="library-today__subtitle">{t('patient.library.subtitle')}</p>
+        </header>
 
-      <div className="patient-stack patient-stack--loose">
-        <div className="patient-filter-bar">
+        <div className="library-today__search">
           <Input
             size="large"
             allowClear
@@ -44,6 +43,7 @@ export function PatientLibraryPage() {
             placeholder={t('patient.library.searchPlaceholder')}
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
+            aria-label={t('patient.library.searchPlaceholder')}
           />
         </div>
 
@@ -61,14 +61,18 @@ export function PatientLibraryPage() {
           />
         ) : null}
 
-        {!isLoading && !isError && filteredExercises.length === 0 ? (
+        {!isLoading && !isError && exercises.length === 0 ? (
           <AppEmpty description={t('patient.library.empty')} />
+        ) : null}
+
+        {!isLoading && !isError && exercises.length > 0 && filteredExercises.length === 0 ? (
+          <AppEmpty description={t('patient.library.emptySearch')} />
         ) : null}
 
         {!isLoading && !isError && filteredExercises.length > 0 ? (
           <PatientExerciseLibraryCatalog exercises={filteredExercises} />
         ) : null}
-      </div>
+      </section>
     </PageContainer>
   );
 }

@@ -20,6 +20,8 @@
     "registering": "در حال ثبت نام…",
     "registerLink": "ثبت نام",
     "signInLink": "ورود",
+    "noAccountPrompt": "حساب ندارید؟",
+    "haveAccountPrompt": "حساب دارید؟",
     "registrationSuccess": "ثبت نام با موفقیت انجام شد.",
     "registrationSuccessPatient": "ثبت نام با موفقیت انجام شد. اکنون می‌توانید وارد شوید.",
     "registrationSuccessDoctor": "ثبت نام شما با موفقیت انجام شد و در انتظار تأیید مدیر است.",
@@ -90,17 +92,20 @@
     "defaultUser": "کاربر",
     "roles": {
       "admin": "مدیر",
+      "clinicManager": "مدیر مطب",
       "doctor": "پزشک",
       "patient": "بیمار"
     },
     "navAria": {
       "admin": "ناوبری مدیر",
+      "clinicManager": "ناوبری مدیر مطب",
       "doctor": "ناوبری پزشک",
       "patient": "ناوبری بیمار"
     },
     "nav": {
       "dashboard": "داشبورد",
       "overview": "نمای کلی",
+      "clinics": "مطب‌ها",
       "doctors": "پزشکان",
       "users": "کاربران",
       "patients": "بیماران",
@@ -114,6 +119,182 @@
       "myExercises": "تمرین‌های من",
       "progress": "پیشرفت",
       "more": "بیشتر"
+    }
+  },
+  "notifications": {
+    "title": "اعلان‌ها",
+    "empty": "هنوز اعلانی ندارید.",
+    "markAllRead": "خواندن همه",
+    "types": {
+      "PatientLinkRequested": {
+        "title": "درخواست بیمار جدید",
+        "body": "{{patientName}} درخواست اتصال به شما را ارسال کرد."
+      },
+      "LinkApproved": {
+        "title": "اتصال تأیید شد",
+        "body": "{{doctorName}} درخواست مراقبت شما را پذیرفت."
+      },
+      "LinkRejected": {
+        "title": "اتصال رد شد",
+        "body": "{{doctorName}} درخواست مراقبت شما را رد کرد."
+      },
+      "PatientRemoved": {
+        "title": "اتصال پایان یافت",
+        "body": "{{doctorName}} شما را از فهرست بیماران حذف کرد."
+      },
+      "ExercisesAssigned": {
+        "title": "تمرین جدید اختصاص داده شد",
+        "body_one": "{{doctorName}} ۱ تمرین برای شما اختصاص داد.",
+        "body_other": "{{doctorName}} {{count}} تمرین برای شما اختصاص داد.",
+        "body": "{{doctorName}} تمرین‌هایی برای شما اختصاص داد."
+      },
+      "ProgramCreated": {
+        "title": "برنامه تمرینی جدید",
+        "body": "{{doctorName}} یک برنامه تمرینی برای شما ساخت."
+      },
+      "ExercisesCompleted": {
+        "title": "تمرین‌ها انجام شد",
+        "body_one": "{{patientName}} ۱ تمرین را انجام داد.",
+        "body_other": "{{patientName}} {{count}} تمرین را انجام داد.",
+        "body": "{{patientName}} تمرین‌ها را انجام داد."
+      },
+      "DailyFeedbackReceived": {
+        "title": "بازخورد روزانه",
+        "body": "{{patientName}} بازخورد امروز را ارسال کرد."
+      },
+      "DoctorPendingActivation": {
+        "title": "ثبت‌نام پزشک جدید",
+        "body": "{{doctorName}} ثبت‌نام کرده و منتظر تأیید است."
+      },
+      "DoctorActivated": {
+        "title": "حساب تأیید شد",
+        "body": "حساب پزشک شما تأیید شد. اکنون می‌توانید وارد شوید."
+      },
+      "ExerciseReminder": {
+        "title": "یادآوری تمرین",
+        "body_one": "امروز ۱ تمرین برای شما برنامه‌ریزی شده است.",
+        "body_other": "امروز {{count}} تمرین برای شما برنامه‌ریزی شده است.",
+        "body": "امروز تمرین‌هایی برای شما برنامه‌ریزی شده است."
+      }
+    }
+  },
+  "clinics": {
+    "title": "مطب‌ها",
+    "description": "مشاهده، ایجاد و مدیریت مطب‌ها",
+    "addButton": "ایجاد مطب",
+    "searchPlaceholder": "جستجوی مطب…",
+    "loading": "در حال بارگذاری…",
+    "retry": "تلاش دوباره",
+    "empty": "هنوز مطبی ثبت نشده است.",
+    "emptyInactive": "مطب غیرفعالی یافت نشد.",
+    "emptySearch": "مطبی با این جستجو پیدا نشد.",
+    "notSet": "—",
+    "columns": {
+      "name": "نام",
+      "address": "آدرس",
+      "phones": "شماره تلفن",
+      "createdAt": "تاریخ ایجاد",
+      "status": "وضعیت",
+      "actions": "عملیات"
+    },
+    "actions": {
+      "view": "مشاهده جزئیات",
+      "edit": "ویرایش",
+      "disable": "غیرفعال کردن"
+    },
+    "form": {
+      "createTitle": "ایجاد مطب",
+      "editTitle": "ویرایش مطب",
+      "name": "نام مطب",
+      "address": "آدرس",
+      "phones": "شماره تلفن‌ها",
+      "addPhone": "افزودن شماره تلفن",
+      "removePhone": "حذف شماره تلفن",
+      "clinicManagerId": "مدیر مطب",
+      "clinicManagerHint": "مدیر مطب را انتخاب کنید.",
+      "clinicManagerPlaceholder": "نام پزشک را جستجو کنید",
+      "clinicManagerEmpty": "پزشکی یافت نشد.",
+      "clinicManagerLoadFailed": "بارگذاری پزشکان انجام نشد.",
+      "managerUnchanged": "مدیر مطب از این فرم قابل تغییر نیست.",
+      "create": "ایجاد مطب",
+      "save": "ذخیره تغییرات",
+      "saving": "در حال ذخیره…",
+      "cancel": "انصراف"
+    },
+    "disable": {
+      "title": "غیرفعال کردن مطب",
+      "message": "مطب «{{name}}» غیرفعال شود؟ دیگر در فهرست فعال‌ها نمایش داده نمی‌شود.",
+      "confirm": "غیرفعال کردن",
+      "cancel": "انصراف"
+    },
+    "validation": {
+      "nameRequired": "نام مطب الزامی است.",
+      "nameMaxLength": "نام مطب حداکثر ۲۰۰ کاراکتر باشد.",
+      "addressRequired": "آدرس الزامی است.",
+      "addressMaxLength": "آدرس حداکثر ۵۰۰ کاراکتر باشد.",
+      "phoneMaxLength": "شماره تلفن حداکثر ۲۰ کاراکتر باشد.",
+      "phoneInvalid": "فرمت شماره تلفن نامعتبر است.",
+      "clinicManagerRequired": "انتخاب مدیر مطب الزامی است.",
+      "guidInvalid": "شناسه معتبر وارد کنید."
+    },
+    "success": {
+      "created": "مطب با موفقیت ایجاد شد.",
+      "updated": "مطب با موفقیت به‌روزرسانی شد.",
+      "disabled": "مطب با موفقیت غیرفعال شد."
+    },
+    "errors": {
+      "loadFailed": "بارگذاری مطب‌ها انجام نشد.",
+      "saveFailed": "ذخیره مطب انجام نشد.",
+      "disableFailed": "غیرفعال کردن مطب انجام نشد."
+    },
+    "details": {
+      "title": "اطلاعات مطب",
+      "description": "اطلاعات مطب و پزشکان عضو",
+      "back": "بازگشت به مطب‌ها",
+      "name": "نام",
+      "address": "آدرس",
+      "phones": "شماره تلفن‌ها",
+      "doctorCount": "تعداد پزشکان",
+      "status": "وضعیت"
+    },
+    "doctors": {
+      "title": "پزشکان مطب",
+      "description": "پزشکان عضو این مطب",
+      "add": "افزودن پزشک",
+      "adding": "در حال افزودن…",
+      "addTitle": "افزودن پزشک به مطب",
+      "selectDoctor": "انتخاب پزشک",
+      "selectDoctorPlaceholder": "نام پزشک را جستجو کنید",
+      "emptyCandidates": "پزشک دیگری برای افزودن یافت نشد.",
+      "addHint": "مدیر مطب پس از عضویت قابل حذف نیست.",
+      "loading": "در حال بارگذاری…",
+      "empty": "هنوز پزشکی به این مطب اضافه نشده است.",
+      "remove": "حذف",
+      "removeTitle": "حذف پزشک",
+      "removeMessage": "«{{name}}» از این مطب حذف شود؟",
+      "managerBadge": "مدیر مطب",
+      "cannotRemoveManager": "مدیر مطب را نمی‌توان از مطب حذف کرد.",
+      "columns": {
+        "name": "نام",
+        "phone": "شماره تلفن",
+        "specialty": "تخصص",
+        "role": "نقش",
+        "actions": "عملیات"
+      },
+      "success": {
+        "added": "پزشک به مطب اضافه شد.",
+        "removed": "پزشک از مطب حذف شد."
+      },
+      "validation": {
+        "doctorRequired": "انتخاب پزشک الزامی است."
+      },
+      "errors": {
+        "loadFailed": "بارگذاری پزشکان مطب انجام نشد.",
+        "candidatesLoadFailed": "بارگذاری فهرست پزشکان انجام نشد.",
+        "alreadyAssigned": "این پزشک قبلاً به مطب اضافه شده است.",
+        "addFailed": "افزودن پزشک انجام نشد.",
+        "removeFailed": "حذف پزشک انجام نشد."
+      }
     }
   },
   "admin": {
@@ -167,11 +348,12 @@
     "dashboard": {
       "title": "داشبورد مدیر",
       "overview": "نمای کلی",
-      "badge": "مدیریت",
+      "badge": "مدیریت سیستم",
       "greeting": "خوش آمدید، {{name}}",
-      "heroDescription": "کلینیک، بیماران و تمرین‌ها را از یک فضای آرام مدیریت کنید.",
+      "heroDescription": "نظارت بر پزشکان، بیماران، تمرینات و محتوای آموزشی",
       "summaryTitle": "خلاصه وضعیت",
       "quickActions": "اقدامات سریع",
+      "quickAccess": "دسترسی سریع CMS",
       "managementAria": "مدیریت سیستم",
       "summary": {
         "doctors": "پزشکان",
@@ -183,7 +365,23 @@
         "manageDoctors": "مدیریت پزشکان",
         "managePatients": "مدیریت بیماران",
         "manageExercises": "مدیریت تمرین‌ها",
-        "assignExercises": "اختصاص تمرین‌ها"
+        "assignExercises": "اختصاص تمرین‌ها",
+        "addExercise": "افزودن تمرین",
+        "approveDoctors": "تایید پزشکان"
+      },
+      "cms": {
+        "clinics": "مطب‌ها",
+        "clinicsDesc": "سوابق مطب و پزشکان",
+        "doctors": "پزشکان",
+        "doctorsDesc": "مدارک و مجوز",
+        "patients": "بیماران",
+        "patientsDesc": "کاربری و پرونده",
+        "exercises": "تمرینات",
+        "exercisesDesc": "ویدیو و محتوا",
+        "categories": "دسته‌بندی",
+        "categoriesDesc": "گروه حرکات",
+        "articles": "مقالات",
+        "articlesDesc": "محتوای آموزشی"
       },
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
@@ -254,12 +452,15 @@
       "empty": "پزشکی ثبت نشده است.",
       "emptyInactive": "پزشکی در انتظار تأیید وجود ندارد.",
       "notSet": "—",
+      "notClinicManager": "مدیر مطب نیست",
+      "clinicManagerWithoutClinics": "مدیر مطب",
       "columns": {
         "name": "نام",
         "phone": "شماره تلفن",
         "specialty": "تخصص",
         "license": "شماره نظام پزشکی",
         "address": "آدرس مطب",
+        "clinicManager": "مدیر مطب",
         "createdAt": "تاریخ ثبت",
         "actions": "عملیات"
       },
@@ -545,21 +746,33 @@
     "dashboard": {
       "title": "داشبورد پزشک",
       "overview": "نمای کلی",
-      "badge": "پزشک",
+      "badge": "پنل پزشک",
       "greeting": "خوش آمدید، {{name}}",
-      "heroDescription": "بیماران و برنامه‌های تمرینی شما، مرتب و آماده مراقبت.",
+      "heroDescription": "مدیریت بیماران، پایبندی روزانه و تجویز برنامه تمرینی",
       "summaryTitle": "خلاصه وضعیت",
       "quickActions": "اقدامات سریع",
+      "quickAccess": "دسترسی سریع",
       "managementAria": "مدیریت بیماران و تمرین‌ها",
       "summary": {
-        "patients": "تعداد بیماران من"
+        "patients": "تعداد بیماران من",
+        "patientsUnderCare": "بیماران تحت نظر",
+        "recentPatients": "بیماران اخیر",
+        "peopleSuffix": "نفر"
       },
       "actions": {
-        "myPatients": "بیماران من",
-        "exercises": "تمرین‌ها"
+        "myPatients": "فهرست بیماران",
+        "exercises": "تمرین‌ها",
+        "prescribe": "تجویز نسخه جدید"
+      },
+      "links": {
+        "patients": "بیماران و درخواست‌ها",
+        "patientsDesc": "سوابق و تایید اتصال",
+        "exercises": "بانک تمرینات",
+        "exercisesDesc": "حرکات و ویدیوها"
       },
       "recentPatients": {
-        "title": "آخرین بیماران",
+        "title": "بیماران اخیر",
+        "count": "{{count}} نفر",
         "columns": {
           "name": "نام بیمار",
           "phone": "شماره موبایل",
@@ -893,6 +1106,54 @@
     }
   },
   "patient": {
+    "reminderSettings": {
+      "menu": "یادآوری تمرین",
+      "title": "یادآوری تمرین",
+      "description": "یادآوری را مثل اپ‌های تمرینی تنظیم کنید: ساعت، الگوی تکرار و یادآوری دوم در صورت انجام‌نشدن.",
+      "enabled": "فعال‌سازی یادآوری",
+      "time": "ساعت یادآوری",
+      "timeHint": "بر اساس ساعت ایران (Asia/Tehran). فقط وقتی تمرین ناتمام دارید ارسال می‌شود.",
+      "save": "ذخیره",
+      "cancel": "انصراف",
+      "success": "تنظیمات یادآوری ذخیره شد.",
+      "error": "ذخیره تنظیمات یادآوری ممکن نشد.",
+      "repeat": {
+        "label": "تکرار",
+        "daily": "هر روز",
+        "daysOfWeek": "روزهای هفته",
+        "interval": "با فاصله",
+        "weekdaysLabel": "روزهای فعال",
+        "intervalLabel": "هر چند روز یک‌بار",
+        "intervalHint": "شمارش از روزی که تنظیمات را ذخیره می‌کنید شروع می‌شود.",
+        "every": "هر",
+        "days": "روز"
+      },
+      "followUp": {
+        "enabled": "یادآوری دوم اگر انجام نشد",
+        "hint": "اگر تمرین‌های امروز ناتمام بماند، یک یادآوری دیگر در همان روز ارسال می‌شود.",
+        "time": "ساعت یادآوری دوم"
+      },
+      "weekdays": {
+        "0": "ی",
+        "1": "د",
+        "2": "س",
+        "3": "چ",
+        "4": "پ",
+        "5": "ج",
+        "6": "ش"
+      },
+      "summary": {
+        "off": "یادآوری‌ها خاموش است.",
+        "daily": "هر روز ساعت {{time}} در صورت تمرین ناتمام.",
+        "daysOfWeek": "{{days}} ساعت {{time}} در صورت تمرین ناتمام.",
+        "interval": "هر {{count}} روز ساعت {{time}} در صورت تمرین ناتمام.",
+        "daySeparator": "، "
+      },
+      "errors": {
+        "noWeekdays": "حداقل یک روز هفته را انتخاب کنید.",
+        "followUpAfterPrimary": "ساعت یادآوری دوم باید بعد از یادآوری اول باشد."
+      }
+    },
     "dashboard": {
       "treatingDoctor": "پزشک معالج: {{doctorName}}",
       "badge": "بهبودی شما",
@@ -924,11 +1185,16 @@
     },
     "library": {
       "title": "کتابخانه تمرین",
+      "subtitle": "تمرین‌های عمومی برای مشاهده و یادگیری",
       "description": "تمرین‌های عمومی که حتی بدون اتصال به پزشک هم می‌توانید ببینید.",
       "searchPlaceholder": "جستجوی تمرین",
+      "listTitle": "فهرست تمرین‌ها",
+      "filterLabel": "فیلتر",
+      "filterAll": "همه",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
       "empty": "هنوز تمرینی موجود نیست.",
+      "emptySearch": "تمرینی با این جستجو پیدا نشد.",
       "video": {
         "play": "پخش ویدیوی «{{title}}»",
         "none": "—"
@@ -957,7 +1223,7 @@
       "description": "پزشکان را ببینید، پروفایل را مشاهده کنید و درخواست اتصال بفرستید.",
       "profileTitle": "پروفایل پزشک",
       "profileDescription": "جزئیات را ببینید و وضعیت اتصال را مدیریت کنید.",
-      "searchPlaceholder": "جستجو بر اساس نام، تخصص یا کلینیک",
+      "searchPlaceholder": "جستجو بر اساس نام، تخصص یا مطب",
       "specialtyFilter": "تخصص",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",
@@ -967,7 +1233,7 @@
       "fields": {
         "specialty": "تخصص",
         "license": "شماره نظام پزشکی",
-        "clinic": "آدرس کلینیک",
+        "clinic": "آدرس مطب",
         "phone": "تلفن",
         "status": "وضعیت اتصال"
       },
@@ -1032,6 +1298,9 @@
     },
     "exercises": {
       "todayTitle": "تمرین‌های امروز",
+      "programTitle": "برنامه من",
+      "programSubtitle": "تمرین‌های تجویزشده امروز",
+      "todayListTitle": "تمرین‌های امروز",
       "title": "تمرین‌های من",
       "description": "تمرین‌های اختصاص‌داده‌شده به شما",
       "loading": "در حال بارگذاری…",
@@ -1051,7 +1320,8 @@
       "showChecklist": "علامت‌گذاری دستی",
       "hideChecklist": "بستن فهرست",
       "moreActions": "عملیات بیشتر",
-      "progressSummary": "{{done}} از {{total}} انجام شده",
+      "progressSummary": "{{done}} از {{total}} تمرین",
+      "remainingCount": "{{count}} تمرین باقی‌مانده",
       "fromDoctor": "از {{doctorName}}",
       "chip": {
         "sets": "ست",
@@ -1064,7 +1334,7 @@
       "session": {
         "title": "جلسه تمرین",
         "start": "شروع جلسه امروز",
-        "startForDoctor": "شروع تمرین ({{count}})",
+        "startForDoctor": "شروع جلسه برای {{count}} تمرین",
         "doctorDone": "تمرین‌های امروز انجام شد",
         "withDoctor": "تمرین‌های {{doctorName}}",
         "progress": "تمرین {{current}} از {{total}}",

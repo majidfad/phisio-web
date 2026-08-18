@@ -2,7 +2,8 @@
 
 > **Source of truth for all UI work.**  
 > Preview PNGs in `docs/preview-assets/` are **moodboards only** — not pixel specs.  
-> The product is **Persian RTL** with real domain data. Do not copy English mock copy, fake metrics, or preview layouts that conflict with this contract.
+> The product is **Persian RTL** with real domain data. Do not copy English mock copy, fake metrics, or preview layouts that conflict with this contract.  
+> **AI implementation contract:** [`docs/AI_UI_KIT_SPEC.md`](./docs/AI_UI_KIT_SPEC.md) + kit PNG.
 
 > **Active redesign target (2026-08):** Modern sky-blue kit → [`UI_KIT.md`](./UI_KIT.md)  
 > **AI implementation spec:** [`docs/AI_UI_KIT_SPEC.md`](./docs/AI_UI_KIT_SPEC.md) + kit image  
@@ -15,23 +16,23 @@
 
 Calm, dense, intentional — closer to a clinical SaaS tool than a generic wellness landing page.
 
-**Active palette: Modern sky-blue (UI kit)** — `#0B7AEA` light / `#3B9AFA` dark, teal for progress only, calm gray canvas.
+**Active palette: Modern patient kit** — primary `#0B7AEA` / `#3B9AFA`, teal for progress only, cool gray canvas. No Signal Blue leftovers.
 
 | Do | Don't |
 | :--- | :--- |
-| Neutrals carry structure; sky-blue only for actions | Soft azure / ice-blue wash everywhere |
+| Neutrals carry structure; primary blue only for actions | Soft azure / ice-blue wash everywhere |
 | Teal only for progress / health / active status | Teal as a second primary CTA color |
-| Neutral slate shadows | Blue-tinted soft shadows / glow stacks |
+| Neutral slate shadows | Blue-tinted soft shadows / glow |
 | One clear primary action per section | Pill CTAs stacked everywhere |
 | Tight type + spacing scale | Ad-hoc sizes / random gaps |
 
 ---
 
-## 2. Tokens (canonical) — Modern sky-blue
+## 2. Tokens (canonical) — Modern patient kit
 
 Defined in `src/styles/design-tokens.css` (dark default) + light overrides in `src/styles/theme.css`.  
 Ant theme: `src/theme/phisio-theme.ts`.  
-Target kit: [`UI_KIT.md`](./UI_KIT.md) + `docs/preview-assets/phisio_ui_kit_modern_patient_light_dark.png`.
+Spec: `docs/AI_UI_KIT_SPEC.md`.
 
 | Token | Light | Dark | Role |
 | :--- | :--- | :--- | :--- |
@@ -47,9 +48,9 @@ Target kit: [`UI_KIT.md`](./UI_KIT.md) + `docs/preview-assets/phisio_ui_kit_mode
 | `--phisio-text` | `#0B1F33` | `#F3F5F7` | Headings & body |
 | `--phisio-text-secondary` | `#5B6B7C` | `#9AA6B2` | Meta |
 | `--phisio-border` | `#E2E6EB` | `#243247` | Dividers |
-| Shadows | navy/black, no blue wash | black | Elevation |
+| Shadows | navy/black, no blue wash | black | Elevation — glow tokens = `none` |
 
-**Brand gradient:** green → blue (`--phisio-brand-gradient`).  
+**Brand gradient:** teal → blue (`--phisio-brand-gradient`) — progress ring / slider only.  
 **Always prefer `var(--phisio-*)` over hard-coded hex in components.**
 
 ---
@@ -72,9 +73,9 @@ Line height ~1.5–1.6. Avoid emojis in UI chrome.
 
 ## 4. Geometry & density
 
-1. **Pill geometry** (`9999px`): primary CTAs and `StatusCapsule` only. Secondary / default Ant buttons use `--phisio-radius` (`14px`). Small primary uses `--phisio-radius-sm`.
+1. **Pill geometry** (`9999px`): `StatusCapsule`, circular play controls, and chip/toggle pills only. Primary and secondary rectangular Ant buttons use `--phisio-radius` (`14px`). Small primary uses `--phisio-radius-sm`.
 2. **Cards**: default `--phisio-radius-md` (`16px`). Hero `--phisio-radius-lg` (`20px`). Modal shell `--phisio-radius-xl` (`28px`).
-3. **Global Ant overrides** (`antd-overrides.css`): do not force pill on every `.ant-btn` — only `.ant-btn-primary`.
+3. **Global Ant overrides** (`antd-overrides.css`): rectangular buttons (primary + default) use `--phisio-radius` (`14px`). Circular icon buttons stay round.
 4. **Section gap**: `16–20px` (not `24–32` everywhere). List row gap `10–12px`.
 5. **Elevation**: list rows → border + optional `--phisio-shadow-sm`. Section cards → `--phisio-shadow-sm` / `--phisio-shadow-card` sparingly. No glow stacks on idle UI.
 6. **Hover**: `.hover-lift` only on interactive cards; keep motion subtle (`-2px`).

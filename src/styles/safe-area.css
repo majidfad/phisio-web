@@ -42,9 +42,16 @@
   left: 16px;
   right: 16px;
   bottom: calc(12px + var(--safe-area-bottom));
+  /* Override .energy-stat-card height:100% so the banner doesn't fill the viewport */
+  top: auto;
+  height: auto;
   /* Above patient tab bar (z-index 100) so the banner stays visible at the bottom */
   z-index: 110;
   margin: 0;
+}
+
+.pwa-install-prompt.ant-card:hover {
+  transform: none;
 }
 
 .pwa-install-prompt--above-tabs.ant-card {

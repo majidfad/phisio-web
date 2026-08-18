@@ -1,8 +1,8 @@
-import { Button, Modal, Tag } from 'antd';
+import { Button, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
-import { AppTable, TableIconActions, AppEmpty } from '@/components/ui';
+import { AppTable, StatusCapsule, TableIconActions, AppEmpty } from '@/components/ui';
 import type { ExerciseCategoryDto } from '@/features/admin/exercise-categories/types/exercise-category';
 import { getCategoryDisplayName } from '@/features/admin/exercise-categories/utils/get-category-display-name';
 import { formatPersianDate } from '@/utils/persian-format';
@@ -66,7 +66,13 @@ export function ExerciseCategoriesTable({
             title: t('admin.exerciseCategories.columns.status'),
             key: 'status',
             width: 120,
-            render: () => <Tag color="warning">{t('admin.common.status.inactive')}</Tag>,
+            render: () => (
+              <StatusCapsule
+                status="cancelled"
+                label={t('admin.common.status.inactive')}
+                showDot={false}
+              />
+            ),
           } as ColumnsType<ExerciseCategoryDto>[number],
         ]
       : []),

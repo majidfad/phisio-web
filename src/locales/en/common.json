@@ -20,6 +20,8 @@
     "registering": "Registering…",
     "registerLink": "Register",
     "signInLink": "Sign in",
+    "noAccountPrompt": "Don't have an account?",
+    "haveAccountPrompt": "Already have an account?",
     "registrationSuccess": "Registration completed successfully.",
     "registrationSuccessPatient": "Registration completed successfully. You can now login.",
     "registrationSuccessDoctor": "Registration submitted successfully and is waiting for administrator approval.",
@@ -90,17 +92,20 @@
     "defaultUser": "User",
     "roles": {
       "admin": "Admin",
+      "clinicManager": "Clinic manager",
       "doctor": "Doctor",
       "patient": "Patient"
     },
     "navAria": {
       "admin": "Admin navigation",
+      "clinicManager": "Clinic manager navigation",
       "doctor": "Doctor navigation",
       "patient": "Patient navigation"
     },
     "nav": {
       "dashboard": "Dashboard",
       "overview": "Overview",
+      "clinics": "Clinics",
       "doctors": "Doctors",
       "users": "Users",
       "patients": "Patients",
@@ -114,6 +119,182 @@
       "myExercises": "My exercises",
       "progress": "Progress",
       "more": "More"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "markAllRead": "Mark all read",
+    "types": {
+      "PatientLinkRequested": {
+        "title": "New patient request",
+        "body": "{{patientName}} requested to link with you."
+      },
+      "LinkApproved": {
+        "title": "Link approved",
+        "body": "{{doctorName}} accepted your care request."
+      },
+      "LinkRejected": {
+        "title": "Link declined",
+        "body": "{{doctorName}} declined your care request."
+      },
+      "PatientRemoved": {
+        "title": "Care link ended",
+        "body": "{{doctorName}} removed you from their patient list."
+      },
+      "ExercisesAssigned": {
+        "title": "New exercises assigned",
+        "body_one": "{{doctorName}} assigned 1 exercise for you.",
+        "body_other": "{{doctorName}} assigned {{count}} exercises for you.",
+        "body": "{{doctorName}} assigned exercises for you."
+      },
+      "ProgramCreated": {
+        "title": "New exercise program",
+        "body": "{{doctorName}} created an exercise program for you."
+      },
+      "ExercisesCompleted": {
+        "title": "Exercises completed",
+        "body_one": "{{patientName}} completed 1 exercise.",
+        "body_other": "{{patientName}} completed {{count}} exercises.",
+        "body": "{{patientName}} completed exercises."
+      },
+      "DailyFeedbackReceived": {
+        "title": "Daily feedback",
+        "body": "{{patientName}} submitted today's feedback."
+      },
+      "DoctorPendingActivation": {
+        "title": "New doctor registration",
+        "body": "{{doctorName}} registered and is waiting for approval."
+      },
+      "DoctorActivated": {
+        "title": "Account approved",
+        "body": "Your doctor account has been approved. You can now sign in."
+      },
+      "ExerciseReminder": {
+        "title": "Exercise reminder",
+        "body_one": "You have 1 exercise scheduled for today.",
+        "body_other": "You have {{count}} exercises scheduled for today.",
+        "body": "You have exercises scheduled for today."
+      }
+    }
+  },
+  "clinics": {
+    "title": "Clinics",
+    "description": "View, create, and manage clinics",
+    "addButton": "Create clinic",
+    "searchPlaceholder": "Search clinics…",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "empty": "No clinics registered yet.",
+    "emptyInactive": "No disabled clinics found.",
+    "emptySearch": "No clinics match this search.",
+    "notSet": "—",
+    "columns": {
+      "name": "Name",
+      "address": "Address",
+      "phones": "Phone numbers",
+      "createdAt": "Created at",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View details",
+      "edit": "Edit",
+      "disable": "Disable"
+    },
+    "form": {
+      "createTitle": "Create clinic",
+      "editTitle": "Edit clinic",
+      "name": "Clinic name",
+      "address": "Address",
+      "phones": "Phone numbers",
+      "addPhone": "Add phone number",
+      "removePhone": "Remove phone number",
+      "clinicManagerId": "Clinic manager",
+      "clinicManagerHint": "Select the clinic manager.",
+      "clinicManagerPlaceholder": "Search by doctor name",
+      "clinicManagerEmpty": "No doctors found.",
+      "clinicManagerLoadFailed": "Failed to load doctors.",
+      "managerUnchanged": "The clinic manager cannot be changed from this form.",
+      "create": "Create clinic",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "disable": {
+      "title": "Disable clinic",
+      "message": "Disable \"{{name}}\"? It will no longer appear in the active list.",
+      "confirm": "Disable",
+      "cancel": "Cancel"
+    },
+    "validation": {
+      "nameRequired": "Clinic name is required.",
+      "nameMaxLength": "Clinic name must be at most 200 characters.",
+      "addressRequired": "Address is required.",
+      "addressMaxLength": "Address must be at most 500 characters.",
+      "phoneMaxLength": "Phone number must be at most 20 characters.",
+      "phoneInvalid": "Phone number format is invalid.",
+      "clinicManagerRequired": "Clinic manager is required.",
+      "guidInvalid": "Enter a valid ID."
+    },
+    "success": {
+      "created": "Clinic created successfully.",
+      "updated": "Clinic updated successfully.",
+      "disabled": "Clinic disabled successfully."
+    },
+    "errors": {
+      "loadFailed": "Failed to load clinics.",
+      "saveFailed": "Failed to save clinic.",
+      "disableFailed": "Failed to disable clinic."
+    },
+    "details": {
+      "title": "Clinic details",
+      "description": "Clinic information and assigned doctors",
+      "back": "Back to clinics",
+      "name": "Name",
+      "address": "Address",
+      "phones": "Phone numbers",
+      "doctorCount": "Doctor count",
+      "status": "Status"
+    },
+    "doctors": {
+      "title": "Clinic doctors",
+      "description": "Doctors assigned to this clinic",
+      "add": "Add doctor",
+      "adding": "Adding…",
+      "addTitle": "Add doctor to clinic",
+      "selectDoctor": "Select a doctor",
+      "selectDoctorPlaceholder": "Search by doctor name",
+      "emptyCandidates": "No other doctors are available to add.",
+      "addHint": "The clinic manager cannot be removed after they are assigned.",
+      "loading": "Loading…",
+      "empty": "No doctors are assigned to this clinic yet.",
+      "remove": "Remove",
+      "removeTitle": "Remove doctor",
+      "removeMessage": "Remove \"{{name}}\" from this clinic?",
+      "managerBadge": "Clinic manager",
+      "cannotRemoveManager": "The clinic manager cannot be removed from the clinic.",
+      "columns": {
+        "name": "Name",
+        "phone": "Phone number",
+        "specialty": "Specialty",
+        "role": "Role",
+        "actions": "Actions"
+      },
+      "success": {
+        "added": "Doctor added to the clinic.",
+        "removed": "Doctor removed from the clinic."
+      },
+      "validation": {
+        "doctorRequired": "Select a doctor."
+      },
+      "errors": {
+        "loadFailed": "Failed to load clinic doctors.",
+        "candidatesLoadFailed": "Failed to load available doctors.",
+        "alreadyAssigned": "This doctor is already assigned to the clinic.",
+        "addFailed": "Failed to add doctor.",
+        "removeFailed": "Failed to remove doctor."
+      }
     }
   },
   "admin": {
@@ -167,11 +348,12 @@
     "dashboard": {
       "title": "Admin Dashboard",
       "overview": "Overview",
-      "badge": "Admin",
+      "badge": "System admin",
       "greeting": "Welcome back, {{name}}",
-      "heroDescription": "Manage your clinic, patients, and exercises from one calm workspace.",
+      "heroDescription": "Oversee doctors, patients, exercises, and educational content",
       "summaryTitle": "At a glance",
       "quickActions": "Quick actions",
+      "quickAccess": "CMS quick access",
       "managementAria": "Admin management",
       "summary": {
         "doctors": "Doctors",
@@ -183,7 +365,23 @@
         "manageDoctors": "Manage Doctors",
         "managePatients": "Manage Patients",
         "manageExercises": "Manage Exercises",
-        "assignExercises": "Assign Exercises"
+        "assignExercises": "Assign Exercises",
+        "addExercise": "Add exercise",
+        "approveDoctors": "Approve doctors"
+      },
+      "cms": {
+        "clinics": "Clinics",
+        "clinicsDesc": "Clinic records and doctors",
+        "doctors": "Doctors",
+        "doctorsDesc": "Credentials and access",
+        "patients": "Patients",
+        "patientsDesc": "Accounts and records",
+        "exercises": "Exercises",
+        "exercisesDesc": "Video and content",
+        "categories": "Categories",
+        "categoriesDesc": "Movement groups",
+        "articles": "Articles",
+        "articlesDesc": "Educational content"
       },
       "loading": "Loading…",
       "retry": "Retry",
@@ -254,12 +452,15 @@
       "empty": "No doctors registered yet.",
       "emptyInactive": "No doctors pending approval.",
       "notSet": "—",
+      "notClinicManager": "Not a clinic manager",
+      "clinicManagerWithoutClinics": "Clinic manager",
       "columns": {
         "name": "Name",
         "phone": "Phone number",
         "specialty": "Specialty",
         "license": "Medical license",
         "address": "Clinic address",
+        "clinicManager": "Clinic manager",
         "createdAt": "Created at",
         "actions": "Actions"
       },
@@ -545,18 +746,29 @@
     "dashboard": {
       "title": "Doctor dashboard",
       "overview": "Overview",
-      "badge": "Doctor",
+      "badge": "Doctor panel",
       "greeting": "Welcome back, {{name}}",
-      "heroDescription": "Your patients and exercise plans, organized for focused care.",
+      "heroDescription": "Manage patients, daily adherence, and prescribe exercise programs",
       "summaryTitle": "At a glance",
       "quickActions": "Quick actions",
+      "quickAccess": "Quick access",
       "managementAria": "Patient and exercise management",
       "summary": {
-        "patients": "My patients"
+        "patients": "My patients",
+        "patientsUnderCare": "Patients under care",
+        "recentPatients": "Recent patients",
+        "peopleSuffix": "people"
       },
       "actions": {
-        "myPatients": "My patients",
-        "exercises": "Exercises"
+        "myPatients": "Patient list",
+        "exercises": "Exercises",
+        "prescribe": "New prescription"
+      },
+      "links": {
+        "patients": "Patients & requests",
+        "patientsDesc": "Records and link approvals",
+        "exercises": "Exercise bank",
+        "exercisesDesc": "Movements and videos"
       },
       "loading": "Loading…",
       "retry": "Retry",
@@ -565,6 +777,7 @@
       },
       "recentPatients": {
         "title": "Recent patients",
+        "count": "{{count}} people",
         "columns": {
           "name": "Patient name",
           "phone": "Mobile number",
@@ -893,6 +1106,54 @@
     }
   },
   "patient": {
+    "reminderSettings": {
+      "menu": "Exercise reminders",
+      "title": "Exercise reminders",
+      "description": "Set your workout reminder like a training app — choose the time, repeat pattern, and an optional follow-up nudge.",
+      "enabled": "Enable reminders",
+      "time": "Reminder time",
+      "timeHint": "Based on Iran time (Asia/Tehran). Reminders are sent only when you still have unfinished exercises.",
+      "save": "Save",
+      "cancel": "Cancel",
+      "success": "Reminder settings saved.",
+      "error": "Unable to save reminder settings.",
+      "repeat": {
+        "label": "Repeat",
+        "daily": "Daily",
+        "daysOfWeek": "Weekdays",
+        "interval": "Interval",
+        "weekdaysLabel": "Active days",
+        "intervalLabel": "Every N days",
+        "intervalHint": "Counting starts from the day you save these settings.",
+        "every": "Every",
+        "days": "days"
+      },
+      "followUp": {
+        "enabled": "Send a follow-up if not done",
+        "hint": "A second reminder later the same day when exercises are still incomplete.",
+        "time": "Follow-up time"
+      },
+      "weekdays": {
+        "0": "Sun",
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat"
+      },
+      "summary": {
+        "off": "Reminders are turned off.",
+        "daily": "Daily at {{time}} when exercises remain.",
+        "daysOfWeek": "{{days}} at {{time}} when exercises remain.",
+        "interval": "Every {{count}} days at {{time}} when exercises remain.",
+        "daySeparator": ", "
+      },
+      "errors": {
+        "noWeekdays": "Select at least one weekday.",
+        "followUpAfterPrimary": "Follow-up time must be later than the first reminder."
+      }
+    },
     "dashboard": {
       "treatingDoctor": "Treating doctor: {{doctorName}}",
       "badge": "Your recovery",
@@ -928,11 +1189,16 @@
     },
     "library": {
       "title": "Exercise library",
+      "subtitle": "Browse general exercises anytime",
       "description": "General exercises you can browse anytime — even without a linked doctor.",
       "searchPlaceholder": "Search exercises",
+      "listTitle": "Exercise list",
+      "filterLabel": "Filter",
+      "filterAll": "All",
       "loading": "Loading…",
       "retry": "Retry",
       "empty": "No exercises are available yet.",
+      "emptySearch": "No exercises match this search.",
       "video": {
         "play": "Play video for \"{{title}}\"",
         "none": "—"
@@ -1036,6 +1302,9 @@
     },
     "exercises": {
       "todayTitle": "Today's exercises",
+      "programTitle": "My program",
+      "programSubtitle": "Today's prescribed exercises",
+      "todayListTitle": "Today's exercises",
       "title": "My exercises",
       "description": "Exercises assigned to you",
       "loading": "Loading…",
@@ -1055,7 +1324,8 @@
       "showChecklist": "Mark manually",
       "hideChecklist": "Hide checklist",
       "moreActions": "More actions",
-      "progressSummary": "{{done}} of {{total}} done",
+      "progressSummary": "{{done}} of {{total}} exercises",
+      "remainingCount": "{{count}} exercises remaining",
       "fromDoctor": "From {{doctorName}}",
       "chip": {
         "sets": "sets",
@@ -1068,7 +1338,7 @@
       "session": {
         "title": "Workout session",
         "start": "Start today's session",
-        "startForDoctor": "Start workout ({{count}})",
+        "startForDoctor": "Start session for {{count}} exercises",
         "doctorDone": "All done for today",
         "withDoctor": "Exercises from {{doctorName}}",
         "progress": "Exercise {{current}} of {{total}}",

@@ -4,44 +4,49 @@
 > Preview PNGs in `docs/preview-assets/` are **moodboards only** — not pixel specs.  
 > The product is **Persian RTL** with real domain data. Do not copy English mock copy, fake metrics, or preview layouts that conflict with this contract.
 
+> **Active redesign target (2026-08):** Modern sky-blue kit → [`UI_KIT.md`](./UI_KIT.md)  
+> **AI implementation spec:** [`docs/AI_UI_KIT_SPEC.md`](./docs/AI_UI_KIT_SPEC.md) + kit image  
+> Kit image: [`docs/preview-assets/phisio_ui_kit_modern_patient_light_dark.png`](./docs/preview-assets/phisio_ui_kit_modern_patient_light_dark.png)  
+> **Tokens are live in code** (`design-tokens.css` / `theme.css` / `phisio-theme.ts`). Geometry, density, RTL rules below still apply.
+
 ---
 
 ## 1. Philosophy (pro clinical product)
 
 Calm, dense, intentional — closer to a clinical SaaS tool than a generic wellness landing page.
 
-**Active palette: Signal Blue (Option E)** — saturated `#0057FF`, green for progress only, pure gray canvas. Atlassian/fintech sharpness.
+**Active palette: Modern sky-blue (UI kit)** — `#0B7AEA` light / `#3B9AFA` dark, teal for progress only, calm gray canvas.
 
 | Do | Don't |
 | :--- | :--- |
-| Neutrals carry structure; electric blue only for actions | Soft azure / ice-blue wash everywhere |
-| Green only for progress / health / active status | Green as a second primary CTA color |
-| Neutral slate shadows | Blue-tinted soft shadows |
+| Neutrals carry structure; sky-blue only for actions | Soft azure / ice-blue wash everywhere |
+| Teal only for progress / health / active status | Teal as a second primary CTA color |
+| Neutral slate shadows | Blue-tinted soft shadows / glow stacks |
 | One clear primary action per section | Pill CTAs stacked everywhere |
 | Tight type + spacing scale | Ad-hoc sizes / random gaps |
 
 ---
 
-## 2. Tokens (canonical) — Signal Blue
+## 2. Tokens (canonical) — Modern sky-blue
 
 Defined in `src/styles/design-tokens.css` (dark default) + light overrides in `src/styles/theme.css`.  
 Ant theme: `src/theme/phisio-theme.ts`.  
-Preview: `docs/palette-preview-sharp.html` (Option E).
+Target kit: [`UI_KIT.md`](./UI_KIT.md) + `docs/preview-assets/phisio_ui_kit_modern_patient_light_dark.png`.
 
 | Token | Light | Dark | Role |
 | :--- | :--- | :--- | :--- |
-| `--phisio-bg` | `#F7F8F9` | `#0B1324` | Page canvas |
-| `--phisio-surface` | `#FFFFFF` | `#152238` | Cards / panels |
-| `--phisio-bg-elevated` | `#EBECF0` | `#1C2B44` | Nested / input chrome |
-| `--phisio-primary` | `#0057FF` | `#4C9AFF` | Primary CTAs & active UI |
-| `--phisio-primary-hover` | `#0046D1` | `#6EB0FF` | Primary hover |
-| `--phisio-accent` / `--phisio-teal` | `#00875A` | `#57D9A3` | Progress / health only |
-| `--phisio-success` | `#00875A` | `#57D9A3` | Success |
+| `--phisio-bg` | `#F6F8FA` | `#0B1220` | Page canvas |
+| `--phisio-surface` | `#FFFFFF` | `#152033` | Cards / panels |
+| `--phisio-bg-elevated` | `#EEF1F4` | `#1C2A3D` | Nested / input chrome |
+| `--phisio-primary` | `#0B7AEA` | `#3B9AFA` | Primary CTAs & active UI |
+| `--phisio-primary-hover` | `#0969D0` | `#5AADFF` | Primary hover |
+| `--phisio-accent` / `--phisio-teal` | `#0F9F8A` | `#2DD4B0` | Progress / health only |
+| `--phisio-success` | `#0F9F8A` | `#2DD4B0` | Success |
 | `--phisio-warning` | `#D97706` | `#FBBF24` | Warning |
 | `--phisio-danger` | `#DC2626` | `#F87171` | Error |
-| `--phisio-text` | `#091E42` | `#F4F5F7` | Headings & body |
-| `--phisio-text-secondary` | `#5E6C84` | `#A5ADBA` | Meta |
-| `--phisio-border` | `#DFE1E6` | `#1C2B44` | Dividers |
+| `--phisio-text` | `#0B1F33` | `#F3F5F7` | Headings & body |
+| `--phisio-text-secondary` | `#5B6B7C` | `#9AA6B2` | Meta |
+| `--phisio-border` | `#E2E6EB` | `#243247` | Dividers |
 | Shadows | navy/black, no blue wash | black | Elevation |
 
 **Brand gradient:** green → blue (`--phisio-brand-gradient`).  

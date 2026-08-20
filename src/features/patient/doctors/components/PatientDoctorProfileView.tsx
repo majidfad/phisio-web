@@ -1,7 +1,7 @@
 import { Button, Card, Descriptions, Select } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import { ConfirmActionModal, LoadingState, AppResult, StatusCapsule } from '@/components/ui';
 import { useToast } from '@/hooks/useToast';
@@ -27,8 +27,10 @@ type PendingConfirm = 'cancel' | 'unlink' | null;
 export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewProps) {
   const { t } = useTranslation();
   const toast = useToast();
+  const [searchParams] = useSearchParams();
+  const preferredClinicId = searchParams.get('clinicId');
   const clinicsQuery = usePatientDoctorClinics(doctorId);
-  const [selectedClinicId, setSelectedClinicId] = useState<string | null>(null);
+  const [selectedClinicId, setSelectedClinicId] = useState<string | null>(preferredClinicId);
 
   useEffect(() => {
     if (!clinicsQuery.data?.length) {
@@ -41,9 +43,16 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
         return current;
       }
 
+      if (
+        preferredClinicId &&
+        clinicsQuery.data.some((clinic) => clinic.clinicId === preferredClinicId)
+      ) {
+        return preferredClinicId;
+      }
+
       return clinicsQuery.data[0]?.clinicId ?? null;
     });
-  }, [clinicsQuery.data]);
+  }, [clinicsQuery.data, preferredClinicId]);
 
   const { data, isLoading, isError, error, refetch } = usePatientDoctorProfile(
     doctorId,

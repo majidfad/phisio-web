@@ -17,6 +17,49 @@ describe('patientDoctorService', () => {
     vi.clearAllMocks();
   });
 
+  it('fetches connected doctors from the mine endpoint', async () => {
+    const doctors = [
+      {
+        doctorId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+        name: 'Dr Ahmadi',
+        specialty: 'Physio',
+        medicalLicenseNumber: 'MD-1',
+        clinicAddress: 'Address',
+        phoneNumber: '+15551111111',
+        status: DoctorPatientStatusCode.Approved,
+        createdAt: '2026-08-20T10:00:00Z',
+        clinicId: '11111111-1111-1111-1111-111111111111',
+        clinicName: 'North Clinic',
+      },
+    ];
+
+    vi.mocked(httpClient.get).mockResolvedValue({ data: doctors });
+
+    await expect(patientDoctorService.getMine()).resolves.toEqual(doctors);
+    expect(httpClient.get).toHaveBeenCalledWith('/patient/doctors/mine');
+  });
+
+  it('searches all doctors with the search query', async () => {
+    const doctors = [
+      {
+        doctorId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+        name: 'Dr Ahmadi',
+        specialty: 'Physio',
+        medicalLicenseNumber: 'MD-1',
+        clinicAddress: 'Address',
+        phoneNumber: '+15551111111',
+        relationshipStatus: null,
+      },
+    ];
+
+    vi.mocked(httpClient.get).mockResolvedValue({ data: doctors });
+
+    await expect(patientDoctorService.search({ search: 'احمدی' })).resolves.toEqual(doctors);
+    expect(httpClient.get).toHaveBeenCalledWith('/patient/doctors', {
+      params: { search: 'احمدی' },
+    });
+  });
+
   it('fetches doctor clinics for the selected doctor', async () => {
     const doctorId = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
     const clinics = [

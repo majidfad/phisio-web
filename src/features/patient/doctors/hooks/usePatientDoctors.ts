@@ -6,13 +6,16 @@ import type { PatientDoctorLinkActionRequest } from '../types/patient-doctor';
 import { patientDoctorQueryKeys } from './patient-doctor-query-keys';
 
 export function usePatientDoctorDirectory(search: string, specialty: string) {
+  const trimmedSearch = search.trim();
+
   return useQuery({
-    queryKey: patientDoctorQueryKeys.directory(search, specialty),
+    queryKey: patientDoctorQueryKeys.directory(trimmedSearch, specialty),
     queryFn: () =>
       patientDoctorService.search({
-        search: search || undefined,
+        search: trimmedSearch || undefined,
         specialty: specialty || undefined,
       }),
+    enabled: trimmedSearch.length > 0,
   });
 }
 

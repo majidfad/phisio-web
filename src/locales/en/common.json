@@ -1224,11 +1224,15 @@
       }
     },
     "doctors": {
-      "title": "Find doctors",
-      "description": "Browse doctors, view profiles, and request a care link.",
+      "title": "My doctors",
+      "description": "View your connected doctors, or search to request a new care link.",
+      "connectedTitle": "My doctors",
+      "emptyConnected": "No doctors are connected to you yet.",
+      "searchResultsTitle": "Search results",
+      "searchResultsDescription": "Results for “{{query}}”",
       "profileTitle": "Doctor profile",
       "profileDescription": "Review details and manage your link request.",
-      "searchPlaceholder": "Search by name, specialty, or clinic",
+      "searchPlaceholder": "Search for a doctor…",
       "specialtyFilter": "Specialty",
       "loading": "Loading…",
       "retry": "Retry",

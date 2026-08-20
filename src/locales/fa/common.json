@@ -1220,11 +1220,15 @@
       }
     },
     "doctors": {
-      "title": "جستجوی پزشک",
-      "description": "پزشکان را ببینید، پروفایل را مشاهده کنید و درخواست اتصال بفرستید.",
+      "title": "پزشکان من",
+      "description": "پزشکان متصل به خود را ببینید یا برای درخواست اتصال جدید جستجو کنید.",
+      "connectedTitle": "پزشکان من",
+      "emptyConnected": "هنوز پزشکی به شما متصل نشده است.",
+      "searchResultsTitle": "نتایج جستجو",
+      "searchResultsDescription": "جستجوی «{{query}}»",
       "profileTitle": "پروفایل پزشک",
       "profileDescription": "جزئیات را ببینید و وضعیت اتصال را مدیریت کنید.",
-      "searchPlaceholder": "جستجو بر اساس نام، تخصص یا مطب",
+      "searchPlaceholder": "جستجوی پزشک...",
       "specialtyFilter": "تخصص",
       "loading": "در حال بارگذاری…",
       "retry": "تلاش مجدد",

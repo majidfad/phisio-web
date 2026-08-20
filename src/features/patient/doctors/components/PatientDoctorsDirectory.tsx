@@ -3,13 +3,17 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { LoadingState, AppEmpty, StatusCapsule } from '@/components/ui';
+import { LoadingState, AppEmpty, PageSection, StatusCapsule } from '@/components/ui';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { convertToPersianDigits } from '@/utils/persian-format';
 
-import { usePatientDoctorDirectory } from '../hooks/usePatientDoctors';
-import { DoctorPatientStatusCode } from '../types/patient-doctor';
+import { useMyDoctors, usePatientDoctorDirectory } from '../hooks/usePatientDoctors';
+import {
+  DoctorPatientStatusCode,
+  type PatientDoctorDirectoryItemDto,
+  type PatientLinkedDoctorDto,
+} from '../types/patient-doctor';
 
 const { Text } = Typography;
 
@@ -19,22 +23,41 @@ export function PatientDoctorsDirectory() {
   const [search, setSearch] = useState('');
   const [specialty, setSpecialty] = useState('');
 
+  const isSearching = search.trim().length > 0;
+
   const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
+    data: myDoctors = [],
+    isLoading: isMineLoading,
+    isError: isMineError,
+    error: mineError,
+    refetch: refetchMine,
+  } = useMyDoctors();
+
+  const {
+    data: searchResults = [],
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+    error: searchError,
+    refetch: refetchSearch,
   } = usePatientDoctorDirectory(search, specialty);
 
   const specialtyOptions = useMemo(() => {
-    const values = new Set(
-      data.map((doctor) => doctor.specialty.trim()).filter((value) => value.length > 0),
-    );
+    const source = isSearching
+      ? searchResults.map((doctor) => doctor.specialty)
+      : myDoctors.map((doctor) => doctor.specialty);
+    const values = new Set(source.map((value) => value.trim()).filter((value) => value.length > 0));
     return Array.from(values)
       .sort((a, b) => a.localeCompare(b))
       .map((value) => ({ value, label: value }));
-  }, [data]);
+  }, [isSearching, myDoctors, searchResults]);
+
+  const handleSearch = (value: string) => {
+    const nextSearch = value.trim();
+    setSearch(nextSearch);
+    if (!nextSearch) {
+      setSpecialty('');
+    }
+  };
 
   return (
     <div className="patient-stack patient-stack--loose">
@@ -45,66 +68,136 @@ export function PatientDoctorsDirectory() {
           placeholder={t('patient.doctors.searchPlaceholder')}
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
-          onSearch={(value) => setSearch(value.trim())}
+          onSearch={handleSearch}
+          onClear={() => handleSearch('')}
         />
-        <Select
-          allowClear
-          showSearch
-          size="large"
-          placeholder={t('patient.doctors.specialtyFilter')}
-          value={specialty || undefined}
-          onChange={(value) => setSpecialty(value ?? '')}
-          options={specialtyOptions}
-          optionFilterProp="label"
-        />
+        {isSearching ? (
+          <Select
+            allowClear
+            showSearch
+            size="large"
+            placeholder={t('patient.doctors.specialtyFilter')}
+            value={specialty || undefined}
+            onChange={(value) => setSpecialty(value ?? '')}
+            options={specialtyOptions}
+            optionFilterProp="label"
+          />
+        ) : null}
       </div>
 
-      {isLoading ? <LoadingState tip={t('patient.doctors.loading')} /> : null}
+      <PageSection title={t('patient.doctors.connectedTitle')}>
+        {isMineLoading ? <LoadingState tip={t('patient.doctors.loading')} /> : null}
 
-      {isError ? (
-        <Card className="patient-media-card">
-          <Text type="danger">
-            {getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}
-          </Text>
-          <div className="patient-media-card__footer">
-            <Button onClick={() => void refetch()}>{t('patient.doctors.retry')}</Button>
+        {isMineError ? (
+          <Card className="patient-media-card">
+            <Text type="danger">
+              {getErrorMessage(mineError, t('patient.doctors.errors.loadFailed'))}
+            </Text>
+            <div className="patient-media-card__footer">
+              <Button onClick={() => void refetchMine()}>{t('patient.doctors.retry')}</Button>
+            </div>
+          </Card>
+        ) : null}
+
+        {!isMineLoading && !isMineError && myDoctors.length === 0 ? (
+          <AppEmpty description={t('patient.doctors.emptyConnected')} />
+        ) : null}
+
+        {!isMineLoading && !isMineError ? (
+          <div className="patient-stack">
+            {myDoctors.map((doctor) => (
+              <ConnectedDoctorCard key={`${doctor.doctorId}:${doctor.clinicId}`} doctor={doctor} />
+            ))}
           </div>
-        </Card>
-      ) : null}
+        ) : null}
+      </PageSection>
 
-      {!isLoading && !isError && data.length === 0 ? (
-        <AppEmpty description={t('patient.doctors.emptyDirectory')} />
-      ) : null}
+      {isSearching ? (
+        <PageSection
+          title={t('patient.doctors.searchResultsTitle')}
+          description={t('patient.doctors.searchResultsDescription', { query: search })}
+        >
+          {isSearchLoading ? <LoadingState tip={t('patient.doctors.loading')} /> : null}
 
-      {!isLoading && !isError ? (
-        <div className="patient-stack">
-          {data.map((doctor) => (
-            <Card key={doctor.doctorId} className="patient-media-card" size="small">
-              <div className="patient-media-card__header">
-                <h3 className="patient-media-card__title">{doctor.name}</h3>
-                <RelationshipTag status={doctor.relationshipStatus} />
-              </div>
-              {doctor.specialty ? (
-                <span className="patient-media-card__meta">{doctor.specialty}</span>
-              ) : null}
-              {doctor.clinicAddress ? (
-                <p className="patient-media-card__body">{doctor.clinicAddress}</p>
-              ) : null}
-              {doctor.phoneNumber ? (
-                <p className="patient-media-card__body" dir="ltr">
-                  {convertToPersianDigits(doctor.phoneNumber)}
-                </p>
-              ) : null}
+          {isSearchError ? (
+            <Card className="patient-media-card">
+              <Text type="danger">
+                {getErrorMessage(searchError, t('patient.doctors.errors.loadFailed'))}
+              </Text>
               <div className="patient-media-card__footer">
-                <Link to={`${routes.patient.doctors}/${doctor.doctorId}`}>
-                  <Button type="link">{t('patient.doctors.viewProfile')}</Button>
-                </Link>
+                <Button onClick={() => void refetchSearch()}>{t('patient.doctors.retry')}</Button>
               </div>
             </Card>
-          ))}
-        </div>
+          ) : null}
+
+          {!isSearchLoading && !isSearchError && searchResults.length === 0 ? (
+            <AppEmpty description={t('patient.doctors.emptyDirectory')} />
+          ) : null}
+
+          {!isSearchLoading && !isSearchError ? (
+            <div className="patient-stack">
+              {searchResults.map((doctor) => (
+                <DirectoryDoctorCard key={doctor.doctorId} doctor={doctor} />
+              ))}
+            </div>
+          ) : null}
+        </PageSection>
       ) : null}
     </div>
+  );
+}
+
+function ConnectedDoctorCard({ doctor }: { doctor: PatientLinkedDoctorDto }) {
+  const { t } = useTranslation();
+
+  return (
+    <Card className="patient-media-card" size="small">
+      <div className="patient-media-card__header">
+        <h3 className="patient-media-card__title">{doctor.name}</h3>
+        <RelationshipTag status={doctor.status} />
+      </div>
+      {doctor.specialty ? <span className="patient-media-card__meta">{doctor.specialty}</span> : null}
+      {doctor.clinicName ? <p className="patient-media-card__body">{doctor.clinicName}</p> : null}
+      {doctor.phoneNumber ? (
+        <p className="patient-media-card__body" dir="ltr">
+          {convertToPersianDigits(doctor.phoneNumber)}
+        </p>
+      ) : null}
+      <div className="patient-media-card__footer">
+        <Link
+          to={`${routes.patient.doctors}/${doctor.doctorId}?clinicId=${encodeURIComponent(doctor.clinicId)}`}
+        >
+          <Button type="link">{t('patient.doctors.viewProfile')}</Button>
+        </Link>
+      </div>
+    </Card>
+  );
+}
+
+function DirectoryDoctorCard({ doctor }: { doctor: PatientDoctorDirectoryItemDto }) {
+  const { t } = useTranslation();
+
+  return (
+    <Card className="patient-media-card" size="small">
+      <div className="patient-media-card__header">
+        <h3 className="patient-media-card__title">{doctor.name}</h3>
+        <RelationshipTag status={doctor.relationshipStatus} />
+      </div>
+      {doctor.specialty ? <span className="patient-media-card__meta">{doctor.specialty}</span> : null}
+      {doctor.clinicAddress ? (
+        <p className="patient-media-card__body">{doctor.clinicAddress}</p>
+      ) : null}
+      {doctor.phoneNumber ? (
+        <p className="patient-media-card__body" dir="ltr">
+          {convertToPersianDigits(doctor.phoneNumber)}
+        </p>
+      ) : null}
+      <div className="patient-media-card__footer">
+        <Link to={`${routes.patient.doctors}/${doctor.doctorId}`}>
+          <Button type="link">{t('patient.doctors.viewProfile')}</Button>
+        </Link>
+      </div>
+    </Card>
   );
 }
 

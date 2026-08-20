@@ -4,6 +4,7 @@ import { doctorExerciseService } from '@/features/doctor/exercises/services/doct
 import { doctorExerciseQueryKeys } from '@/features/doctor/exercises/hooks/doctor-exercise-query-keys';
 
 import { doctorPatientService } from '../services/doctorPatientService';
+import type { DoctorPatientClinicActionRequest } from '../types/doctor-patient';
 import type { AssignPatientExercisesRequest } from '../types/patient-exercise-plan';
 import type {
   CreateExerciseProgramRequest,
@@ -30,7 +31,8 @@ export function useApproveDoctorPatientRequest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (patientId: string) => doctorPatientService.approveRequest(patientId),
+    mutationFn: ({ patientId, clinicId }: DoctorPatientClinicActionRequest) =>
+      doctorPatientService.approveRequest(patientId, clinicId),
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() }),
@@ -44,7 +46,8 @@ export function useRejectDoctorPatientRequest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (patientId: string) => doctorPatientService.rejectRequest(patientId),
+    mutationFn: ({ patientId, clinicId }: DoctorPatientClinicActionRequest) =>
+      doctorPatientService.rejectRequest(patientId, clinicId),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.requests() });
     },
@@ -55,14 +58,17 @@ export function useRemoveDoctorPatient() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (patientId: string) => doctorPatientService.remove(patientId),
-    onMutate: async (patientId) => {
+    mutationFn: ({ patientId, clinicId }: DoctorPatientClinicActionRequest) =>
+      doctorPatientService.remove(patientId, clinicId),
+    onMutate: async ({ patientId, clinicId }) => {
       await queryClient.cancelQueries({ queryKey: doctorPatientQueryKeys.list() });
       const previous = queryClient.getQueryData(doctorPatientQueryKeys.list());
 
       queryClient.setQueryData(doctorPatientQueryKeys.list(), (current: typeof previous) =>
         Array.isArray(current)
-          ? current.filter((patient) => patient.patientId !== patientId)
+          ? current.filter(
+              (patient) => !(patient.patientId === patientId && patient.clinicId === clinicId),
+            )
           : current,
       );
 

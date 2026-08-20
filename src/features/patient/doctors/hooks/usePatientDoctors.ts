@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { patientDoctorService } from '../services/patientDoctorService';
+import type { PatientDoctorLinkActionRequest } from '../types/patient-doctor';
 
 import { patientDoctorQueryKeys } from './patient-doctor-query-keys';
 
@@ -22,10 +23,18 @@ export function useMyDoctors() {
   });
 }
 
-export function usePatientDoctorProfile(doctorId: string | null) {
+export function usePatientDoctorProfile(doctorId: string | null, clinicId?: string | null) {
   return useQuery({
-    queryKey: patientDoctorQueryKeys.profile(doctorId ?? ''),
-    queryFn: () => patientDoctorService.getProfile(doctorId!),
+    queryKey: patientDoctorQueryKeys.profile(doctorId ?? '', clinicId ?? ''),
+    queryFn: () => patientDoctorService.getProfile(doctorId!, clinicId || undefined),
+    enabled: Boolean(doctorId),
+  });
+}
+
+export function usePatientDoctorClinics(doctorId: string | null) {
+  return useQuery({
+    queryKey: patientDoctorQueryKeys.clinics(doctorId ?? ''),
+    queryFn: () => patientDoctorService.getDoctorClinics(doctorId!),
     enabled: Boolean(doctorId),
   });
 }
@@ -38,7 +47,8 @@ export function useRequestDoctorLink() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (doctorId: string) => patientDoctorService.requestLink(doctorId),
+    mutationFn: ({ doctorId, clinicId }: PatientDoctorLinkActionRequest) =>
+      patientDoctorService.requestLink(doctorId, { clinicId }),
     onSuccess: async () => {
       await invalidateDoctorQueries(queryClient);
     },
@@ -49,7 +59,8 @@ export function useCancelDoctorRequest() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (doctorId: string) => patientDoctorService.cancelRequest(doctorId),
+    mutationFn: ({ doctorId, clinicId }: PatientDoctorLinkActionRequest) =>
+      patientDoctorService.cancelRequest(doctorId, clinicId),
     onSuccess: async () => {
       await invalidateDoctorQueries(queryClient);
     },
@@ -60,7 +71,8 @@ export function useUnlinkDoctor() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (doctorId: string) => patientDoctorService.unlink(doctorId),
+    mutationFn: ({ doctorId, clinicId }: PatientDoctorLinkActionRequest) =>
+      patientDoctorService.unlink(doctorId, clinicId),
     onSuccess: async () => {
       await invalidateDoctorQueries(queryClient);
     },

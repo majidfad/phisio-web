@@ -870,6 +870,7 @@
       "columns": {
         "name": "Name",
         "phone": "Phone number",
+        "clinic": "Clinic",
         "assignedAt": "Linked at",
         "requestedAt": "Requested at",
         "exercisePlan": "Exercise plan",
@@ -1234,10 +1235,13 @@
       "emptyDirectory": "No doctors found.",
       "viewProfile": "View profile",
       "backToDirectory": "Back to doctors",
+      "selectClinicPlaceholder": "Select a clinic",
+      "emptyClinics": "This doctor is not assigned to any clinic yet.",
       "fields": {
         "specialty": "Specialty",
         "license": "Medical license",
-        "clinic": "Clinic address",
+        "clinic": "Clinic",
+        "address": "Clinic address",
         "phone": "Phone",
         "status": "Link status"
       },

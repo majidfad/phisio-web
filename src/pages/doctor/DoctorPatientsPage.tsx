@@ -62,10 +62,13 @@ export function DoctorPatientsPage() {
       return;
     }
 
-    setRemovingPatientId(patientToRemove.patientId);
+    setRemovingPatientId(`${patientToRemove.patientId}:${patientToRemove.clinicId}`);
 
     try {
-      await removePatient.mutateAsync(patientToRemove.patientId);
+      await removePatient.mutateAsync({
+        patientId: patientToRemove.patientId,
+        clinicId: patientToRemove.clinicId,
+      });
       toast.success(t('doctor.patients.success.removed'));
       setPatientToRemove(null);
     } catch (removeError) {
@@ -76,10 +79,13 @@ export function DoctorPatientsPage() {
   };
 
   const handleApprove = async (request: DoctorPatientRequestDto) => {
-    setActingRequestId(request.patientId);
+    setActingRequestId(`${request.patientId}:${request.clinicId}`);
 
     try {
-      await approveRequest.mutateAsync(request.patientId);
+      await approveRequest.mutateAsync({
+        patientId: request.patientId,
+        clinicId: request.clinicId,
+      });
       toast.success(t('doctor.patients.success.approved'));
     } catch (approveError) {
       toast.error(getErrorMessage(approveError, t('doctor.patients.errors.approveFailed')));
@@ -93,10 +99,13 @@ export function DoctorPatientsPage() {
       return;
     }
 
-    setActingRequestId(requestToReject.patientId);
+    setActingRequestId(`${requestToReject.patientId}:${requestToReject.clinicId}`);
 
     try {
-      await rejectRequest.mutateAsync(requestToReject.patientId);
+      await rejectRequest.mutateAsync({
+        patientId: requestToReject.patientId,
+        clinicId: requestToReject.clinicId,
+      });
       toast.success(t('doctor.patients.success.rejected'));
       setRequestToReject(null);
     } catch (rejectError) {
@@ -131,7 +140,7 @@ export function DoctorPatientsPage() {
 
           {!isRequestsLoading && !isRequestsError ? (
             <AppTable
-              rowKey="patientId"
+              rowKey={(request) => `${request.patientId}:${request.clinicId}`}
               dataSource={requests}
               pagination={false}
               locale={{ emptyText: t('doctor.patients.emptyRequests') }}
@@ -139,6 +148,11 @@ export function DoctorPatientsPage() {
                 {
                   title: t('doctor.patients.columns.name'),
                   dataIndex: 'patientName',
+                  minWidth: 140,
+                },
+                {
+                  title: t('doctor.patients.columns.clinic'),
+                  dataIndex: 'clinicName',
                   minWidth: 140,
                 },
                 {
@@ -161,14 +175,18 @@ export function DoctorPatientsPage() {
                     <Space>
                       <Button
                         type="primary"
-                        loading={actingRequestId === request.patientId}
+                        loading={
+                          actingRequestId === `${request.patientId}:${request.clinicId}`
+                        }
                         onClick={() => void handleApprove(request)}
                       >
                         {t('doctor.patients.approve')}
                       </Button>
                       <Button
                         danger
-                        loading={actingRequestId === request.patientId}
+                        loading={
+                          actingRequestId === `${request.patientId}:${request.clinicId}`
+                        }
                         onClick={() => setRequestToReject(request)}
                       >
                         {t('doctor.patients.reject')}

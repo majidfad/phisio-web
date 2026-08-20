@@ -1,5 +1,5 @@
-import { Button, Card, Descriptions } from 'antd';
-import { useState } from 'react';
+import { Button, Card, Descriptions, Select } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import { convertToPersianDigits } from '@/utils/persian-format';
 
 import {
   useCancelDoctorRequest,
+  usePatientDoctorClinics,
   usePatientDoctorProfile,
   useRequestDoctorLink,
   useUnlinkDoctor,
@@ -26,21 +27,54 @@ type PendingConfirm = 'cancel' | 'unlink' | null;
 export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewProps) {
   const { t } = useTranslation();
   const toast = useToast();
-  const { data, isLoading, isError, error, refetch } = usePatientDoctorProfile(doctorId);
+  const clinicsQuery = usePatientDoctorClinics(doctorId);
+  const [selectedClinicId, setSelectedClinicId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!clinicsQuery.data?.length) {
+      setSelectedClinicId(null);
+      return;
+    }
+
+    setSelectedClinicId((current) => {
+      if (current && clinicsQuery.data.some((clinic) => clinic.clinicId === current)) {
+        return current;
+      }
+
+      return clinicsQuery.data[0]?.clinicId ?? null;
+    });
+  }, [clinicsQuery.data]);
+
+  const { data, isLoading, isError, error, refetch } = usePatientDoctorProfile(
+    doctorId,
+    selectedClinicId,
+  );
   const requestLink = useRequestDoctorLink();
   const cancelRequest = useCancelDoctorRequest();
   const unlink = useUnlinkDoctor();
   const [pendingConfirm, setPendingConfirm] = useState<PendingConfirm>(null);
 
-  if (isLoading) {
+  const selectedClinic = useMemo(
+    () => clinicsQuery.data?.find((clinic) => clinic.clinicId === selectedClinicId) ?? null,
+    [clinicsQuery.data, selectedClinicId],
+  );
+
+  const status = selectedClinic?.relationshipStatus ?? data?.relationshipStatus ?? null;
+  const isPending =
+    requestLink.isPending || cancelRequest.isPending || unlink.isPending || clinicsQuery.isLoading;
+
+  if (clinicsQuery.isLoading || isLoading) {
     return <LoadingState tip={t('patient.doctors.loading')} />;
   }
 
-  if (isError || !data) {
+  if (clinicsQuery.isError || isError || !data) {
     return (
       <AppResult
         status="error"
-        title={getErrorMessage(error, t('patient.doctors.errors.loadFailed'))}
+        title={getErrorMessage(
+          clinicsQuery.error ?? error,
+          t('patient.doctors.errors.loadFailed'),
+        )}
         extra={
           <>
             <Button type="primary" onClick={() => void refetch()}>
@@ -55,12 +89,13 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
     );
   }
 
-  const status = data.relationshipStatus;
-  const isPending = requestLink.isPending || cancelRequest.isPending || unlink.isPending;
-
   const handleRequest = async () => {
+    if (!selectedClinicId) {
+      return;
+    }
+
     try {
-      await requestLink.mutateAsync(doctorId);
+      await requestLink.mutateAsync({ doctorId, clinicId: selectedClinicId });
       toast.success(t('patient.doctors.success.requested'));
     } catch (submitError) {
       toast.error(getErrorMessage(submitError, t('patient.doctors.errors.requestFailed')));
@@ -68,8 +103,12 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
   };
 
   const handleCancelConfirm = async () => {
+    if (!selectedClinicId) {
+      return;
+    }
+
     try {
-      await cancelRequest.mutateAsync(doctorId);
+      await cancelRequest.mutateAsync({ doctorId, clinicId: selectedClinicId });
       toast.success(t('patient.doctors.success.cancelled'));
       setPendingConfirm(null);
     } catch (submitError) {
@@ -78,8 +117,12 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
   };
 
   const handleUnlinkConfirm = async () => {
+    if (!selectedClinicId) {
+      return;
+    }
+
     try {
-      await unlink.mutateAsync(doctorId);
+      await unlink.mutateAsync({ doctorId, clinicId: selectedClinicId });
       toast.success(t('patient.doctors.success.unlinked'));
       setPendingConfirm(null);
     } catch (submitError) {
@@ -97,14 +140,32 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
 
       <Card className="patient-media-card" title={data.name}>
         <Descriptions column={1} size="small">
+          <Descriptions.Item label={t('patient.doctors.fields.clinic')}>
+            {clinicsQuery.data && clinicsQuery.data.length > 0 ? (
+              <Select
+                showSearch
+                optionFilterProp="label"
+                style={{ width: '100%' }}
+                value={selectedClinicId ?? undefined}
+                placeholder={t('patient.doctors.selectClinicPlaceholder')}
+                onChange={(value) => setSelectedClinicId(value)}
+                options={clinicsQuery.data.map((clinic) => ({
+                  value: clinic.clinicId,
+                  label: clinic.name,
+                }))}
+              />
+            ) : (
+              t('patient.doctors.emptyClinics')
+            )}
+          </Descriptions.Item>
           <Descriptions.Item label={t('patient.doctors.fields.specialty')}>
             {data.specialty || '—'}
           </Descriptions.Item>
           <Descriptions.Item label={t('patient.doctors.fields.license')}>
             {data.medicalLicenseNumber || '—'}
           </Descriptions.Item>
-          <Descriptions.Item label={t('patient.doctors.fields.clinic')}>
-            {data.clinicAddress || '—'}
+          <Descriptions.Item label={t('patient.doctors.fields.address')}>
+            {selectedClinic?.address || data.clinicAddress || '—'}
           </Descriptions.Item>
           <Descriptions.Item label={t('patient.doctors.fields.phone')}>
             <span dir="ltr">
@@ -146,6 +207,7 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
               type="primary"
               size="large"
               loading={isPending}
+              disabled={!selectedClinicId}
               onClick={() => void handleRequest()}
             >
               {t('patient.doctors.actions.request')}

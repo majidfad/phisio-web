@@ -870,6 +870,7 @@
       "columns": {
         "name": "نام",
         "phone": "شماره تلفن",
+        "clinic": "مطب",
         "assignedAt": "تاریخ اتصال",
         "requestedAt": "تاریخ درخواست",
         "exercisePlan": "برنامه تمرین‌ها",
@@ -1230,10 +1231,13 @@
       "emptyDirectory": "پزشکی یافت نشد.",
       "viewProfile": "مشاهده پروفایل",
       "backToDirectory": "بازگشت به فهرست پزشکان",
+      "selectClinicPlaceholder": "انتخاب مطب",
+      "emptyClinics": "این پزشک هنوز به هیچ مطبی اختصاص داده نشده است.",
       "fields": {
         "specialty": "تخصص",
         "license": "شماره نظام پزشکی",
-        "clinic": "آدرس مطب",
+        "clinic": "مطب",
+        "address": "آدرس مطب",
         "phone": "تلفن",
         "status": "وضعیت اتصال"
       },

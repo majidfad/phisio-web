@@ -56,6 +56,12 @@ export function DoctorPatientsTable({
       render: (phone: string) => <span dir="ltr">{formatDisplayPhone(phone)}</span>,
     },
     {
+      title: t('doctor.patients.columns.clinic'),
+      dataIndex: 'clinicName',
+      key: 'clinicName',
+      minWidth: 140,
+    },
+    {
       title: t('doctor.patients.columns.assignedAt'),
       dataIndex: 'assignedAt',
       key: 'assignedAt',
@@ -104,7 +110,7 @@ export function DoctorPatientsTable({
               danger
               className="table-icon-actions__btn table-icon-actions__btn--delete"
               icon={<Trash2 {...denseIconProps} />}
-              loading={removingPatientId === patient.patientId}
+              loading={removingPatientId === `${patient.patientId}:${patient.clinicId}`}
               aria-label={t('doctor.patients.remove')}
               onClick={() => onRemove(patient)}
             />
@@ -120,7 +126,7 @@ export function DoctorPatientsTable({
 
   return (
     <AppTable
-      rowKey="patientId"
+      rowKey={(patient) => `${patient.patientId}:${patient.clinicId}`}
       columns={columns}
       dataSource={patients}
       pagination={{ pageSize: 10, showSizeChanger: true }}

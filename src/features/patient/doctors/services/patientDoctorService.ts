@@ -1,9 +1,11 @@
 import { httpClient } from '@/api/http-client';
 
 import type {
+  PatientDoctorClinicOptionDto,
   PatientDoctorDirectoryItemDto,
   PatientDoctorProfileDto,
   PatientLinkedDoctorDto,
+  RequestPatientDoctorLinkRequest,
 } from '../types/patient-doctor';
 
 const PATIENT_DOCTORS_BASE = '/patient/doctors';
@@ -24,25 +26,43 @@ export const patientDoctorService = {
     return data;
   },
 
-  async getProfile(doctorId: string): Promise<PatientDoctorProfileDto> {
+  async getProfile(doctorId: string, clinicId?: string): Promise<PatientDoctorProfileDto> {
     const { data } = await httpClient.get<PatientDoctorProfileDto>(
       `${PATIENT_DOCTORS_BASE}/${doctorId}`,
+      {
+        params: clinicId ? { clinicId } : undefined,
+      },
     );
     return data;
   },
 
-  async requestLink(doctorId: string): Promise<PatientLinkedDoctorDto> {
+  async getDoctorClinics(doctorId: string): Promise<PatientDoctorClinicOptionDto[]> {
+    const { data } = await httpClient.get<PatientDoctorClinicOptionDto[]>(
+      `${PATIENT_DOCTORS_BASE}/${doctorId}/clinics`,
+    );
+    return data;
+  },
+
+  async requestLink(
+    doctorId: string,
+    request: RequestPatientDoctorLinkRequest,
+  ): Promise<PatientLinkedDoctorDto> {
     const { data } = await httpClient.post<PatientLinkedDoctorDto>(
       `${PATIENT_DOCTORS_BASE}/${doctorId}/request`,
+      request,
     );
     return data;
   },
 
-  async cancelRequest(doctorId: string): Promise<void> {
-    await httpClient.delete(`${PATIENT_DOCTORS_BASE}/${doctorId}/request`);
+  async cancelRequest(doctorId: string, clinicId: string): Promise<void> {
+    await httpClient.delete(`${PATIENT_DOCTORS_BASE}/${doctorId}/request`, {
+      params: { clinicId },
+    });
   },
 
-  async unlink(doctorId: string): Promise<void> {
-    await httpClient.delete(`${PATIENT_DOCTORS_BASE}/${doctorId}`);
+  async unlink(doctorId: string, clinicId: string): Promise<void> {
+    await httpClient.delete(`${PATIENT_DOCTORS_BASE}/${doctorId}`, {
+      params: { clinicId },
+    });
   },
 };

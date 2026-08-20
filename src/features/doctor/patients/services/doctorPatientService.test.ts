@@ -16,6 +16,54 @@ describe('doctorPatientService', () => {
     vi.clearAllMocks();
   });
 
+  it('approves a patient request with clinicId query param', async () => {
+    const patientId = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
+    const clinicId = '11111111-1111-1111-1111-111111111111';
+    const approved = {
+      patientId,
+      patientName: 'Alice Patient',
+      phoneNumber: '+15551111111',
+      assignedAt: '2026-08-20T10:00:00Z',
+      clinicId,
+      clinicName: 'North Clinic',
+    };
+
+    vi.mocked(httpClient.post).mockResolvedValue({ data: approved });
+
+    await expect(doctorPatientService.approveRequest(patientId, clinicId)).resolves.toEqual(
+      approved,
+    );
+    expect(httpClient.post).toHaveBeenCalledWith(
+      `/doctor/patients/${patientId}/approve`,
+      null,
+      { params: { clinicId } },
+    );
+  });
+
+  it('rejects a patient request with clinicId query param', async () => {
+    const patientId = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
+    const clinicId = '11111111-1111-1111-1111-111111111111';
+
+    vi.mocked(httpClient.post).mockResolvedValue({});
+
+    await expect(doctorPatientService.rejectRequest(patientId, clinicId)).resolves.toBeUndefined();
+    expect(httpClient.post).toHaveBeenCalledWith(`/doctor/patients/${patientId}/reject`, null, {
+      params: { clinicId },
+    });
+  });
+
+  it('removes a patient relationship with clinicId query param', async () => {
+    const patientId = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
+    const clinicId = '11111111-1111-1111-1111-111111111111';
+
+    vi.mocked(httpClient.delete).mockResolvedValue({});
+
+    await expect(doctorPatientService.remove(patientId, clinicId)).resolves.toBeUndefined();
+    expect(httpClient.delete).toHaveBeenCalledWith(`/doctor/patients/${patientId}`, {
+      params: { clinicId },
+    });
+  });
+
   it('fetches patient exercise plan from doctor patients endpoint', async () => {
     const patientId = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
     const exercises = [

@@ -37,15 +37,19 @@ export const doctorPatientService = {
     return data;
   },
 
-  async approveRequest(patientId: string): Promise<DoctorPatientDto> {
+  async approveRequest(patientId: string, clinicId: string): Promise<DoctorPatientDto> {
     const { data } = await httpClient.post<DoctorPatientDto>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/approve`,
+      null,
+      { params: { clinicId } },
     );
     return data;
   },
 
-  async rejectRequest(patientId: string): Promise<void> {
-    await httpClient.post(`${DOCTOR_PATIENTS_BASE}/${patientId}/reject`);
+  async rejectRequest(patientId: string, clinicId: string): Promise<void> {
+    await httpClient.post(`${DOCTOR_PATIENTS_BASE}/${patientId}/reject`, null, {
+      params: { clinicId },
+    });
   },
 
   async getPatientExercises(patientId: string): Promise<DoctorPatientExerciseDto[]> {
@@ -66,8 +70,10 @@ export const doctorPatientService = {
     return data;
   },
 
-  async remove(patientId: string): Promise<void> {
-    await httpClient.delete(`${DOCTOR_PATIENTS_BASE}/${patientId}`);
+  async remove(patientId: string, clinicId: string): Promise<void> {
+    await httpClient.delete(`${DOCTOR_PATIENTS_BASE}/${patientId}`, {
+      params: { clinicId },
+    });
   },
 
   async getExerciseHistory(

@@ -1,4 +1,5 @@
 import { httpClient } from '@/api/http-client';
+import type { ClinicPhoneLookupResultDto } from '@/features/clinics/types/clinic';
 import type {
   AuthResponse,
   ChangePasswordRequest,
@@ -23,6 +24,18 @@ export async function registerApi(request: RegisterRequest): Promise<RegisterRes
   const { data } = await httpClient.post<RegisterResponse>(`${AUTH_BASE}/register`, request, {
     skipAuth: true,
   });
+
+  return data;
+}
+
+export async function lookupClinicsByPhonesApi(
+  phoneNumbers: string[],
+): Promise<ClinicPhoneLookupResultDto> {
+  const { data } = await httpClient.post<ClinicPhoneLookupResultDto>(
+    `${AUTH_BASE}/clinics/lookup-by-phones`,
+    { phoneNumbers },
+    { skipAuth: true },
+  );
 
   return data;
 }

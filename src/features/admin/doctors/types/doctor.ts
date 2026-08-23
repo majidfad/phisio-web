@@ -22,6 +22,11 @@ export interface CreateDoctorRequest {
   password?: string;
   confirmPassword?: string;
   generatePassword?: boolean;
+  clinicPhoneNumbers: string[];
+  newClinicName?: string | null;
+  newClinicAddress?: string | null;
+  managerIsThisDoctor?: boolean;
+  clinicManagerId?: string | null;
 }
 
 export interface CreateDoctorResponse {
@@ -31,5 +36,12 @@ export interface CreateDoctorResponse {
 
 export type UpdateDoctorRequest = Omit<
   CreateDoctorRequest,
-  'password' | 'confirmPassword' | 'generatePassword'
+  | 'password'
+  | 'confirmPassword'
+  | 'generatePassword'
+  | 'clinicPhoneNumbers'
+  | 'newClinicName'
+  | 'newClinicAddress'
+  | 'managerIsThisDoctor'
+  | 'clinicManagerId'
 >;

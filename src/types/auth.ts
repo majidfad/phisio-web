@@ -28,6 +28,10 @@ export interface RegisterRequest {
   role: number;
   medicalLicenseNumber?: string;
   specialty?: string;
+  clinicPhoneNumbers?: string[];
+  newClinicName?: string | null;
+  newClinicAddress?: string | null;
+  managerIsThisDoctor?: boolean;
 }
 
 export interface RegisterResponse {

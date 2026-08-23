@@ -90,6 +90,20 @@ describe('clinicService', () => {
     expect(httpClient.get).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}/doctors`);
   });
 
+  it('looks up clinics by phone numbers', async () => {
+    const lookup = {
+      status: 'Found',
+      clinic,
+      conflictingClinics: [],
+    };
+    vi.mocked(httpClient.post).mockResolvedValue({ data: lookup });
+
+    await expect(clinicService.lookupByPhones(['02112345678'])).resolves.toEqual(lookup);
+    expect(httpClient.post).toHaveBeenCalledWith('/clinics/lookup-by-phones', {
+      phoneNumbers: ['02112345678'],
+    });
+  });
+
   it('fetches doctor candidates from the clinic scoped endpoint', async () => {
     const candidates = [
       {

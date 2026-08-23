@@ -5,6 +5,10 @@ const phoneNumberPattern = /^\+?[0-9\s\-()]+$/;
 
 export type RegistrationRole = 'patient' | 'doctor';
 
+export interface RegisterClinicPhoneField {
+  value: string;
+}
+
 export interface RegisterFormValues {
   name: string;
   phoneNumber: string;
@@ -12,6 +16,21 @@ export interface RegisterFormValues {
   confirmPassword: string;
   medicalLicenseNumber?: string;
   specialty?: string;
+  clinicPhoneNumbers?: RegisterClinicPhoneField[];
+  newClinicName?: string;
+  newClinicAddress?: string;
+  managerIsThisDoctor?: boolean;
+}
+
+function createClinicPhoneFieldSchema(t: TFunction) {
+  return z.object({
+    value: z
+      .string()
+      .trim()
+      .min(1, t('auth.validation.clinicPhoneRequired'))
+      .max(20, t('auth.validation.clinicPhoneMaxLength'))
+      .regex(phoneNumberPattern, t('auth.validation.clinicPhoneInvalid')),
+  });
 }
 
 export function createRegisterSchema(t: TFunction, role: RegistrationRole = 'patient') {
@@ -39,6 +58,12 @@ export function createRegisterSchema(t: TFunction, role: RegistrationRole = 'pat
       .trim()
       .min(1, t('auth.validation.specialtyRequired'))
       .max(200, t('auth.validation.specialtyMaxLength')),
+    clinicPhoneNumbers: z
+      .array(createClinicPhoneFieldSchema(t))
+      .min(1, t('auth.validation.clinicPhoneRequired')),
+    newClinicName: z.string(),
+    newClinicAddress: z.string(),
+    managerIsThisDoctor: z.boolean(),
   };
 
   const schema = role === 'doctor' ? z.object(doctorShape) : z.object(baseShape);
@@ -47,4 +72,41 @@ export function createRegisterSchema(t: TFunction, role: RegistrationRole = 'pat
     message: t('auth.validation.passwordMismatch'),
     path: ['confirmPassword'],
   });
+}
+
+export function createRegisterNewClinicStepSchema(t: TFunction) {
+  return z
+    .object({
+      newClinicName: z
+        .string()
+        .trim()
+        .min(1, t('auth.validation.newClinicNameRequired'))
+        .max(200, t('auth.validation.newClinicNameMaxLength')),
+      newClinicAddress: z
+        .string()
+        .trim()
+        .min(1, t('auth.validation.newClinicAddressRequired'))
+        .max(500, t('auth.validation.newClinicAddressMaxLength')),
+      clinicPhoneNumbers: z
+        .array(createClinicPhoneFieldSchema(t))
+        .min(1, t('auth.validation.clinicPhoneRequired')),
+      managerIsThisDoctor: z.boolean(),
+    })
+    .superRefine((values, context) => {
+      if (values.managerIsThisDoctor) {
+        return;
+      }
+
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['managerIsThisDoctor'],
+        message: t('auth.validation.managerMustBeThisDoctor'),
+      });
+    });
+}
+
+export function toRegisterClinicPhonePayload(
+  phoneNumbers: RegisterClinicPhoneField[],
+): string[] {
+  return phoneNumbers.map((item) => item.value.trim()).filter((value) => value.length > 0);
 }

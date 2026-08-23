@@ -35,3 +35,11 @@ export interface ClinicDoctorCandidateDto {
   specialty: string;
   isClinicManager: boolean;
 }
+
+export type ClinicPhoneLookupStatus = 'None' | 'Found' | 'Conflict';
+
+export interface ClinicPhoneLookupResultDto {
+  status: ClinicPhoneLookupStatus;
+  clinic: ClinicDto | null;
+  conflictingClinics: ClinicDto[];
+}

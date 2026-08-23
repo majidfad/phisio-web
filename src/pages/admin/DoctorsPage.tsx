@@ -17,7 +17,11 @@ import {
   useSetDoctorPassword,
   useUpdateDoctor,
 } from '@/features/admin/doctors/hooks/useDoctors';
-import type { DoctorFormSchemaValues } from '@/features/admin/doctors/schemas/doctor-form-schema';
+import type { DoctorFormSubmitValues } from '@/features/admin/doctors/components/DoctorFormModal';
+import {
+  toClinicPhonePayload,
+  type DoctorFormSchemaValues,
+} from '@/features/admin/doctors/schemas/doctor-form-schema';
 import type { DoctorDto } from '@/features/admin/doctors/types/doctor';
 import { AdminGeneratedPasswordModal } from '@/features/admin/password/components/AdminGeneratedPasswordModal';
 import { AdminSetPasswordModal } from '@/features/admin/password/components/AdminSetPasswordModal';
@@ -77,7 +81,7 @@ export function DoctorsPage() {
     setGeneratedPassword(password);
   };
 
-  const handleFormSubmit = async (values: DoctorFormSchemaValues) => {
+  const handleFormSubmit = async (values: DoctorFormSubmitValues) => {
     const profilePayload = {
       name: values.name.trim(),
       phoneNumber: values.phoneNumber.trim(),
@@ -89,10 +93,24 @@ export function DoctorsPage() {
 
     try {
       if (formMode === 'create') {
-        const passwordPayload = toAdminSetPasswordRequest(values);
+        const createValues = values as DoctorFormSchemaValues;
+        const passwordPayload = toAdminSetPasswordRequest(createValues);
+        const clinicPhoneNumbers = toClinicPhonePayload(createValues.clinicPhoneNumbers);
+        const managerIsThisDoctor = createValues.managerIsThisDoctor;
+        const newClinicName = createValues.newClinicName.trim();
+        const newClinicAddress = createValues.newClinicAddress.trim();
+
         const result = await createDoctor.mutateAsync({
           ...profilePayload,
           ...passwordPayload,
+          clinicPhoneNumbers,
+          newClinicName: newClinicName.length > 0 ? newClinicName : null,
+          newClinicAddress: newClinicAddress.length > 0 ? newClinicAddress : null,
+          managerIsThisDoctor,
+          clinicManagerId:
+            managerIsThisDoctor || !createValues.clinicManagerId?.trim()
+              ? null
+              : createValues.clinicManagerId.trim(),
         });
         closeForm();
         showGeneratedPassword(result.generatedPassword, result.doctor.name);
@@ -223,6 +241,10 @@ export function DoctorsPage() {
         isOpen={formMode !== null}
         mode={formMode ?? 'create'}
         doctor={selectedDoctor}
+        managerCandidates={doctors}
+        isLoadingManagers={isLoading}
+        isManagersError={isError}
+        onRetryManagers={() => void refetch()}
         isSubmitting={isFormSubmitting}
         onClose={closeForm}
         onSubmit={handleFormSubmit}

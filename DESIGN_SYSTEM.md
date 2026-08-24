@@ -5,6 +5,11 @@
 > The product is **Persian RTL** with real domain data. Do not copy English mock copy, fake metrics, or preview layouts that conflict with this contract.  
 > **AI implementation contract:** [`docs/AI_UI_KIT_SPEC.md`](./docs/AI_UI_KIT_SPEC.md) + kit PNG.
 
+> **Active redesign target (2026-08):** Modern sky-blue kit → [`UI_KIT.md`](./UI_KIT.md)  
+> **AI implementation spec:** [`docs/AI_UI_KIT_SPEC.md`](./docs/AI_UI_KIT_SPEC.md) + kit image  
+> Kit image: [`docs/preview-assets/phisio_ui_kit_modern_patient_light_dark.png`](./docs/preview-assets/phisio_ui_kit_modern_patient_light_dark.png)  
+> **Tokens are live in code** (`design-tokens.css` / `theme.css` / `phisio-theme.ts`). Geometry, density, RTL rules below still apply.
+
 ---
 
 ## 1. Philosophy (pro clinical product)

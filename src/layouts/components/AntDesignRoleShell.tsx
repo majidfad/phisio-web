@@ -7,6 +7,7 @@ import {
   PanelLeftOpen,
   BookOpen,
   BarChart3,
+  Building2,
   Tags,
   Users,
   User,
@@ -30,6 +31,7 @@ const { Header, Content, Sider } = Layout;
 
 const NAV_ICONS: Record<string, ReactNode> = {
   dashboard: <LayoutDashboard {...appIconProps} />,
+  clinics: <Building2 {...appIconProps} />,
   doctors: <Users {...appIconProps} />,
   patients: <User {...appIconProps} />,
   articles: <BookOpen {...appIconProps} />,

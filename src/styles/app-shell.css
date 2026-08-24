@@ -710,6 +710,11 @@
   background: var(--phisio-primary-soft);
 }
 
+.role-layout--clinic-manager .nav-card--active .nav-card__icon {
+  color: var(--phisio-primary);
+  background: var(--phisio-primary-soft);
+}
+
 .role-layout--doctor .nav-card--active {
   border-color: color-mix(in srgb, var(--phisio-primary) 35%, transparent);
   background: var(--phisio-primary-soft);

@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 
-import { AUTH_SESSION_CLEARED_EVENT } from '@/store/auth-session';
+import { AUTH_SESSION_CLEARED_EVENT, authSessionStore } from '@/store/auth-session';
 import type { AuthenticatedUser, LoginRequest } from '@/types/auth';
 
 import { AuthContext, type AuthContextValue } from './auth-context';
@@ -13,19 +14,21 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthenticatedUser | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const authGenerationRef = useRef(0);
 
   useEffect(() => {
     let isMounted = true;
+    const generation = authGenerationRef.current;
 
     authService
       .restoreSession()
       .then((restoredUser) => {
-        if (isMounted) {
+        if (isMounted && generation === authGenerationRef.current) {
           setUser(restoredUser);
         }
       })
       .finally(() => {
-        if (isMounted) {
+        if (isMounted && generation === authGenerationRef.current) {
           setIsInitializing(false);
         }
       });
@@ -49,11 +52,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = useCallback(async (credentials: LoginRequest) => {
     const authenticatedUser = await authService.login(credentials);
-    setUser(authenticatedUser);
+
+    if (!authSessionStore.getAccessToken()) {
+      throw new Error('Login succeeded without persisting an access token.');
+    }
+
+    authGenerationRef.current += 1;
+    flushSync(() => {
+      setUser(authenticatedUser);
+      setIsInitializing(false);
+    });
+
     return authenticatedUser;
   }, []);
 
   const logout = useCallback(() => {
+    authGenerationRef.current += 1;
     authService.logout();
     setUser(null);
   }, []);

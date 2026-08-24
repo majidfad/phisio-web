@@ -2,14 +2,16 @@ import { describe, expect, it } from 'vitest';
 
 import {
   adminLayoutConfig,
+  clinicManagerLayoutConfig,
   doctorLayoutConfig,
   patientLayoutConfig,
 } from '@/layouts/config/role-layout-config';
 
 describe('role-layout-config', () => {
   it.each([
-    ['layout.roles.admin', adminLayoutConfig, 7],
-    ['layout.roles.doctor', doctorLayoutConfig, 3],
+    ['layout.roles.admin', adminLayoutConfig, 8],
+    ['layout.roles.clinicManager', clinicManagerLayoutConfig, 4],
+    ['layout.roles.doctor', doctorLayoutConfig, 4],
     ['layout.roles.patient', patientLayoutConfig, 6],
   ])('defines navigation for %s', (roleLabelKey, config, itemCount) => {
     expect(config.roleLabelKey).toBe(roleLabelKey);
@@ -23,8 +25,18 @@ describe('role-layout-config', () => {
     expect(adminLayoutConfig.navItems.every((item) => item.to)).toBe(true);
   });
 
+  it('gives clinic managers the complete Doctor navigation including clinics', () => {
+    expect(clinicManagerLayoutConfig.navItems).toEqual(doctorLayoutConfig.navItems);
+    expect(clinicManagerLayoutConfig.navItems.find((item) => item.id === 'clinics')?.to).toBe(
+      '/doctor/clinics',
+    );
+  });
+
   it('links doctor navigation items to doctor routes', () => {
     expect(doctorLayoutConfig.navItems.every((item) => item.to)).toBe(true);
+    expect(doctorLayoutConfig.navItems.find((item) => item.id === 'clinics')?.to).toBe(
+      '/doctor/clinics',
+    );
   });
 
   it('links patient exercises navigation to patient exercises route', () => {

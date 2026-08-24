@@ -10,6 +10,7 @@ export const adminLayoutConfig: RoleLayoutConfig = {
   navAriaLabelKey: 'layout.navAria.admin',
   navItems: [
     { id: 'dashboard', labelKey: 'layout.nav.dashboard', to: routes.admin.root, end: true },
+    { id: 'clinics', labelKey: 'layout.nav.clinics', to: routes.admin.clinics },
     { id: 'doctors', labelKey: 'layout.nav.doctors', to: routes.admin.doctors },
     { id: 'patients', labelKey: 'layout.nav.patients', to: routes.admin.patients },
     { id: 'exercises', labelKey: 'layout.nav.exercises', to: routes.admin.exercises },
@@ -23,15 +24,25 @@ export const adminLayoutConfig: RoleLayoutConfig = {
   ],
 };
 
+const doctorNavItems: RoleLayoutConfig['navItems'] = [
+  { id: 'dashboard', labelKey: 'layout.nav.overview', to: routes.doctor.root, end: true },
+  { id: 'clinics', labelKey: 'layout.nav.clinics', to: routes.doctor.clinics },
+  { id: 'patients', labelKey: 'layout.nav.myPatients', to: routes.doctor.patients },
+  { id: 'exercises', labelKey: 'layout.nav.exercises', to: routes.doctor.exercises },
+];
+
+export const clinicManagerLayoutConfig: RoleLayoutConfig = {
+  layoutClassName: 'role-layout--clinic-manager',
+  roleLabelKey: 'layout.roles.clinicManager',
+  navAriaLabelKey: 'layout.navAria.clinicManager',
+  navItems: [...doctorNavItems],
+};
+
 export const doctorLayoutConfig: RoleLayoutConfig = {
   layoutClassName: 'role-layout--doctor',
   roleLabelKey: 'layout.roles.doctor',
   navAriaLabelKey: 'layout.navAria.doctor',
-  navItems: [
-    { id: 'dashboard', labelKey: 'layout.nav.overview', to: routes.doctor.root, end: true },
-    { id: 'patients', labelKey: 'layout.nav.myPatients', to: routes.doctor.patients },
-    { id: 'exercises', labelKey: 'layout.nav.exercises', to: routes.doctor.exercises },
-  ],
+  navItems: [...doctorNavItems],
 };
 
 export const patientLayoutConfig: RoleLayoutConfig = {

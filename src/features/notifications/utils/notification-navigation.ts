@@ -45,6 +45,7 @@ export function getNotificationHref(
 
     default:
       if (role === 'Admin') return routes.admin.root;
+      if (role === 'ClinicManager') return routes.doctor.root;
       if (role === 'Doctor') return routes.doctor.root;
       if (role === 'Patient') return routes.patient.root;
       return null;

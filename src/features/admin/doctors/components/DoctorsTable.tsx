@@ -75,6 +75,24 @@ export function DoctorsTable({
       render: (v: string) => v || t('admin.doctors.notSet'),
     },
     {
+      title: t('admin.doctors.columns.clinicManager'),
+      key: 'clinicManager',
+      ellipsis: true,
+      render: (_, doctor) => {
+        const managedClinics = doctor.managedClinicNames ?? [];
+
+        if (doctor.isClinicManager && managedClinics.length > 0) {
+          return managedClinics.join(', ');
+        }
+
+        if (doctor.isClinicManager) {
+          return t('admin.doctors.clinicManagerWithoutClinics');
+        }
+
+        return t('admin.doctors.notClinicManager');
+      },
+    },
+    {
       title: t('admin.doctors.columns.createdAt'),
       key: 'createdAt',
       width: 130,

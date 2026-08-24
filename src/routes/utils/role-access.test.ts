@@ -31,6 +31,19 @@ describe('hasRequiredRole', () => {
   it('returns false when role is missing', () => {
     expect(hasRequiredRole(baseUser, 'Patient')).toBe(false);
   });
+
+  it('treats ClinicManager as having Doctor access', () => {
+    expect(
+      hasRequiredRole(
+        {
+          ...baseUser,
+          role: 'ClinicManager',
+          roles: ['ClinicManager'],
+        },
+        'Doctor',
+      ),
+    ).toBe(true);
+  });
 });
 
 describe('getHomeRouteForUser', () => {
@@ -42,6 +55,26 @@ describe('getHomeRouteForUser', () => {
     };
 
     expect(getHomeRouteForUser(user)).toBe(routes.admin.root);
+  });
+
+  it('returns Doctor panel for clinic manager users', () => {
+    const user: AuthenticatedUser = {
+      ...baseUser,
+      role: 'ClinicManager',
+      roles: ['ClinicManager'],
+    };
+
+    expect(getHomeRouteForUser(user)).toBe(routes.doctor.root);
+  });
+
+  it('does not send ClinicManager to the Admin home when Doctor is also present', () => {
+    const user: AuthenticatedUser = {
+      ...baseUser,
+      role: 'ClinicManager',
+      roles: ['ClinicManager', 'Doctor'],
+    };
+
+    expect(getHomeRouteForUser(user)).toBe(routes.doctor.root);
   });
 
   it('returns doctor route for doctor users', () => {

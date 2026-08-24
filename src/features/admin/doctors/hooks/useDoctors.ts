@@ -10,12 +10,13 @@ import { doctorService } from '../services/doctorService';
 import type { CreateDoctorRequest, UpdateDoctorRequest } from '../types/doctor';
 import { doctorQueryKeys } from './doctor-query-keys';
 
-export function useDoctors(filter: AdminListFilter = 'active') {
+export function useDoctors(filter: AdminListFilter = 'active', enabled = true) {
   const isEnabled = adminListFilterToIsEnabled(filter);
 
   return useQuery({
     queryKey: doctorQueryKeys.list(isEnabled),
     queryFn: () => doctorService.getAll(isEnabled),
+    enabled,
   });
 }
 

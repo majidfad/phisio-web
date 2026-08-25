@@ -6,7 +6,11 @@ import {
 } from '@/features/admin/types/admin-list-filter';
 
 import { clinicService } from '../services/clinicService';
-import type { CreateClinicRequest, UpdateClinicRequest } from '../types/clinic';
+import type {
+  ChangeClinicManagerRequest,
+  CreateClinicRequest,
+  UpdateClinicRequest,
+} from '../types/clinic';
 import { clinicQueryKeys } from './clinic-query-keys';
 
 export function useClinics(filter: AdminListFilter = 'active') {
@@ -75,6 +79,21 @@ export function useDisableClinic() {
     onSuccess: async (_data, id) => {
       await queryClient.invalidateQueries({ queryKey: clinicQueryKeys.lists() });
       await queryClient.invalidateQueries({ queryKey: clinicQueryKeys.detail(id) });
+    },
+  });
+}
+
+export function useChangeClinicManager() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, request }: { id: string; request: ChangeClinicManagerRequest }) =>
+      clinicService.changeManager(id, request),
+    onSuccess: async (_data, variables) => {
+      await queryClient.invalidateQueries({ queryKey: clinicQueryKeys.lists() });
+      await queryClient.invalidateQueries({ queryKey: clinicQueryKeys.detail(variables.id) });
+      await queryClient.invalidateQueries({ queryKey: clinicQueryKeys.doctors(variables.id) });
+      await queryClient.invalidateQueries({ queryKey: clinicQueryKeys.doctorCandidates() });
     },
   });
 }

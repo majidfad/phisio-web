@@ -13,11 +13,13 @@ import {
 } from '@/components/ui';
 import { useAuth } from '@/features/auth';
 import { AddClinicDoctorModal } from '@/features/clinics/components/AddClinicDoctorModal';
+import { ChangeClinicManagerModal } from '@/features/clinics/components/ChangeClinicManagerModal';
 import { ClinicDetailsCard } from '@/features/clinics/components/ClinicDetailsCard';
 import { ClinicDoctorsTable } from '@/features/clinics/components/ClinicDoctorsTable';
 import { ClinicFormModal } from '@/features/clinics/components/ClinicFormModal';
 import {
   useAddClinicDoctor,
+  useChangeClinicManager,
   useClinic,
   useClinicDoctorCandidates,
   useClinicDoctors,
@@ -29,6 +31,10 @@ import {
   resolveAddClinicDoctorId,
   type AddClinicDoctorSchemaValues,
 } from '@/features/clinics/schemas/add-clinic-doctor-schema';
+import {
+  resolveChangeClinicManagerId,
+  type ChangeClinicManagerSchemaValues,
+} from '@/features/clinics/schemas/change-clinic-manager-schema';
 import {
   toClinicPhonePayload,
   type ClinicFormSchemaValues,
@@ -59,17 +65,23 @@ export function ClinicDetailsPage() {
 
   const updateClinic = useUpdateClinic();
   const disableClinic = useDisableClinic();
+  const changeManager = useChangeClinicManager();
   const addDoctor = useAddClinicDoctor(clinicId);
   const removeDoctor = useRemoveClinicDoctor(clinicId);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddDoctorOpen, setIsAddDoctorOpen] = useState(false);
+  const [isChangeManagerOpen, setIsChangeManagerOpen] = useState(false);
   const [clinicToDisable, setClinicToDisable] = useState(false);
   const [doctorToRemove, setDoctorToRemove] = useState<ClinicDoctorMemberDto | null>(null);
 
-  const candidatesQuery = useClinicDoctorCandidates(isAddDoctorOpen);
+  const candidatesQuery = useClinicDoctorCandidates(isAddDoctorOpen || isChangeManagerOpen);
   const assignedDoctorIds = useMemo(
     () => new Set(doctors.map((doctor) => doctor.doctorId)),
+    [doctors],
+  );
+  const currentManager = useMemo(
+    () => doctors.find((doctor) => doctor.isClinicManager) ?? null,
     [doctors],
   );
 
@@ -125,6 +137,29 @@ export function ClinicDetailsPage() {
     }
   };
 
+  const handleChangeManager = async (values: ChangeClinicManagerSchemaValues) => {
+    if (!clinic) {
+      return;
+    }
+
+    const clinicManagerId = resolveChangeClinicManagerId(values);
+    if (clinicManagerId === clinic.clinicManagerId) {
+      toast.error(t('clinics.changeManager.errors.sameManager'));
+      return;
+    }
+
+    try {
+      await changeManager.mutateAsync({
+        id: clinic.clinicId,
+        request: { clinicManagerId },
+      });
+      toast.success(t('clinics.changeManager.success'));
+      setIsChangeManagerOpen(false);
+    } catch (submitError) {
+      toast.error(getErrorMessage(submitError, t('clinics.changeManager.errors.saveFailed')));
+    }
+  };
+
   const handleRemoveDoctor = async () => {
     if (!doctorToRemove) {
       return;
@@ -155,6 +190,11 @@ export function ClinicDetailsPage() {
             {clinic ? (
               <Button onClick={() => setIsEditOpen(true)}>{t('clinics.actions.edit')}</Button>
             ) : null}
+            {clinic && isAdmin ? (
+              <Button onClick={() => setIsChangeManagerOpen(true)}>
+                {t('clinics.actions.changeManager')}
+              </Button>
+            ) : null}
             {clinic?.isEnabled ? (
               <Button danger onClick={() => setClinicToDisable(true)}>
                 {t('clinics.actions.disable')}
@@ -180,7 +220,11 @@ export function ClinicDetailsPage() {
 
       {!isLoading && !isError && clinic ? (
         <>
-          <ClinicDetailsCard clinic={clinic} doctorCount={doctors.length} />
+          <ClinicDetailsCard
+            clinic={clinic}
+            doctorCount={doctors.length}
+            managerName={currentManager?.name}
+          />
 
           <PageSection
             title={t('clinics.doctors.title')}
@@ -240,6 +284,21 @@ export function ClinicDetailsPage() {
             onClose={() => setIsAddDoctorOpen(false)}
             onSubmit={handleAddDoctor}
           />
+
+          {isAdmin ? (
+            <ChangeClinicManagerModal
+              isOpen={isChangeManagerOpen}
+              isSubmitting={changeManager.isPending}
+              isLoadingCandidates={candidatesQuery.isLoading}
+              isCandidatesError={candidatesQuery.isError}
+              currentManagerId={clinic.clinicManagerId}
+              currentManagerName={currentManager?.name}
+              candidates={candidatesQuery.data ?? []}
+              onRetryCandidates={() => void candidatesQuery.refetch()}
+              onClose={() => setIsChangeManagerOpen(false)}
+              onSubmit={handleChangeManager}
+            />
+          ) : null}
 
           <ConfirmActionModal
             open={clinicToDisable}

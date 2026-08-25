@@ -66,6 +66,20 @@ describe('clinicService', () => {
     expect(httpClient.put).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}`, request);
   });
 
+  it('changes the clinic manager', async () => {
+    const request = {
+      clinicManagerId: '11111111-1111-1111-1111-111111111111',
+    };
+    const updated = {
+      ...clinic,
+      clinicManagerId: request.clinicManagerId,
+    };
+    vi.mocked(httpClient.put).mockResolvedValue({ data: updated });
+
+    await expect(clinicService.changeManager(clinic.clinicId, request)).resolves.toEqual(updated);
+    expect(httpClient.put).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}/manager`, request);
+  });
+
   it('disables a clinic with delete', async () => {
     vi.mocked(httpClient.delete).mockResolvedValue({});
 

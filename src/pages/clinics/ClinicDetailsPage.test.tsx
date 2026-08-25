@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -7,6 +7,15 @@ import { renderWithProviders } from '@/test/render';
 
 const unassignedDoctorId = '22222222-2222-2222-2222-222222222222';
 const addDoctorMock = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
+const changeManagerMock = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
+const authUserMock = vi.hoisted(() => ({
+  current: {
+    userId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+    name: 'Admin User',
+    role: 'Admin' as const,
+    roles: ['Admin'] as string[],
+  },
+}));
 const candidatesMock = vi.hoisted(() => ({
   data: [
     {
@@ -40,12 +49,7 @@ vi.mock('react-router-dom', async () => {
 
 vi.mock('@/features/auth', () => ({
   useAuth: () => ({
-    user: {
-      userId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
-      name: 'Clinic Manager',
-      role: 'ClinicManager',
-      roles: ['ClinicManager'],
-    },
+    user: authUserMock.current,
   }),
 }));
 
@@ -84,18 +88,43 @@ vi.mock('@/features/clinics/hooks/useClinics', () => ({
   useClinicDoctorCandidates: () => candidatesMock,
   useUpdateClinic: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useDisableClinic: () => ({ mutateAsync: vi.fn(), isPending: false }),
+  useChangeClinicManager: () => ({ mutateAsync: changeManagerMock, isPending: false }),
   useAddClinicDoctor: () => ({ mutateAsync: addDoctorMock, isPending: false }),
   useRemoveClinicDoctor: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }));
 
 describe('ClinicDetailsPage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    authUserMock.current = {
+      userId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      name: 'Admin User',
+      role: 'Admin',
+      roles: ['Admin'],
+    };
+  });
+
   it('renders clinic details and doctor list', () => {
     renderWithProviders(<ClinicDetailsPage />);
 
     expect(screen.getAllByText('North Clinic').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Tehran, Valiasr')).toBeInTheDocument();
-    expect(screen.getByText('Manager User')).toBeInTheDocument();
+    expect(screen.getAllByText('Manager User').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('button', { name: 'Add doctor' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Change manager' })).toBeInTheDocument();
+  });
+
+  it('hides change manager for non-admin users', () => {
+    authUserMock.current = {
+      userId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+      name: 'Clinic Manager',
+      role: 'ClinicManager',
+      roles: ['ClinicManager'],
+    };
+
+    renderWithProviders(<ClinicDetailsPage />);
+
+    expect(screen.queryByRole('button', { name: 'Change manager' })).not.toBeInTheDocument();
   });
 
   it('adds a system doctor who is not yet a member of the clinic', async () => {
@@ -119,5 +148,26 @@ describe('ClinicDetailsPage', () => {
     );
 
     await waitFor(() => expect(addDoctorMock).toHaveBeenCalledWith(unassignedDoctorId));
+  });
+
+  it('changes the clinic manager as admin', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ClinicDetailsPage />);
+
+    await user.click(screen.getByRole('button', { name: 'Change manager' }));
+
+    const dialog = await screen.findByRole('dialog');
+    const select = within(dialog).getByRole('combobox');
+    await user.click(select);
+    await user.type(select, 'Sara');
+    await user.click(await screen.findByText(/Sara Ahmadi/));
+    await user.click(within(dialog).getByRole('button', { name: 'Change manager' }));
+
+    await waitFor(() =>
+      expect(changeManagerMock).toHaveBeenCalledWith({
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        request: { clinicManagerId: unassignedDoctorId },
+      }),
+    );
   });
 });

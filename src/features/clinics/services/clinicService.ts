@@ -1,6 +1,7 @@
 import { httpClient } from '@/api/http-client';
 
 import type {
+  ChangeClinicManagerRequest,
   ClinicDoctorCandidateDto,
   ClinicDoctorMemberDto,
   ClinicDto,
@@ -34,6 +35,12 @@ export const clinicService = {
 
   async update(id: string, request: UpdateClinicRequest): Promise<ClinicDto> {
     const { data } = await httpClient.put<ClinicDto>(`${CLINICS_BASE}/${id}`, request);
+
+    return data;
+  },
+
+  async changeManager(id: string, request: ChangeClinicManagerRequest): Promise<ClinicDto> {
+    const { data } = await httpClient.put<ClinicDto>(`${CLINICS_BASE}/${id}/manager`, request);
 
     return data;
   },

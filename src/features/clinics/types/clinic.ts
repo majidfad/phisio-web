@@ -19,6 +19,10 @@ export interface CreateClinicRequest {
 
 export type UpdateClinicRequest = Omit<CreateClinicRequest, 'clinicManagerId'>;
 
+export interface ChangeClinicManagerRequest {
+  clinicManagerId: string;
+}
+
 export interface ClinicDoctorMemberDto {
   doctorId: string;
   name: string;

@@ -227,6 +227,7 @@
     "actions": {
       "view": "View details",
       "edit": "Edit",
+      "changeManager": "Change manager",
       "disable": "Disable"
     },
     "form": {
@@ -242,11 +243,25 @@
       "clinicManagerPlaceholder": "Search by doctor name",
       "clinicManagerEmpty": "No doctors found.",
       "clinicManagerLoadFailed": "Failed to load doctors.",
-      "managerUnchanged": "The clinic manager cannot be changed from this form.",
+      "managerUnchanged": "To change the clinic manager, use Change manager on this page.",
       "create": "Create clinic",
       "save": "Save changes",
       "saving": "Saving…",
       "cancel": "Cancel"
+    },
+    "changeManager": {
+      "title": "Change clinic manager",
+      "currentManager": "Current manager: {{name}}",
+      "selectManager": "New clinic manager",
+      "emptyCandidates": "No other doctors are available to assign as manager.",
+      "hint": "The new manager is added to the clinic if they are not already a member. The previous manager keeps Doctor access.",
+      "confirm": "Change manager",
+      "saving": "Saving…",
+      "success": "Clinic manager updated successfully.",
+      "errors": {
+        "saveFailed": "Failed to change clinic manager.",
+        "sameManager": "Select a different doctor than the current manager."
+      }
     },
     "disable": {
       "title": "Disable clinic",
@@ -282,6 +297,7 @@
       "name": "Name",
       "address": "Address",
       "phones": "Phone numbers",
+      "manager": "Clinic manager",
       "doctorCount": "Doctor count",
       "status": "Status"
     },

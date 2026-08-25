@@ -7,6 +7,7 @@ import { formatDisplayPhone, formatPersianNumber } from '@/utils/persian-format'
 interface ClinicDetailsCardProps {
   clinic: ClinicDto;
   doctorCount: number;
+  managerName?: string | null;
 }
 
 const fieldStyle = {
@@ -28,7 +29,7 @@ const valueStyle = {
   lineHeight: 1.55,
 };
 
-export function ClinicDetailsCard({ clinic, doctorCount }: ClinicDetailsCardProps) {
+export function ClinicDetailsCard({ clinic, doctorCount, managerName }: ClinicDetailsCardProps) {
   const { t } = useTranslation();
 
   return (
@@ -60,6 +61,14 @@ export function ClinicDetailsCard({ clinic, doctorCount }: ClinicDetailsCardProp
           {clinic.phoneNumbers.length === 0
             ? t('clinics.notSet')
             : clinic.phoneNumbers.map((phone) => formatDisplayPhone(phone)).join('، ')}
+        </span>
+      </div>
+      <div style={fieldStyle}>
+        <span style={labelStyle}>{t('clinics.details.manager')}</span>
+        <span style={valueStyle}>
+          <bdi style={{ unicodeBidi: 'plaintext' }}>
+            {managerName?.trim() || t('clinics.notSet')}
+          </bdi>
         </span>
       </div>
       <div style={fieldStyle}>

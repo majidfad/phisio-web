@@ -1,6 +1,10 @@
 /// <reference lib="webworker" />
 import { clientsClaim } from 'workbox-core';
-import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
+import {
+  cleanupOutdatedCaches,
+  createHandlerBoundToURL,
+  precacheAndRoute,
+} from 'workbox-precaching';
 import { NavigationRoute, registerRoute } from 'workbox-routing';
 import { NetworkFirst } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
@@ -37,13 +41,15 @@ registerRoute(
 
 self.addEventListener('push', (event) => {
   let title = 'Zivan';
-  let body = '';
+  let body: string;
   let data: Record<string, unknown> = {};
 
   try {
-    const payload = event.data?.json() as
-      | { title?: string; body?: string; data?: Record<string, unknown> }
-      | undefined;
+    const payload = event.data?.json() as {
+      title?: string;
+      body?: string;
+      data?: Record<string, unknown>;
+    };
     title = payload?.title || title;
     body = payload?.body || '';
     data = payload?.data || {};

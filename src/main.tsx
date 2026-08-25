@@ -2,6 +2,7 @@ import '@/i18n';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { registerSW } from 'virtual:pwa-register';
 
 import { App } from '@/App';
 
@@ -35,6 +36,10 @@ async function prepareDevelopmentRuntime(): Promise<boolean> {
 }
 
 function renderApp(): void {
+  if (import.meta.env.PROD) {
+    registerSW({ immediate: true });
+  }
+
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <App />

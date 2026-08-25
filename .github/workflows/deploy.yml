@@ -15,7 +15,9 @@ permissions:
   packages: write
 
 env:
+  # Push to real GHCR from GitHub Actions; VPS pulls via focker.ir mirror.
   REGISTRY: ghcr.io
+  PULL_REGISTRY: focker.ir/ghcr.io
   APP_DIR: /opt/phisio
 
 jobs:
@@ -59,7 +61,7 @@ jobs:
       - name: Deploy on server
         uses: appleboy/ssh-action@v1.2.0
         env:
-          REGISTRY: ${{ env.REGISTRY }}
+          PULL_REGISTRY: ${{ env.PULL_REGISTRY }}
           IMAGE_OWNER: ${{ env.IMAGE_OWNER }}
           IMAGE_TAG: ${{ github.event.workflow_run.head_sha }}
           APP_DIR: ${{ env.APP_DIR }}
@@ -69,7 +71,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          envs: REGISTRY,IMAGE_OWNER,IMAGE_TAG,APP_DIR,GHCR_PULL_TOKEN,GITHUB_ACTOR
+          envs: PULL_REGISTRY,IMAGE_OWNER,IMAGE_TAG,APP_DIR,GHCR_PULL_TOKEN,GITHUB_ACTOR
           script: |
             set -euo pipefail
             cd "${APP_DIR}"
@@ -86,17 +88,17 @@ jobs:
             fi
 
             if [ -n "${GHCR_PULL_TOKEN:-}" ]; then
-              echo "${GHCR_PULL_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
+              echo "${GHCR_PULL_TOKEN}" | docker login focker.ir -u "${GITHUB_ACTOR}" --password-stdin
             else
               echo "GHCR_PULL_TOKEN is empty — pull may fail for private packages"
             fi
 
-            export PHISIO_WEB_IMAGE="${REGISTRY}/${IMAGE_OWNER}/phisio-web:${IMAGE_TAG}"
+            export PHISIO_WEB_IMAGE="${PULL_REGISTRY}/${IMAGE_OWNER}/phisio-web:${IMAGE_TAG}"
 
             case "${PHISIO_WEB_IMAGE}" in
-              ghcr.io/*) ;;
+              focker.ir/ghcr.io/*) ;;
               *)
-                echo "Refusing non-GHCR web image: ${PHISIO_WEB_IMAGE}"
+                echo "Refusing non-mirrored GHCR web image: ${PHISIO_WEB_IMAGE}"
                 exit 1
                 ;;
             esac
@@ -117,7 +119,8 @@ jobs:
             echo "Removing previous Web container/image before pull..."
             docker compose -f docker-compose.prod.yml --env-file .env --profile web stop web || true
             docker compose -f docker-compose.prod.yml --env-file .env --profile web rm -f web || true
-            docker images "${REGISTRY}/${IMAGE_OWNER}/phisio-web" -q | sort -u | xargs -r docker rmi -f || true
+            docker images "${PULL_REGISTRY}/${IMAGE_OWNER}/phisio-web" -q | sort -u | xargs -r docker rmi -f || true
+            docker images "ghcr.io/${IMAGE_OWNER}/phisio-web" -q | sort -u | xargs -r docker rmi -f || true
 
             docker compose -f docker-compose.prod.yml --env-file .env --profile web pull web
             docker compose -f docker-compose.prod.yml --env-file .env --profile web up -d --no-deps web proxy

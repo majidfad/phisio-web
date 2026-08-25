@@ -1229,10 +1229,14 @@
       "errors": {
         "noWeekdays": "Select at least one weekday.",
         "followUpAfterPrimary": "Follow-up time must be later than the first reminder."
+      },
+      "push": {
+        "enabled": "Phone notifications enabled. Android will show reminders even when the app is closed.",
+        "denied": "Notification permission was denied. Enable notifications in Android settings for Zivan to get phone alerts."
       }
     },
     "dashboard": {
-      "treatingDoctor": "Treating doctor: {{doctorName}}",
+      "treatingDoctor": "Treating doctor",
       "badge": "Your recovery",
       "subtitle": "Track your daily physiotherapy exercises",
       "greetingMorning": "Good morning",

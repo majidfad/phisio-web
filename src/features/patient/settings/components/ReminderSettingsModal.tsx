@@ -29,6 +29,11 @@ import {
 } from '@/features/patient/settings/types/reminder-settings';
 import { useToast } from '@/hooks/useToast';
 import { getErrorMessage } from '@/utils/get-error-message';
+import {
+  disablePushNotifications,
+  enablePushNotifications,
+  isPushSupported,
+} from '@/features/notifications/utils/web-push';
 
 interface ReminderSettingsModalProps {
   open: boolean;
@@ -284,6 +289,18 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
   const handleSave = async (payload: Parameters<ReminderSettingsFormProps['onSave']>[0]) => {
     try {
       await updateSettings.mutateAsync(payload);
+
+      if (payload.exerciseRemindersEnabled && isPushSupported()) {
+        const pushResult = await enablePushNotifications();
+        if (pushResult === 'granted') {
+          toast.success(t('patient.reminderSettings.push.enabled'));
+        } else if (pushResult === 'denied') {
+          toast.warning(t('patient.reminderSettings.push.denied'));
+        }
+      } else if (!payload.exerciseRemindersEnabled && isPushSupported()) {
+        await disablePushNotifications();
+      }
+
       toast.success(t('patient.reminderSettings.success'));
       onClose();
     } catch (error) {

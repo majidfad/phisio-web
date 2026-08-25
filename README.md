@@ -20,7 +20,7 @@ docker build -t phisio-web:local .
 
 ## Production deploy
 
-Images are built in CI and pulled from **GHCR**. Push API first, then this repo — Web Deploy updates only the `web` service (`--profile web`).
+Images are built in CI and pulled from **GHCR** via the `focker.ir` mirror. Push API first, then this repo — Web Deploy updates only the `web` service (`--profile web`).
 
 See [deploy/GITHUB_SECRETS.md](deploy/GITHUB_SECRETS.md).
 

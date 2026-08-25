@@ -2,7 +2,7 @@
 
 | Secret | Description |
 |--------|-------------|
-| `DEPLOY_HOST` | VPS public IP |
+| `DEPLOY_HOST` | VPS public IP (current: `85.198.15.132`) |
 | `DEPLOY_USER` | SSH user with Docker access |
 | `DEPLOY_SSH_KEY` | Private SSH key |
 | `GHCR_PULL_TOKEN` | PAT with `read:packages` for GHCR pulls on the VPS |

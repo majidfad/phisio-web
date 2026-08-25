@@ -58,7 +58,7 @@ export function PatientDashboard() {
               </span>
               <span className="home-doctor-chip__text">
                 <span className="home-doctor-chip__label">
-                  {t('patient.dashboard.treatingDoctor', { defaultValue: 'پزشک معالج' })}
+                  {t('patient.dashboard.treatingDoctor')}
                 </span>
                 <span className="home-doctor-chip__name">{activeDoctor.name}</span>
               </span>

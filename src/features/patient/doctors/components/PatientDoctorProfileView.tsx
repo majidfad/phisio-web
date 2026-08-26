@@ -1,5 +1,5 @@
 import { Button, Card, Descriptions, Select } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -24,6 +24,26 @@ interface PatientDoctorProfileViewProps {
 
 type PendingConfirm = 'cancel' | 'unlink' | null;
 
+function resolveSelectedClinicId(
+  clinics: { clinicId: string }[] | undefined,
+  preferredClinicId: string | null,
+  current: string | null,
+): string | null {
+  if (!clinics?.length) {
+    return null;
+  }
+
+  if (current && clinics.some((clinic) => clinic.clinicId === current)) {
+    return current;
+  }
+
+  if (preferredClinicId && clinics.some((clinic) => clinic.clinicId === preferredClinicId)) {
+    return preferredClinicId;
+  }
+
+  return clinics[0]?.clinicId ?? null;
+}
+
 export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewProps) {
   const { t } = useTranslation();
   const toast = useToast();
@@ -31,28 +51,16 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
   const preferredClinicId = searchParams.get('clinicId');
   const clinicsQuery = usePatientDoctorClinics(doctorId);
   const [selectedClinicId, setSelectedClinicId] = useState<string | null>(preferredClinicId);
+  const [syncedClinics, setSyncedClinics] = useState(clinicsQuery.data);
+  const [syncedPreferredClinicId, setSyncedPreferredClinicId] = useState(preferredClinicId);
 
-  useEffect(() => {
-    if (!clinicsQuery.data?.length) {
-      setSelectedClinicId(null);
-      return;
-    }
-
-    setSelectedClinicId((current) => {
-      if (current && clinicsQuery.data.some((clinic) => clinic.clinicId === current)) {
-        return current;
-      }
-
-      if (
-        preferredClinicId &&
-        clinicsQuery.data.some((clinic) => clinic.clinicId === preferredClinicId)
-      ) {
-        return preferredClinicId;
-      }
-
-      return clinicsQuery.data[0]?.clinicId ?? null;
-    });
-  }, [clinicsQuery.data, preferredClinicId]);
+  if (clinicsQuery.data !== syncedClinics || preferredClinicId !== syncedPreferredClinicId) {
+    setSyncedClinics(clinicsQuery.data);
+    setSyncedPreferredClinicId(preferredClinicId);
+    setSelectedClinicId(
+      resolveSelectedClinicId(clinicsQuery.data, preferredClinicId, selectedClinicId),
+    );
+  }
 
   const { data, isLoading, isError, error, refetch } = usePatientDoctorProfile(
     doctorId,
@@ -80,10 +88,7 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
     return (
       <AppResult
         status="error"
-        title={getErrorMessage(
-          clinicsQuery.error ?? error,
-          t('patient.doctors.errors.loadFailed'),
-        )}
+        title={getErrorMessage(clinicsQuery.error ?? error, t('patient.doctors.errors.loadFailed'))}
         extra={
           <>
             <Button type="primary" onClick={() => void refetch()}>

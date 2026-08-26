@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Alert, Button, Checkbox, Form, Input, Modal, Select, Space, Spin, Typography } from 'antd';
 import { Plus, Trash2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -61,6 +61,8 @@ export function DoctorFormModal({
   const [foundClinic, setFoundClinic] = useState<ClinicDto | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [isLookingUp, setIsLookingUp] = useState(false);
+  const formResetKey = `${isOpen}:${doctor?.id ?? 'create'}`;
+  const [syncedFormResetKey, setSyncedFormResetKey] = useState<string | null>(null);
 
   const createSchema = useMemo(() => createDoctorFormSchema(t), [t]);
   const editSchema = useMemo(() => createDoctorEditFormSchema(t), [t]);
@@ -103,16 +105,12 @@ export function DoctorFormModal({
     name: 'clinicPhoneNumbers',
   });
 
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
+  if (isOpen && formResetKey !== syncedFormResetKey) {
+    setSyncedFormResetKey(formResetKey);
     setCreateStep('doctor');
     setFoundClinic(null);
     setLookupError(null);
     setIsLookingUp(false);
-
     reset({
       name: doctor?.name ?? '',
       phoneNumber: doctor?.phoneNumber ?? '',
@@ -127,7 +125,9 @@ export function DoctorFormModal({
       clinicManagerId: '',
       ...EMPTY_ADMIN_PASSWORD_FIELDS,
     });
-  }, [isOpen, doctor, reset]);
+  } else if (!isOpen && syncedFormResetKey !== null) {
+    setSyncedFormResetKey(null);
+  }
 
   const title =
     mode === 'create' ? t('admin.doctors.form.createTitle') : t('admin.doctors.form.editTitle');
@@ -387,7 +387,11 @@ export function DoctorFormModal({
             <Form.Item style={{ marginBottom: 0 }}>
               <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
                 <Button onClick={onClose}>{t('admin.doctors.form.cancel')}</Button>
-                <Button type="primary" loading={isSubmitting} onClick={() => void handleEditSubmit()}>
+                <Button
+                  type="primary"
+                  loading={isSubmitting}
+                  onClick={() => void handleEditSubmit()}
+                >
                   {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.save')}
                 </Button>
               </Space>
@@ -416,7 +420,11 @@ export function DoctorFormModal({
             <Form.Item style={{ marginBottom: 0 }}>
               <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
                 <Button onClick={onClose}>{t('admin.doctors.form.cancel')}</Button>
-                <Button type="primary" loading={isLookingUp} onClick={() => void handleLookupAndContinue()}>
+                <Button
+                  type="primary"
+                  loading={isLookingUp}
+                  onClick={() => void handleLookupAndContinue()}
+                >
                   {isLookingUp
                     ? t('admin.doctors.clinic.searching')
                     : t('admin.doctors.clinic.continue')}
@@ -449,15 +457,15 @@ export function DoctorFormModal({
             />
             <Form.Item style={{ marginBottom: 0 }}>
               <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-                <Button onClick={() => setCreateStep('doctor')}>{t('admin.doctors.clinic.back')}</Button>
+                <Button onClick={() => setCreateStep('doctor')}>
+                  {t('admin.doctors.clinic.back')}
+                </Button>
                 <Button
                   type="primary"
                   loading={isSubmitting}
                   onClick={() => void handleCreateWithExistingClinic()}
                 >
-                  {isSubmitting
-                    ? t('admin.doctors.form.saving')
-                    : t('admin.doctors.form.create')}
+                  {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.create')}
                 </Button>
               </Space>
             </Form.Item>
@@ -561,15 +569,15 @@ export function DoctorFormModal({
 
             <Form.Item style={{ marginBottom: 0 }}>
               <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-                <Button onClick={() => setCreateStep('doctor')}>{t('admin.doctors.clinic.back')}</Button>
+                <Button onClick={() => setCreateStep('doctor')}>
+                  {t('admin.doctors.clinic.back')}
+                </Button>
                 <Button
                   type="primary"
                   loading={isSubmitting}
                   onClick={() => void handleCreateWithNewClinic()}
                 >
-                  {isSubmitting
-                    ? t('admin.doctors.form.saving')
-                    : t('admin.doctors.form.create')}
+                  {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.create')}
                 </Button>
               </Space>
             </Form.Item>

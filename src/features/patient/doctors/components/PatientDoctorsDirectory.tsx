@@ -156,7 +156,9 @@ function ConnectedDoctorCard({ doctor }: { doctor: PatientLinkedDoctorDto }) {
         <h3 className="patient-media-card__title">{doctor.name}</h3>
         <RelationshipTag status={doctor.status} />
       </div>
-      {doctor.specialty ? <span className="patient-media-card__meta">{doctor.specialty}</span> : null}
+      {doctor.specialty ? (
+        <span className="patient-media-card__meta">{doctor.specialty}</span>
+      ) : null}
       {doctor.clinicName ? <p className="patient-media-card__body">{doctor.clinicName}</p> : null}
       {doctor.phoneNumber ? (
         <p className="patient-media-card__body" dir="ltr">
@@ -183,7 +185,9 @@ function DirectoryDoctorCard({ doctor }: { doctor: PatientDoctorDirectoryItemDto
         <h3 className="patient-media-card__title">{doctor.name}</h3>
         <RelationshipTag status={doctor.relationshipStatus} />
       </div>
-      {doctor.specialty ? <span className="patient-media-card__meta">{doctor.specialty}</span> : null}
+      {doctor.specialty ? (
+        <span className="patient-media-card__meta">{doctor.specialty}</span>
+      ) : null}
       {doctor.clinicAddress ? (
         <p className="patient-media-card__body">{doctor.clinicAddress}</p>
       ) : null}

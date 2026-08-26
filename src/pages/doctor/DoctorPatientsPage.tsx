@@ -175,18 +175,14 @@ export function DoctorPatientsPage() {
                     <Space>
                       <Button
                         type="primary"
-                        loading={
-                          actingRequestId === `${request.patientId}:${request.clinicId}`
-                        }
+                        loading={actingRequestId === `${request.patientId}:${request.clinicId}`}
                         onClick={() => void handleApprove(request)}
                       >
                         {t('doctor.patients.approve')}
                       </Button>
                       <Button
                         danger
-                        loading={
-                          actingRequestId === `${request.patientId}:${request.clinicId}`
-                        }
+                        loading={actingRequestId === `${request.patientId}:${request.clinicId}`}
                         onClick={() => setRequestToReject(request)}
                       >
                         {t('doctor.patients.reject')}

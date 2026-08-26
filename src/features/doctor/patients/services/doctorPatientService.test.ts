@@ -33,11 +33,9 @@ describe('doctorPatientService', () => {
     await expect(doctorPatientService.approveRequest(patientId, clinicId)).resolves.toEqual(
       approved,
     );
-    expect(httpClient.post).toHaveBeenCalledWith(
-      `/doctor/patients/${patientId}/approve`,
-      null,
-      { params: { clinicId } },
-    );
+    expect(httpClient.post).toHaveBeenCalledWith(`/doctor/patients/${patientId}/approve`, null, {
+      params: { clinicId },
+    });
   });
 
   it('rejects a patient request with clinicId query param', async () => {

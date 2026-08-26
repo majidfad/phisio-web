@@ -1,0 +1,15 @@
+---
+description: Always verify frontend lint and build after every task
+alwaysApply: true
+---
+
+# Verify lint and build after every task
+
+After completing any frontend work in `phisio-web` (code changes, fixes, refactors, or tests):
+
+1. Run `npm run lint` and fix all reported errors before finishing.
+2. Run `npm run build` and fix all TypeScript/build failures before finishing.
+3. Do not leave the task done while lint or build is failing.
+4. Prefer fixing root causes over disabling rules; use auto-fix (`eslint --fix` / Prettier) for formatting-only issues first.
+
+If the task only touched `phisio-api`, still run the equivalent API checks when applicable (`dotnet build` / tests). For mixed front+API work, verify both.

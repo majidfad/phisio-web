@@ -105,8 +105,6 @@ export function createRegisterNewClinicStepSchema(t: TFunction) {
     });
 }
 
-export function toRegisterClinicPhonePayload(
-  phoneNumbers: RegisterClinicPhoneField[],
-): string[] {
+export function toRegisterClinicPhonePayload(phoneNumbers: RegisterClinicPhoneField[]): string[] {
   return phoneNumbers.map((item) => item.value.trim()).filter((value) => value.length > 0);
 }

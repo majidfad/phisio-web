@@ -36,6 +36,7 @@ import { PatientHomePage } from '@/pages/patient/PatientHomePage';
 import { PatientLibraryPage } from '@/pages/patient/PatientLibraryPage';
 import { PatientProgressPage } from '@/pages/patient/PatientProgressPage';
 import { GuestRoute } from '@/routes/guards/GuestRoute';
+import { RequireAppHost, RequireLandingHost } from '@/routes/guards/HostGates';
 import { ProtectedRoute } from '@/routes/guards/ProtectedRoute';
 import { RootRedirect } from '@/routes/guards/RootRedirect';
 
@@ -51,178 +52,188 @@ export const router = createBrowserRouter([
         element: <RootRedirect />,
       },
       {
-        path: routes.about,
-        element: <AboutPage />,
-      },
-      {
-        path: routes.download,
-        element: <DownloadAppPage />,
-      },
-      {
-        path: routes.privacy,
-        element: <PrivacyPage />,
-      },
-      {
-        path: routes.terms,
-        element: <TermsPage />,
-      },
-      {
-        element: <GuestRoute />,
+        element: <RequireLandingHost />,
         children: [
           {
-            element: <AuthLayout />,
-            children: [
-              {
-                path: routes.login,
-                element: <LoginPage />,
-              },
-              {
-                path: routes.register,
-                element: <RegisterPage />,
-              },
-            ],
+            path: routes.about,
+            element: <AboutPage />,
+          },
+          {
+            path: routes.download,
+            element: <DownloadAppPage />,
+          },
+          {
+            path: routes.privacy,
+            element: <PrivacyPage />,
+          },
+          {
+            path: routes.terms,
+            element: <TermsPage />,
           },
         ],
       },
       {
-        path: routes.unauthorized,
-        element: <UnauthorizedPage />,
-      },
-      {
-        element: <ProtectedRoute role="Admin" />,
+        element: <RequireAppHost />,
         children: [
           {
-            path: routes.admin.root,
-            element: <AdminLayout />,
+            element: <GuestRoute />,
             children: [
               {
-                index: true,
-                element: <AdminDashboardPage />,
-              },
-              {
-                path: 'doctors',
-                element: <DoctorsPage />,
-              },
-              {
-                path: 'patients',
-                element: <PatientsPage />,
-              },
-              {
-                path: 'clinics',
-                element: <ClinicsPage />,
-              },
-              {
-                path: 'clinics/:clinicId',
-                element: <ClinicDetailsPage />,
-              },
-              {
-                path: 'exercises',
-                element: <ExercisesPage />,
-              },
-              {
-                path: 'exercise-categories',
-                element: <ExerciseCategoriesPage />,
-              },
-              {
-                path: 'articles',
-                element: <ArticlesPage />,
-              },
-              {
-                path: 'assignments',
-                element: <AssignmentsPage />,
+                element: <AuthLayout />,
+                children: [
+                  {
+                    path: routes.login,
+                    element: <LoginPage />,
+                  },
+                  {
+                    path: routes.register,
+                    element: <RegisterPage />,
+                  },
+                ],
               },
             ],
           },
-        ],
-      },
-      {
-        element: <ProtectedRoute role="ClinicManager" />,
-        children: [
           {
-            path: routes.clinicManager.root,
-            element: <ClinicManagerLayout />,
+            path: routes.unauthorized,
+            element: <UnauthorizedPage />,
+          },
+          {
+            element: <ProtectedRoute role="Admin" />,
             children: [
               {
-                index: true,
-                element: <ClinicsPage />,
-              },
-              {
-                path: ':clinicId',
-                element: <ClinicDetailsPage />,
+                path: routes.admin.root,
+                element: <AdminLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: <AdminDashboardPage />,
+                  },
+                  {
+                    path: 'doctors',
+                    element: <DoctorsPage />,
+                  },
+                  {
+                    path: 'patients',
+                    element: <PatientsPage />,
+                  },
+                  {
+                    path: 'clinics',
+                    element: <ClinicsPage />,
+                  },
+                  {
+                    path: 'clinics/:clinicId',
+                    element: <ClinicDetailsPage />,
+                  },
+                  {
+                    path: 'exercises',
+                    element: <ExercisesPage />,
+                  },
+                  {
+                    path: 'exercise-categories',
+                    element: <ExerciseCategoriesPage />,
+                  },
+                  {
+                    path: 'articles',
+                    element: <ArticlesPage />,
+                  },
+                  {
+                    path: 'assignments',
+                    element: <AssignmentsPage />,
+                  },
+                ],
               },
             ],
           },
-        ],
-      },
-      {
-        element: <ProtectedRoute role="Doctor" />,
-        children: [
           {
-            path: routes.doctor.root,
-            element: <DoctorLayout />,
+            element: <ProtectedRoute role="ClinicManager" />,
             children: [
               {
-                index: true,
-                element: <DoctorHomePage />,
-              },
-              {
-                path: 'clinics',
-                element: <ClinicsPage />,
-              },
-              {
-                path: 'clinics/:clinicId',
-                element: <ClinicDetailsPage />,
-              },
-              {
-                path: 'patients',
-                element: <DoctorPatientsPage />,
-              },
-              {
-                path: 'exercises',
-                element: <DoctorExercisesPage />,
+                path: routes.clinicManager.root,
+                element: <ClinicManagerLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: <ClinicsPage />,
+                  },
+                  {
+                    path: ':clinicId',
+                    element: <ClinicDetailsPage />,
+                  },
+                ],
               },
             ],
           },
-        ],
-      },
-      {
-        element: <ProtectedRoute role="Patient" />,
-        children: [
           {
-            path: routes.patient.root,
-            element: <PatientLayout />,
+            element: <ProtectedRoute role="Doctor" />,
             children: [
               {
-                index: true,
-                element: <PatientHomePage />,
+                path: routes.doctor.root,
+                element: <DoctorLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: <DoctorHomePage />,
+                  },
+                  {
+                    path: 'clinics',
+                    element: <ClinicsPage />,
+                  },
+                  {
+                    path: 'clinics/:clinicId',
+                    element: <ClinicDetailsPage />,
+                  },
+                  {
+                    path: 'patients',
+                    element: <DoctorPatientsPage />,
+                  },
+                  {
+                    path: 'exercises',
+                    element: <DoctorExercisesPage />,
+                  },
+                ],
               },
+            ],
+          },
+          {
+            element: <ProtectedRoute role="Patient" />,
+            children: [
               {
-                path: 'doctors',
-                element: <PatientDoctorsPage />,
-              },
-              {
-                path: 'doctors/:doctorId',
-                element: <PatientDoctorProfilePage />,
-              },
-              {
-                path: 'library',
-                element: <PatientLibraryPage />,
-              },
-              {
-                path: 'articles',
-                element: <PatientArticlesPage />,
-              },
-              {
-                path: 'articles/:articleId',
-                element: <PatientArticleDetailPage />,
-              },
-              {
-                path: 'exercises',
-                element: <PatientExercisesPage />,
-              },
-              {
-                path: 'progress',
-                element: <PatientProgressPage />,
+                path: routes.patient.root,
+                element: <PatientLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: <PatientHomePage />,
+                  },
+                  {
+                    path: 'doctors',
+                    element: <PatientDoctorsPage />,
+                  },
+                  {
+                    path: 'doctors/:doctorId',
+                    element: <PatientDoctorProfilePage />,
+                  },
+                  {
+                    path: 'library',
+                    element: <PatientLibraryPage />,
+                  },
+                  {
+                    path: 'articles',
+                    element: <PatientArticlesPage />,
+                  },
+                  {
+                    path: 'articles/:articleId',
+                    element: <PatientArticleDetailPage />,
+                  },
+                  {
+                    path: 'exercises',
+                    element: <PatientExercisesPage />,
+                  },
+                  {
+                    path: 'progress',
+                    element: <PatientProgressPage />,
+                  },
+                ],
               },
             ],
           },

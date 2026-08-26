@@ -55,6 +55,8 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/phisio-web:${{ github.event.workflow_run.head_sha }}
           build-args: |
             VITE_API_BASE_URL=/api
+            VITE_LANDING_ORIGIN=https://zivan.me
+            VITE_APP_ORIGIN=https://app.zivan.me
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { AppLink } from '@/components/SiteLink';
 import { ZivanLogo } from '@/components/ui';
 import { LanguageToggle } from '@/features/landing/components/LanguageToggle';
 import { routes } from '@/routes/routes';
@@ -41,9 +42,9 @@ export function LandingNav({ onLanding = true }: LandingNavProps) {
 
         <div className="landing-nav__actions">
           <LanguageToggle />
-          <Link to={routes.login} className="landing-nav__login">
+          <AppLink to={routes.login} className="landing-nav__login">
             {t('landing.nav.login')}
-          </Link>
+          </AppLink>
         </div>
       </div>
     </header>

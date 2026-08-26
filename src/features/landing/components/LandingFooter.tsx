@@ -2,6 +2,7 @@ import { Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { AppLink } from '@/components/SiteLink';
 import { ZivanLogo } from '@/components/ui';
 import { LANDING_CONTACT } from '@/features/landing/landing-content';
 import { routes } from '@/routes/routes';
@@ -40,9 +41,9 @@ export function LandingFooter() {
 
         <nav className="landing-footer__col" aria-label={t('landing.footer.accountNav')}>
           <h3>{t('landing.footer.account')}</h3>
-          <Link to={routes.login}>{t('landing.nav.login')}</Link>
-          <Link to={`${routes.register}?role=patient`}>{t('landing.hero.ctaPatient')}</Link>
-          <Link to={`${routes.register}?role=doctor`}>{t('landing.hero.ctaClinic')}</Link>
+          <AppLink to={routes.login}>{t('landing.nav.login')}</AppLink>
+          <AppLink to={`${routes.register}?role=patient`}>{t('landing.hero.ctaPatient')}</AppLink>
+          <AppLink to={`${routes.register}?role=doctor`}>{t('landing.hero.ctaClinic')}</AppLink>
         </nav>
 
         <div className="landing-footer__col landing-footer__contact">

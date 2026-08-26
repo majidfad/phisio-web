@@ -23,6 +23,7 @@ import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { AppLink } from '@/components/SiteLink';
 import { LandingDownloadSection } from '@/features/landing/components/LandingDownloadSection';
 import { LandingFooter } from '@/features/landing/components/LandingFooter';
 import { LandingNav } from '@/features/landing/components/LandingNav';
@@ -160,16 +161,19 @@ export function LandingPage() {
               </h1>
               <p className="landing-hero__tagline">{t('app.tagline')}</p>
               <div className="landing-hero__ctas">
-                <Link
+                <AppLink
                   to={`${routes.register}?role=patient`}
                   className="landing-btn landing-btn--primary landing-hero__cta-primary"
                 >
                   {t('landing.hero.ctaPatient')}
-                </Link>
+                </AppLink>
                 <div className="landing-hero__cta-secondary">
-                  <Link to={`${routes.register}?role=doctor`} className="landing-hero__text-link">
+                  <AppLink
+                    to={`${routes.register}?role=doctor`}
+                    className="landing-hero__text-link"
+                  >
                     {t('landing.hero.ctaClinic')}
-                  </Link>
+                  </AppLink>
                   <span className="landing-hero__cta-dot" aria-hidden>
                     ·
                   </span>
@@ -405,15 +409,15 @@ export function LandingPage() {
           <div className="landing-cta-band__inner">
             <h2 id="cta-title">{t('landing.cta.title')}</h2>
             <div className="landing-hero__ctas landing-cta-band__ctas">
-              <Link
+              <AppLink
                 to={`${routes.register}?role=patient`}
                 className="landing-btn landing-btn--light"
               >
                 {t('landing.cta.patient')}
-              </Link>
-              <Link to={routes.login} className="landing-btn landing-btn--dark">
+              </AppLink>
+              <AppLink to={routes.login} className="landing-btn landing-btn--dark">
                 {t('landing.cta.login')}
-              </Link>
+              </AppLink>
             </div>
           </div>
         </section>

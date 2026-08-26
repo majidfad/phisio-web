@@ -26,12 +26,12 @@
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://zivan.me/login</loc>
+    <loc>https://app.zivan.me/login</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://zivan.me/register</loc>
+    <loc>https://app.zivan.me/register</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

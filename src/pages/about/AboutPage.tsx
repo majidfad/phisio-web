@@ -1,7 +1,7 @@
 import { Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
+import { AppLink } from '@/components/SiteLink';
 import { AboutFounders } from '@/features/landing/components/AboutFounders';
 import { LandingFooter } from '@/features/landing/components/LandingFooter';
 import { LandingNav } from '@/features/landing/components/LandingNav';
@@ -51,9 +51,9 @@ export function AboutPage() {
               {phoneLabel}
             </a>
           </div>
-          <Link to={routes.register} className="landing-btn landing-btn--primary">
+          <AppLink to={routes.register} className="landing-btn landing-btn--primary">
             {t('landing.aboutPage.cta')}
-          </Link>
+          </AppLink>
         </section>
       </main>
 

@@ -11,6 +11,10 @@ export const env = {
   uploadTimeoutMs: Number(import.meta.env.VITE_UPLOAD_TIMEOUT_MS ?? 600_000),
   authTokenStorageKey: import.meta.env.VITE_AUTH_TOKEN_STORAGE_KEY ?? 'phisio.auth.token',
   authSessionStorageKey: import.meta.env.VITE_AUTH_SESSION_STORAGE_KEY ?? 'phisio.auth.session',
+  /** Marketing site (zivan.me). Localhost ignores this and keeps a single origin. */
+  landingOrigin: import.meta.env.VITE_LANDING_ORIGIN ?? 'https://zivan.me',
+  /** App site (app.zivan.me). Localhost ignores this and keeps a single origin. */
+  appOrigin: import.meta.env.VITE_APP_ORIGIN ?? 'https://app.zivan.me',
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
 } as const;

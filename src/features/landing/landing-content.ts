@@ -1,8 +1,12 @@
+import { env } from '@/constants/env';
+
+const landingOrigin = env.landingOrigin.replace(/\/$/, '');
+
 export const LANDING_SITE = {
-  origin: 'https://zivan.me',
+  origin: landingOrigin,
   name: 'Zivan',
   nameFa: 'زیوان',
-  defaultOgImage: 'https://zivan.me/brand/landing/hero-lg.jpg',
+  defaultOgImage: `${landingOrigin}/brand/landing/hero-lg.jpg`,
   localeFa: 'fa_IR',
   localeEn: 'en_US',
 } as const;

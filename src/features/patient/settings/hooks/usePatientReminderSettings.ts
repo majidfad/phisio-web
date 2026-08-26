@@ -18,9 +18,9 @@ export function useUpdatePatientReminderSettings() {
   return useMutation({
     mutationFn: (request: UpdatePatientReminderSettingsRequest) =>
       patientSettingsService.updateReminderSettings(request),
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
       queryClient.setQueryData(patientSettingsQueryKeys.reminders(), data);
-      await queryClient.invalidateQueries({ queryKey: patientSettingsQueryKeys.reminders() });
+      void queryClient.invalidateQueries({ queryKey: patientSettingsQueryKeys.reminders() });
     },
   });
 }

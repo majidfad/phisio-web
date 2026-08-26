@@ -11,6 +11,7 @@ import {
   Typography,
 } from 'antd';
 import dayjs, { type Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,6 +36,8 @@ import {
   isPushSupported,
 } from '@/features/notifications/utils/web-push';
 
+dayjs.extend(customParseFormat);
+
 interface ReminderSettingsModalProps {
   open: boolean;
   onClose: () => void;
@@ -42,7 +45,12 @@ interface ReminderSettingsModalProps {
 
 function parseTime(value: string | undefined, fallback: string): Dayjs {
   const parsed = dayjs(value || fallback, ['HH:mm:ss', 'HH:mm'], true);
-  return parsed.isValid() ? parsed : dayjs(fallback, 'HH:mm');
+  if (parsed.isValid()) {
+    return parsed;
+  }
+
+  const fallbackParsed = dayjs(fallback, 'HH:mm', true);
+  return fallbackParsed.isValid() ? fallbackParsed : dayjs().hour(9).minute(0).second(0);
 }
 
 interface ReminderSettingsFormProps {
@@ -289,19 +297,23 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
   const handleSave = async (payload: Parameters<ReminderSettingsFormProps['onSave']>[0]) => {
     try {
       await updateSettings.mutateAsync(payload);
+      toast.success(t('patient.reminderSettings.success'));
 
-      if (payload.exerciseRemindersEnabled && isPushSupported()) {
-        const pushResult = await enablePushNotifications();
-        if (pushResult === 'granted') {
-          toast.success(t('patient.reminderSettings.push.enabled'));
-        } else if (pushResult === 'denied') {
-          toast.warning(t('patient.reminderSettings.push.denied'));
+      try {
+        if (payload.exerciseRemindersEnabled && isPushSupported()) {
+          const pushResult = await enablePushNotifications();
+          if (pushResult === 'granted') {
+            toast.success(t('patient.reminderSettings.push.enabled'));
+          } else if (pushResult === 'denied') {
+            toast.warning(t('patient.reminderSettings.push.denied'));
+          }
+        } else if (!payload.exerciseRemindersEnabled && isPushSupported()) {
+          await disablePushNotifications();
         }
-      } else if (!payload.exerciseRemindersEnabled && isPushSupported()) {
-        await disablePushNotifications();
+      } catch {
+        toast.warning(t('patient.reminderSettings.push.denied'));
       }
 
-      toast.success(t('patient.reminderSettings.success'));
       onClose();
     } catch (error) {
       toast.error(getErrorMessage(error, t('patient.reminderSettings.error')));
@@ -321,6 +333,16 @@ export function ReminderSettingsModal({ open, onClose }: ReminderSettingsModalPr
     >
       {data ? (
         <ReminderSettingsForm
+          key={[
+            data.exerciseRemindersEnabled,
+            data.preferredReminderTime,
+            data.repeatMode,
+            data.daysOfWeekMask,
+            data.intervalDays,
+            data.followUpEnabled,
+            data.followUpReminderTime,
+            data.anchorDate,
+          ].join('|')}
           data={data}
           formDisabled={isLoading || updateSettings.isPending}
           saving={updateSettings.isPending}

@@ -21,6 +21,10 @@ import { UnauthorizedPage } from '@/pages/errors/UnauthorizedPage';
 import { DoctorExercisesPage } from '@/pages/doctor/DoctorExercisesPage';
 import { DoctorHomePage } from '@/pages/doctor/DoctorHomePage';
 import { DoctorPatientsPage } from '@/pages/doctor/DoctorPatientsPage';
+import { AboutPage } from '@/pages/about/AboutPage';
+import { DownloadAppPage } from '@/pages/download/DownloadAppPage';
+import { PrivacyPage } from '@/pages/legal/PrivacyPage';
+import { TermsPage } from '@/pages/legal/TermsPage';
 import { LoginPage } from '@/pages/login/LoginPage';
 import { RegisterPage } from '@/pages/register/RegisterPage';
 import { PatientArticleDetailPage } from '@/pages/patient/PatientArticleDetailPage';
@@ -45,6 +49,22 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <RootRedirect />,
+      },
+      {
+        path: routes.about,
+        element: <AboutPage />,
+      },
+      {
+        path: routes.download,
+        element: <DownloadAppPage />,
+      },
+      {
+        path: routes.privacy,
+        element: <PrivacyPage />,
+      },
+      {
+        path: routes.terms,
+        element: <TermsPage />,
       },
       {
         element: <GuestRoute />,

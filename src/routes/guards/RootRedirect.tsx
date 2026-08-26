@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
 import { useAuth } from '@/features/auth';
-import { routes } from '@/routes/routes';
+import { LandingPage } from '@/pages/landing/LandingPage';
 import { getHomeRouteForUser } from '@/routes/utils/role-access';
 
 export function RootRedirect() {
@@ -12,7 +12,7 @@ export function RootRedirect() {
   }
 
   if (!isAuthenticated || !user) {
-    return <Navigate to={routes.login} replace />;
+    return <LandingPage />;
   }
 
   return <Navigate to={getHomeRouteForUser(user)} replace />;

@@ -56,6 +56,7 @@ function renderGuards(
       <AuthWrapper user={user} isInitializing={isInitializing}>
         <Routes>
           <Route path={routes.root} element={<RootRedirect />} />
+          <Route path={routes.about} element={<div>about-screen</div>} />
           <Route element={<GuestRoute />}>
             <Route path={routes.login} element={<div>login-screen</div>} />
           </Route>
@@ -107,6 +108,12 @@ describe('role-based route guards', () => {
     renderGuards(routes.admin.root, userForRole('ClinicManager'));
     expect(screen.getByText('unauthorized-screen')).toBeInTheDocument();
     expect(screen.queryByText('admin-screen')).not.toBeInTheDocument();
+  });
+
+  it('shows the landing page for unauthenticated users on /', () => {
+    renderGuards(routes.root, null);
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    expect(screen.queryByText('login-screen')).not.toBeInTheDocument();
   });
 
   it('redirects unauthenticated users from protected routes to login', () => {

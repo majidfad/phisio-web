@@ -604,6 +604,63 @@
   margin-bottom: 16px;
 }
 
+.auth-role-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--phisio-radius-md);
+  border: 1px solid var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+  cursor: pointer;
+  text-align: start;
+  font-family: inherit;
+  color: inherit;
+}
+
+.auth-role-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--phisio-radius-sm);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.auth-role-card__copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.auth-role-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--phisio-text);
+}
+
+.auth-role-card__desc {
+  font-size: var(--phisio-font-meta);
+  color: var(--phisio-text-secondary);
+  line-height: 1.4;
+}
+
+.auth-role-card__chevron {
+  color: var(--phisio-text-secondary);
+  flex-shrink: 0;
+}
+
+.auth-form .ant-btn {
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-form .ant-btn > .ant-btn-icon {
+  margin-inline: 0 !important;
+}
+
 .phisio-icon-primary {
   color: var(--phisio-primary);
 }

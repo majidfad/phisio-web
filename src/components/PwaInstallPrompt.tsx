@@ -1,39 +1,18 @@
 import { Download, X } from 'lucide-react';
 import { Button, Card } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
+import { usePwaInstall } from '@/hooks/usePwaInstall';
 
 const DISMISS_STORAGE_KEY = 'phisio.pwaInstallDismissed';
-
-function isRunningAsInstalledPwa(): boolean {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  const displayStandalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.matchMedia('(display-mode: fullscreen)').matches ||
-    window.matchMedia('(display-mode: minimal-ui)').matches;
-
-  const iosStandalone =
-    'standalone' in window.navigator &&
-    Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
-
-  return displayStandalone || iosStandalone;
-}
 
 export function PwaInstallPrompt() {
   const { t } = useTranslation();
   const location = useLocation();
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const { canInstall, install } = usePwaInstall();
   const [dismissed, setDismissed] = useState(() => {
     try {
       return sessionStorage.getItem(DISMISS_STORAGE_KEY) === '1';
@@ -41,51 +20,10 @@ export function PwaInstallPrompt() {
       return false;
     }
   });
-  const [installed, setInstalled] = useState(() => isRunningAsInstalledPwa());
 
   const isPatientRoute = location.pathname.startsWith('/patient');
 
-  useEffect(() => {
-    if (installed) {
-      return;
-    }
-
-    const onBeforeInstall = (e: Event) => {
-      // Never offer install while already running as an installed PWA.
-      if (isRunningAsInstalledPwa()) {
-        setInstalled(true);
-        return;
-      }
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-    };
-
-    const onAppInstalled = () => {
-      setInstalled(true);
-      setDeferredPrompt(null);
-    };
-
-    const onDisplayModeChange = () => {
-      if (isRunningAsInstalledPwa()) {
-        setInstalled(true);
-        setDeferredPrompt(null);
-      }
-    };
-
-    window.addEventListener('beforeinstallprompt', onBeforeInstall);
-    window.addEventListener('appinstalled', onAppInstalled);
-
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    mediaQuery.addEventListener('change', onDisplayModeChange);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
-      window.removeEventListener('appinstalled', onAppInstalled);
-      mediaQuery.removeEventListener('change', onDisplayModeChange);
-    };
-  }, [installed]);
-
-  if (installed || !deferredPrompt || dismissed) {
+  if (!canInstall || dismissed) {
     return null;
   }
 
@@ -99,13 +37,10 @@ export function PwaInstallPrompt() {
   };
 
   const handleInstall = async () => {
-    await deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setDeferredPrompt(null);
-      setInstalled(true);
+    const accepted = await install();
+    if (accepted) {
+      dismiss();
     }
-    dismiss();
   };
 
   return (

@@ -1533,5 +1533,322 @@
     "installPrompt": "Install the app for quick access",
     "install": "Install",
     "dismiss": "Dismiss"
+  },
+  "landing": {
+    "nav": {
+      "aria": "Primary navigation",
+      "home": "Home",
+      "features": "Features",
+      "how": "How it works",
+      "ai": "AI",
+      "trust": "Trust",
+      "about": "About us",
+      "download": "Download app",
+      "login": "Login",
+      "register": "Register"
+    },
+    "hero": {
+      "eyebrow": "Home physiotherapy exercises",
+      "ctaClinic": "Therapist / clinic",
+      "ctaPatient": "Patient sign-up",
+      "ctaDownload": "Download app"
+    },
+    "phoneMock": {
+      "appTitle": "Zivan",
+      "time": "9:41",
+      "patientName": "Sara",
+      "doctorName": "Dr. Rezaei",
+      "greeting": "Hi — today’s exercises are ready",
+      "todayTitle": "Your exercises today",
+      "exercise1Title": "Quad strengthening",
+      "exercise1Meta": "3 sets · 12 reps",
+      "exercise2Title": "Hamstring stretch",
+      "exercise2Meta": "2 sets · 30 sec",
+      "exercise3Title": "Single-leg balance",
+      "exercise3Meta": "3 sets · 10 reps",
+      "doNow": "Start"
+    },
+    "how": {
+      "title": "How Zivan works",
+      "lead": "Three clear steps. Nothing extra.",
+      "steps": {
+        "1": {
+          "title": "Connect with your therapist",
+          "body": "Find the clinic and send a request. After approval, you are linked."
+        },
+        "2": {
+          "title": "Get today’s plan",
+          "body": "The exercises your therapist prescribed appear on your phone, with counts and guidance."
+        },
+        "3": {
+          "title": "Do them and report back",
+          "body": "Finish the session and note how hard it felt. Your therapist sees what happened between visits."
+        }
+      }
+    },
+    "features": {
+      "title": "What patients and therapists can do in Zivan",
+      "lead": "Each role gets its own tools — the most useful ones first.",
+      "patientBadge": "Patient",
+      "patientTitle": "If you are a patient",
+      "patientLead": "See today’s plan, do the work, and keep your therapist in the loop.",
+      "doctorBadge": "Therapist / clinic",
+      "doctorTitle": "If you are a therapist or clinic",
+      "doctorLead": "Prescribe programs, track adherence, and follow patients between visits.",
+      "patient": {
+        "1": {
+          "title": "Today’s exercises on your phone",
+          "body": "A clear day list with counts and guidance. Open it, do it, done."
+        },
+        "2": {
+          "title": "Exercise reminders",
+          "body": "On busy days, a reminder helps the plan not get lost."
+        },
+        "3": {
+          "title": "Effort and progress notes",
+          "body": "Say if it felt hard or better — your therapist can adjust the next plan."
+        },
+        "4": {
+          "title": "Link to your therapist",
+          "body": "The program comes from your clinic so you stay on the same path."
+        },
+        "5": {
+          "title": "Learning materials",
+          "body": "Exercises and short articles when you want clearer guidance."
+        }
+      },
+      "doctor": {
+        "1": {
+          "title": "Prescribe exercise programs",
+          "body": "Build a plan for each patient and set dosage for every move."
+        },
+        "2": {
+          "title": "Track home adherence",
+          "body": "See what got done between visits — and where patients stalled."
+        },
+        "3": {
+          "title": "Manage patients",
+          "body": "Patient list, link status, and quick access to exercise history."
+        },
+        "4": {
+          "title": "History and feedback",
+          "body": "Session effort notes and progress trends for clearer clinical decisions."
+        },
+        "5": {
+          "title": "AI assist (coming soon)",
+          "body": "Draft programs and weekly summaries — final control stays with you."
+        }
+      }
+    },
+    "trust": {
+      "title": "Why you can trust Zivan",
+      "lead": "We are early. So we stay clear, reachable, and careful with your information.",
+      "items": {
+        "1": {
+          "title": "Real support",
+          "body": "We offer 24/7 support. If something gets stuck, call us or use the smart chatbot."
+        },
+        "2": {
+          "title": "Data confidentiality",
+          "body": "Your account and care-related information stay confidential and are not shared for unrelated use."
+        },
+        "3": {
+          "title": "The therapist decides",
+          "body": "Treatment plans are set and approved by the therapist. Our tools assist; they do not replace clinical judgment."
+        }
+      },
+      "founderNote": "We built Zivan to shorten the gap between the clinic visit and home practice. If you have a question or concern, tell us directly.",
+      "founderNoteBy": "The Zivan team"
+    },
+    "support": {
+      "fabLabel": "24/7 support",
+      "callCta": "Call support"
+    },
+    "ai": {
+      "badge": "Coming soon",
+      "title": "AI is on the way",
+      "lead": "This part is not finished yet. The aim is to help therapists and patients, with final control always staying with the therapist.",
+      "items": {
+        "1": {
+          "title": "Exercise ideas by body area",
+          "body": "Based on the selected area, a few exercise ideas are prepared for the therapist to review."
+        },
+        "2": {
+          "title": "Draft program",
+          "body": "Builds a draft from patient information. The therapist edits and finalizes it."
+        },
+        "3": {
+          "title": "Weekly summary for therapists",
+          "body": "A short weekly overview of completed exercises for easier follow-up."
+        },
+        "4": {
+          "title": "Better reminder timing",
+          "body": "Reminders move closer to the hours when exercises are more likely to get done."
+        },
+        "5": {
+          "title": "Movement guidance",
+          "body": "Patients can ask how to do a move correctly and get plain guidance."
+        }
+      }
+    },
+    "about": {
+      "title": "About Zivan",
+      "lead": "We started in 2025.",
+      "story": "We saw strong plans stall after people left the clinic. Zivan exists so patients know what to do each day, and therapists can see how home practice is going.",
+      "team": "Zivan’s co-founders started the product path, and today they work alongside colleagues in development, support, and improving the user experience. If you have a question, contact us directly.",
+      "readMore": "More detail"
+    },
+    "founders": {
+      "linkedin": "LinkedIn",
+      "majid": {
+        "name": "Majid Fadavi Ardestani",
+        "role": "Co-founder",
+        "shortBio": "I’m Majid, co-founder of Zivan.\nI work on the technical core so your exercise plan stays reliable and always within reach.\nI want the gap between the clinic and home to feel smaller — for real.",
+        "bio": "I’m Majid, co-founder of Zivan.\nI work on the technical core so your exercise plan stays reliable and always within reach.\nI want the gap between the clinic and home to feel smaller — for real."
+      },
+      "mahboube": {
+        "name": "Mahboube Rahmani",
+        "role": "Co-founder",
+        "shortBio": "I’m Mahboube, co-founder of Zivan.\nI focus on stability and experience — I want home exercises to stay simple and easy to follow.\nWith the Zivan team, I try to make the path for patients and therapists smoother.",
+        "bio": "I’m Mahboube, co-founder of Zivan.\nI focus on stability and experience — I want home exercises to stay simple and easy to follow.\nWith the Zivan team, I try to make the path for patients and therapists smoother."
+      }
+    },
+    "download": {
+      "eyebrow": "Zivan app",
+      "title": "Download & install Zivan",
+      "lead": "You can install the web app now. Native store apps are coming soon.",
+      "sectionTitle": "Download the Zivan app",
+      "sectionLead": "Install the PWA now. Store apps are coming soon.",
+      "more": "Install details",
+      "pwaTitle": "Quick install (PWA)",
+      "pwaBody": "Install Zivan on your phone or desktop without an app store, and open it like a native app.",
+      "pwaCta": "Install Zivan",
+      "pwaInstalled": "Zivan is already installed on this device.",
+      "pwaHint": "If you don’t see Install, open your browser menu and choose “Install app” or “Add to Home Screen”.",
+      "iosTip": "In Safari, tap Share, then choose “Add to Home Screen”.",
+      "storesBadge": "Coming soon",
+      "storesTitle": "Android & iOS apps",
+      "cafeBazaarAlt": "Cafe Bazaar",
+      "sibAppAlt": "Sib App",
+      "androidSoon": "The Android app will be available on Cafe Bazaar soon.",
+      "iosSoon": "The iOS app will be available on Sib App soon."
+    },
+    "seo": {
+      "homeTitle": "Zivan | Home physiotherapy exercises for patients and therapists",
+      "homeDescription": "Zivan keeps physiotherapy plans going from clinic to home. Patients complete today’s exercises; therapists track adherence between visits.",
+      "downloadTitle": "Download Zivan | PWA install and app stores",
+      "downloadDescription": "Install Zivan as a PWA now. Native Android (Cafe Bazaar) and iOS (Sib App) apps are coming soon.",
+      "aboutTitle": "About Zivan | Story and co-founders",
+      "aboutDescription": "Zivan started in 2025 to shorten the gap between clinic visits and home practice. Meet the team and contact us.",
+      "privacyTitle": "Privacy Policy | Zivan",
+      "privacyDescription": "How Zivan collects and uses account and care-related information.",
+      "termsTitle": "Terms of Use | Zivan",
+      "termsDescription": "Terms for using Zivan as a patient, therapist, or clinic."
+    },
+    "legal": {
+      "privacyTitle": "Privacy Policy",
+      "privacyUpdated": "Last updated: August 2026",
+      "privacyLead": "This policy explains what data Zivan collects, why we collect it, how we keep it, and what rights you have.",
+      "privacyControllerTitle": "Data controller",
+      "privacyControllerBody": "Zivan is provided by the Zivan team. For privacy questions, contact phone support.",
+      "privacyWhatTitle": "What we collect",
+      "privacyWhatBody": "Depending on your role (patient, therapist, or clinic manager), we may process:",
+      "privacyWhatItems": [
+        "Account details: name, phone number, role, and hashed password",
+        "Care relationships: patient–therapist/clinic links and request status",
+        "Exercise data: prescribed programs, completions, effort notes, and progress",
+        "Technical data needed for security and reliability: session identifiers, device/browser type, and error logs"
+      ],
+      "privacyUseTitle": "How we use it",
+      "privacyUseBody": "We use data only to provide and improve the service:",
+      "privacyUseItems": [
+        "Show exercise plans and send reminders",
+        "Let therapists follow adherence between visits",
+        "Protect accounts, prevent abuse, and provide support",
+        "Improve product quality in aggregate form where possible"
+      ],
+      "privacyShareTitle": "Sharing",
+      "privacyShareBody": "Care-related information stays within the patient–therapist/clinic relationship. We do not sell data for third-party ads. We may process data with trusted infrastructure providers under confidentiality, or when required by law, only as needed.",
+      "privacyRetentionTitle": "Retention",
+      "privacyRetentionBody": "We keep data while your account is active and needed for the service. After account deletion or a valid request, we delete or anonymize identifiable data within a reasonable period, unless short-term retention is required for legal or security reasons.",
+      "privacyRightsTitle": "Your rights",
+      "privacyRightsBody": "You may request access, correction, account deletion, or restriction of processing. Contact phone support and we will review your request.",
+      "privacySecurityTitle": "Security",
+      "privacySecurityBody": "We use reasonable technical and organizational measures (including secure transport and role-based access). No system is risk-free; if a significant incident occurs, we will notify as required.",
+      "privacyChildrenTitle": "Minors",
+      "privacyChildrenBody": "If a user is under the legal age of consent, registration and use should happen with guardian supervision and consent.",
+      "privacyChangesTitle": "Changes",
+      "privacyChangesBody": "We may update this policy. The latest version will be published on this page with an updated date.",
+      "privacyContactTitle": "Privacy contact",
+      "privacyContactBody": "Call phone support with questions or requests:",
+      "termsTitle": "Terms of Use",
+      "termsUpdated": "Last updated: August 2026",
+      "termsLead": "By creating an account or using Zivan, you agree to these terms. Please read them before continuing.",
+      "termsServiceTitle": "What the service is",
+      "termsServiceBody": "Zivan is a digital tool for prescribing, viewing, and completing physiotherapy exercises at home. Product features may change, expand, or be limited over time.",
+      "termsMedicalTitle": "Medical limitation",
+      "termsMedicalBody": "Zivan does not replace in-person clinical diagnosis, treatment, or advice from a therapist. Clinical decisions, prescriptions, and program approval belong to the treating therapist or clinic. If you have severe pain, worrying symptoms, or a medical emergency, seek care immediately.",
+      "termsAccountsTitle": "Accounts and security",
+      "termsAccountsBody": "You are responsible for accurate registration details and for keeping your account secure. Sharing passwords, providing false information, or unauthorized use of another account is not allowed. If you suspect unauthorized access, contact support right away.",
+      "termsAcceptTitle": "User commitments",
+      "termsAcceptBody": "When using Zivan, you agree to:",
+      "termsAcceptItems": [
+        "Use the service only for lawful purposes related to care and prescribed exercise",
+        "Keep login credentials confidential and not share them",
+        "As a patient, follow the prescribed plan per therapist guidance and log honest feedback",
+        "As a therapist/clinic, prescribe only for linked patients under your professional responsibility"
+      ],
+      "termsRolesTitle": "Roles",
+      "termsRolesBody": "Patient, therapist, and clinic manager have separate roles with role-based access. Patient–therapist/clinic links are established after the other party approves.",
+      "termsProhibitedTitle": "Prohibited conduct",
+      "termsProhibitedBody": "The following are not allowed:",
+      "termsProhibitedItems": [
+        "Abuse, hacking, disrupting the service, or attempting unauthorized access",
+        "Uploading or distributing illegal, misleading, or rights-infringing content",
+        "Unauthorized commercial use of Zivan content, brand, or data",
+        "Impersonation or creating fake accounts"
+      ],
+      "termsIpTitle": "Intellectual property",
+      "termsIpBody": "The Zivan name, logo, interface, educational content, and software belong to Zivan unless stated otherwise. Personal use within the service is allowed; copying or redistribution without written permission is not.",
+      "termsLiabilityTitle": "Limitation of liability",
+      "termsLiabilityBody": "We aim for a stable and accurate service, but technical interruptions, user error, or infrastructure issues may occur. Zivan is not responsible for clinical decisions, treatment outcomes, or indirect damages arising from use or inability to use the service, except where law requires otherwise.",
+      "termsChangesTitle": "Changes to these terms",
+      "termsChangesBody": "We may update these terms. The latest version will be published on this page. Continued use after publication means you accept the updated terms.",
+      "termsContactTitle": "Contact",
+      "termsContactBody": "For questions about these terms, call phone support:"
+    },
+    "cta": {
+      "title": "When you are ready, start with patient sign-up",
+      "patient": "Patient sign-up",
+      "login": "Log in",
+      "register": "Register"
+    },
+    "footer": {
+      "copyright": "© {{year}} Zivan",
+      "rights": "All rights reserved. The website and its content belong to Zivan.",
+      "product": "Product",
+      "account": "Account",
+      "legal": "Legal",
+      "legalNav": "Legal links",
+      "contact": "Contact",
+      "productNav": "Product links",
+      "accountNav": "Account links",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "support24": "24/7 support"
+    },
+    "aboutPage": {
+      "eyebrow": "Our story",
+      "title": "About Zivan",
+      "lead": "We help physiotherapy plans continue from the clinic to home.",
+      "missionTitle": "Our goal",
+      "missionBody": "We want prescribed exercises to actually get done. Patients get a clear path; therapists get visibility between visits.",
+      "storyBody": "Zivan took shape in 2025 with its co-founders. We believe the gap between the treatment session and home practice is where many recovery paths weaken. That is why we serve both patients and clinics.",
+      "teamTitle": "Co-founders",
+      "teamLead": "Part of the Zivan team. Alongside them, other colleagues work on product, support, and user experience quality.",
+      "contactTitle": "Contact",
+      "contactLead": "For support, clinic partnership, or any other question.",
+      "cta": "Get started"
+    }
   }
 }

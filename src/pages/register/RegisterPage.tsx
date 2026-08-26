@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Typography } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import { RegisterForm } from '@/features/auth/components/RegisterForm';
 import type { RegistrationRole } from '@/features/auth/schemas/register-schema';
@@ -11,9 +11,19 @@ import { routes } from '@/routes/routes';
 
 const { Text } = Typography;
 
+function roleFromSearch(value: string | null): RegistrationRole | null {
+  if (value === 'doctor' || value === 'patient') {
+    return value;
+  }
+  return null;
+}
+
 export function RegisterPage() {
   const { t } = useTranslation();
-  const [role, setRole] = useState<RegistrationRole | null>(null);
+  const [searchParams] = useSearchParams();
+  const [role, setRole] = useState<RegistrationRole | null>(() =>
+    roleFromSearch(searchParams.get('role')),
+  );
 
   if (role) {
     return <RegisterForm role={role} onBack={() => setRole(null)} />;
@@ -70,57 +80,18 @@ function RoleChoiceCard({
       : { bg: 'var(--phisio-primary-soft)', color: 'var(--phisio-primary)' };
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="tactile-press"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 12,
-        width: '100%',
-        padding: '14px 16px',
-        borderRadius: 'var(--phisio-radius-md)',
-        border: '1px solid var(--phisio-border)',
-        background: 'var(--phisio-bg-elevated)',
-        cursor: 'pointer',
-        textAlign: 'start',
-        fontFamily: 'inherit',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 'var(--phisio-radius-sm)',
-            backgroundColor: tone.bg,
-            color: tone.color,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          {icon}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--phisio-text)' }}>
-            {title}
-          </span>
-          <span
-            style={{
-              fontSize: 'var(--phisio-font-meta)',
-              color: 'var(--phisio-text-secondary)',
-              lineHeight: 1.4,
-            }}
-          >
-            {description}
-          </span>
-        </div>
-      </div>
-      <ChevronLeft size={18} style={{ color: 'var(--phisio-text-secondary)', flexShrink: 0 }} />
+    <button type="button" onClick={onClick} className="tactile-press auth-role-card">
+      <span
+        className="auth-role-card__icon"
+        style={{ backgroundColor: tone.bg, color: tone.color }}
+      >
+        {icon}
+      </span>
+      <span className="auth-role-card__copy">
+        <span className="auth-role-card__title">{title}</span>
+        <span className="auth-role-card__desc">{description}</span>
+      </span>
+      <ChevronLeft size={18} className="auth-role-card__chevron" aria-hidden />
     </button>
   );
 }

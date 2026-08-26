@@ -84,6 +84,14 @@ jobs:
 
             if ! docker inspect -f '{{.State.Running}}' phisio-api 2>/dev/null | grep -q true; then
               echo "API container is not running — deploy phisio-api first"
+              echo "--- docker ps -a (api/web/proxy) ---"
+              docker ps -a --filter name=phisio- --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' || true
+              exit 1
+            fi
+
+            # Ensure web can resolve the compose network alias "api".
+            if ! docker exec phisio-api true 2>/dev/null; then
+              echo "API container exists but is not executable — redeploy phisio-api"
               exit 1
             fi
 
@@ -140,5 +148,10 @@ jobs:
             done
 
             echo "Frontend health check failed"
+            echo "--- containers ---"
+            docker ps -a --filter name=phisio- --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' || true
+            echo "--- web logs ---"
             docker compose -f docker-compose.prod.yml --env-file .env --profile web logs --tail=100 web
+            echo "--- api logs ---"
+            docker compose -f docker-compose.prod.yml --env-file .env logs --tail=50 api || true
             exit 1

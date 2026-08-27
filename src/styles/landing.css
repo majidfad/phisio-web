@@ -1,10 +1,45 @@
-/* Landing — flat app kit (navy / blue / teal) */
+/* Scoped smooth scrolling for marketing pages only (see useLandingDocumentScroll). */
+html.landing-scroll {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.landing-scroll {
+    scroll-behavior: auto;
+  }
+}
+
+/* Landing — flat app kit (navy / blue / teal).
+ * Always dark: re-declare tokens so app light theme (`data-theme="light"`)
+ * cannot wash out the hero veil / white copy. */
 
 .landing-page {
+  /* Isolate from ThemeProvider light overrides on :root */
+  --phisio-primary: #3b9afa;
+  --phisio-primary-hover: #5aadff;
+  --phisio-primary-soft: rgba(59, 154, 250, 0.14);
+  --phisio-primary-muted: rgba(59, 154, 250, 0.26);
+  --phisio-accent: #2dd4b0;
+  --phisio-accent-soft: rgba(45, 212, 176, 0.14);
+  --phisio-teal: #2dd4b0;
+  --phisio-bg: #0b1220;
+  --phisio-bg-elevated: #1c2a3d;
+  --phisio-surface: #152033;
+  --phisio-surface-hover: #1a2740;
+  --phisio-text: #f3f5f7;
+  --phisio-text-secondary: #9aa6b2;
+  --phisio-border: #243247;
+  --phisio-header-bg: #152033;
+  --phisio-panel-bg: #152033;
+  --phisio-btn-solid: #3b9afa;
+  --phisio-btn-solid-hover: #5aadff;
+
   min-height: 100vh;
-  background: var(--phisio-bg, #0b1220);
-  color: var(--phisio-text, #f3f5f7);
+  background: var(--phisio-bg);
+  color: var(--phisio-text);
   overflow-x: clip;
+  color-scheme: dark;
 }
 
 .landing-nav {
@@ -47,16 +82,18 @@
   margin-inline-start: auto;
 }
 
-.landing-nav__links a {
+.landing-nav__links a,
+.landing-nav__links .landing-nav__link {
   color: #9aa6b2;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
   position: relative;
-  transition: color 0.2s ease;
+  transition: color 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.landing-nav__links a::after {
+.landing-nav__links a::after,
+.landing-nav__links .landing-nav__link::after {
   content: '';
   position: absolute;
   inset-inline: 0;
@@ -66,14 +103,20 @@
   background: linear-gradient(90deg, #2dd4b0, #3b9afa);
   transform: scaleX(0);
   transform-origin: center;
-  transition: transform 0.25s ease;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.landing-nav__links a:hover {
+.landing-nav__links a:hover,
+.landing-nav__links .landing-nav__link:hover,
+.landing-nav__links a.is-active,
+.landing-nav__links .landing-nav__link.is-active {
   color: #f3f5f7;
 }
 
-.landing-nav__links a:hover::after {
+.landing-nav__links a:hover::after,
+.landing-nav__links .landing-nav__link:hover::after,
+.landing-nav__links a.is-active::after,
+.landing-nav__links .landing-nav__link.is-active::after {
   transform: scaleX(1);
 }
 
@@ -159,6 +202,8 @@
   object-fit: cover;
   object-position: center 28%;
   display: block;
+  transform: scale(1.04);
+  animation: landing-hero-ken 18s ease-out both;
 }
 
 @media (min-width: 700px) {
@@ -199,7 +244,11 @@
   display: grid;
   gap: 28px;
   align-items: center;
-  animation: landing-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-hero__enter {
+  animation: landing-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--enter-delay, 0ms);
 }
 
 @media (min-width: 900px) {
@@ -471,23 +520,55 @@
 
 .landing-reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translate3d(0, 36px, 0);
+  filter: blur(6px);
   transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-section-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+.landing-reveal--soft {
+  transform: translate3d(0, 22px, 0);
+  filter: blur(4px);
 }
 
 .landing-reveal.is-in {
   opacity: 1;
   transform: none;
+  filter: none;
+  will-change: auto;
 }
 
+.landing-reveal.is-in .landing-reveal__title,
+.landing-reveal.is-in .landing-reveal__lead,
+.landing-reveal.is-in .landing-reveal__item,
 .landing-reveal.is-in .landing-how__step,
 .landing-reveal.is-in .landing-feature-card,
 .landing-reveal.is-in .landing-ai-card,
+.landing-reveal.is-in .landing-trust-card,
 .landing-reveal.is-in .landing-founder {
-  animation: landing-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: landing-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--reveal-delay, 0ms);
+}
+
+.landing-reveal.is-in .landing-reveal__title {
+  animation-delay: 40ms;
+}
+
+.landing-reveal.is-in .landing-reveal__lead {
+  animation-delay: 110ms;
+}
+
+#how,
+#features,
+#trust,
+#ai,
+#about,
+#download {
+  scroll-margin-top: 5.5rem;
 }
 
 .landing-how {
@@ -613,6 +694,18 @@
   display: grid;
   gap: 20px;
   align-items: start;
+  animation: landing-features-swap 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes landing-features-swap {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .landing-features__aside {
@@ -1072,14 +1165,47 @@
 .landing-phone__scale {
   --phone-scale: 0.7;
   --phone-design-width: 390px;
+  --demo-scroll: 0px;
   position: absolute;
   top: 0;
   left: 50%;
   width: var(--phone-design-width);
-  transform: translateX(-50%) scale(var(--phone-scale));
+  transform: translateX(-50%) translateY(var(--demo-scroll)) scale(var(--phone-scale));
   transform-origin: top center;
   pointer-events: none;
   padding: 4px 12px 0;
+  transition: transform 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.landing-phone__tap {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.landing-phone__tap-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(59, 154, 250, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55);
+  animation: landing-phone-tap 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.landing-phone-preview--success .hero-card__ring svg {
+  animation: landing-phone-ring 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-phone-preview__row--tapping {
+  transform: scale(0.985);
+  transition: transform 0.2s ease;
 }
 
 .landing-phone-preview {
@@ -1887,11 +2013,20 @@
 @keyframes landing-rise {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translate3d(0, 26px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes landing-hero-ken {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1.12);
   }
 }
 
@@ -1975,6 +2110,21 @@
   }
 }
 
+@keyframes landing-phone-tap {
+  0% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
 @keyframes landing-glow-pulse {
   0%,
   100% {
@@ -1984,15 +2134,6 @@
   50% {
     opacity: 0.95;
     transform: scale(1.1);
-  }
-}
-
-@keyframes landing-hero-ken {
-  from {
-    transform: scale(1.04);
-  }
-  to {
-    transform: scale(1.12);
   }
 }
 
@@ -2086,16 +2227,22 @@
   .landing-hero__glow,
   .landing-hero__orbs,
   .landing-hero__content,
+  .landing-hero__enter,
   .landing-hero__eyebrow--pulse,
   .landing-btn--primary,
   .landing-btn--pulse::after,
   .landing-pill,
   .landing-cta-band,
   .landing-reveal,
+  .landing-reveal.is-in .landing-reveal__title,
+  .landing-reveal.is-in .landing-reveal__lead,
+  .landing-reveal.is-in .landing-reveal__item,
   .landing-reveal.is-in .landing-how__step,
   .landing-reveal.is-in .landing-feature-card,
   .landing-reveal.is-in .landing-ai-card,
+  .landing-reveal.is-in .landing-trust-card,
   .landing-reveal.is-in .landing-founder,
+  .landing-features__panel,
   .landing-phone__aura,
   .landing-phone__device,
   .landing-phone__shine,
@@ -2103,10 +2250,21 @@
   .landing-phone-preview__item,
   .landing-phone-preview .hero-card__ring svg,
   .landing-phone-preview__row--active,
-  .landing-phone__dock {
+  .landing-phone__dock,
+  .landing-phone__scale,
+  .landing-phone__tap-ring {
     animation: none !important;
     transition: none !important;
+    filter: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .landing-phone__scale {
+    transform: translateX(-50%) scale(var(--phone-scale)) !important;
+  }
+
+  .landing-phone__tap {
+    display: none !important;
   }
 }

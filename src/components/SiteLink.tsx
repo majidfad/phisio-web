@@ -1,4 +1,4 @@
-import type { AnchorHTMLAttributes, ReactNode } from 'react';
+import type { AnchorHTMLAttributes, CSSProperties, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 import { appUrl, isCrossOriginHref, landingUrl } from '@/constants/site';
@@ -7,7 +7,8 @@ type SiteLinkProps = {
   to: string;
   children: ReactNode;
   className?: string;
-} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>;
+  style?: CSSProperties;
+} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'style'>;
 
 function resolveHref(to: string, site: 'app' | 'landing'): string {
   return site === 'app' ? appUrl(to) : landingUrl(to);
@@ -21,20 +22,21 @@ function SiteLink({
   site,
   children,
   className,
+  style,
   ...rest
 }: SiteLinkProps & { site: 'app' | 'landing' }) {
   const href = resolveHref(to, site);
 
   if (isCrossOriginHref(href)) {
     return (
-      <a href={href} className={className} {...rest}>
+      <a href={href} className={className} style={style} {...rest}>
         {children}
       </a>
     );
   }
 
   return (
-    <Link to={href} className={className}>
+    <Link to={href} className={className} style={style}>
       {children}
     </Link>
   );

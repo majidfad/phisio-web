@@ -13,8 +13,12 @@ export function AboutFounders({ expanded = false }: AboutFoundersProps) {
 
   return (
     <div className={`landing-founders${expanded ? ' landing-founders--expanded' : ''}`}>
-      {LANDING_FOUNDERS.map((founder) => (
-        <article key={founder.id} className="landing-founder">
+      {LANDING_FOUNDERS.map((founder, index) => (
+        <article
+          key={founder.id}
+          className="landing-founder landing-reveal__item"
+          style={{ ['--reveal-delay' as string]: `${80 + index * 100}ms` }}
+        >
           <div className="landing-founder__media">
             <img
               src={founder.imageSrc}

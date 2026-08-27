@@ -1,13 +1,19 @@
 import { Activity, BarChart3, Home, MoreHorizontal, Users } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { appIconProps } from '@/components/icons/app-icon';
 
-import { LandingPatientHomePreview } from './LandingPatientHomePreview';
+import { LandingPatientHomePreview, type PhoneDemoFrame } from './LandingPatientHomePreview';
 
-/** iPhone-style frame showing the real patient home UI (static preview). */
+/** iPhone-style frame with a looping live demo of the real patient home UI. */
 export function LandingPhoneMock() {
   const { t } = useTranslation();
+  const [frame, setFrame] = useState<PhoneDemoFrame>({ scrollY: 0, showTap: false });
+
+  const onFrameChange = useCallback((next: PhoneDemoFrame) => {
+    setFrame(next);
+  }, []);
 
   const dockItems = [
     {
@@ -69,9 +75,18 @@ export function LandingPhoneMock() {
             </div>
 
             <div className="landing-phone__viewport">
-              <div className="landing-phone__scale">
-                <LandingPatientHomePreview />
+              <div
+                className="landing-phone__scale"
+                style={{ ['--demo-scroll' as string]: `${frame.scrollY}px` }}
+              >
+                <LandingPatientHomePreview onFrameChange={onFrameChange} />
               </div>
+
+              {frame.showTap ? (
+                <span className="landing-phone__tap" aria-hidden>
+                  <span className="landing-phone__tap-ring" />
+                </span>
+              ) : null}
             </div>
 
             <nav className="dock-nav landing-phone__dock" aria-hidden>

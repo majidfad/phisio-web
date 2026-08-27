@@ -1,17 +1,20 @@
 import { Phone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { AppLink } from '@/components/SiteLink';
 import { ZivanLogo } from '@/components/ui';
 import { LANDING_CONTACT } from '@/features/landing/landing-content';
+import { handleLandingSectionClick } from '@/features/landing/utils/section-nav';
 import { routes } from '@/routes/routes';
 
 export function LandingFooter() {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
   const isFa = i18n.language.startsWith('fa');
   const phoneLabel = isFa ? LANDING_CONTACT.phoneDisplayFa : LANDING_CONTACT.phoneDisplayEn;
   const year = new Date().getFullYear();
+  const onLandingHome = location.pathname === routes.root;
 
   return (
     <footer className="landing-footer">
@@ -33,8 +36,18 @@ export function LandingFooter() {
         <nav className="landing-footer__col" aria-label={t('landing.footer.productNav')}>
           <h3>{t('landing.footer.product')}</h3>
           <Link to={routes.root}>{t('landing.nav.home')}</Link>
-          <a href={`${routes.root}#features`}>{t('landing.nav.features')}</a>
-          <a href={`${routes.root}#how`}>{t('landing.nav.how')}</a>
+          <a
+            href={`${routes.root}#features`}
+            onClick={onLandingHome ? (e) => handleLandingSectionClick(e, 'features') : undefined}
+          >
+            {t('landing.nav.features')}
+          </a>
+          <a
+            href={`${routes.root}#how`}
+            onClick={onLandingHome ? (e) => handleLandingSectionClick(e, 'how') : undefined}
+          >
+            {t('landing.nav.how')}
+          </a>
           <Link to={routes.download}>{t('landing.nav.download')}</Link>
           <Link to={routes.about}>{t('landing.nav.about')}</Link>
         </nav>

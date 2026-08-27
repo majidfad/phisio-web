@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom';
 import { AppLink } from '@/components/SiteLink';
 import { ZivanLogo } from '@/components/ui';
 import { LanguageToggle } from '@/features/landing/components/LanguageToggle';
+import { useLandingScrollSpy } from '@/features/landing/hooks/useLandingScrollSpy';
+import { handleLandingSectionClick } from '@/features/landing/utils/section-nav';
 import { routes } from '@/routes/routes';
+
+const LANDING_SECTION_IDS = ['how', 'features', 'trust', 'ai', 'about'] as const;
+const NO_SECTIONS: readonly string[] = [];
 
 interface LandingNavProps {
   /** When true, feature/how anchors point to landing hash routes. */
@@ -13,11 +18,12 @@ interface LandingNavProps {
 
 export function LandingNav({ onLanding = true }: LandingNavProps) {
   const { t } = useTranslation();
+  const activeId = useLandingScrollSpy(onLanding ? LANDING_SECTION_IDS : NO_SECTIONS);
 
-  const featuresHref = onLanding ? '#features' : `${routes.root}#features`;
-  const howHref = onLanding ? '#how' : `${routes.root}#how`;
-  const aiHref = onLanding ? '#ai' : `${routes.root}#ai`;
-  const trustHref = onLanding ? '#trust' : `${routes.root}#trust`;
+  const sectionHref = (id: (typeof LANDING_SECTION_IDS)[number]) =>
+    onLanding ? `#${id}` : `${routes.root}#${id}`;
+
+  const sectionClass = (id: string) => `landing-nav__link${activeId === id ? ' is-active' : ''}`;
 
   return (
     <header className="landing-nav">
@@ -28,15 +34,49 @@ export function LandingNav({ onLanding = true }: LandingNavProps) {
         </Link>
 
         <nav className="landing-nav__links" aria-label={t('landing.nav.aria')}>
-          <a href={howHref}>{t('landing.nav.how')}</a>
-          <a href={featuresHref}>{t('landing.nav.features')}</a>
-          <a href={trustHref}>{t('landing.nav.trust')}</a>
-          <a href={aiHref}>{t('landing.nav.ai')}</a>
-          <Link to={routes.download}>{t('landing.nav.download')}</Link>
+          <a
+            href={sectionHref('how')}
+            className={sectionClass('how')}
+            onClick={onLanding ? (e) => handleLandingSectionClick(e, 'how') : undefined}
+          >
+            {t('landing.nav.how')}
+          </a>
+          <a
+            href={sectionHref('features')}
+            className={sectionClass('features')}
+            onClick={onLanding ? (e) => handleLandingSectionClick(e, 'features') : undefined}
+          >
+            {t('landing.nav.features')}
+          </a>
+          <a
+            href={sectionHref('trust')}
+            className={sectionClass('trust')}
+            onClick={onLanding ? (e) => handleLandingSectionClick(e, 'trust') : undefined}
+          >
+            {t('landing.nav.trust')}
+          </a>
+          <a
+            href={sectionHref('ai')}
+            className={sectionClass('ai')}
+            onClick={onLanding ? (e) => handleLandingSectionClick(e, 'ai') : undefined}
+          >
+            {t('landing.nav.ai')}
+          </a>
+          <Link to={routes.download} className="landing-nav__link">
+            {t('landing.nav.download')}
+          </Link>
           {onLanding ? (
-            <a href="#about">{t('landing.nav.about')}</a>
+            <a
+              href="#about"
+              className={sectionClass('about')}
+              onClick={(e) => handleLandingSectionClick(e, 'about')}
+            >
+              {t('landing.nav.about')}
+            </a>
           ) : (
-            <Link to={routes.about}>{t('landing.nav.about')}</Link>
+            <Link to={routes.about} className="landing-nav__link">
+              {t('landing.nav.about')}
+            </Link>
           )}
         </nav>
 

@@ -2,6 +2,7 @@ import { Layout, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { ThemeToggleButton, ZivanLogo } from '@/components/ui';
 
 const { Content } = Layout;
@@ -13,6 +14,7 @@ export function AuthLayout() {
   return (
     <Layout className="auth-shell">
       <div className="auth-shell__topbar">
+        <LanguageToggle className="landing-lang app-lang-toggle" />
         <ThemeToggleButton />
       </div>
 

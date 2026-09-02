@@ -47,6 +47,38 @@
         document.documentElement.setAttribute('data-theme', theme);
       })();
     </script>
+    <script>
+      (function () {
+        var host = window.location.hostname.toLowerCase();
+        var isLoopback =
+          host === 'localhost' ||
+          host === '127.0.0.1' ||
+          host === '[::1]' ||
+          host === '::1' ||
+          host.slice(-6) === '.local';
+        var isAppHost = host.indexOf('app.') === 0;
+        var isLandingHost = !isLoopback && !isAppHost;
+
+        if (!isLandingHost) {
+          return;
+        }
+
+        var selectors = [
+          'link[rel="manifest"]',
+          'link[rel="apple-touch-icon"]',
+          'meta[name="apple-mobile-web-app-capable"]',
+          'meta[name="apple-mobile-web-app-status-bar-style"]',
+          'meta[name="apple-mobile-web-app-title"]',
+        ];
+
+        selectors.forEach(function (selector) {
+          var node = document.querySelector(selector);
+          if (node) {
+            node.parentNode.removeChild(node);
+          }
+        });
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

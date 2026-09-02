@@ -1,18 +1,17 @@
-import { CheckCircle2, Download, Share } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { appUrl } from '@/constants/site';
 import { LandingFooter } from '@/features/landing/components/LandingFooter';
 import { LandingStoreBadges } from '@/features/landing/components/LandingDownloadSection';
 import { LandingNav } from '@/features/landing/components/LandingNav';
 import { LandingReveal } from '@/features/landing/components/LandingReveal';
 import { LandingSeo } from '@/features/landing/components/LandingSeo';
 import { useLandingDocumentScroll } from '@/features/landing/hooks/useLandingDocumentScroll';
-import { usePwaInstall } from '@/hooks/usePwaInstall';
 import { routes } from '@/routes/routes';
 
 export function DownloadAppPage() {
   const { t } = useTranslation();
-  const { canInstall, installed, isIos, install } = usePwaInstall();
   useLandingDocumentScroll();
 
   return (
@@ -48,28 +47,11 @@ export function DownloadAppPage() {
               <p>{t('landing.download.pwaBody')}</p>
             </div>
 
-            {installed ? (
-              <p className="landing-download__status">
-                <CheckCircle2 size={18} aria-hidden />
-                {t('landing.download.pwaInstalled')}
-              </p>
-            ) : canInstall ? (
-              <button
-                type="button"
-                className="landing-btn landing-btn--primary"
-                onClick={() => void install()}
-              >
-                <Download size={18} aria-hidden />
-                {t('landing.download.pwaCta')}
-              </button>
-            ) : isIos ? (
-              <div className="landing-download__ios-tip">
-                <Share size={18} aria-hidden />
-                <p>{t('landing.download.iosTip')}</p>
-              </div>
-            ) : (
-              <p className="landing-download__hint">{t('landing.download.pwaHint')}</p>
-            )}
+            <a href={appUrl('/login')} className="landing-btn landing-btn--primary">
+              <Download size={18} aria-hidden />
+              {t('landing.download.openAppCta')}
+            </a>
+            <p className="landing-download__hint">{t('landing.download.appInstallHint')}</p>
           </div>
         </LandingReveal>
 

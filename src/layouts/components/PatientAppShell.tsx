@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { DockNav } from '@/components/navigation';
 import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand, ThemeToggleButton } from '@/components/ui';
@@ -165,6 +166,7 @@ export function PatientAppShell() {
       <Header className="app-header safe-area-top">
         <AppBrand size={isMobile ? 32 : 36} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <LanguageToggle className="landing-lang app-lang-toggle" />
           <NotificationBell />
           {!isMobile ? <ThemeToggleButton /> : null}
           <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">

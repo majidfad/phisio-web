@@ -2292,4 +2292,18 @@
   background: var(--phisio-bg-elevated);
 }
 
+.app-lang-toggle {
+  border-color: var(--phisio-border);
+  background: var(--phisio-bg-elevated);
+}
+
+.app-lang-toggle .landing-lang__btn {
+  color: var(--phisio-text-secondary);
+}
+
+.app-lang-toggle .landing-lang__btn.is-active {
+  background: var(--phisio-primary-soft);
+  color: var(--phisio-primary);
+}
+
 

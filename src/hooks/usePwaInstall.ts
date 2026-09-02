@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { isPwaEnabled } from '@/utils/pwa';
+
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
@@ -35,7 +37,7 @@ export function usePwaInstall() {
   const [isIos] = useState(() => isIosDevice());
 
   useEffect(() => {
-    if (installed) {
+    if (!isPwaEnabled() || installed) {
       return;
     }
 

@@ -9,6 +9,12 @@ import { NavigationRoute, registerRoute } from 'workbox-routing';
 import { NetworkFirst } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 
+import {
+  getPushNotificationCopy,
+  getPushNotificationLanguageMeta,
+} from '@/features/notifications/utils/notification-push-copy';
+import { getPushNotificationLanguage } from '@/features/notifications/utils/push-language-store';
+
 declare let self: ServiceWorkerGlobalScope;
 
 precacheAndRoute(self.__WB_MANIFEST);
@@ -48,32 +54,53 @@ registerRoute(
 );
 
 self.addEventListener('push', (event) => {
-  let title = 'Zivan';
-  let body: string;
-  let data: Record<string, unknown> = {};
-
-  try {
-    const payload = event.data?.json() as {
-      title?: string;
-      body?: string;
-      data?: Record<string, unknown>;
-    };
-    title = payload?.title || title;
-    body = payload?.body || '';
-    data = payload?.data || {};
-  } catch {
-    body = event.data?.text() || '';
-  }
-
   event.waitUntil(
-    self.registration.showNotification(title, {
-      body,
-      icon: '/icons/zivan-192.png',
-      badge: '/icons/zivan-192.png',
-      data,
-      dir: 'auto',
-      lang: 'fa',
-    }),
+    (async () => {
+      let fallbackTitle = 'Zivan';
+      let fallbackBody: string;
+      let notificationType = '';
+      let payloadData: Record<string, unknown> = {};
+      let data: Record<string, unknown> = {};
+
+      try {
+        const payload = event.data?.json() as {
+          title?: string;
+          body?: string;
+          data?: {
+            type?: string;
+            url?: string;
+            payload?: Record<string, unknown>;
+          };
+        };
+
+        fallbackTitle = payload?.title || fallbackTitle;
+        fallbackBody = payload?.body || '';
+        notificationType = payload?.data?.type || '';
+        payloadData = payload?.data?.payload || {};
+        data = {
+          url: payload?.data?.url,
+          type: notificationType,
+          payload: payloadData,
+        };
+      } catch {
+        fallbackBody = event.data?.text() || '';
+      }
+
+      const language = await getPushNotificationLanguage();
+      const localized = notificationType
+        ? getPushNotificationCopy(notificationType, language, payloadData)
+        : { title: fallbackTitle, body: fallbackBody };
+      const { lang, dir } = getPushNotificationLanguageMeta(language);
+
+      await self.registration.showNotification(localized.title || fallbackTitle, {
+        body: localized.body || fallbackBody,
+        icon: '/icons/zivan-192.png',
+        badge: '/icons/zivan-192.png',
+        data,
+        dir,
+        lang,
+      });
+    })(),
   );
 });
 

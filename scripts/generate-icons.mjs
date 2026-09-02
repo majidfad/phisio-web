@@ -16,7 +16,7 @@ const transparent = { r: 0, g: 0, b: 0, alpha: 0 };
 
 const markBuf = await readFile(brandMark);
 
-async function makeAppIcon(size, outName, scale = 0.72, background = white) {
+async function makeAppIcon(size, outName, scale = 0.72) {
   const mark = await sharp(markBuf)
     .resize(Math.round(size * scale), Math.round(size * scale), {
       fit: 'contain',
@@ -26,7 +26,7 @@ async function makeAppIcon(size, outName, scale = 0.72, background = white) {
     .toBuffer();
 
   await sharp({
-    create: { width: size, height: size, channels: 4, background },
+    create: { width: size, height: size, channels: 4, background: white },
   })
     .composite([{ input: mark, gravity: 'centre' }])
     .png()
@@ -38,14 +38,21 @@ async function makeAppIcon(size, outName, scale = 0.72, background = white) {
 await makeAppIcon(192, 'zivan-192.png');
 await makeAppIcon(512, 'zivan-512.png');
 await makeAppIcon(180, 'apple-touch-icon.png');
-await makeAppIcon(512, 'zivan-maskable-512.png', 0.58);
+// Maskable safe zone: keep the mark smaller on a solid white canvas.
+await makeAppIcon(512, 'zivan-maskable-512.png', 0.5);
 await makeAppIcon(512, 'zivan-icon.png', 0.7);
 
-await sharp(markBuf)
-  .resize(64, 64, {
-    fit: 'contain',
-    background: transparent,
-  })
-  .png()
-  .toFile(path.join(root, 'public', 'favicon.png'));
-console.log('Generated favicon.png');
+for (const size of [32, 64, 128]) {
+  await sharp(markBuf)
+    .resize(size, size, {
+      fit: 'contain',
+      background: transparent,
+    })
+    .png()
+    .toFile(
+      size === 128
+        ? path.join(root, 'public', 'brand', 'zivan-mark-128.png')
+        : path.join(root, 'public', size === 32 ? 'favicon-32.png' : 'favicon.png'),
+    );
+  console.log(`Generated ${size === 128 ? 'brand/zivan-mark-128.png' : size === 32 ? 'favicon-32.png' : 'favicon.png'} (${size}x${size})`);
+}

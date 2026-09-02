@@ -2,10 +2,12 @@
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="128x128" href="/brand/zivan-mark-128.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b1220" />
+    <meta name="theme-color" content="#ffffff" />
     <meta
       name="description"
       content="زیوان | تمرین فیزیوتراپی در خانه. بیمار تمرین امروز را انجام می‌دهد و پزشک پایبندی را بین جلسات پیگیری می‌کند."
@@ -23,7 +25,7 @@
     <meta property="og:image" content="https://zivan.me/brand/landing/hero-lg.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Zivan" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="canonical" href="https://zivan.me/" />
@@ -77,6 +79,11 @@
             node.parentNode.removeChild(node);
           }
         });
+
+        var themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) {
+          themeColor.setAttribute('content', '#0b1220');
+        }
       })();
     </script>
     <div id="root"></div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import { isPwaEnabled } from '@/utils/pwa';
+import { isPwaEnabled } from '@/pwa/bootstrap';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -32,12 +33,14 @@ function isIosDevice(): boolean {
 }
 
 export function usePwaInstall() {
+  const location = useLocation();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(() => isRunningAsInstalledPwa());
   const [isIos] = useState(() => isIosDevice());
+  const pwaEnabled = isPwaEnabled(undefined, location.pathname);
 
   useEffect(() => {
-    if (!isPwaEnabled() || installed) {
+    if (!pwaEnabled || installed) {
       return;
     }
 
@@ -73,7 +76,7 @@ export function usePwaInstall() {
       window.removeEventListener('appinstalled', onAppInstalled);
       mediaQuery.removeEventListener('change', onDisplayModeChange);
     };
-  }, [installed]);
+  }, [installed, pwaEnabled]);
 
   const install = useCallback(async () => {
     if (!deferredPrompt) {
@@ -90,7 +93,7 @@ export function usePwaInstall() {
   }, [deferredPrompt]);
 
   return {
-    canInstall: Boolean(deferredPrompt) && !installed,
+    canInstall: pwaEnabled && Boolean(deferredPrompt) && !installed,
     installed,
     isIos,
     install,

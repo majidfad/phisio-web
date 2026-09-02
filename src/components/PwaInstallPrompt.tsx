@@ -55,7 +55,7 @@ export function PwaInstallPrompt() {
       <div className="pwa-install-prompt__row">
         <div className="pwa-install-prompt__copy">
           <img
-            src="/brand/zivan-mark.png"
+            src="/icons/zivan-192.png"
             alt=""
             width={28}
             height={28}

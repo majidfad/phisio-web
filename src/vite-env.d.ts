@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_AUTH_SESSION_STORAGE_KEY: string;
   readonly VITE_LANDING_ORIGIN: string;
   readonly VITE_APP_ORIGIN: string;
+  readonly VITE_APP_VERSION: string;
 }
 
 interface ImportMeta {

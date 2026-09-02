@@ -15,6 +15,8 @@ export const env = {
   landingOrigin: import.meta.env.VITE_LANDING_ORIGIN ?? 'https://zivan.me',
   /** App site (app.zivan.me). Localhost ignores this and keeps a single origin. */
   appOrigin: import.meta.env.VITE_APP_ORIGIN ?? 'https://app.zivan.me',
+  /** Git commit / release id baked into each production build. */
+  appVersion: import.meta.env.VITE_APP_VERSION ?? 'dev',
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
 } as const;

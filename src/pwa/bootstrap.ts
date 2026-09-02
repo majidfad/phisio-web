@@ -87,7 +87,13 @@ function registerServiceWorker(): void {
     return;
   }
 
-  registerSW({ immediate: true });
+  const updateSW = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      void updateSW(true);
+    },
+  });
+
   swRegistered = true;
 }
 

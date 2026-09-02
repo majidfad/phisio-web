@@ -57,6 +57,7 @@ jobs:
             VITE_API_BASE_URL=/api
             VITE_LANDING_ORIGIN=https://zivan.me
             VITE_APP_ORIGIN=https://app.zivan.me
+            VITE_APP_VERSION=${{ github.event.workflow_run.head_sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

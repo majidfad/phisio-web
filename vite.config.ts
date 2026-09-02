@@ -1,14 +1,36 @@
 import path from 'node:path';
+import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import { VitePWA } from 'vite-plugin-pwa';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const appVersion = process.env.VITE_APP_VERSION ?? 'dev';
+
+function releaseVersionPlugin() {
+  return {
+    name: 'release-version',
+    writeBundle(options: { dir?: string }) {
+      const outDir = options.dir ?? path.resolve(__dirname, 'dist');
+      writeFileSync(
+        path.join(outDir, 'version.json'),
+        JSON.stringify({
+          version: appVersion,
+          builtAt: new Date().toISOString(),
+        }),
+      );
+    },
+  };
+}
 
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion),
+  },
   plugins: [
     react(),
+    releaseVersionPlugin(),
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src',

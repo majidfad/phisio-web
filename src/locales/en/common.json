@@ -248,7 +248,8 @@
       "create": "Create clinic",
       "save": "Save changes",
       "saving": "Saving…",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "close": "Close"
     },
     "changeManager": {
       "title": "Change clinic manager",
@@ -315,10 +316,23 @@
       "loading": "Loading…",
       "empty": "No doctors are assigned to this clinic yet.",
       "remove": "Remove",
+      "view": "View details",
       "removeTitle": "Remove doctor",
       "removeMessage": "Remove \"{{name}}\" from this clinic?",
       "managerBadge": "Clinic manager",
       "cannotRemoveManager": "The clinic manager cannot be removed from the clinic.",
+      "details": {
+        "title": "Doctor details",
+        "patientsTitle": "Patients at this clinic",
+        "patientsDescription": "Approved patients linked to this doctor in the clinic.",
+        "fields": {
+          "name": "Name",
+          "phone": "Phone number",
+          "specialty": "Specialty",
+          "license": "Medical license",
+          "role": "Role"
+        }
+      },
       "columns": {
         "name": "Name",
         "phone": "Phone number",
@@ -339,6 +353,21 @@
         "alreadyAssigned": "This doctor is already assigned to the clinic.",
         "addFailed": "Failed to add doctor.",
         "removeFailed": "Failed to remove doctor."
+      }
+    },
+    "patients": {
+      "title": "Clinic patients",
+      "description": "Patients linked to doctors in this clinic",
+      "loading": "Loading…",
+      "empty": "No patients are linked to doctors in this clinic yet.",
+      "columns": {
+        "name": "Patient name",
+        "phone": "Phone number",
+        "doctor": "Doctor",
+        "assignedAt": "Linked at"
+      },
+      "errors": {
+        "loadFailed": "Failed to load clinic patients."
       }
     }
   },

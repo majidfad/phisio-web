@@ -5,6 +5,7 @@ import type {
   ClinicDoctorCandidateDto,
   ClinicDoctorMemberDto,
   ClinicDto,
+  ClinicPatientDto,
   ClinicPhoneLookupResultDto,
   CreateClinicRequest,
   UpdateClinicRequest,
@@ -52,6 +53,15 @@ export const clinicService = {
   async getDoctors(clinicId: string): Promise<ClinicDoctorMemberDto[]> {
     const { data } = await httpClient.get<ClinicDoctorMemberDto[]>(
       `${CLINICS_BASE}/${clinicId}/doctors`,
+    );
+
+    return data;
+  },
+
+  async getPatients(clinicId: string, doctorId?: string): Promise<ClinicPatientDto[]> {
+    const { data } = await httpClient.get<ClinicPatientDto[]>(
+      `${CLINICS_BASE}/${clinicId}/patients`,
+      { params: doctorId ? { doctorId } : undefined },
     );
 
     return data;

@@ -11,6 +11,7 @@ interface ClinicDoctorsTableProps {
   doctors: ClinicDoctorMemberDto[];
   isRemoving?: boolean;
   removingDoctorId?: string | null;
+  onView: (doctor: ClinicDoctorMemberDto) => void;
   onRemove: (doctor: ClinicDoctorMemberDto) => void;
 }
 
@@ -18,6 +19,7 @@ export function ClinicDoctorsTable({
   doctors,
   isRemoving = false,
   removingDoctorId = null,
+  onView,
   onRemove,
 }: ClinicDoctorsTableProps) {
   const { t } = useTranslation();
@@ -76,28 +78,34 @@ export function ClinicDoctorsTable({
     {
       title: t('clinics.doctors.columns.actions'),
       key: 'actions',
-      width: 120,
+      width: 180,
       align: 'center',
-      render: (_, doctor) =>
-        doctor.isClinicManager ? (
-          <Tooltip title={t('clinics.doctors.cannotRemoveManager')}>
-            <span>
-              <Button type="link" danger size="small" disabled>
-                {t('clinics.doctors.remove')}
-              </Button>
-            </span>
-          </Tooltip>
-        ) : (
-          <Button
-            type="link"
-            danger
-            size="small"
-            loading={isRemoving && removingDoctorId === doctor.doctorId}
-            onClick={() => onRemove(doctor)}
-          >
-            {t('clinics.doctors.remove')}
+      render: (_, doctor) => (
+        <Space size={4}>
+          <Button type="link" size="small" onClick={() => onView(doctor)}>
+            {t('clinics.doctors.view')}
           </Button>
-        ),
+          {doctor.isClinicManager ? (
+            <Tooltip title={t('clinics.doctors.cannotRemoveManager')}>
+              <span>
+                <Button type="link" danger size="small" disabled>
+                  {t('clinics.doctors.remove')}
+                </Button>
+              </span>
+            </Tooltip>
+          ) : (
+            <Button
+              type="link"
+              danger
+              size="small"
+              loading={isRemoving && removingDoctorId === doctor.doctorId}
+              onClick={() => onRemove(doctor)}
+            >
+              {t('clinics.doctors.remove')}
+            </Button>
+          )}
+        </Space>
+      ),
     },
   ];
 

@@ -38,6 +38,14 @@ export function useClinicDoctors(clinicId: string | undefined) {
   });
 }
 
+export function useClinicPatients(clinicId: string | undefined, doctorId?: string) {
+  return useQuery({
+    queryKey: clinicQueryKeys.patients(clinicId ?? '', doctorId),
+    queryFn: () => clinicService.getPatients(clinicId!, doctorId),
+    enabled: Boolean(clinicId),
+  });
+}
+
 export function useClinicDoctorCandidates(enabled: boolean) {
   return useQuery({
     queryKey: clinicQueryKeys.doctorCandidates(),

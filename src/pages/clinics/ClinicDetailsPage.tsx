@@ -15,14 +15,17 @@ import { useAuth } from '@/features/auth';
 import { AddClinicDoctorModal } from '@/features/clinics/components/AddClinicDoctorModal';
 import { ChangeClinicManagerModal } from '@/features/clinics/components/ChangeClinicManagerModal';
 import { ClinicDetailsCard } from '@/features/clinics/components/ClinicDetailsCard';
+import { ClinicDoctorDetailsModal } from '@/features/clinics/components/ClinicDoctorDetailsModal';
 import { ClinicDoctorsTable } from '@/features/clinics/components/ClinicDoctorsTable';
 import { ClinicFormModal } from '@/features/clinics/components/ClinicFormModal';
+import { ClinicPatientsTable } from '@/features/clinics/components/ClinicPatientsTable';
 import {
   useAddClinicDoctor,
   useChangeClinicManager,
   useClinic,
   useClinicDoctorCandidates,
   useClinicDoctors,
+  useClinicPatients,
   useDisableClinic,
   useRemoveClinicDoctor,
   useUpdateClinic,
@@ -62,6 +65,13 @@ export function ClinicDetailsPage() {
     error: doctorsError,
     refetch: refetchDoctors,
   } = useClinicDoctors(clinicId);
+  const {
+    data: patients = [],
+    isLoading: isPatientsLoading,
+    isError: isPatientsError,
+    error: patientsError,
+    refetch: refetchPatients,
+  } = useClinicPatients(clinicId);
 
   const updateClinic = useUpdateClinic();
   const disableClinic = useDisableClinic();
@@ -73,6 +83,7 @@ export function ClinicDetailsPage() {
   const [isAddDoctorOpen, setIsAddDoctorOpen] = useState(false);
   const [isChangeManagerOpen, setIsChangeManagerOpen] = useState(false);
   const [clinicToDisable, setClinicToDisable] = useState(false);
+  const [doctorToView, setDoctorToView] = useState<ClinicDoctorMemberDto | null>(null);
   const [doctorToRemove, setDoctorToRemove] = useState<ClinicDoctorMemberDto | null>(null);
 
   const candidatesQuery = useClinicDoctorCandidates(isAddDoctorOpen || isChangeManagerOpen);
@@ -254,8 +265,32 @@ export function ClinicDetailsPage() {
                 doctors={doctors}
                 isRemoving={removeDoctor.isPending}
                 removingDoctorId={doctorToRemove?.doctorId ?? null}
+                onView={setDoctorToView}
                 onRemove={setDoctorToRemove}
               />
+            ) : null}
+          </PageSection>
+
+          <PageSection
+            title={t('clinics.patients.title')}
+            description={t('clinics.patients.description')}
+          >
+            {isPatientsLoading ? <LoadingState tip={t('clinics.patients.loading')} /> : null}
+
+            {isPatientsError ? (
+              <AppResult
+                status="error"
+                title={getErrorMessage(patientsError, t('clinics.patients.errors.loadFailed'))}
+                extra={
+                  <Button type="primary" onClick={() => void refetchPatients()}>
+                    {t('clinics.retry')}
+                  </Button>
+                }
+              />
+            ) : null}
+
+            {!isPatientsLoading && !isPatientsError ? (
+              <ClinicPatientsTable patients={patients} />
             ) : null}
           </PageSection>
 
@@ -283,6 +318,13 @@ export function ClinicDetailsPage() {
             onRetryCandidates={() => void candidatesQuery.refetch()}
             onClose={() => setIsAddDoctorOpen(false)}
             onSubmit={handleAddDoctor}
+          />
+
+          <ClinicDoctorDetailsModal
+            open={doctorToView !== null}
+            clinicId={clinicId}
+            doctor={doctorToView}
+            onClose={() => setDoctorToView(null)}
           />
 
           {isAdmin ? (

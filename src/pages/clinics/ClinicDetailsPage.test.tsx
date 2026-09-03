@@ -77,9 +77,31 @@ vi.mock('@/features/clinics/hooks/useClinics', () => ({
         phoneNumber: '+15551111111',
         role: 4,
         specialty: 'Physio',
+        medicalLicenseNumber: 'MD-100',
         isClinicManager: true,
       },
     ],
+    isLoading: false,
+    isError: false,
+    error: null,
+    refetch: vi.fn(),
+  }),
+  useClinicPatients: (_clinicId?: string, doctorId?: string) => ({
+    data:
+      doctorId === '7c9e6679-7425-40de-944b-e07fc1f90ae7' || doctorId === undefined
+        ? [
+            {
+              patientId: '33333333-3333-3333-3333-333333333333',
+              patientName: 'Reza Patient',
+              phoneNumber: '+15553333333',
+              assignedAt: '2026-08-12T10:00:00Z',
+              clinicId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+              clinicName: 'North Clinic',
+              doctorId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+              doctorName: 'Manager User',
+            },
+          ]
+        : [],
     isLoading: false,
     isError: false,
     error: null,
@@ -110,8 +132,22 @@ describe('ClinicDetailsPage', () => {
     expect(screen.getAllByText('North Clinic').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Tehran, Valiasr')).toBeInTheDocument();
     expect(screen.getAllByText('Manager User').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('Reza Patient')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add doctor' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Change manager' })).toBeInTheDocument();
+  });
+
+  it('opens doctor details modal with patients', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ClinicDetailsPage />);
+
+    await user.click(screen.getByRole('button', { name: 'View details' }));
+
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByText('Doctor details')).toBeInTheDocument();
+    expect(within(dialog).getByText('MD-100')).toBeInTheDocument();
+    expect(within(dialog).getByText('Reza Patient')).toBeInTheDocument();
+    expect(within(dialog).getByText('Patients at this clinic')).toBeInTheDocument();
   });
 
   it('hides change manager for non-admin users', () => {

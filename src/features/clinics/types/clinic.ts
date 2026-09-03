@@ -29,6 +29,7 @@ export interface ClinicDoctorMemberDto {
   phoneNumber: string;
   role: UserRole | number;
   specialty: string;
+  medicalLicenseNumber: string;
   isClinicManager: boolean;
 }
 
@@ -38,6 +39,17 @@ export interface ClinicDoctorCandidateDto {
   phoneNumber: string;
   specialty: string;
   isClinicManager: boolean;
+}
+
+export interface ClinicPatientDto {
+  patientId: string;
+  patientName: string;
+  phoneNumber: string;
+  assignedAt: string;
+  clinicId: string;
+  clinicName: string;
+  doctorId: string;
+  doctorName: string;
 }
 
 export type ClinicPhoneLookupStatus = 'None' | 'Found' | 'Conflict';

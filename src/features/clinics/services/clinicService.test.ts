@@ -95,6 +95,7 @@ describe('clinicService', () => {
         phoneNumber: '+15551111111',
         role: 4,
         specialty: 'Physio',
+        medicalLicenseNumber: 'MD-1',
         isClinicManager: true,
       },
     ];
@@ -102,6 +103,34 @@ describe('clinicService', () => {
 
     await expect(clinicService.getDoctors(clinic.clinicId)).resolves.toEqual(doctors);
     expect(httpClient.get).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}/doctors`);
+  });
+
+  it('fetches clinic patients with optional doctor filter', async () => {
+    const patients = [
+      {
+        patientId: '33333333-3333-3333-3333-333333333333',
+        patientName: 'Reza Patient',
+        phoneNumber: '+15553333333',
+        assignedAt: '2026-08-12T10:00:00Z',
+        clinicId: clinic.clinicId,
+        clinicName: clinic.name,
+        doctorId: clinic.clinicManagerId,
+        doctorName: 'Manager',
+      },
+    ];
+    vi.mocked(httpClient.get).mockResolvedValue({ data: patients });
+
+    await expect(clinicService.getPatients(clinic.clinicId)).resolves.toEqual(patients);
+    expect(httpClient.get).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}/patients`, {
+      params: undefined,
+    });
+
+    await expect(
+      clinicService.getPatients(clinic.clinicId, clinic.clinicManagerId),
+    ).resolves.toEqual(patients);
+    expect(httpClient.get).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}/patients`, {
+      params: { doctorId: clinic.clinicManagerId },
+    });
   });
 
   it('looks up clinics by phone numbers', async () => {

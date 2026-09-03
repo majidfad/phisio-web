@@ -1203,7 +1203,8 @@
         "rejectFailed": "Failed to reject request.",
         "removeFailed": "Failed to unlink patient.",
         "lookupFailed": "No patient was found with this phone number.",
-        "addFailed": "Failed to add patient."
+        "addFailed": "Failed to add patient.",
+        "alreadyLinkedElsewhere": "This patient is already linked to another doctor or clinic. Unlink the current connection first."
       }
     }
   },
@@ -1402,7 +1403,8 @@
         "loadFailed": "Failed to load doctors.",
         "requestFailed": "Failed to send link request.",
         "cancelFailed": "Failed to cancel request.",
-        "unlinkFailed": "Failed to unlink doctor."
+        "unlinkFailed": "Failed to unlink doctor.",
+        "alreadyLinkedElsewhere": "You are already linked to another doctor or clinic. Unlink your current connection first."
       }
     },
     "progress": {

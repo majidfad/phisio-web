@@ -2,7 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { patientVisitService } from '../services/patientVisitService';
 import { patientVisitQueryKeys } from './patient-visit-query-keys';
-import type { RegisterPatientVisitRequest } from '../types/patient-visit';
+import type {
+  RegisterPatientVisitRequest,
+  SubmitVisitFeedbackRequest,
+} from '../types/patient-visit';
 
 export function usePatientMostRecentVisit(
   patientId: string | null | undefined,
@@ -162,6 +165,18 @@ export function useRegisterPatientVisit() {
   return useMutation({
     mutationFn: (request: RegisterPatientVisitRequest) =>
       patientVisitService.registerVisit(request),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: patientVisitQueryKeys.all });
+    },
+  });
+}
+
+export function useSubmitVisitFeedback() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ visitId, request }: { visitId: string; request: SubmitVisitFeedbackRequest }) =>
+      patientVisitService.submitVisitFeedback(visitId, request),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: patientVisitQueryKeys.all });
     },

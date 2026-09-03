@@ -4,6 +4,7 @@ import {
   Book,
   BookOpen,
   BarChart3,
+  ClipboardList,
   Ellipsis,
   Home,
   Lock,
@@ -72,6 +73,11 @@ export function PatientAppShell() {
         label: t('layout.nav.myDoctors'),
       },
       {
+        key: routes.patient.visits,
+        icon: <ClipboardList {...appIconProps} />,
+        label: t('layout.nav.visits'),
+      },
+      {
         key: routes.patient.progress,
         icon: <BarChart3 {...appIconProps} />,
         label: t('layout.nav.progress'),
@@ -117,6 +123,7 @@ export function PatientAppShell() {
       return exact;
     }
     if (location.pathname.startsWith(routes.patient.doctors)) return routes.patient.doctors;
+    if (location.pathname.startsWith(routes.patient.visits)) return routes.patient.visits;
     if (location.pathname.startsWith(routes.patient.library)) return routes.patient.library;
     if (location.pathname.startsWith(routes.patient.articles)) return routes.patient.articles;
     if (location.pathname.startsWith(routes.patient.exercises)) return routes.patient.exercises;

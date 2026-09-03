@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { AppResult, AppTable, LoadingState, PageContainer } from '@/components/ui';
 import { PageHeader } from '@/components/PageHeader';
+import { VisitFeedbackModal } from '@/features/visits/components/VisitFeedbackModal';
 import { useMyPatientVisits } from '@/features/visits/hooks/usePatientVisits';
 import type { PatientVisitDto } from '@/features/visits/types/patient-visit';
-import { formatPersianDate } from '@/utils/persian-format';
+import { formatPersianDate, formatPersianNumber } from '@/utils/persian-format';
 import { appIconProps } from '@/components/icons/app-icon';
 import { getErrorMessage } from '@/utils/get-error-message';
 
@@ -18,6 +19,7 @@ export function PatientVisitsPage() {
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [feedbackVisit, setFeedbackVisit] = useState<PatientVisitDto | null>(null);
 
   const { data, isLoading, isError, error, refetch } = useMyPatientVisits({
     page,
@@ -93,8 +95,27 @@ export function PatientVisitsPage() {
               dataIndex: 'doctorNotes',
               key: 'doctorNotes',
               ellipsis: true,
-              minWidth: 220,
+              minWidth: 180,
               render: (notes: string | null) => notes ?? t('patient.visits.noNotes'),
+            },
+            {
+              title: t('patient.visits.columns.feedback'),
+              key: 'feedback',
+              width: 180,
+              render: (_: unknown, row: PatientVisitDto) => {
+                if (row.feedback) {
+                  return t('patient.visits.feedback.summary', {
+                    satisfaction: formatPersianNumber(row.feedback.satisfactionScore),
+                    communication: formatPersianNumber(row.feedback.doctorCommunicationScore),
+                  });
+                }
+
+                return (
+                  <Button type="link" size="small" onClick={() => setFeedbackVisit(row)}>
+                    {t('patient.visits.feedback.action')}
+                  </Button>
+                );
+              },
             },
           ]}
           loading={false}
@@ -111,6 +132,8 @@ export function PatientVisitsPage() {
           size="middle"
         />
       ) : null}
+
+      <VisitFeedbackModal visit={feedbackVisit} onClose={() => setFeedbackVisit(null)} />
     </PageContainer>
   );
 }

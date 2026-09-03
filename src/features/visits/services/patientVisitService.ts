@@ -4,6 +4,8 @@ import type {
   PatientVisitDto,
   PatientVisitHistoryResponse,
   RegisterPatientVisitRequest,
+  SubmitVisitFeedbackRequest,
+  VisitFeedbackDto,
 } from '../types/patient-visit';
 
 const VISITS_BASE = '/visits';
@@ -134,6 +136,17 @@ export const patientVisitService = {
         doctorId: params?.doctorId ?? undefined,
       },
     });
+    return data;
+  },
+
+  async submitVisitFeedback(
+    visitId: string,
+    request: SubmitVisitFeedbackRequest,
+  ): Promise<VisitFeedbackDto> {
+    const { data } = await httpClient.post<VisitFeedbackDto>(
+      `${MY_VISITS_BASE}/${visitId}/feedback`,
+      request,
+    );
     return data;
   },
 };

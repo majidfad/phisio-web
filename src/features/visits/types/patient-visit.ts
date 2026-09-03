@@ -6,6 +6,23 @@ export const PATIENT_CONDITION_VALUES = [1, 2, 3] as const;
 export type PatientCondition = (typeof PATIENT_CONDITION_VALUES)[number];
 // 1=Improved, 2=Unchanged, 3=Worsened
 
+export const VISIT_FEEDBACK_SCORE_MIN = 1;
+export const VISIT_FEEDBACK_SCORE_MAX = 5;
+export const VISIT_FEEDBACK_COMMENT_MAX_LENGTH = 1000;
+
+export interface VisitFeedbackDto {
+  satisfactionScore: number;
+  doctorCommunicationScore: number;
+  comment: string | null;
+  submittedAt: string;
+}
+
+export interface SubmitVisitFeedbackRequest {
+  satisfactionScore: number;
+  doctorCommunicationScore: number;
+  comment?: string | null;
+}
+
 export interface PatientVisitDto {
   visitId: string;
   patientId: string;
@@ -18,6 +35,7 @@ export interface PatientVisitDto {
   visitType: VisitType | null;
   patientCondition: PatientCondition | null;
   doctorNotes: string | null;
+  feedback: VisitFeedbackDto | null;
 }
 
 export interface PatientVisitHistoryResponse {

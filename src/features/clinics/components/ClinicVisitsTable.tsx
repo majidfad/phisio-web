@@ -12,7 +12,7 @@ import type {
   VisitType,
 } from '@/features/visits/types/patient-visit';
 import { getErrorMessage } from '@/utils/get-error-message';
-import { formatPersianDate } from '@/utils/persian-format';
+import { formatPersianDate, formatPersianNumber } from '@/utils/persian-format';
 
 interface ClinicVisitsTableProps {
   clinicId: string | undefined;
@@ -140,8 +140,22 @@ export function ClinicVisitsTable({ clinicId }: ClinicVisitsTableProps) {
               dataIndex: 'doctorNotes',
               key: 'doctorNotes',
               ellipsis: true,
-              minWidth: 200,
+              minWidth: 160,
               render: (notes: string | null) => notes ?? t('clinics.visits.noNotes'),
+            },
+            {
+              title: t('clinics.visits.columns.feedback'),
+              key: 'feedback',
+              width: 200,
+              render: (_: unknown, row: PatientVisitDto) => {
+                if (!row.feedback) {
+                  return t('clinics.visits.feedback.none');
+                }
+                return t('patient.visits.feedback.summary', {
+                  satisfaction: formatPersianNumber(row.feedback.satisfactionScore),
+                  communication: formatPersianNumber(row.feedback.doctorCommunicationScore),
+                });
+              },
             },
           ]}
           pagination={{

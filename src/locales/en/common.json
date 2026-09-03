@@ -395,7 +395,11 @@
         "doctor": "Doctor",
         "visitType": "Visit type",
         "patientCondition": "Patient condition",
-        "notes": "Notes"
+        "notes": "Notes",
+        "feedback": "Patient feedback"
+      },
+      "feedback": {
+        "none": "No feedback yet"
       },
       "errors": {
         "loadFailed": "Failed to load clinic visits."
@@ -1300,7 +1304,11 @@
       "loading": "Loading visits…",
       "retry": "Retry",
       "columns": {
-        "patient": "Patient"
+        "patient": "Patient",
+        "feedback": "Patient feedback"
+      },
+      "feedback": {
+        "none": "No feedback yet"
       },
       "errors": {
         "loadFailed": "Failed to load visits."
@@ -1517,7 +1525,40 @@
         "date": "Date",
         "doctor": "Doctor",
         "clinic": "Clinic",
-        "notes": "Notes"
+        "notes": "Notes",
+        "feedback": "Your feedback"
+      },
+      "feedback": {
+        "title": "Visit feedback",
+        "action": "Leave feedback",
+        "visitSummary": "Visit with {{doctor}} on {{date}}",
+        "satisfactionQuestion": "How useful was this visit?",
+        "communicationQuestion": "How clear and attentive was your doctor?",
+        "satisfactionLabels": {
+          "1": "Not useful",
+          "2": "Slightly useful",
+          "3": "Somewhat useful",
+          "4": "Useful",
+          "5": "Very useful"
+        },
+        "communicationLabels": {
+          "1": "Not clear",
+          "2": "A little clear",
+          "3": "Okay",
+          "4": "Clear",
+          "5": "Very clear"
+        },
+        "commentLabel": "Comment (optional)",
+        "commentPlaceholder": "Anything else you want to share…",
+        "commentHint": "{{count}} characters left",
+        "submit": "Submit feedback",
+        "cancel": "Cancel",
+        "success": "Thank you — your feedback was saved.",
+        "summary": "Satisfaction {{satisfaction}} / Communication {{communication}}",
+        "errors": {
+          "scoresRequired": "Please rate both questions.",
+          "submitFailed": "Unable to submit feedback."
+        }
       },
       "errors": {
         "loadFailed": "Failed to load visits."

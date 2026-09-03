@@ -8,7 +8,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useDoctorVisits } from '@/features/visits/hooks/usePatientVisits';
 import type { PatientVisitDto } from '@/features/visits/types/patient-visit';
-import { formatPersianDate } from '@/utils/persian-format';
+import { formatPersianDate, formatPersianNumber } from '@/utils/persian-format';
 import { appIconProps } from '@/components/icons/app-icon';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { AddPatientVisitModal } from '@/features/doctor/patients/components/AddPatientVisitModal';
@@ -98,8 +98,22 @@ export function DoctorVisitsPage() {
               dataIndex: 'doctorNotes',
               key: 'doctorNotes',
               ellipsis: true,
-              minWidth: 220,
+              minWidth: 180,
               render: (notes: string | null) => notes ?? t('patient.visits.noNotes'),
+            },
+            {
+              title: t('doctor.visits.columns.feedback'),
+              key: 'feedback',
+              width: 200,
+              render: (_: unknown, row: PatientVisitDto) => {
+                if (!row.feedback) {
+                  return t('doctor.visits.feedback.none');
+                }
+                return t('patient.visits.feedback.summary', {
+                  satisfaction: formatPersianNumber(row.feedback.satisfactionScore),
+                  communication: formatPersianNumber(row.feedback.doctorCommunicationScore),
+                });
+              },
             },
           ]}
           loading={false}

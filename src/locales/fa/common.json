@@ -395,7 +395,11 @@
         "doctor": "پزشک",
         "visitType": "نوع ویزیت",
         "patientCondition": "وضعیت بیمار",
-        "notes": "یادداشت"
+        "notes": "یادداشت",
+        "feedback": "نظر بیمار"
+      },
+      "feedback": {
+        "none": "هنوز نظری ثبت نشده"
       },
       "errors": {
         "loadFailed": "بارگذاری ویزیت‌های مطب ممکن نشد."
@@ -1300,7 +1304,11 @@
       "loading": "در حال بارگذاری ویزیت‌ها…",
       "retry": "تلاش مجدد",
       "columns": {
-        "patient": "بیمار"
+        "patient": "بیمار",
+        "feedback": "نظر بیمار"
+      },
+      "feedback": {
+        "none": "هنوز نظری ثبت نشده"
       },
       "errors": {
         "loadFailed": "بارگذاری ویزیت‌ها ممکن نشد."
@@ -1513,7 +1521,40 @@
         "date": "تاریخ",
         "doctor": "پزشک",
         "clinic": "مطب",
-        "notes": "یادداشت"
+        "notes": "یادداشت",
+        "feedback": "نظر شما"
+      },
+      "feedback": {
+        "title": "نظر درباره ویزیت",
+        "action": "ثبت نظر",
+        "visitSummary": "ویزیت با {{doctor}} در {{date}}",
+        "satisfactionQuestion": "این ویزیت چقدر مفید بود؟",
+        "communicationQuestion": "توضیحات و توجه پزشک چقدر واضح و خوب بود؟",
+        "satisfactionLabels": {
+          "1": "مفید نبود",
+          "2": "کم‌کم مفید",
+          "3": "تا حدی مفید",
+          "4": "مفید",
+          "5": "خیلی مفید"
+        },
+        "communicationLabels": {
+          "1": "واضح نبود",
+          "2": "کمی واضح",
+          "3": "متوسط",
+          "4": "واضح",
+          "5": "خیلی واضح"
+        },
+        "commentLabel": "نظر کوتاه (اختیاری)",
+        "commentPlaceholder": "اگر نکته‌ای دارید بنویسید…",
+        "commentHint": "{{count}} کاراکتر باقی‌مانده",
+        "submit": "ثبت نظر",
+        "cancel": "انصراف",
+        "success": "ممنون — نظر شما ذخیره شد.",
+        "summary": "رضایت {{satisfaction}} / ارتباط {{communication}}",
+        "errors": {
+          "scoresRequired": "لطفاً به هر دو سؤال امتیاز دهید.",
+          "submitFailed": "ثبت نظر ممکن نشد."
+        }
       },
       "errors": {
         "loadFailed": "بارگذاری ویزیت‌ها ممکن نشد."

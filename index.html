@@ -2,15 +2,35 @@
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="128x128" href="/brand/zivan-mark-128.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#2e5bcc" />
-    <meta name="description" content="Zivan — Move Better, Live Better." />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="زیوان | تمرین فیزیوتراپی در خانه. بیمار تمرین امروز را انجام می‌دهد و پزشک پایبندی را بین جلسات پیگیری می‌کند."
+    />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Zivan" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:title" content="زیوان | تمرین فیزیوتراپی در خانه" />
+    <meta
+      property="og:description"
+      content="برنامه فیزیوتراپی از کلینیک تا خانه. ثبت‌نام بیمار و ورود پزشک / کلینیک."
+    />
+    <meta property="og:url" content="https://zivan.me/" />
+    <meta property="og:image" content="https://zivan.me/brand/landing/hero-lg.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Zivan" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <title>Zivan</title>
+    <link rel="canonical" href="https://zivan.me/" />
+    <link rel="preload" as="image" href="/brand/landing/hero-md.webp" type="image/webp" fetchpriority="high" />
+    <title>زیوان | تمرین فیزیوتراپی در خانه</title>
   </head>
   <body>
     <script>
@@ -27,6 +47,43 @@
           /* keep dark default */
         }
         document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+    <script>
+      (function () {
+        var host = window.location.hostname.toLowerCase();
+        var isLoopback =
+          host === 'localhost' ||
+          host === '127.0.0.1' ||
+          host === '[::1]' ||
+          host === '::1' ||
+          host.slice(-6) === '.local';
+        var isAppHost = host.indexOf('app.') === 0;
+        var isLandingHost = !isLoopback && !isAppHost;
+
+        if (!isLandingHost) {
+          return;
+        }
+
+        var selectors = [
+          'link[rel="manifest"]',
+          'link[rel="apple-touch-icon"]',
+          'meta[name="apple-mobile-web-app-capable"]',
+          'meta[name="apple-mobile-web-app-status-bar-style"]',
+          'meta[name="apple-mobile-web-app-title"]',
+        ];
+
+        selectors.forEach(function (selector) {
+          var node = document.querySelector(selector);
+          if (node) {
+            node.parentNode.removeChild(node);
+          }
+        });
+
+        var themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) {
+          themeColor.setAttribute('content', '#0b1220');
+        }
       })();
     </script>
     <div id="root"></div>

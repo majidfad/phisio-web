@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { type ReactNode } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import * as site from '@/constants/site';
 import { AuthContext } from '@/features/auth/context/auth-context';
 import { GuestRoute } from '@/routes/guards/GuestRoute';
 import { ProtectedRoute } from '@/routes/guards/ProtectedRoute';
@@ -56,6 +57,7 @@ function renderGuards(
       <AuthWrapper user={user} isInitializing={isInitializing}>
         <Routes>
           <Route path={routes.root} element={<RootRedirect />} />
+          <Route path={routes.about} element={<div>about-screen</div>} />
           <Route element={<GuestRoute />}>
             <Route path={routes.login} element={<div>login-screen</div>} />
           </Route>
@@ -83,6 +85,10 @@ describe('role-based route guards', () => {
     authSessionStore.clear();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each([
     ['Admin', 'admin-screen'],
     ['ClinicManager', 'doctor-screen'],
@@ -107,6 +113,18 @@ describe('role-based route guards', () => {
     renderGuards(routes.admin.root, userForRole('ClinicManager'));
     expect(screen.getByText('unauthorized-screen')).toBeInTheDocument();
     expect(screen.queryByText('admin-screen')).not.toBeInTheDocument();
+  });
+
+  it('shows the landing page for unauthenticated users on /', () => {
+    renderGuards(routes.root, null);
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    expect(screen.queryByText('login-screen')).not.toBeInTheDocument();
+  });
+
+  it('sends unauthenticated users on the app host from / to login', () => {
+    vi.spyOn(site, 'getSiteMode').mockReturnValue('app');
+    renderGuards(routes.root, null);
+    expect(screen.getByText('login-screen')).toBeInTheDocument();
   });
 
   it('redirects unauthenticated users from protected routes to login', () => {

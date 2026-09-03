@@ -45,6 +45,15 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
   const [foundClinic, setFoundClinic] = useState<ClinicDto | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [isLookingUp, setIsLookingUp] = useState(false);
+  const [syncedRole, setSyncedRole] = useState(role);
+
+  if (role !== syncedRole) {
+    setSyncedRole(role);
+    setDoctorStep('doctor');
+    setFoundClinic(null);
+    setLookupError(null);
+    setIsLookingUp(false);
+  }
 
   const {
     control,

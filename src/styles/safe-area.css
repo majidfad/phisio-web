@@ -42,16 +42,24 @@
   left: 16px;
   right: 16px;
   bottom: calc(12px + var(--safe-area-bottom));
-  /* Override .energy-stat-card height:100% so the banner doesn't fill the viewport */
   top: auto;
   height: auto;
-  /* Above patient tab bar (z-index 100) so the banner stays visible at the bottom */
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--phisio-surface);
+  border: 1px solid var(--phisio-border-soft);
+  border-radius: var(--phisio-radius-lg);
+  box-shadow: var(--phisio-shadow-md);
   z-index: 110;
-  margin: 0;
+}
+
+.pwa-install-prompt.ant-card .ant-card-body {
+  padding: 10px 12px;
 }
 
 .pwa-install-prompt.ant-card:hover {
   transform: none;
+  box-shadow: var(--phisio-shadow-md);
 }
 
 .pwa-install-prompt--above-tabs.ant-card {
@@ -74,11 +82,14 @@
 
 .pwa-install-prompt__mark {
   flex-shrink: 0;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 
 .pwa-install-prompt__text {
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.35;
   color: var(--phisio-text);
 }
 

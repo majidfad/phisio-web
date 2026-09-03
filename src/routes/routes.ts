@@ -1,5 +1,9 @@
 export const routes = {
   root: '/',
+  about: '/about',
+  download: '/download',
+  privacy: '/privacy',
+  terms: '/terms',
   login: '/login',
   register: '/register',
   unauthorized: '/unauthorized',
@@ -34,6 +38,10 @@ export const routes = {
 
 export type AppRoutePath =
   | typeof routes.root
+  | typeof routes.about
+  | typeof routes.download
+  | typeof routes.privacy
+  | typeof routes.terms
   | typeof routes.login
   | typeof routes.register
   | typeof routes.unauthorized

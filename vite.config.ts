@@ -1,14 +1,36 @@
 import path from 'node:path';
+import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import { VitePWA } from 'vite-plugin-pwa';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const appVersion = process.env.VITE_APP_VERSION ?? 'dev';
+
+function releaseVersionPlugin() {
+  return {
+    name: 'release-version',
+    writeBundle(options: { dir?: string }) {
+      const outDir = options.dir ?? path.resolve(__dirname, 'dist');
+      writeFileSync(
+        path.join(outDir, 'version.json'),
+        JSON.stringify({
+          version: appVersion,
+          builtAt: new Date().toISOString(),
+        }),
+      );
+    },
+  };
+}
 
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion),
+  },
   plugins: [
     react(),
+    releaseVersionPlugin(),
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src',
@@ -17,20 +39,27 @@ export default defineConfig({
       injectRegister: false,
       includeAssets: [
         'favicon.png',
+        'favicon-32.png',
         'favicon.svg',
         'brand/zivan-mark.png',
+        'brand/zivan-mark-128.png',
         'icons/apple-touch-icon.png',
       ],
       manifest: {
+        id: '/',
         name: 'Zivan',
         short_name: 'Zivan',
         description: 'Zivan — Move Better, Live Better.',
-        theme_color: '#2e5bcc',
+        theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
+        display_override: ['standalone', 'minimal-ui'],
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
+        lang: 'fa',
+        dir: 'rtl',
+        categories: ['health', 'medical'],
         icons: [
           {
             src: 'icons/zivan-192.png',
@@ -49,6 +78,12 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
+          },
+          {
+            src: 'icons/apple-touch-icon.png',
+            sizes: '180x180',
+            type: 'image/png',
+            purpose: 'any',
           },
         ],
       },

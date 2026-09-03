@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { appIconProps } from '@/components/icons/app-icon';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { NavCard } from '@/components/navigation/NavCard';
 import { AppBrand, ThemeToggleButton } from '@/components/ui';
 import { ChangePasswordModal } from '@/features/auth/components/ChangePasswordModal';
@@ -171,6 +172,7 @@ export function AntDesignRoleShell({ config }: AntDesignRoleShellProps) {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <LanguageToggle className="landing-lang app-lang-toggle" />
             <NotificationBell />
             <ThemeToggleButton />
             <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>

@@ -19,6 +19,7 @@ import { ClinicDetailsPage } from '@/pages/clinics/ClinicDetailsPage';
 import { ClinicsPage } from '@/pages/clinics/ClinicsPage';
 import { UnauthorizedPage } from '@/pages/errors/UnauthorizedPage';
 import { DoctorExercisesPage } from '@/pages/doctor/DoctorExercisesPage';
+import { DoctorVisitsPage } from '@/pages/doctor/DoctorVisitsPage';
 import { DoctorHomePage } from '@/pages/doctor/DoctorHomePage';
 import { DoctorPatientsPage } from '@/pages/doctor/DoctorPatientsPage';
 import { AboutPage } from '@/pages/about/AboutPage';
@@ -35,6 +36,7 @@ import { PatientExercisesPage } from '@/pages/patient/PatientExercisesPage';
 import { PatientHomePage } from '@/pages/patient/PatientHomePage';
 import { PatientLibraryPage } from '@/pages/patient/PatientLibraryPage';
 import { PatientProgressPage } from '@/pages/patient/PatientProgressPage';
+import { PatientVisitsPage } from '@/pages/patient/PatientVisitsPage';
 import { GuestRoute } from '@/routes/guards/GuestRoute';
 import { RequireAppHost, RequireLandingHost } from '@/routes/guards/HostGates';
 import { ProtectedRoute } from '@/routes/guards/ProtectedRoute';
@@ -190,6 +192,10 @@ export const router = createBrowserRouter([
                     path: 'exercises',
                     element: <DoctorExercisesPage />,
                   },
+                  {
+                    path: 'visits',
+                    element: <DoctorVisitsPage />,
+                  },
                 ],
               },
             ],
@@ -232,6 +238,10 @@ export const router = createBrowserRouter([
                   {
                     path: 'progress',
                     element: <PatientProgressPage />,
+                  },
+                  {
+                    path: 'visits',
+                    element: <PatientVisitsPage />,
                   },
                 ],
               },

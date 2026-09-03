@@ -20,6 +20,7 @@ import { ClinicDoctorDetailsModal } from '@/features/clinics/components/ClinicDo
 import { ClinicDoctorsTable } from '@/features/clinics/components/ClinicDoctorsTable';
 import { ClinicFormModal } from '@/features/clinics/components/ClinicFormModal';
 import { ClinicPatientsTable } from '@/features/clinics/components/ClinicPatientsTable';
+import { ClinicVisitsTable } from '@/features/clinics/components/ClinicVisitsTable';
 import {
   useAddClinicDoctor,
   useChangeClinicManager,
@@ -311,6 +312,13 @@ export function ClinicDetailsPage() {
             {!isPatientsLoading && !isPatientsError ? (
               <ClinicPatientsTable patients={patientsWithAdherence} showAdherenceColumn />
             ) : null}
+          </PageSection>
+
+          <PageSection
+            title={t('clinics.visits.title')}
+            description={t('clinics.visits.description')}
+          >
+            <ClinicVisitsTable clinicId={clinicId} />
           </PageSection>
 
           <ClinicFormModal

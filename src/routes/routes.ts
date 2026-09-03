@@ -25,12 +25,14 @@ export const routes = {
     clinics: '/doctor/clinics',
     patients: '/doctor/patients',
     exercises: '/doctor/exercises',
+    visits: '/doctor/visits',
   },
   patient: {
     root: '/patient',
     exercises: '/patient/exercises',
     progress: '/patient/progress',
     doctors: '/patient/doctors',
+    visits: '/patient/visits',
     library: '/patient/library',
     articles: '/patient/articles',
   },
@@ -58,9 +60,11 @@ export type AppRoutePath =
   | typeof routes.doctor.clinics
   | typeof routes.doctor.patients
   | typeof routes.doctor.exercises
+  | typeof routes.doctor.visits
   | typeof routes.patient.root
   | typeof routes.patient.exercises
   | typeof routes.patient.progress
   | typeof routes.patient.doctors
+  | typeof routes.patient.visits
   | typeof routes.patient.library
   | typeof routes.patient.articles;

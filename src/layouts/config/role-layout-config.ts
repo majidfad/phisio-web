@@ -28,6 +28,7 @@ const doctorNavItems: RoleLayoutConfig['navItems'] = [
   { id: 'dashboard', labelKey: 'layout.nav.overview', to: routes.doctor.root, end: true },
   { id: 'clinics', labelKey: 'layout.nav.clinics', to: routes.doctor.clinics },
   { id: 'patients', labelKey: 'layout.nav.myPatients', to: routes.doctor.patients },
+  { id: 'visits', labelKey: 'layout.nav.visits', to: routes.doctor.visits },
   { id: 'exercises', labelKey: 'layout.nav.exercises', to: routes.doctor.exercises },
 ];
 
@@ -52,6 +53,7 @@ export const patientLayoutConfig: RoleLayoutConfig = {
   navItems: [
     { id: 'dashboard', labelKey: 'layout.nav.dashboard', to: routes.patient.root, end: true },
     { id: 'doctors', labelKey: 'layout.nav.myDoctors', to: routes.patient.doctors },
+    { id: 'visits', labelKey: 'layout.nav.visits', to: routes.patient.visits },
     { id: 'library', labelKey: 'layout.nav.library', to: routes.patient.library },
     { id: 'articles', labelKey: 'layout.nav.articles', to: routes.patient.articles },
     { id: 'exercises', labelKey: 'layout.nav.myExercises', to: routes.patient.exercises },

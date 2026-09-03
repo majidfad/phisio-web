@@ -146,6 +146,7 @@
       "assignments": "Exercise report",
       "myExercises": "My exercises",
       "progress": "Progress",
+      "visits": "My visits",
       "more": "More"
     }
   },
@@ -380,6 +381,24 @@
       "last30Days": "Last 30 days",
       "errors": {
         "loadFailed": "Failed to load adherence."
+      }
+    },
+    "visits": {
+      "title": "Clinic visits",
+      "description": "Visit history recorded for patients in this clinic",
+      "searchPlaceholder": "Search visits…",
+      "loading": "Loading visits…",
+      "noNotes": "No notes",
+      "columns": {
+        "date": "Date",
+        "patient": "Patient",
+        "doctor": "Doctor",
+        "visitType": "Visit type",
+        "patientCondition": "Patient condition",
+        "notes": "Notes"
+      },
+      "errors": {
+        "loadFailed": "Failed to load clinic visits."
       }
     }
   },
@@ -1237,6 +1256,32 @@
           "loadFailed": "Failed to load exercise history."
         }
       },
+      "visits": {
+        "recentTitle": "Recent visit",
+        "addBtn": "Add visit",
+        "loading": "Loading visit…",
+        "when": "Date: {{value}}",
+        "doctorClinic": "Doctor: {{doctor}} — Clinic: {{clinic}}",
+        "noNotes": "No notes",
+        "empty": "No visits recorded yet.",
+        "add": {
+          "title": "Add visit",
+          "patientLabel": "Patient",
+          "patientPlaceholder": "Select a patient…",
+          "visitTypeLabel": "Visit type",
+          "visitTypePlaceholder": "Select type (optional)",
+          "patientConditionLabel": "Patient condition",
+          "patientConditionPlaceholder": "Select condition (optional)",
+          "dateLabel": "Visit date",
+          "timeLabel": "Visit time",
+          "notesLabel": "Clinical notes",
+          "notesPlaceholder": "Enter clinical notes or observations (optional)",
+          "submit": "Save visit",
+          "loading": "Loading…",
+          "success": "Visit recorded successfully.",
+          "error": "Failed to record visit."
+        }
+      },
       "errors": {
         "loadFailed": "Failed to load patients.",
         "loadRequestsFailed": "Failed to load link requests.",
@@ -1246,6 +1291,19 @@
         "lookupFailed": "No patient was found with this phone number.",
         "addFailed": "Failed to add patient.",
         "alreadyLinkedElsewhere": "This patient is already linked to another doctor or clinic. Unlink the current connection first."
+      }
+    },
+    "visits": {
+      "title": "Visits",
+      "description": "All visits recorded for your patients",
+      "searchPlaceholder": "Search visits…",
+      "loading": "Loading visits…",
+      "retry": "Retry",
+      "columns": {
+        "patient": "Patient"
+      },
+      "errors": {
+        "loadFailed": "Failed to load visits."
       }
     }
   },
@@ -1448,6 +1506,23 @@
         "alreadyLinkedElsewhere": "You are already linked to another doctor or clinic. Unlink your current connection first."
       }
     },
+    "visits": {
+      "title": "My visits",
+      "description": "View your visit history",
+      "searchPlaceholder": "Search visits…",
+      "loading": "Loading visits…",
+      "retry": "Retry",
+      "noNotes": "No notes",
+      "columns": {
+        "date": "Date",
+        "doctor": "Doctor",
+        "clinic": "Clinic",
+        "notes": "Notes"
+      },
+      "errors": {
+        "loadFailed": "Failed to load visits."
+      }
+    },
     "progress": {
       "badge": "Progress",
       "title": "Your progress",
@@ -1597,6 +1672,17 @@
       "title": "Access denied",
       "message": "You do not have permission to view this page."
     }
+  },
+  "visitType": {
+    "initial": "Initial",
+    "followUp": "Follow-up",
+    "emergency": "Emergency",
+    "discharge": "Discharge"
+  },
+  "patientCondition": {
+    "improved": "Improved",
+    "unchanged": "Unchanged",
+    "worsened": "Worsened"
   },
   "pwa": {
     "installPrompt": "Install the app for quick access",

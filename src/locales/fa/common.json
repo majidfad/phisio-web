@@ -146,6 +146,7 @@
       "assignments": "گزارش تمرین‌ها",
       "myExercises": "تمرین‌های من",
       "progress": "پیشرفت",
+      "visits": "ویزیت‌های من",
       "more": "بیشتر"
     }
   },
@@ -380,6 +381,24 @@
       "last30Days": "۳۰ روز اخیر",
       "errors": {
         "loadFailed": "بارگذاری پایبندی انجام نشد."
+      }
+    },
+    "visits": {
+      "title": "ویزیت‌های مطب",
+      "description": "تاریخچه ویزیت‌های ثبت‌شده برای بیماران این مطب",
+      "searchPlaceholder": "جستجوی ویزیت…",
+      "loading": "در حال بارگذاری ویزیت‌ها…",
+      "noNotes": "یادداشتی ثبت نشده",
+      "columns": {
+        "date": "تاریخ",
+        "patient": "بیمار",
+        "doctor": "پزشک",
+        "visitType": "نوع ویزیت",
+        "patientCondition": "وضعیت بیمار",
+        "notes": "یادداشت"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری ویزیت‌های مطب ممکن نشد."
       }
     }
   },
@@ -1246,6 +1265,45 @@
         "lookupFailed": "بیماری با این شماره تلفن یافت نشد.",
         "addFailed": "افزودن بیمار ناموفق بود.",
         "alreadyLinkedElsewhere": "بیمار در حال حاضر به پزشک یا مطب دیگری متصل است. ابتدا اتصال فعلی را قطع کنید."
+      },
+      "visits": {
+        "recentTitle": "آخرین ویزیت",
+        "addBtn": "ثبت ویزیت",
+        "loading": "در حال بارگذاری ویزیت…",
+        "when": "تاریخ: {{value}}",
+        "doctorClinic": "پزشک: {{doctor}} — مطب: {{clinic}}",
+        "noNotes": "یادداشتی ثبت نشده",
+        "empty": "هنوز ویزیتی ثبت نشده است.",
+        "add": {
+          "title": "ثبت ویزیت",
+          "patientLabel": "بیمار",
+          "patientPlaceholder": "یک بیمار انتخاب کنید…",
+          "visitTypeLabel": "نوع ویزیت",
+          "visitTypePlaceholder": "نوع را انتخاب کنید (اختیاری)",
+          "patientConditionLabel": "وضعیت بیمار",
+          "patientConditionPlaceholder": "وضعیت را انتخاب کنید (اختیاری)",
+          "dateLabel": "تاریخ ویزیت",
+          "timeLabel": "ساعت ویزیت",
+          "notesLabel": "یادداشت بالینی",
+          "notesPlaceholder": "یادداشت یا مشاهدات بالینی را وارد کنید (اختیاری)",
+          "submit": "ذخیره ویزیت",
+          "loading": "در حال بارگذاری…",
+          "success": "ویزیت با موفقیت ثبت شد.",
+          "error": "ثبت ویزیت ممکن نشد."
+        }
+      }
+    },
+    "visits": {
+      "title": "ویزیت‌ها",
+      "description": "تمام ویزیت‌های ثبت‌شده برای بیماران شما",
+      "searchPlaceholder": "جستجوی ویزیت…",
+      "loading": "در حال بارگذاری ویزیت‌ها…",
+      "retry": "تلاش مجدد",
+      "columns": {
+        "patient": "بیمار"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری ویزیت‌ها ممکن نشد."
       }
     }
   },
@@ -1444,6 +1502,23 @@
         "alreadyLinkedElsewhere": "شما در حال حاضر به پزشک یا مطب دیگری متصل هستید. ابتدا اتصال فعلی را قطع کنید."
       }
     },
+    "visits": {
+      "title": "ویزیت‌های من",
+      "description": "تاریخچه ویزیت‌های خود را مشاهده کنید",
+      "searchPlaceholder": "جستجوی ویزیت…",
+      "loading": "در حال بارگذاری ویزیت‌ها…",
+      "retry": "تلاش مجدد",
+      "noNotes": "یادداشتی ثبت نشده",
+      "columns": {
+        "date": "تاریخ",
+        "doctor": "پزشک",
+        "clinic": "مطب",
+        "notes": "یادداشت"
+      },
+      "errors": {
+        "loadFailed": "بارگذاری ویزیت‌ها ممکن نشد."
+      }
+    },
     "progress": {
       "badge": "پیشرفت",
       "title": "پیشرفت شما",
@@ -1593,6 +1668,17 @@
       "title": "دسترسی مجاز نیست",
       "message": "شما اجازه مشاهده این صفحه را ندارید."
     }
+  },
+  "visitType": {
+    "initial": "اولیه",
+    "followUp": "پیگیری",
+    "emergency": "اورژانسی",
+    "discharge": "ترخیص"
+  },
+  "patientCondition": {
+    "improved": "بهبود یافته",
+    "unchanged": "بدون تغییر",
+    "worsened": "بدتر شده"
   },
   "pwa": {
     "installPrompt": "اپ را نصب کنید برای دسترسی سریع",

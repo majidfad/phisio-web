@@ -31,6 +31,7 @@ interface PatientExercisesListProps {
 
 interface ActiveSession {
   doctorId: string;
+  clinicId: string;
   doctorName: string;
   exercises: PatientTodayExerciseItemDto[];
   key: number;
@@ -38,6 +39,7 @@ interface ActiveSession {
 
 interface FeedbackContext {
   doctorId: string;
+  clinicId: string;
   doctorName: string;
   completedCount: number;
 }
@@ -129,6 +131,7 @@ export function PatientExercisesList({
       if (firstGroup) {
         setFeedbackContext({
           doctorId: firstGroup.doctorId,
+          clinicId: firstGroup.clinicId,
           doctorName: firstGroup.doctorName,
           completedCount: submittableIds.length,
         });
@@ -148,6 +151,7 @@ export function PatientExercisesList({
 
     setActiveSession({
       doctorId: group.doctorId,
+      clinicId: group.clinicId,
       doctorName: group.doctorName,
       exercises: incomplete,
       key: ++sessionKeyRef.current,
@@ -164,7 +168,7 @@ export function PatientExercisesList({
           const progressPercent = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
           return (
-            <section key={group.doctorId} className="program-today__group">
+            <section key={`${group.doctorId}:${group.clinicId}`} className="program-today__group">
               <HeroCard
                 illustration="recovery"
                 badge={t('patient.exercises.fromDoctor', { doctorName: group.doctorName })}
@@ -254,6 +258,7 @@ export function PatientExercisesList({
             setShowCompletionModal(true);
             setFeedbackContext({
               doctorId: activeSession.doctorId,
+              clinicId: activeSession.clinicId,
               doctorName: activeSession.doctorName,
               completedCount,
             });
@@ -271,6 +276,7 @@ export function PatientExercisesList({
       <DailyFeedbackModal
         isOpen={Boolean(feedbackContext)}
         doctorId={feedbackContext?.doctorId}
+        clinicId={feedbackContext?.clinicId}
         doctorName={feedbackContext?.doctorName}
         completedCount={feedbackContext?.completedCount}
         onClose={() => setFeedbackContext(null)}

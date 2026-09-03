@@ -90,8 +90,11 @@ export function ExerciseAssignmentWizard({
 
   const isOpen = Boolean(patient);
   const { data: exercises = [], isLoading, isError, error, refetch } = useExerciseCatalog(isOpen);
-  const { data: planExercises = [] } = usePatientExercisePlan(patient?.patientId ?? null);
-  const saveProgram = useSavePatientProgram(patient?.patientId ?? '');
+  const { data: planExercises = [] } = usePatientExercisePlan(
+    patient?.patientId ?? null,
+    patient?.clinicId,
+  );
+  const saveProgram = useSavePatientProgram(patient?.patientId ?? '', patient?.clinicId);
 
   const selectedExercises = useMemo(
     () => exercises.filter((exercise) => selectedExerciseIds.has(exercise.exerciseId)),

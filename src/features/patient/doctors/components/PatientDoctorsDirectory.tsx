@@ -156,7 +156,9 @@ function ConnectedDoctorCard({ doctor }: { doctor: PatientLinkedDoctorDto }) {
         <h3 className="patient-media-card__title">{doctor.name}</h3>
         <RelationshipTag status={doctor.status} />
       </div>
-      {doctor.specialty ? <span className="patient-media-card__meta">{doctor.specialty}</span> : null}
+      {doctor.specialty ? (
+        <span className="patient-media-card__meta">{doctor.specialty}</span>
+      ) : null}
       {doctor.clinicName ? <p className="patient-media-card__body">{doctor.clinicName}</p> : null}
       {doctor.phoneNumber ? (
         <p className="patient-media-card__body" dir="ltr">
@@ -183,10 +185,10 @@ function DirectoryDoctorCard({ doctor }: { doctor: PatientDoctorDirectoryItemDto
         <h3 className="patient-media-card__title">{doctor.name}</h3>
         <RelationshipTag status={doctor.relationshipStatus} />
       </div>
-      {doctor.specialty ? <span className="patient-media-card__meta">{doctor.specialty}</span> : null}
-      {doctor.clinicAddress ? (
-        <p className="patient-media-card__body">{doctor.clinicAddress}</p>
+      {doctor.specialty ? (
+        <span className="patient-media-card__meta">{doctor.specialty}</span>
       ) : null}
+      <DoctorClinicsSummary clinics={doctor.clinics} />
       {doctor.phoneNumber ? (
         <p className="patient-media-card__body" dir="ltr">
           {convertToPersianDigits(doctor.phoneNumber)}
@@ -198,6 +200,31 @@ function DirectoryDoctorCard({ doctor }: { doctor: PatientDoctorDirectoryItemDto
         </Link>
       </div>
     </Card>
+  );
+}
+
+function DoctorClinicsSummary({ clinics }: { clinics: PatientDoctorDirectoryItemDto['clinics'] }) {
+  const { t } = useTranslation();
+
+  if (!clinics?.length) {
+    return null;
+  }
+
+  if (clinics.length === 1) {
+    const clinic = clinics[0];
+    return (
+      <p className="patient-media-card__body">
+        {clinic.address ? `${clinic.name} — ${clinic.address}` : clinic.name}
+      </p>
+    );
+  }
+
+  return (
+    <p className="patient-media-card__body">
+      {t('patient.doctors.clinicCount', { count: clinics.length })}
+      {': '}
+      {clinics.map((clinic) => clinic.name).join('، ')}
+    </p>
   );
 }
 

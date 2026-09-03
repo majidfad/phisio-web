@@ -1,9 +1,33 @@
 const SELECTED_DOCTOR_STORAGE_KEY = 'phisio.selectedDoctorId';
 
+export type SelectedDoctorKey = `${string}:${string}`;
+
 type Listener = () => void;
 
-let memorySelectedDoctorId: string | null = null;
+let memorySelectedDoctorKey: string | null = null;
 const listeners = new Set<Listener>();
+
+export function encodeSelectedDoctorKey(doctorId: string, clinicId: string): SelectedDoctorKey {
+  return `${doctorId}:${clinicId}`;
+}
+
+export function decodeSelectedDoctorKey(
+  key: string | null,
+): { doctorId: string; clinicId: string } | null {
+  if (!key) {
+    return null;
+  }
+
+  const separatorIndex = key.indexOf(':');
+  if (separatorIndex <= 0 || separatorIndex >= key.length - 1) {
+    return null;
+  }
+
+  return {
+    doctorId: key.slice(0, separatorIndex),
+    clinicId: key.slice(separatorIndex + 1),
+  };
+}
 
 function getLocalStorage(): Storage | null {
   try {
@@ -13,29 +37,29 @@ function getLocalStorage(): Storage | null {
   }
 }
 
-function readSelectedDoctorId(): string | null {
+function readSelectedDoctorKey(): string | null {
   const storage = getLocalStorage();
   if (!storage) {
-    return memorySelectedDoctorId;
+    return memorySelectedDoctorKey;
   }
 
   try {
     return storage.getItem(SELECTED_DOCTOR_STORAGE_KEY);
   } catch {
-    return memorySelectedDoctorId;
+    return memorySelectedDoctorKey;
   }
 }
 
-function writeSelectedDoctorId(doctorId: string | null): void {
-  memorySelectedDoctorId = doctorId;
+function writeSelectedDoctorKey(key: string | null): void {
+  memorySelectedDoctorKey = key;
   const storage = getLocalStorage();
   if (!storage) {
     return;
   }
 
   try {
-    if (doctorId) {
-      storage.setItem(SELECTED_DOCTOR_STORAGE_KEY, doctorId);
+    if (key) {
+      storage.setItem(SELECTED_DOCTOR_STORAGE_KEY, key);
     } else {
       storage.removeItem(SELECTED_DOCTOR_STORAGE_KEY);
     }
@@ -50,11 +74,11 @@ function notify(): void {
 
 export const selectedDoctorStore = {
   get(): string | null {
-    return readSelectedDoctorId();
+    return readSelectedDoctorKey();
   },
 
-  set(doctorId: string | null): void {
-    writeSelectedDoctorId(doctorId);
+  set(key: string | null): void {
+    writeSelectedDoctorKey(key);
     notify();
   },
 

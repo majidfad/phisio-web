@@ -10,12 +10,21 @@ import type {
 const PATIENT_EXERCISES_BASE = '/patient/exercises';
 
 export const patientExerciseService = {
-  async getTodayExercises(doctorId?: string | null): Promise<PatientTodayExercisesResponse> {
+  async getTodayExercises(
+    doctorId?: string | null,
+    clinicId?: string | null,
+  ): Promise<PatientTodayExercisesResponse> {
+    const params: Record<string, string> = {};
+    if (doctorId) {
+      params.doctorId = doctorId;
+    }
+    if (clinicId) {
+      params.clinicId = clinicId;
+    }
+
     const { data } = await httpClient.get<PatientTodayExercisesResponse>(
       `${PATIENT_EXERCISES_BASE}/today`,
-      {
-        params: doctorId ? { doctorId } : undefined,
-      },
+      Object.keys(params).length > 0 ? { params } : undefined,
     );
     return data;
   },
@@ -24,12 +33,21 @@ export const patientExerciseService = {
   async getExercises(
     scheduledDate?: string,
     doctorId?: string | null,
+    clinicId?: string | null,
   ): Promise<PatientExercisesResponse> {
+    const params: Record<string, string> = {};
+    if (scheduledDate) {
+      params.scheduledDate = scheduledDate;
+    }
+    if (doctorId) {
+      params.doctorId = doctorId;
+    }
+    if (clinicId) {
+      params.clinicId = clinicId;
+    }
+
     const { data } = await httpClient.get<PatientExercisesResponse>(PATIENT_EXERCISES_BASE, {
-      params: {
-        ...(scheduledDate ? { scheduledDate } : {}),
-        ...(doctorId ? { doctorId } : {}),
-      },
+      params: Object.keys(params).length > 0 ? params : undefined,
     });
     return data;
   },

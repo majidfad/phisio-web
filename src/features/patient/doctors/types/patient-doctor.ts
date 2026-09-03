@@ -8,6 +8,12 @@ export const DoctorPatientStatusCode = {
 export type DoctorPatientStatusCode =
   (typeof DoctorPatientStatusCode)[keyof typeof DoctorPatientStatusCode];
 
+export interface PatientDoctorDirectoryClinicDto {
+  clinicId: string;
+  name: string;
+  address: string;
+}
+
 export interface PatientDoctorDirectoryItemDto {
   doctorId: string;
   name: string;
@@ -16,6 +22,7 @@ export interface PatientDoctorDirectoryItemDto {
   clinicAddress: string;
   phoneNumber: string;
   relationshipStatus: DoctorPatientStatusCode | null;
+  clinics: PatientDoctorDirectoryClinicDto[];
 }
 
 export interface PatientDoctorClinicOptionDto {

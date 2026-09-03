@@ -50,8 +50,8 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
     isError,
     error,
     refetch,
-  } = usePatientOverview(patient?.patientId ?? null);
-  const deleteProgram = useDeletePatientProgram(patient?.patientId ?? '');
+  } = usePatientOverview(patient?.patientId ?? null, patient?.clinicId);
+  const deleteProgram = useDeletePatientProgram(patient?.patientId ?? '', patient?.clinicId);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [editingProgram, setEditingProgram] = useState<ExerciseProgramDto | null>(null);
   const [programToRemove, setProgramToRemove] = useState<ExerciseProgramDto | null>(null);
@@ -168,7 +168,11 @@ export function PatientOverviewDrawer({ patient, onClose }: PatientOverviewDrawe
             </Card>
 
             <Card className="patient-media-card" size="small">
-              <PatientExerciseStatsPanel patientId={overview.patientId} variant="overview" />
+              <PatientExerciseStatsPanel
+                patientId={overview.patientId}
+                clinicId={patient?.clinicId}
+                variant="overview"
+              />
             </Card>
 
             <PageSection

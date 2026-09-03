@@ -5,8 +5,10 @@ import type { DoctorDashboardDto } from '../types/dashboard';
 const DASHBOARD_BASE = '/doctor/dashboard';
 
 export const doctorDashboardService = {
-  async getDashboard(): Promise<DoctorDashboardDto> {
-    const { data } = await httpClient.get<DoctorDashboardDto>(DASHBOARD_BASE);
+  async getDashboard(clinicId?: string): Promise<DoctorDashboardDto> {
+    const { data } = clinicId
+      ? await httpClient.get<DoctorDashboardDto>(DASHBOARD_BASE, { params: { clinicId } })
+      : await httpClient.get<DoctorDashboardDto>(DASHBOARD_BASE);
     return data;
   },
 };

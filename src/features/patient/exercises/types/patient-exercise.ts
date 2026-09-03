@@ -12,11 +12,15 @@ export interface PatientTodayExerciseItemDto {
   patientCue: string | null;
   scheduledDate: string;
   completedToday: boolean;
+  clinicId: string;
+  clinicName: string;
 }
 
 export interface PatientDoctorExerciseGroupDto {
   doctorId: string;
   doctorName: string;
+  clinicId: string;
+  clinicName: string;
   exercises: PatientTodayExerciseItemDto[];
 }
 
@@ -33,6 +37,8 @@ export interface PatientExerciseItemDto {
   mediaType: ExerciseMediaType;
   scheduledDate: string;
   completedToday: boolean;
+  clinicId: string;
+  clinicName: string;
 }
 
 export interface PatientExercisesResponse {

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Alert, Button, Checkbox, Form, Input, Typography } from 'antd';
 import { Plus, Trash2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -74,13 +74,6 @@ export function RegisterForm({ role, onBack }: RegisterFormProps) {
     control,
     name: 'clinicPhoneNumbers',
   });
-
-  useEffect(() => {
-    setDoctorStep('doctor');
-    setFoundClinic(null);
-    setLookupError(null);
-    setIsLookingUp(false);
-  }, [role]);
 
   const submitRegistration = async (values: RegisterFormValues) => {
     const clinicPhoneNumbers = isDoctor

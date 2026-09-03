@@ -833,6 +833,10 @@
         "patients": "My patients",
         "patientsUnderCare": "Patients under care",
         "recentPatients": "Recent patients",
+        "pendingRequests": "Pending requests",
+        "assignedExercises": "Assigned exercises",
+        "completedExercises": "Completed exercises",
+        "feedback": "Daily feedback",
         "peopleSuffix": "people"
       },
       "actions": {
@@ -857,6 +861,7 @@
         "columns": {
           "name": "Patient name",
           "phone": "Mobile number",
+          "clinic": "Clinic",
           "status": "Treatment status",
           "actions": "Actions"
         },
@@ -916,6 +921,22 @@
     "patients": {
       "title": "My patients",
       "description": "Approve link requests and manage your patients",
+      "clinicFilter": {
+        "all": "All clinics"
+      },
+      "add": {
+        "open": "Add patient",
+        "title": "Add patient",
+        "phoneLabel": "Patient phone number",
+        "phonePlaceholder": "Enter phone number",
+        "phoneRequired": "Enter a phone number.",
+        "search": "Search",
+        "clinicLabel": "Clinic",
+        "clinicPlaceholder": "Select a clinic",
+        "noClinics": "You are not assigned to a clinic yet.",
+        "submit": "Add to clinic",
+        "cancel": "Cancel"
+      },
       "requestsTitle": "Pending requests",
       "linkedTitle": "Linked patients",
       "emptyRequests": "No pending link requests.",
@@ -941,7 +962,8 @@
       "success": {
         "approved": "Patient request approved.",
         "rejected": "Patient request rejected.",
-        "removed": "Patient unlinked."
+        "removed": "Patient unlinked.",
+        "added": "Patient added to this clinic."
       },
       "columns": {
         "name": "Name",
@@ -1178,7 +1200,9 @@
         "loadRequestsFailed": "Failed to load link requests.",
         "approveFailed": "Failed to approve request.",
         "rejectFailed": "Failed to reject request.",
-        "removeFailed": "Failed to unlink patient."
+        "removeFailed": "Failed to unlink patient.",
+        "lookupFailed": "No patient was found with this phone number.",
+        "addFailed": "Failed to add patient."
       }
     }
   },
@@ -1321,6 +1345,7 @@
       "backToDirectory": "Back to doctors",
       "selectClinicPlaceholder": "Select a clinic",
       "emptyClinics": "This doctor is not assigned to any clinic yet.",
+      "clinicCount": "{{count}} clinics",
       "fields": {
         "specialty": "Specialty",
         "license": "Medical license",

@@ -49,6 +49,7 @@ describe('patientDoctorService', () => {
         clinicAddress: 'Address',
         phoneNumber: '+15551111111',
         relationshipStatus: null,
+        clinics: [],
       },
     ];
 

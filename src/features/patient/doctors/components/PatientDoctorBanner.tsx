@@ -6,13 +6,25 @@ import { Link } from 'react-router-dom';
 import { denseIconProps } from '@/components/icons/app-icon';
 import { routes } from '@/routes/routes';
 
+import { encodeSelectedDoctorKey, decodeSelectedDoctorKey } from '../store/selected-doctor-store';
 import { useActiveDoctor } from '../hooks/useActiveDoctor';
 
 const { Text } = Typography;
 
+function formatDoctorOptionLabel(
+  doctor: { doctorId: string; name: string; clinicName: string },
+  approvedDoctors: { doctorId: string; clinicName: string }[],
+): string {
+  const sameDoctorCount = approvedDoctors.filter(
+    (item) => item.doctorId === doctor.doctorId,
+  ).length;
+
+  return sameDoctorCount > 1 ? `${doctor.name} — ${doctor.clinicName}` : doctor.name;
+}
+
 export function PatientDoctorBanner() {
   const { t } = useTranslation();
-  const { activeDoctor, approvedDoctors, pendingDoctors, setSelectedDoctorId, isLoading } =
+  const { activeDoctor, approvedDoctors, pendingDoctors, setSelectedDoctor, isLoading } =
     useActiveDoctor();
 
   if (isLoading) {
@@ -82,12 +94,19 @@ export function PatientDoctorBanner() {
           {approvedDoctors.length > 1 ? (
             <Select
               size="small"
-              style={{ minWidth: 160 }}
-              value={activeDoctor?.doctorId}
-              onChange={(value) => setSelectedDoctorId(value)}
+              style={{ minWidth: 200 }}
+              value={
+                activeDoctor
+                  ? encodeSelectedDoctorKey(activeDoctor.doctorId, activeDoctor.clinicId)
+                  : undefined
+              }
+              onChange={(value) => {
+                const parsed = decodeSelectedDoctorKey(value);
+                setSelectedDoctor(parsed?.doctorId ?? null, parsed?.clinicId ?? null);
+              }}
               options={approvedDoctors.map((doctor) => ({
-                value: doctor.doctorId,
-                label: doctor.name,
+                value: encodeSelectedDoctorKey(doctor.doctorId, doctor.clinicId),
+                label: formatDoctorOptionLabel(doctor, approvedDoctors),
               }))}
               aria-label={t('patient.doctors.banner.switchLabel')}
             />
@@ -96,7 +115,12 @@ export function PatientDoctorBanner() {
         <Text type="secondary">
           {activeDoctor?.specialty
             ? t('patient.doctors.banner.linkedSpecialty', { specialty: activeDoctor.specialty })
-            : t('patient.doctors.banner.linkedDescription')}
+            : activeDoctor?.clinicName
+              ? t('patient.doctors.banner.linkedClinic', {
+                  defaultValue: 'Clinic: {{clinicName}}',
+                  clinicName: activeDoctor.clinicName,
+                })
+              : t('patient.doctors.banner.linkedDescription')}
         </Text>
       </div>
       <div className="status-panel__actions">

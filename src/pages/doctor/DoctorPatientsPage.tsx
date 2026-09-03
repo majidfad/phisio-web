@@ -10,20 +10,26 @@ import {
   AppTable,
   PageSection,
 } from '@/components/ui';
-import { PageHeader } from '@/components/PageHeader';
+import { PageHeader, PageHeaderButton } from '@/components/PageHeader';
+import { AddDoctorPatientModal } from '@/features/doctor/patients/components/AddDoctorPatientModal';
+import { DoctorClinicFilter } from '@/features/doctor/patients/components/DoctorClinicFilter';
 import { DoctorPatientsTable } from '@/features/doctor/patients/components/DoctorPatientsTable';
 import { PatientExerciseHistoryModal } from '@/features/doctor/patients/components/PatientExerciseHistoryModal';
 import { ExerciseAssignmentWizard } from '@/features/doctor/patients/components/ExerciseAssignmentWizard';
 import { PatientOverviewDrawer } from '@/features/doctor/patients/components/PatientOverviewDrawer';
 import {
+  useAddDoctorPatient,
   useApproveDoctorPatientRequest,
+  useDoctorClinics,
   useDoctorPatientRequests,
   useDoctorPatients,
+  useLookupDoctorPatient,
   useRejectDoctorPatientRequest,
   useRemoveDoctorPatient,
 } from '@/features/doctor/patients/hooks/useDoctorPatients';
 import type {
   DoctorPatientDto,
+  DoctorPatientLookupDto,
   DoctorPatientRequestDto,
 } from '@/features/doctor/patients/types/doctor-patient';
 import { useToast } from '@/hooks/useToast';
@@ -33,17 +39,21 @@ import { convertToPersianDigits, formatPersianDate } from '@/utils/persian-forma
 export function DoctorPatientsPage() {
   const { t } = useTranslation();
   const toast = useToast();
-  const { data: patients = [], isLoading, isError, error, refetch } = useDoctorPatients();
+  const [clinicId, setClinicId] = useState<string | null>(null);
+  const { data: clinics = [] } = useDoctorClinics();
+  const { data: patients = [], isLoading, isError, error, refetch } = useDoctorPatients(clinicId);
   const {
     data: requests = [],
     isLoading: isRequestsLoading,
     isError: isRequestsError,
     error: requestsError,
     refetch: refetchRequests,
-  } = useDoctorPatientRequests();
+  } = useDoctorPatientRequests(clinicId);
   const approveRequest = useApproveDoctorPatientRequest();
   const rejectRequest = useRejectDoctorPatientRequest();
   const removePatient = useRemoveDoctorPatient();
+  const lookupPatient = useLookupDoctorPatient();
+  const addPatient = useAddDoctorPatient();
 
   const [removingPatientId, setRemovingPatientId] = useState<string | null>(null);
   const [actingRequestId, setActingRequestId] = useState<string | null>(null);
@@ -56,6 +66,9 @@ export function DoctorPatientsPage() {
   const [exerciseHistoryPatient, setExerciseHistoryPatient] = useState<DoctorPatientDto | null>(
     null,
   );
+  const [addPatientOpen, setAddPatientOpen] = useState(false);
+  const [matchedPatient, setMatchedPatient] = useState<DoctorPatientLookupDto | null>(null);
+  const [lookupError, setLookupError] = useState<string | null>(null);
 
   const handleRemoveConfirm = async () => {
     if (!patientToRemove) {
@@ -115,12 +128,48 @@ export function DoctorPatientsPage() {
     }
   };
 
+  const handleLookup = async (phoneNumber: string) => {
+    setLookupError(null);
+    setMatchedPatient(null);
+
+    if (!phoneNumber) {
+      setLookupError(t('doctor.patients.add.phoneRequired'));
+      return;
+    }
+
+    try {
+      const patient = await lookupPatient.mutateAsync(phoneNumber);
+      setMatchedPatient(patient);
+    } catch (lookupErr) {
+      setLookupError(getErrorMessage(lookupErr, t('doctor.patients.errors.lookupFailed')));
+    }
+  };
+
+  const handleAddPatient = async (patientId: string, selectedClinicId: string) => {
+    try {
+      await addPatient.mutateAsync({ patientId, clinicId: selectedClinicId });
+      toast.success(t('doctor.patients.success.added'));
+      setAddPatientOpen(false);
+      setMatchedPatient(null);
+    } catch (addError) {
+      toast.error(getErrorMessage(addError, t('doctor.patients.errors.addFailed')));
+    }
+  };
+
   return (
     <PageContainer>
       <PageHeader
         title={t('doctor.patients.title')}
         description={t('doctor.patients.description')}
+        action={
+          <PageHeaderButton
+            label={t('doctor.patients.add.open')}
+            onClick={() => setAddPatientOpen(true)}
+          />
+        }
       />
+
+      <DoctorClinicFilter clinics={clinics} value={clinicId} onChange={setClinicId} />
 
       <div className="patient-stack patient-stack--loose">
         <PageSection title={t('doctor.patients.requestsTitle')}>
@@ -175,18 +224,14 @@ export function DoctorPatientsPage() {
                     <Space>
                       <Button
                         type="primary"
-                        loading={
-                          actingRequestId === `${request.patientId}:${request.clinicId}`
-                        }
+                        loading={actingRequestId === `${request.patientId}:${request.clinicId}`}
                         onClick={() => void handleApprove(request)}
                       >
                         {t('doctor.patients.approve')}
                       </Button>
                       <Button
                         danger
-                        loading={
-                          actingRequestId === `${request.patientId}:${request.clinicId}`
-                        }
+                        loading={actingRequestId === `${request.patientId}:${request.clinicId}`}
                         onClick={() => setRequestToReject(request)}
                       >
                         {t('doctor.patients.reject')}
@@ -264,6 +309,22 @@ export function DoctorPatientsPage() {
         confirming={rejectRequest.isPending}
         onCancel={() => setRequestToReject(null)}
         onConfirm={() => void handleRejectConfirm()}
+      />
+
+      <AddDoctorPatientModal
+        open={addPatientOpen}
+        clinics={clinics}
+        isLookingUp={lookupPatient.isPending}
+        isSubmitting={addPatient.isPending}
+        lookupError={lookupError}
+        matchedPatient={matchedPatient}
+        onClose={() => {
+          setAddPatientOpen(false);
+          setMatchedPatient(null);
+          setLookupError(null);
+        }}
+        onLookup={handleLookup}
+        onSubmit={handleAddPatient}
       />
     </PageContainer>
   );

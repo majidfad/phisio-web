@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Alert, Button, Checkbox, Form, Input, Modal, Select, Space, Spin, Typography } from 'antd';
 import { Plus, Trash2 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +30,23 @@ type CreateStep = 'doctor' | 'existingClinic' | 'newClinic';
 
 export type DoctorFormSubmitValues = DoctorFormSchemaValues | DoctorEditFormSchemaValues;
 
+function getDoctorFormDefaultValues(doctor?: DoctorDto | null): DoctorFormSchemaValues {
+  return {
+    name: doctor?.name ?? '',
+    phoneNumber: doctor?.phoneNumber ?? '',
+    email: doctor?.email ?? '',
+    specialty: doctor?.specialty ?? '',
+    medicalLicenseNumber: doctor?.medicalLicenseNumber ?? '',
+    clinicAddress: doctor?.clinicAddress ?? '',
+    clinicPhoneNumbers: [EMPTY_PHONE],
+    newClinicName: '',
+    newClinicAddress: '',
+    managerIsThisDoctor: true,
+    clinicManagerId: '',
+    ...EMPTY_ADMIN_PASSWORD_FIELDS,
+  };
+}
+
 interface DoctorFormModalProps {
   isOpen: boolean;
   mode: 'create' | 'edit';
@@ -44,8 +61,20 @@ interface DoctorFormModalProps {
   onSubmit: (values: DoctorFormSubmitValues) => Promise<void>;
 }
 
-export function DoctorFormModal({
-  isOpen,
+export function DoctorFormModal(props: DoctorFormModalProps) {
+  const { t } = useTranslation();
+  const { isOpen, onClose, mode, doctor } = props;
+  const title =
+    mode === 'create' ? t('admin.doctors.form.createTitle') : t('admin.doctors.form.editTitle');
+
+  return (
+    <Modal title={title} open={isOpen} onCancel={onClose} footer={null} destroyOnHidden centered>
+      {isOpen ? <DoctorFormModalBody key={`${mode}:${doctor?.id ?? 'new'}`} {...props} /> : null}
+    </Modal>
+  );
+}
+
+function DoctorFormModalBody({
   mode,
   doctor,
   managerCandidates = [],
@@ -69,7 +98,6 @@ export function DoctorFormModal({
   const {
     control,
     handleSubmit,
-    reset,
     trigger,
     getValues,
     setValue,
@@ -79,20 +107,7 @@ export function DoctorFormModal({
   } = useForm<DoctorFormSchemaValues>({
     // Edit uses a narrower schema; cast keeps a single form values type for create+edit.
     resolver: zodResolver(mode === 'create' ? createSchema : editSchema) as never,
-    defaultValues: {
-      name: '',
-      phoneNumber: '',
-      email: '',
-      specialty: '',
-      medicalLicenseNumber: '',
-      clinicAddress: '',
-      clinicPhoneNumbers: [EMPTY_PHONE],
-      newClinicName: '',
-      newClinicAddress: '',
-      managerIsThisDoctor: true,
-      clinicManagerId: '',
-      ...EMPTY_ADMIN_PASSWORD_FIELDS,
-    },
+    defaultValues: getDoctorFormDefaultValues(doctor),
   });
 
   const passwordMode = useWatch({ control, name: 'passwordMode' });
@@ -102,35 +117,6 @@ export function DoctorFormModal({
     control,
     name: 'clinicPhoneNumbers',
   });
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    setCreateStep('doctor');
-    setFoundClinic(null);
-    setLookupError(null);
-    setIsLookingUp(false);
-
-    reset({
-      name: doctor?.name ?? '',
-      phoneNumber: doctor?.phoneNumber ?? '',
-      email: doctor?.email ?? '',
-      specialty: doctor?.specialty ?? '',
-      medicalLicenseNumber: doctor?.medicalLicenseNumber ?? '',
-      clinicAddress: doctor?.clinicAddress ?? '',
-      clinicPhoneNumbers: [EMPTY_PHONE],
-      newClinicName: '',
-      newClinicAddress: '',
-      managerIsThisDoctor: true,
-      clinicManagerId: '',
-      ...EMPTY_ADMIN_PASSWORD_FIELDS,
-    });
-  }, [isOpen, doctor, reset]);
-
-  const title =
-    mode === 'create' ? t('admin.doctors.form.createTitle') : t('admin.doctors.form.editTitle');
 
   const handleLookupAndContinue = async () => {
     setLookupError(null);
@@ -379,203 +365,205 @@ export function DoctorFormModal({
   );
 
   return (
-    <Modal title={title} open={isOpen} onCancel={onClose} footer={null} destroyOnHidden centered>
-      <Form layout="vertical">
-        {mode === 'edit' ? (
-          <>
-            {renderDoctorFields({ includeClinicAddress: true })}
-            <Form.Item style={{ marginBottom: 0 }}>
-              <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-                <Button onClick={onClose}>{t('admin.doctors.form.cancel')}</Button>
-                <Button type="primary" loading={isSubmitting} onClick={() => void handleEditSubmit()}>
-                  {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.save')}
-                </Button>
-              </Space>
-            </Form.Item>
-          </>
-        ) : null}
+    <Form layout="vertical">
+      {mode === 'edit' ? (
+        <>
+          {renderDoctorFields({ includeClinicAddress: true })}
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+              <Button onClick={onClose}>{t('admin.doctors.form.cancel')}</Button>
+              <Button type="primary" loading={isSubmitting} onClick={() => void handleEditSubmit()}>
+                {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.save')}
+              </Button>
+            </Space>
+          </Form.Item>
+        </>
+      ) : null}
 
-        {mode === 'create' && createStep === 'doctor' ? (
-          <>
-            {renderDoctorFields()}
-            <Title level={5} style={{ marginTop: 8 }}>
-              {t('admin.doctors.clinic.sectionTitle')}
-            </Title>
-            <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
-              {t('admin.doctors.clinic.phoneStepHint')}
-            </Text>
-            {renderClinicPhoneFields()}
-            <AdminPasswordFormFields
-              control={control as never}
-              errors={errors}
-              passwordMode={passwordMode ?? 'generate'}
-            />
-            {lookupError ? (
-              <Alert type="error" showIcon style={{ marginBottom: 16 }} message={lookupError} />
-            ) : null}
-            <Form.Item style={{ marginBottom: 0 }}>
-              <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-                <Button onClick={onClose}>{t('admin.doctors.form.cancel')}</Button>
-                <Button type="primary" loading={isLookingUp} onClick={() => void handleLookupAndContinue()}>
-                  {isLookingUp
-                    ? t('admin.doctors.clinic.searching')
-                    : t('admin.doctors.clinic.continue')}
-                </Button>
-              </Space>
-            </Form.Item>
-          </>
-        ) : null}
+      {mode === 'create' && createStep === 'doctor' ? (
+        <>
+          {renderDoctorFields()}
+          <Title level={5} style={{ marginTop: 8 }}>
+            {t('admin.doctors.clinic.sectionTitle')}
+          </Title>
+          <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
+            {t('admin.doctors.clinic.phoneStepHint')}
+          </Text>
+          {renderClinicPhoneFields()}
+          <AdminPasswordFormFields
+            control={control as never}
+            errors={errors}
+            passwordMode={passwordMode ?? 'generate'}
+          />
+          {lookupError ? (
+            <Alert type="error" showIcon style={{ marginBottom: 16 }} message={lookupError} />
+          ) : null}
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+              <Button onClick={onClose}>{t('admin.doctors.form.cancel')}</Button>
+              <Button
+                type="primary"
+                loading={isLookingUp}
+                onClick={() => void handleLookupAndContinue()}
+              >
+                {isLookingUp
+                  ? t('admin.doctors.clinic.searching')
+                  : t('admin.doctors.clinic.continue')}
+              </Button>
+            </Space>
+          </Form.Item>
+        </>
+      ) : null}
 
-        {mode === 'create' && createStep === 'existingClinic' && foundClinic ? (
-          <>
-            <Alert
-              type="success"
-              showIcon
-              style={{ marginBottom: 16 }}
-              message={t('admin.doctors.clinic.foundTitle')}
-              description={
-                <Space direction="vertical" size={4}>
-                  <Text strong>{foundClinic.name}</Text>
-                  <Text>
-                    {t('admin.doctors.clinic.address')}: {foundClinic.address}
-                  </Text>
-                  <Text dir="ltr">
-                    {t('admin.doctors.clinic.phones')}:{' '}
-                    {foundClinic.phoneNumbers.map((phone) => formatDisplayPhone(phone)).join('، ')}
-                  </Text>
-                  <Text type="secondary">{t('admin.doctors.clinic.foundHint')}</Text>
-                </Space>
-              }
+      {mode === 'create' && createStep === 'existingClinic' && foundClinic ? (
+        <>
+          <Alert
+            type="success"
+            showIcon
+            style={{ marginBottom: 16 }}
+            message={t('admin.doctors.clinic.foundTitle')}
+            description={
+              <Space direction="vertical" size={4}>
+                <Text strong>{foundClinic.name}</Text>
+                <Text>
+                  {t('admin.doctors.clinic.address')}: {foundClinic.address}
+                </Text>
+                <Text dir="ltr">
+                  {t('admin.doctors.clinic.phones')}:{' '}
+                  {foundClinic.phoneNumbers.map((phone) => formatDisplayPhone(phone)).join('، ')}
+                </Text>
+                <Text type="secondary">{t('admin.doctors.clinic.foundHint')}</Text>
+              </Space>
+            }
+          />
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+              <Button onClick={() => setCreateStep('doctor')}>
+                {t('admin.doctors.clinic.back')}
+              </Button>
+              <Button
+                type="primary"
+                loading={isSubmitting}
+                onClick={() => void handleCreateWithExistingClinic()}
+              >
+                {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.create')}
+              </Button>
+            </Space>
+          </Form.Item>
+        </>
+      ) : null}
+
+      {mode === 'create' && createStep === 'newClinic' ? (
+        <>
+          <Title level={5}>{t('admin.doctors.clinic.createStepTitle')}</Title>
+          <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
+            {t('admin.doctors.clinic.createStepHint')}
+          </Text>
+
+          <Form.Item
+            label={t('admin.doctors.clinic.name')}
+            validateStatus={errors.newClinicName ? 'error' : undefined}
+            help={errors.newClinicName?.message}
+          >
+            <Controller
+              name="newClinicName"
+              control={control}
+              render={({ field }) => <Input {...field} autoComplete="organization" />}
             />
-            <Form.Item style={{ marginBottom: 0 }}>
-              <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-                <Button onClick={() => setCreateStep('doctor')}>{t('admin.doctors.clinic.back')}</Button>
-                <Button
-                  type="primary"
-                  loading={isSubmitting}
-                  onClick={() => void handleCreateWithExistingClinic()}
+          </Form.Item>
+
+          <Form.Item
+            label={t('admin.doctors.clinic.address')}
+            validateStatus={errors.newClinicAddress ? 'error' : undefined}
+            help={errors.newClinicAddress?.message}
+          >
+            <Controller
+              name="newClinicAddress"
+              control={control}
+              render={({ field }) => <Input.TextArea {...field} rows={3} />}
+            />
+          </Form.Item>
+
+          {renderClinicPhoneFields()}
+
+          <Form.Item>
+            <Controller
+              name="managerIsThisDoctor"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  checked={field.value}
+                  onChange={(event) => field.onChange(event.target.checked)}
                 >
-                  {isSubmitting
-                    ? t('admin.doctors.form.saving')
-                    : t('admin.doctors.form.create')}
-                </Button>
-              </Space>
-            </Form.Item>
-          </>
-        ) : null}
+                  {t('admin.doctors.clinic.managerIsThisDoctor')}
+                </Checkbox>
+              )}
+            />
+          </Form.Item>
 
-        {mode === 'create' && createStep === 'newClinic' ? (
-          <>
-            <Title level={5}>{t('admin.doctors.clinic.createStepTitle')}</Title>
-            <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
-              {t('admin.doctors.clinic.createStepHint')}
-            </Text>
-
+          {!managerIsThisDoctor ? (
             <Form.Item
-              label={t('admin.doctors.clinic.name')}
-              validateStatus={errors.newClinicName ? 'error' : undefined}
-              help={errors.newClinicName?.message}
+              label={t('admin.doctors.clinic.clinicManager')}
+              validateStatus={errors.clinicManagerId ? 'error' : undefined}
+              help={errors.clinicManagerId?.message}
             >
               <Controller
-                name="newClinicName"
-                control={control}
-                render={({ field }) => <Input {...field} autoComplete="organization" />}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label={t('admin.doctors.clinic.address')}
-              validateStatus={errors.newClinicAddress ? 'error' : undefined}
-              help={errors.newClinicAddress?.message}
-            >
-              <Controller
-                name="newClinicAddress"
-                control={control}
-                render={({ field }) => <Input.TextArea {...field} rows={3} />}
-              />
-            </Form.Item>
-
-            {renderClinicPhoneFields()}
-
-            <Form.Item>
-              <Controller
-                name="managerIsThisDoctor"
+                name="clinicManagerId"
                 control={control}
                 render={({ field }) => (
-                  <Checkbox
-                    checked={field.value}
-                    onChange={(event) => field.onChange(event.target.checked)}
-                  >
-                    {t('admin.doctors.clinic.managerIsThisDoctor')}
-                  </Checkbox>
+                  <Select
+                    allowClear
+                    showSearch
+                    loading={isLoadingManagers}
+                    disabled={isManagersError}
+                    placeholder={t('admin.doctors.clinic.clinicManagerPlaceholder')}
+                    optionFilterProp="label"
+                    value={field.value || undefined}
+                    onChange={(value) => field.onChange(value ?? '')}
+                    onBlur={field.onBlur}
+                    notFoundContent={
+                      isLoadingManagers ? (
+                        <Spin size="small" />
+                      ) : (
+                        t('admin.doctors.clinic.clinicManagerEmpty')
+                      )
+                    }
+                    options={managerCandidates.map((candidate) => ({
+                      value: candidate.id,
+                      label: candidate.name,
+                    }))}
+                  />
                 )}
               />
+              {isManagersError ? (
+                <Space direction="vertical" size={4} style={{ marginTop: 8 }}>
+                  <Text type="danger">{t('admin.doctors.clinic.clinicManagerLoadFailed')}</Text>
+                  {onRetryManagers ? (
+                    <Button size="small" onClick={onRetryManagers}>
+                      {t('admin.doctors.retry')}
+                    </Button>
+                  ) : null}
+                </Space>
+              ) : null}
             </Form.Item>
+          ) : null}
 
-            {!managerIsThisDoctor ? (
-              <Form.Item
-                label={t('admin.doctors.clinic.clinicManager')}
-                validateStatus={errors.clinicManagerId ? 'error' : undefined}
-                help={errors.clinicManagerId?.message}
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+              <Button onClick={() => setCreateStep('doctor')}>
+                {t('admin.doctors.clinic.back')}
+              </Button>
+              <Button
+                type="primary"
+                loading={isSubmitting}
+                onClick={() => void handleCreateWithNewClinic()}
               >
-                <Controller
-                  name="clinicManagerId"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      allowClear
-                      showSearch
-                      loading={isLoadingManagers}
-                      disabled={isManagersError}
-                      placeholder={t('admin.doctors.clinic.clinicManagerPlaceholder')}
-                      optionFilterProp="label"
-                      value={field.value || undefined}
-                      onChange={(value) => field.onChange(value ?? '')}
-                      onBlur={field.onBlur}
-                      notFoundContent={
-                        isLoadingManagers ? (
-                          <Spin size="small" />
-                        ) : (
-                          t('admin.doctors.clinic.clinicManagerEmpty')
-                        )
-                      }
-                      options={managerCandidates.map((candidate) => ({
-                        value: candidate.id,
-                        label: candidate.name,
-                      }))}
-                    />
-                  )}
-                />
-                {isManagersError ? (
-                  <Space direction="vertical" size={4} style={{ marginTop: 8 }}>
-                    <Text type="danger">{t('admin.doctors.clinic.clinicManagerLoadFailed')}</Text>
-                    {onRetryManagers ? (
-                      <Button size="small" onClick={onRetryManagers}>
-                        {t('admin.doctors.retry')}
-                      </Button>
-                    ) : null}
-                  </Space>
-                ) : null}
-              </Form.Item>
-            ) : null}
-
-            <Form.Item style={{ marginBottom: 0 }}>
-              <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-                <Button onClick={() => setCreateStep('doctor')}>{t('admin.doctors.clinic.back')}</Button>
-                <Button
-                  type="primary"
-                  loading={isSubmitting}
-                  onClick={() => void handleCreateWithNewClinic()}
-                >
-                  {isSubmitting
-                    ? t('admin.doctors.form.saving')
-                    : t('admin.doctors.form.create')}
-                </Button>
-              </Space>
-            </Form.Item>
-          </>
-        ) : null}
-      </Form>
-    </Modal>
+                {isSubmitting ? t('admin.doctors.form.saving') : t('admin.doctors.form.create')}
+              </Button>
+            </Space>
+          </Form.Item>
+        </>
+      ) : null}
+    </Form>
   );
 }

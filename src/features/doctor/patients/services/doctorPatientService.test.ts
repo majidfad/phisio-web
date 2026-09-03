@@ -16,6 +16,56 @@ describe('doctorPatientService', () => {
     vi.clearAllMocks();
   });
 
+  it('fetches patients filtered by clinicId', async () => {
+    const clinicId = '11111111-1111-1111-1111-111111111111';
+    const patients = [
+      {
+        patientId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+        patientName: 'Alice Patient',
+        phoneNumber: '+15551111111',
+        assignedAt: '2026-08-20T10:00:00Z',
+        clinicId,
+        clinicName: 'North Clinic',
+      },
+    ];
+
+    vi.mocked(httpClient.get).mockResolvedValue({ data: patients });
+
+    await expect(doctorPatientService.getAll(clinicId)).resolves.toEqual(patients);
+    expect(httpClient.get).toHaveBeenCalledWith('/doctor/patients', { params: { clinicId } });
+  });
+
+  it('looks up a patient by phone and adds them with clinicId', async () => {
+    const clinicId = '11111111-1111-1111-1111-111111111111';
+    const lookup = {
+      patientId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+      patientName: 'Alice Patient',
+      phoneNumber: '+15551111111',
+    };
+    const added = {
+      ...lookup,
+      assignedAt: '2026-08-20T10:00:00Z',
+      clinicId,
+      clinicName: 'North Clinic',
+    };
+
+    vi.mocked(httpClient.get).mockResolvedValue({ data: lookup });
+    vi.mocked(httpClient.post).mockResolvedValue({ data: added });
+
+    await expect(doctorPatientService.lookupByPhone('+15551111111')).resolves.toEqual(lookup);
+    expect(httpClient.get).toHaveBeenCalledWith('/doctor/patients/lookup', {
+      params: { phoneNumber: '+15551111111' },
+    });
+
+    await expect(
+      doctorPatientService.addPatient({ patientId: lookup.patientId, clinicId }),
+    ).resolves.toEqual(added);
+    expect(httpClient.post).toHaveBeenCalledWith('/doctor/patients', {
+      patientId: lookup.patientId,
+      clinicId,
+    });
+  });
+
   it('approves a patient request with clinicId query param', async () => {
     const patientId = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
     const clinicId = '11111111-1111-1111-1111-111111111111';
@@ -33,11 +83,9 @@ describe('doctorPatientService', () => {
     await expect(doctorPatientService.approveRequest(patientId, clinicId)).resolves.toEqual(
       approved,
     );
-    expect(httpClient.post).toHaveBeenCalledWith(
-      `/doctor/patients/${patientId}/approve`,
-      null,
-      { params: { clinicId } },
-    );
+    expect(httpClient.post).toHaveBeenCalledWith(`/doctor/patients/${patientId}/approve`, null, {
+      params: { clinicId },
+    });
   });
 
   it('rejects a patient request with clinicId query param', async () => {

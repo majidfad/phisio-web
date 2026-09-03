@@ -1,5 +1,14 @@
-import { Activity, ChevronLeft, Plus, Users, UserCheck } from 'lucide-react';
+import {
+  Activity,
+  ChevronLeft,
+  ClipboardList,
+  MessageSquare,
+  Plus,
+  Users,
+  UserCheck,
+} from 'lucide-react';
 import { Button, Col, Row } from 'antd';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -8,6 +17,8 @@ import { StatusCapsule } from '@/components/ui/StatusCapsule';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { RecentPatientsTable } from '@/features/doctor/dashboard/components/RecentPatientsTable';
 import { useDoctorDashboard } from '@/features/doctor/dashboard/hooks/useDoctorDashboard';
+import { DoctorClinicFilter } from '@/features/doctor/patients/components/DoctorClinicFilter';
+import { useDoctorClinics } from '@/features/doctor/patients/hooks/useDoctorPatients';
 import { routes } from '@/routes/routes';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { formatPersianNumber } from '@/utils/persian-format';
@@ -16,7 +27,9 @@ export function DoctorHomePage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { data: dashboard, isLoading, isError, error, refetch } = useDoctorDashboard();
+  const [clinicId, setClinicId] = useState<string | null>(null);
+  const { data: clinics = [] } = useDoctorClinics();
+  const { data: dashboard, isLoading, isError, error, refetch } = useDoctorDashboard(clinicId);
 
   const displayName = user?.name ?? t('layout.defaultUser');
 
@@ -66,8 +79,9 @@ export function DoctorHomePage() {
 
         {!isLoading && !isError && dashboard ? (
           <>
+            <DoctorClinicFilter clinics={clinics} value={clinicId} onChange={setClinicId} />
             <Row gutter={[12, 12]} className="clinic-dashboard__stats">
-              <Col xs={24} sm={12}>
+              <Col xs={24} sm={12} lg={8}>
                 <StatCard
                   label={t('doctor.dashboard.summary.patientsUnderCare')}
                   value={formatPersianNumber(dashboard.patientsCount)}
@@ -76,12 +90,36 @@ export function DoctorHomePage() {
                   accent="blue"
                 />
               </Col>
-              <Col xs={24} sm={12}>
+              <Col xs={24} sm={12} lg={8}>
                 <StatCard
-                  label={t('doctor.dashboard.summary.recentPatients')}
-                  value={formatPersianNumber(dashboard.recentPatients.length)}
+                  label={t('doctor.dashboard.summary.pendingRequests')}
+                  value={formatPersianNumber(dashboard.pendingRequestsCount)}
                   suffix={t('doctor.dashboard.summary.peopleSuffix')}
                   icon={<UserCheck size={20} />}
+                  accent="mint"
+                />
+              </Col>
+              <Col xs={24} sm={12} lg={8}>
+                <StatCard
+                  label={t('doctor.dashboard.summary.assignedExercises')}
+                  value={formatPersianNumber(dashboard.assignedExercisesCount)}
+                  icon={<ClipboardList size={20} />}
+                  accent="peach"
+                />
+              </Col>
+              <Col xs={24} sm={12} lg={8}>
+                <StatCard
+                  label={t('doctor.dashboard.summary.completedExercises')}
+                  value={formatPersianNumber(dashboard.completedExercisesCount)}
+                  icon={<Activity size={20} />}
+                  accent="blue"
+                />
+              </Col>
+              <Col xs={24} sm={12} lg={8}>
+                <StatCard
+                  label={t('doctor.dashboard.summary.feedback')}
+                  value={formatPersianNumber(dashboard.feedbackCount)}
+                  icon={<MessageSquare size={20} />}
                   accent="mint"
                 />
               </Col>

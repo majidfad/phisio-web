@@ -1,5 +1,5 @@
 import { Button, Card, Descriptions, Select } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -16,7 +16,34 @@ import {
   useRequestDoctorLink,
   useUnlinkDoctor,
 } from '../hooks/usePatientDoctors';
-import { DoctorPatientStatusCode } from '../types/patient-doctor';
+import {
+  DoctorPatientStatusCode,
+  type PatientDoctorClinicOptionDto,
+} from '../types/patient-doctor';
+
+function resolveSelectedClinicId(
+  clinics: PatientDoctorClinicOptionDto[] | undefined,
+  preferredClinicId: string | null,
+  userSelectedClinicId: string | null,
+): string | null {
+  if (!clinics?.length) {
+    return null;
+  }
+
+  if (userSelectedClinicId && clinics.some((clinic) => clinic.clinicId === userSelectedClinicId)) {
+    return userSelectedClinicId;
+  }
+
+  if (preferredClinicId && clinics.some((clinic) => clinic.clinicId === preferredClinicId)) {
+    return preferredClinicId;
+  }
+
+  if (clinics.length === 1) {
+    return clinics[0]?.clinicId ?? null;
+  }
+
+  return null;
+}
 
 interface PatientDoctorProfileViewProps {
   doctorId: string;
@@ -30,29 +57,14 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
   const [searchParams] = useSearchParams();
   const preferredClinicId = searchParams.get('clinicId');
   const clinicsQuery = usePatientDoctorClinics(doctorId);
-  const [selectedClinicId, setSelectedClinicId] = useState<string | null>(preferredClinicId);
-
-  useEffect(() => {
-    if (!clinicsQuery.data?.length) {
-      setSelectedClinicId(null);
-      return;
-    }
-
-    setSelectedClinicId((current) => {
-      if (current && clinicsQuery.data.some((clinic) => clinic.clinicId === current)) {
-        return current;
-      }
-
-      if (
-        preferredClinicId &&
-        clinicsQuery.data.some((clinic) => clinic.clinicId === preferredClinicId)
-      ) {
-        return preferredClinicId;
-      }
-
-      return clinicsQuery.data[0]?.clinicId ?? null;
-    });
-  }, [clinicsQuery.data, preferredClinicId]);
+  const [userSelectedClinicId, setUserSelectedClinicId] = useState<string | null>(
+    preferredClinicId,
+  );
+  const selectedClinicId = resolveSelectedClinicId(
+    clinicsQuery.data,
+    preferredClinicId,
+    userSelectedClinicId,
+  );
 
   const { data, isLoading, isError, error, refetch } = usePatientDoctorProfile(
     doctorId,
@@ -80,10 +92,7 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
     return (
       <AppResult
         status="error"
-        title={getErrorMessage(
-          clinicsQuery.error ?? error,
-          t('patient.doctors.errors.loadFailed'),
-        )}
+        title={getErrorMessage(clinicsQuery.error ?? error, t('patient.doctors.errors.loadFailed'))}
         extra={
           <>
             <Button type="primary" onClick={() => void refetch()}>
@@ -150,19 +159,26 @@ export function PatientDoctorProfileView({ doctorId }: PatientDoctorProfileViewP
       <Card className="patient-media-card" title={data.name}>
         <Descriptions column={1} size="small">
           <Descriptions.Item label={t('patient.doctors.fields.clinic')}>
-            {clinicsQuery.data && clinicsQuery.data.length > 0 ? (
+            {clinicsQuery.data && clinicsQuery.data.length > 1 ? (
               <Select
+                allowClear
                 showSearch
                 optionFilterProp="label"
                 style={{ width: '100%' }}
                 value={selectedClinicId ?? undefined}
                 placeholder={t('patient.doctors.selectClinicPlaceholder')}
-                onChange={(value) => setSelectedClinicId(value)}
+                onChange={(value) => setUserSelectedClinicId(value ?? null)}
                 options={clinicsQuery.data.map((clinic) => ({
                   value: clinic.clinicId,
-                  label: clinic.name,
+                  label: clinic.address ? `${clinic.name} — ${clinic.address}` : clinic.name,
                 }))}
               />
+            ) : clinicsQuery.data && clinicsQuery.data.length === 1 ? (
+              selectedClinic?.address ? (
+                `${selectedClinic.name} — ${selectedClinic.address}`
+              ) : (
+                (selectedClinic?.name ?? t('patient.doctors.emptyClinics'))
+              )
             ) : (
               t('patient.doctors.emptyClinics')
             )}

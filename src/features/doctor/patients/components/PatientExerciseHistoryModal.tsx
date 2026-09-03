@@ -140,6 +140,7 @@ export function PatientExerciseHistoryModal({
   const { data, isLoading, isError, error, refetch, isFetching } = usePatientExerciseHistory(
     patient?.patientId ?? null,
     { page, pageSize },
+    patient?.clinicId,
   );
 
   const summary = data?.summary;
@@ -279,7 +280,11 @@ export function PatientExerciseHistoryModal({
               </Row>
 
               <Card className="patient-media-card" size="small">
-                <PatientExerciseStatsPanel patientId={patient.patientId} variant="history" />
+                <PatientExerciseStatsPanel
+                  patientId={patient.patientId}
+                  clinicId={patient.clinicId}
+                  variant="history"
+                />
               </Card>
 
               {!hasHistory ? (

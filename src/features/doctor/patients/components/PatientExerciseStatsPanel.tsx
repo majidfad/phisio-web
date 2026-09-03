@@ -28,14 +28,19 @@ export type PatientExerciseStatsPanelVariant = 'overview' | 'history';
 
 interface PatientExerciseStatsPanelProps {
   patientId: string;
+  clinicId?: string | null;
   variant: PatientExerciseStatsPanelVariant;
 }
 
-export function PatientExerciseStatsPanel({ patientId, variant }: PatientExerciseStatsPanelProps) {
+export function PatientExerciseStatsPanel({
+  patientId,
+  clinicId,
+  variant,
+}: PatientExerciseStatsPanelProps) {
   const { t } = useTranslation();
   const [rangeDays, setRangeDays] = useState<ExerciseStatsRangeDays>(30);
   const range = useMemo(() => statsRangeFromDays(rangeDays), [rangeDays]);
-  const { data, isLoading, isError, refetch } = usePatientExerciseStats(patientId, range);
+  const { data, isLoading, isError, refetch } = usePatientExerciseStats(patientId, range, clinicId);
 
   const weeklyChartData = useMemo(
     () =>

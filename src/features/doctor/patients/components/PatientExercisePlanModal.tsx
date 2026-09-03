@@ -24,7 +24,7 @@ export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePl
     isError,
     error,
     refetch,
-  } = usePatientExercisePlan(patient?.patientId ?? null);
+  } = usePatientExercisePlan(patient?.patientId ?? null, patient?.clinicId);
   const [showAddExercises, setShowAddExercises] = useState(false);
 
   const assignedExerciseIds = useMemo(
@@ -79,6 +79,7 @@ export function PatientExercisePlanModal({ patient, onClose }: PatientExercisePl
       {patient ? (
         <AddPatientExercisesModal
           patientId={patient.patientId}
+          clinicId={patient.clinicId}
           assignedExerciseIds={assignedExerciseIds}
           planExercises={exercises}
           isOpen={showAddExercises}

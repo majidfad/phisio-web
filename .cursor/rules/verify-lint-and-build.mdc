@@ -1,0 +1,20 @@
+---
+description: After every frontend task, run lint and build and fix all failures before finishing.
+alwaysApply: true
+---
+
+# Verify lint and build after every task
+
+Before considering any frontend task complete:
+
+1. Run `npm run lint` in `phisio-web`.
+2. Run `npm run build` in `phisio-web`.
+3. Fix every error. Do not leave known lint, TypeScript, or Vite build failures.
+4. Re-run the failing command until it passes.
+
+Do this even for small edits. Do not skip because the change looks unrelated.
+
+```bash
+npm run lint
+npm run build
+```

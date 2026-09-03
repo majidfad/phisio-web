@@ -1,6 +1,12 @@
 import { httpClient } from '@/api/http-client';
 
-import type { DoctorPatientDto, DoctorPatientRequestDto } from '../types/doctor-patient';
+import type {
+  AddDoctorPatientRequest,
+  DoctorClinicOptionDto,
+  DoctorPatientDto,
+  DoctorPatientLookupDto,
+  DoctorPatientRequestDto,
+} from '../types/doctor-patient';
 import type {
   AssignPatientExercisesRequest,
   AssignPatientExercisesResultDto,
@@ -24,16 +30,62 @@ import type {
 
 const DOCTOR_PATIENTS_BASE = '/doctor/patients';
 
+async function getJson<T>(url: string, params?: Record<string, string | number | undefined>) {
+  const response = params ? await httpClient.get<T>(url, { params }) : await httpClient.get<T>(url);
+  return response.data;
+}
+
+async function postJson<T>(
+  url: string,
+  body: unknown,
+  params?: Record<string, string | number | undefined>,
+) {
+  const response = params
+    ? await httpClient.post<T>(url, body, { params })
+    : await httpClient.post<T>(url, body);
+  return response.data;
+}
+
+async function putJson<T>(
+  url: string,
+  body: unknown,
+  params?: Record<string, string | number | undefined>,
+) {
+  const response = params
+    ? await httpClient.put<T>(url, body, { params })
+    : await httpClient.put<T>(url, body);
+  return response.data;
+}
+
 export const doctorPatientService = {
-  async getAll(): Promise<DoctorPatientDto[]> {
-    const { data } = await httpClient.get<DoctorPatientDto[]>(DOCTOR_PATIENTS_BASE);
+  async getAll(clinicId?: string): Promise<DoctorPatientDto[]> {
+    return getJson<DoctorPatientDto[]>(DOCTOR_PATIENTS_BASE, clinicId ? { clinicId } : undefined);
+  },
+
+  async getPendingRequests(clinicId?: string): Promise<DoctorPatientRequestDto[]> {
+    return getJson<DoctorPatientRequestDto[]>(
+      `${DOCTOR_PATIENTS_BASE}/requests`,
+      clinicId ? { clinicId } : undefined,
+    );
+  },
+
+  async getMyClinics(): Promise<DoctorClinicOptionDto[]> {
+    const { data } = await httpClient.get<DoctorClinicOptionDto[]>(
+      `${DOCTOR_PATIENTS_BASE}/clinics`,
+    );
     return data;
   },
 
-  async getPendingRequests(): Promise<DoctorPatientRequestDto[]> {
-    const { data } = await httpClient.get<DoctorPatientRequestDto[]>(
-      `${DOCTOR_PATIENTS_BASE}/requests`,
+  async lookupByPhone(phoneNumber: string): Promise<DoctorPatientLookupDto> {
+    const { data } = await httpClient.get<DoctorPatientLookupDto>(
+      `${DOCTOR_PATIENTS_BASE}/lookup`,
+      { params: { phoneNumber } },
     );
+    return data;
+  },
+
+  async addPatient(request: AddDoctorPatientRequest): Promise<DoctorPatientDto> {
+    const { data } = await httpClient.post<DoctorPatientDto>(DOCTOR_PATIENTS_BASE, request);
     return data;
   },
 
@@ -52,22 +104,26 @@ export const doctorPatientService = {
     });
   },
 
-  async getPatientExercises(patientId: string): Promise<DoctorPatientExerciseDto[]> {
-    const { data } = await httpClient.get<DoctorPatientExerciseDto[]>(
+  async getPatientExercises(
+    patientId: string,
+    clinicId?: string,
+  ): Promise<DoctorPatientExerciseDto[]> {
+    return getJson<DoctorPatientExerciseDto[]>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/exercises`,
+      clinicId ? { clinicId } : undefined,
     );
-    return data;
   },
 
   async assignExercises(
     patientId: string,
     request: AssignPatientExercisesRequest,
+    clinicId?: string,
   ): Promise<AssignPatientExercisesResultDto> {
-    const { data } = await httpClient.post<AssignPatientExercisesResultDto>(
+    return postJson<AssignPatientExercisesResultDto>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/exercises`,
       request,
+      clinicId ? { clinicId } : undefined,
     );
-    return data;
   },
 
   async remove(patientId: string, clinicId: string): Promise<void> {
@@ -79,6 +135,7 @@ export const doctorPatientService = {
   async getExerciseHistory(
     patientId: string,
     params: PatientExerciseHistoryParams = {},
+    clinicId?: string,
   ): Promise<PatientExerciseHistoryResponse> {
     const { data } = await httpClient.get<PatientExerciseHistoryResponse>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/exercise-history`,
@@ -86,56 +143,65 @@ export const doctorPatientService = {
         params: {
           page: params.page ?? 1,
           pageSize: params.pageSize ?? 10,
+          ...(clinicId ? { clinicId } : {}),
         },
       },
     );
     return data;
   },
 
-  async getPatientOverview(patientId: string): Promise<DoctorPatientOverviewDto> {
-    const { data } = await httpClient.get<DoctorPatientOverviewDto>(
+  async getPatientOverview(
+    patientId: string,
+    clinicId?: string,
+  ): Promise<DoctorPatientOverviewDto> {
+    return getJson<DoctorPatientOverviewDto>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/overview`,
+      clinicId ? { clinicId } : undefined,
     );
-    return data;
   },
 
-  async getPatientPrograms(patientId: string): Promise<ExerciseProgramDto[]> {
-    const { data } = await httpClient.get<ExerciseProgramDto[]>(
+  async getPatientPrograms(patientId: string, clinicId?: string): Promise<ExerciseProgramDto[]> {
+    return getJson<ExerciseProgramDto[]>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/programs`,
+      clinicId ? { clinicId } : undefined,
     );
-    return data;
   },
 
   async createProgram(
     patientId: string,
     request: CreateExerciseProgramRequest,
+    clinicId?: string,
   ): Promise<CreateExerciseProgramResultDto> {
-    const { data } = await httpClient.post<CreateExerciseProgramResultDto>(
+    return postJson<CreateExerciseProgramResultDto>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/programs`,
       request,
+      clinicId ? { clinicId } : undefined,
     );
-    return data;
   },
 
   async updateProgram(
     patientId: string,
     programId: string,
     request: UpdateExerciseProgramRequest,
+    clinicId?: string,
   ): Promise<CreateExerciseProgramResultDto> {
-    const { data } = await httpClient.put<CreateExerciseProgramResultDto>(
+    return putJson<CreateExerciseProgramResultDto>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/programs/${programId}`,
       request,
+      clinicId ? { clinicId } : undefined,
     );
-    return data;
   },
 
-  async deleteProgram(patientId: string, programId: string): Promise<void> {
-    await httpClient.delete(`${DOCTOR_PATIENTS_BASE}/${patientId}/programs/${programId}`);
+  async deleteProgram(patientId: string, programId: string, clinicId?: string): Promise<void> {
+    await httpClient.delete(`${DOCTOR_PATIENTS_BASE}/${patientId}/programs/${programId}`, {
+      params: clinicId ? { clinicId } : undefined,
+    });
   },
 
   async getExerciseStats(
     patientId: string,
     params: PatientExerciseStatsParams = {},
+    clinicId?: string,
   ): Promise<PatientExerciseStatsResponse> {
     const { data } = await httpClient.get<PatientExerciseStatsResponse>(
       `${DOCTOR_PATIENTS_BASE}/${patientId}/exercise-stats`,
@@ -143,6 +209,7 @@ export const doctorPatientService = {
         params: {
           from: params.from,
           to: params.to,
+          ...(clinicId ? { clinicId } : {}),
         },
       },
     );

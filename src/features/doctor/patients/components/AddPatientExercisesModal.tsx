@@ -25,6 +25,7 @@ const { Text } = Typography;
 
 interface AddPatientExercisesModalProps {
   patientId: string;
+  clinicId?: string;
   assignedExerciseIds: ReadonlySet<string>;
   planExercises: DoctorPatientExerciseDto[];
   isOpen: boolean;
@@ -34,6 +35,7 @@ interface AddPatientExercisesModalProps {
 
 export function AddPatientExercisesModal({
   patientId,
+  clinicId,
   assignedExerciseIds,
   planExercises,
   isOpen,
@@ -43,7 +45,7 @@ export function AddPatientExercisesModal({
   const { t } = useTranslation();
   const toast = useToast();
   const { data: exercises = [], isLoading, isError, error, refetch } = useExerciseCatalog(isOpen);
-  const assignExercises = useAssignPatientExercises(patientId);
+  const assignExercises = useAssignPatientExercises(patientId, clinicId);
   const [selectedExerciseIds, setSelectedExerciseIds] = useState<Set<string>>(new Set());
   const [dosageByExerciseId, setDosageByExerciseId] = useState<
     Record<string, AssignPatientExerciseItem>

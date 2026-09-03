@@ -20,6 +20,7 @@ const { Text, Paragraph } = Typography;
 interface DailyFeedbackModalProps {
   isOpen: boolean;
   doctorId?: string | null;
+  clinicId?: string | null;
   doctorName?: string | null;
   completedCount?: number;
   onClose: () => void;
@@ -28,6 +29,7 @@ interface DailyFeedbackModalProps {
 export function DailyFeedbackModal({
   isOpen,
   doctorId,
+  clinicId,
   doctorName,
   completedCount = 0,
   onClose,
@@ -66,6 +68,7 @@ export function DailyFeedbackModal({
     try {
       await patientDailyFeedbackService.submitFeedback({
         doctorId: doctorId ?? undefined,
+        clinicId: clinicId ?? undefined,
         hardnessScore,
         improvementScore,
         comment: comment.trim() || null,

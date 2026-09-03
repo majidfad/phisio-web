@@ -13,3 +13,4 @@ Before any UI change, read [`DESIGN_SYSTEM.md`](../DESIGN_SYSTEM.md).
 5. **RTL** — wrap mixed FA/EN titles in `<bdi style={{ unicodeBidi: 'plaintext' }}>` + ellipsis.
 6. **Previews** — `docs/preview-assets/*.png` and `docs/palette-preview.html` are references. Do **not** invent English/fake metrics to match PNG moodboards.
 7. **Honesty** — build success ≠ visual done. Use the QA checklist in `DESIGN_SYSTEM.md`.
+8. **Lint and build** — After every frontend task, run `npm run lint` and `npm run build` and fix all failures before finishing.

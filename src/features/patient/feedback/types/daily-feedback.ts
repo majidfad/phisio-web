@@ -1,5 +1,6 @@
 export interface SubmitDailyFeedbackRequest {
   doctorId?: string;
+  clinicId?: string;
   improvementScore: number;
   hardnessScore: number;
   comment?: string | null;

@@ -59,6 +59,12 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       ),
     },
     {
+      title: t('doctor.dashboard.recentPatients.columns.clinic'),
+      dataIndex: 'clinicName',
+      key: 'clinicName',
+      width: 160,
+    },
+    {
       title: t('doctor.dashboard.recentPatients.columns.status'),
       key: 'status',
       width: 150,
@@ -93,7 +99,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
       <div className="patient-card-list">
         {patients.map((patient) => (
           <button
-            key={patient.patientId}
+            key={`${patient.patientId}:${patient.clinicId}`}
             type="button"
             className="patient-card patient-card--tap"
             onClick={openPatients}
@@ -105,6 +111,9 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
                 <span className="patient-card__meta" dir="ltr">
                   {formatDisplayPhone(patient.phoneNumber)}
                 </span>
+                {patient.clinicName ? (
+                  <span className="patient-card__meta">{patient.clinicName}</span>
+                ) : null}
               </div>
               <ChevronLeft size={18} className="patient-card__chevron" aria-hidden />
             </div>
@@ -120,7 +129,7 @@ export function RecentPatientsTable({ patients }: RecentPatientsTableProps) {
 
   return (
     <AppTable
-      rowKey="patientId"
+      rowKey={(patient) => `${patient.patientId}:${patient.clinicId}`}
       columns={columns}
       dataSource={patients}
       pagination={false}

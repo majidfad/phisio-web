@@ -4,7 +4,10 @@ import { doctorExerciseService } from '@/features/doctor/exercises/services/doct
 import { doctorExerciseQueryKeys } from '@/features/doctor/exercises/hooks/doctor-exercise-query-keys';
 
 import { doctorPatientService } from '../services/doctorPatientService';
-import type { DoctorPatientClinicActionRequest } from '../types/doctor-patient';
+import type {
+  AddDoctorPatientRequest,
+  DoctorPatientClinicActionRequest,
+} from '../types/doctor-patient';
 import type { AssignPatientExercisesRequest } from '../types/patient-exercise-plan';
 import type {
   CreateExerciseProgramRequest,
@@ -13,17 +16,45 @@ import type {
 
 import { doctorPatientQueryKeys } from './doctor-patient-query-keys';
 
-export function useDoctorPatients() {
+export function useDoctorPatients(clinicId?: string | null) {
   return useQuery({
-    queryKey: doctorPatientQueryKeys.list(),
-    queryFn: () => doctorPatientService.getAll(),
+    queryKey: doctorPatientQueryKeys.list(clinicId),
+    queryFn: () => doctorPatientService.getAll(clinicId ?? undefined),
   });
 }
 
-export function useDoctorPatientRequests() {
+export function useDoctorPatientRequests(clinicId?: string | null) {
   return useQuery({
-    queryKey: doctorPatientQueryKeys.requests(),
-    queryFn: () => doctorPatientService.getPendingRequests(),
+    queryKey: doctorPatientQueryKeys.requests(clinicId),
+    queryFn: () => doctorPatientService.getPendingRequests(clinicId ?? undefined),
+  });
+}
+
+export function useDoctorClinics() {
+  return useQuery({
+    queryKey: doctorPatientQueryKeys.clinics(),
+    queryFn: () => doctorPatientService.getMyClinics(),
+  });
+}
+
+export function useLookupDoctorPatient() {
+  return useMutation({
+    mutationFn: (phoneNumber: string) => doctorPatientService.lookupByPhone(phoneNumber),
+  });
+}
+
+export function useAddDoctorPatient() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: AddDoctorPatientRequest) => doctorPatientService.addPatient(request),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.clinics() }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.all }),
+      ]);
+    },
   });
 }
 
@@ -36,7 +67,8 @@ export function useApproveDoctorPatientRequest() {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() }),
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.requests() }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.all }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.clinics() }),
       ]);
     },
   });
@@ -49,7 +81,10 @@ export function useRejectDoctorPatientRequest() {
     mutationFn: ({ patientId, clinicId }: DoctorPatientClinicActionRequest) =>
       doctorPatientService.rejectRequest(patientId, clinicId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.requests() });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.all }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.clinics() }),
+      ]);
     },
   });
 }
@@ -61,13 +96,14 @@ export function useRemoveDoctorPatient() {
     mutationFn: ({ patientId, clinicId }: DoctorPatientClinicActionRequest) =>
       doctorPatientService.remove(patientId, clinicId),
     onMutate: async ({ patientId, clinicId }) => {
-      await queryClient.cancelQueries({ queryKey: doctorPatientQueryKeys.list() });
-      const previous = queryClient.getQueryData(doctorPatientQueryKeys.list());
+      await queryClient.cancelQueries({ queryKey: doctorPatientQueryKeys.lists() });
+      const previous = queryClient.getQueriesData({ queryKey: doctorPatientQueryKeys.lists() });
 
-      queryClient.setQueryData(doctorPatientQueryKeys.list(), (current: typeof previous) =>
+      queryClient.setQueriesData({ queryKey: doctorPatientQueryKeys.lists() }, (current) =>
         Array.isArray(current)
           ? current.filter(
-              (patient) => !(patient.patientId === patientId && patient.clinicId === clinicId),
+              (patient: { patientId: string; clinicId: string }) =>
+                !(patient.patientId === patientId && patient.clinicId === clinicId),
             )
           : current,
       );
@@ -75,20 +111,23 @@ export function useRemoveDoctorPatient() {
       return { previous };
     },
     onError: (_error, _patientId, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(doctorPatientQueryKeys.list(), context.previous);
-      }
+      context?.previous.forEach(([key, data]) => {
+        queryClient.setQueryData(key, data);
+      });
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.lists() }),
+        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.clinics() }),
+      ]);
     },
   });
 }
 
-export function usePatientExercisePlan(patientId: string | null) {
+export function usePatientExercisePlan(patientId: string | null, clinicId?: string | null) {
   return useQuery({
-    queryKey: doctorPatientQueryKeys.exercises(patientId ?? ''),
-    queryFn: () => doctorPatientService.getPatientExercises(patientId!),
+    queryKey: doctorPatientQueryKeys.exercises(patientId ?? '', clinicId),
+    queryFn: () => doctorPatientService.getPatientExercises(patientId!, clinicId ?? undefined),
     enabled: Boolean(patientId),
   });
 }
@@ -101,15 +140,15 @@ export function useExerciseCatalog(enabled: boolean) {
   });
 }
 
-export function useAssignPatientExercises(patientId: string) {
+export function useAssignPatientExercises(patientId: string, clinicId?: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (request: AssignPatientExercisesRequest) =>
-      doctorPatientService.assignExercises(patientId, request),
+      doctorPatientService.assignExercises(patientId, request, clinicId ?? undefined),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: doctorPatientQueryKeys.exercises(patientId),
+        queryKey: doctorPatientQueryKeys.exercises(patientId, clinicId),
       });
     },
   });
@@ -118,27 +157,33 @@ export function useAssignPatientExercises(patientId: string) {
 export function usePatientExerciseHistory(
   patientId: string | null,
   params: { page?: number; pageSize?: number } = {},
+  clinicId?: string | null,
 ) {
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 10;
 
   return useQuery({
-    queryKey: doctorPatientQueryKeys.exerciseHistoryPage(patientId ?? '', page, pageSize),
-    queryFn: () => doctorPatientService.getExerciseHistory(patientId!, { page, pageSize }),
+    queryKey: doctorPatientQueryKeys.exerciseHistoryPage(patientId ?? '', page, pageSize, clinicId),
+    queryFn: () =>
+      doctorPatientService.getExerciseHistory(
+        patientId!,
+        { page, pageSize },
+        clinicId ?? undefined,
+      ),
     enabled: Boolean(patientId),
     placeholderData: (previous) => previous,
   });
 }
 
-export function usePatientOverview(patientId: string | null) {
+export function usePatientOverview(patientId: string | null, clinicId?: string | null) {
   return useQuery({
-    queryKey: doctorPatientQueryKeys.overview(patientId ?? ''),
-    queryFn: () => doctorPatientService.getPatientOverview(patientId!),
+    queryKey: doctorPatientQueryKeys.overview(patientId ?? '', clinicId),
+    queryFn: () => doctorPatientService.getPatientOverview(patientId!, clinicId ?? undefined),
     enabled: Boolean(patientId),
   });
 }
 
-export function useSavePatientProgram(patientId: string) {
+export function useSavePatientProgram(patientId: string, clinicId?: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -150,39 +195,52 @@ export function useSavePatientProgram(patientId: string) {
       request: CreateExerciseProgramRequest | UpdateExerciseProgramRequest;
     }) =>
       programId
-        ? doctorPatientService.updateProgram(patientId, programId, request)
-        : doctorPatientService.createProgram(patientId, request),
+        ? doctorPatientService.updateProgram(patientId, programId, request, clinicId ?? undefined)
+        : doctorPatientService.createProgram(patientId, request, clinicId ?? undefined),
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.overview(patientId) }),
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.programs(patientId) }),
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.exercises(patientId) }),
         queryClient.invalidateQueries({
-          queryKey: doctorPatientQueryKeys.exerciseHistory(patientId),
+          queryKey: doctorPatientQueryKeys.overview(patientId, clinicId),
         }),
         queryClient.invalidateQueries({
-          queryKey: doctorPatientQueryKeys.exerciseStats(patientId),
+          queryKey: doctorPatientQueryKeys.programs(patientId, clinicId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exercises(patientId, clinicId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseHistory(patientId, clinicId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseStats(patientId, clinicId),
         }),
       ]);
     },
   });
 }
 
-export function useDeletePatientProgram(patientId: string) {
+export function useDeletePatientProgram(patientId: string, clinicId?: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (programId: string) => doctorPatientService.deleteProgram(patientId, programId),
+    mutationFn: (programId: string) =>
+      doctorPatientService.deleteProgram(patientId, programId, clinicId ?? undefined),
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.overview(patientId) }),
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.programs(patientId) }),
-        queryClient.invalidateQueries({ queryKey: doctorPatientQueryKeys.exercises(patientId) }),
         queryClient.invalidateQueries({
-          queryKey: doctorPatientQueryKeys.exerciseHistory(patientId),
+          queryKey: doctorPatientQueryKeys.overview(patientId, clinicId),
         }),
         queryClient.invalidateQueries({
-          queryKey: doctorPatientQueryKeys.exerciseStats(patientId),
+          queryKey: doctorPatientQueryKeys.programs(patientId, clinicId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exercises(patientId, clinicId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseHistory(patientId, clinicId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: doctorPatientQueryKeys.exerciseStats(patientId, clinicId),
         }),
       ]);
     },
@@ -192,18 +250,24 @@ export function useDeletePatientProgram(patientId: string) {
 export function usePatientExerciseStats(
   patientId: string | null,
   params: { from: string; to: string } | null,
+  clinicId?: string | null,
 ) {
   return useQuery({
     queryKey: doctorPatientQueryKeys.exerciseStatsRange(
       patientId ?? '',
       params?.from ?? '',
       params?.to ?? '',
+      clinicId,
     ),
     queryFn: () =>
-      doctorPatientService.getExerciseStats(patientId!, {
-        from: params!.from,
-        to: params!.to,
-      }),
+      doctorPatientService.getExerciseStats(
+        patientId!,
+        {
+          from: params!.from,
+          to: params!.to,
+        },
+        clinicId ?? undefined,
+      ),
     enabled: Boolean(patientId && params),
   });
 }

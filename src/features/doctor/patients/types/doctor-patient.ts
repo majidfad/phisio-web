@@ -20,3 +20,22 @@ export interface DoctorPatientClinicActionRequest {
   patientId: string;
   clinicId: string;
 }
+
+export interface DoctorClinicOptionDto {
+  clinicId: string;
+  name: string;
+  address: string;
+  activePatientCount: number;
+  pendingRequestCount: number;
+}
+
+export interface DoctorPatientLookupDto {
+  patientId: string;
+  patientName: string;
+  phoneNumber: string;
+}
+
+export interface AddDoctorPatientRequest {
+  patientId: string;
+  clinicId: string;
+}

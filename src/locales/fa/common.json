@@ -833,6 +833,10 @@
         "patients": "تعداد بیماران من",
         "patientsUnderCare": "بیماران تحت نظر",
         "recentPatients": "بیماران اخیر",
+        "pendingRequests": "درخواست‌های در انتظار",
+        "assignedExercises": "تمرین‌های اختصاص‌داده‌شده",
+        "completedExercises": "تمرین‌های انجام‌شده",
+        "feedback": "بازخورد روزانه",
         "peopleSuffix": "نفر"
       },
       "actions": {
@@ -852,6 +856,7 @@
         "columns": {
           "name": "نام بیمار",
           "phone": "شماره موبایل",
+          "clinic": "مطب",
           "status": "وضعیت درمان",
           "actions": "عملیات"
         },
@@ -916,6 +921,22 @@
     "patients": {
       "title": "بیماران من",
       "description": "تأیید درخواست‌های اتصال و مدیریت بیماران",
+      "clinicFilter": {
+        "all": "همه مطب‌ها"
+      },
+      "add": {
+        "open": "افزودن بیمار",
+        "title": "افزودن بیمار",
+        "phoneLabel": "شماره تلفن بیمار",
+        "phonePlaceholder": "شماره تلفن را وارد کنید",
+        "phoneRequired": "شماره تلفن را وارد کنید.",
+        "search": "جستجو",
+        "clinicLabel": "مطب",
+        "clinicPlaceholder": "مطب را انتخاب کنید",
+        "noClinics": "هنوز به مطبی اختصاص داده نشده‌اید.",
+        "submit": "افزودن به مطب",
+        "cancel": "انصراف"
+      },
       "requestsTitle": "درخواست‌های در انتظار",
       "linkedTitle": "بیماران متصل",
       "emptyRequests": "درخواست اتصال در انتظاری وجود ندارد.",
@@ -941,7 +962,8 @@
       "success": {
         "approved": "درخواست بیمار تأیید شد.",
         "rejected": "درخواست بیمار رد شد.",
-        "removed": "اتصال بیمار قطع شد."
+        "removed": "اتصال بیمار قطع شد.",
+        "added": "بیمار به این مطب اضافه شد."
       },
       "columns": {
         "name": "نام",
@@ -1178,7 +1200,9 @@
         "loadRequestsFailed": "بارگذاری درخواست‌های اتصال ناموفق بود.",
         "approveFailed": "تأیید درخواست ناموفق بود.",
         "rejectFailed": "رد درخواست ناموفق بود.",
-        "removeFailed": "قطع اتصال بیمار ناموفق بود."
+        "removeFailed": "قطع اتصال بیمار ناموفق بود.",
+        "lookupFailed": "بیماری با این شماره تلفن یافت نشد.",
+        "addFailed": "افزودن بیمار ناموفق بود."
       }
     }
   },
@@ -1317,6 +1341,7 @@
       "backToDirectory": "بازگشت به فهرست پزشکان",
       "selectClinicPlaceholder": "انتخاب مطب",
       "emptyClinics": "این پزشک هنوز به هیچ مطبی اختصاص داده نشده است.",
+      "clinicCount": "{{count}} مطب",
       "fields": {
         "specialty": "تخصص",
         "license": "شماره نظام پزشکی",

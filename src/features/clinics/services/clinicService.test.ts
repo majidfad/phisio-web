@@ -133,6 +133,42 @@ describe('clinicService', () => {
     });
   });
 
+  it('fetches clinic adherence with optional doctor filter', async () => {
+    const adherence = {
+      today: {
+        from: '2026-09-03',
+        to: '2026-09-03',
+        scheduledDays: 1,
+        completedDays: 1,
+        missedDays: 0,
+        adherencePercentage: 100,
+      },
+      last7Days: {
+        from: '2026-08-28',
+        to: '2026-09-03',
+        scheduledDays: 2,
+        completedDays: 1,
+        missedDays: 1,
+        adherencePercentage: 50,
+      },
+      last30Days: {
+        from: '2026-08-05',
+        to: '2026-09-03',
+        scheduledDays: 4,
+        completedDays: 2,
+        missedDays: 2,
+        adherencePercentage: 50,
+      },
+      patients: [],
+    };
+    vi.mocked(httpClient.get).mockResolvedValue({ data: adherence });
+
+    await expect(clinicService.getAdherence(clinic.clinicId)).resolves.toEqual(adherence);
+    expect(httpClient.get).toHaveBeenCalledWith(`/clinics/${clinic.clinicId}/adherence`, {
+      params: undefined,
+    });
+  });
+
   it('looks up clinics by phone numbers', async () => {
     const lookup = {
       status: 'Found',

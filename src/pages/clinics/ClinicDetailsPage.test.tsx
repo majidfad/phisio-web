@@ -107,6 +107,49 @@ vi.mock('@/features/clinics/hooks/useClinics', () => ({
     error: null,
     refetch: vi.fn(),
   }),
+  useClinicAdherence: () => ({
+    data: {
+      today: {
+        from: '2026-09-03',
+        to: '2026-09-03',
+        scheduledDays: 1,
+        completedDays: 1,
+        missedDays: 0,
+        adherencePercentage: 100,
+      },
+      last7Days: {
+        from: '2026-08-28',
+        to: '2026-09-03',
+        scheduledDays: 2,
+        completedDays: 1,
+        missedDays: 1,
+        adherencePercentage: 50,
+      },
+      last30Days: {
+        from: '2026-08-05',
+        to: '2026-09-03',
+        scheduledDays: 4,
+        completedDays: 2,
+        missedDays: 2,
+        adherencePercentage: 50,
+      },
+      patients: [
+        {
+          patientId: '33333333-3333-3333-3333-333333333333',
+          patientName: 'Reza Patient',
+          doctorId: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+          doctorName: 'Manager User',
+          scheduledDays: 2,
+          completedDays: 1,
+          adherencePercentage: 50,
+        },
+      ],
+    },
+    isLoading: false,
+    isError: false,
+    error: null,
+    refetch: vi.fn(),
+  }),
   useClinicDoctorCandidates: () => candidatesMock,
   useUpdateClinic: () => ({ mutateAsync: vi.fn(), isPending: false }),
   useDisableClinic: () => ({ mutateAsync: vi.fn(), isPending: false }),
@@ -133,6 +176,7 @@ describe('ClinicDetailsPage', () => {
     expect(screen.getByText('Tehran, Valiasr')).toBeInTheDocument();
     expect(screen.getAllByText('Manager User').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Reza Patient')).toBeInTheDocument();
+    expect(screen.getByText('Patient adherence')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add doctor' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Change manager' })).toBeInTheDocument();
   });

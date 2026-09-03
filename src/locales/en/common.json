@@ -364,10 +364,22 @@
         "name": "Patient name",
         "phone": "Phone number",
         "doctor": "Doctor",
+        "adherence": "7-day adherence",
         "assignedAt": "Linked at"
       },
       "errors": {
         "loadFailed": "Failed to load clinic patients."
+      }
+    },
+    "adherence": {
+      "title": "Patient adherence",
+      "description": "Share of scheduled exercise days completed by clinic patients.",
+      "loading": "Loading adherence…",
+      "today": "Today",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "errors": {
+        "loadFailed": "Failed to load adherence."
       }
     }
   },

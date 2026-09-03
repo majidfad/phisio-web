@@ -14,6 +14,7 @@ import {
 import { useAuth } from '@/features/auth';
 import { AddClinicDoctorModal } from '@/features/clinics/components/AddClinicDoctorModal';
 import { ChangeClinicManagerModal } from '@/features/clinics/components/ChangeClinicManagerModal';
+import { ClinicAdherenceStats } from '@/features/clinics/components/ClinicAdherenceStats';
 import { ClinicDetailsCard } from '@/features/clinics/components/ClinicDetailsCard';
 import { ClinicDoctorDetailsModal } from '@/features/clinics/components/ClinicDoctorDetailsModal';
 import { ClinicDoctorsTable } from '@/features/clinics/components/ClinicDoctorsTable';
@@ -23,6 +24,7 @@ import {
   useAddClinicDoctor,
   useChangeClinicManager,
   useClinic,
+  useClinicAdherence,
   useClinicDoctorCandidates,
   useClinicDoctors,
   useClinicPatients,
@@ -44,6 +46,10 @@ import {
 } from '@/features/clinics/schemas/clinic-form-schema';
 import type { ClinicDoctorMemberDto } from '@/features/clinics/types/clinic';
 import { getClinicListPath } from '@/features/clinics/utils/clinic-paths';
+import {
+  mergePatientsWithAdherence,
+  toAdherenceLookup,
+} from '@/features/clinics/utils/clinic-patient-adherence';
 import { useToast } from '@/hooks/useToast';
 import { hasRequiredRole } from '@/routes/utils/role-access';
 import { getErrorMessage } from '@/utils/get-error-message';
@@ -72,6 +78,12 @@ export function ClinicDetailsPage() {
     error: patientsError,
     refetch: refetchPatients,
   } = useClinicPatients(clinicId);
+  const adherenceQuery = useClinicAdherence(clinicId);
+  const patientsWithAdherence = useMemo(
+    () =>
+      mergePatientsWithAdherence(patients, toAdherenceLookup(adherenceQuery.data?.patients ?? [])),
+    [patients, adherenceQuery.data?.patients],
+  );
 
   const updateClinic = useUpdateClinic();
   const disableClinic = useDisableClinic();
@@ -238,6 +250,13 @@ export function ClinicDetailsPage() {
           />
 
           <PageSection
+            title={t('clinics.adherence.title')}
+            description={t('clinics.adherence.description')}
+          >
+            <ClinicAdherenceStats clinicId={clinicId} />
+          </PageSection>
+
+          <PageSection
             title={t('clinics.doctors.title')}
             description={t('clinics.doctors.description')}
             action={
@@ -290,7 +309,7 @@ export function ClinicDetailsPage() {
             ) : null}
 
             {!isPatientsLoading && !isPatientsError ? (
-              <ClinicPatientsTable patients={patients} />
+              <ClinicPatientsTable patients={patientsWithAdherence} showAdherenceColumn />
             ) : null}
           </PageSection>
 

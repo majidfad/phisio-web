@@ -1,11 +1,17 @@
 import { Button, Modal, Space, Typography } from 'antd';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AppResult, LoadingState, StatusCapsule } from '@/components/ui';
+import { ClinicAdherenceStats } from '@/features/clinics/components/ClinicAdherenceStats';
 import { ClinicPatientsTable } from '@/features/clinics/components/ClinicPatientsTable';
-import { useClinicPatients } from '@/features/clinics/hooks/useClinics';
+import { useClinicAdherence, useClinicPatients } from '@/features/clinics/hooks/useClinics';
 import type { ClinicDoctorMemberDto } from '@/features/clinics/types/clinic';
 import { normalizeUserRole } from '@/features/auth/utils/normalize-user-role';
+import {
+  mergePatientsWithAdherence,
+  toAdherenceLookup,
+} from '@/features/clinics/utils/clinic-patient-adherence';
 import { getErrorMessage } from '@/utils/get-error-message';
 import { formatDisplayPhone } from '@/utils/persian-format';
 
@@ -57,13 +63,21 @@ export function ClinicDoctorDetailsModal({
   onClose,
 }: ClinicDoctorDetailsModalProps) {
   const { t } = useTranslation();
+  const doctorId = open ? doctor?.doctorId : undefined;
   const {
     data: patients = [],
     isLoading,
     isError,
     error,
     refetch,
-  } = useClinicPatients(open ? clinicId : undefined, doctor?.doctorId);
+  } = useClinicPatients(open ? clinicId : undefined, doctorId);
+  const adherenceQuery = useClinicAdherence(open ? clinicId : undefined, doctorId);
+
+  const patientsWithAdherence = useMemo(
+    () =>
+      mergePatientsWithAdherence(patients, toAdherenceLookup(adherenceQuery.data?.patients ?? [])),
+    [patients, adherenceQuery.data?.patients],
+  );
 
   return (
     <Modal
@@ -73,7 +87,7 @@ export function ClinicDoctorDetailsModal({
       footer={<Button onClick={onClose}>{t('clinics.form.close')}</Button>}
       destroyOnHidden
       centered
-      width={720}
+      width={800}
     >
       {doctor ? (
         <Space orientation="vertical" size={20} style={{ width: '100%' }}>
@@ -125,6 +139,13 @@ export function ClinicDoctorDetailsModal({
 
           <div>
             <Text strong style={{ display: 'block', marginBottom: 8 }}>
+              {t('clinics.adherence.title')}
+            </Text>
+            <ClinicAdherenceStats clinicId={clinicId} doctorId={doctor.doctorId} compact />
+          </div>
+
+          <div>
+            <Text strong style={{ display: 'block', marginBottom: 8 }}>
               {t('clinics.doctors.details.patientsTitle')}
             </Text>
             <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
@@ -146,7 +167,11 @@ export function ClinicDoctorDetailsModal({
             ) : null}
 
             {!isLoading && !isError ? (
-              <ClinicPatientsTable patients={patients} hideDoctorColumn />
+              <ClinicPatientsTable
+                patients={patientsWithAdherence}
+                hideDoctorColumn
+                showAdherenceColumn
+              />
             ) : null}
           </div>
         </Space>

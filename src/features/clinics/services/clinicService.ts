@@ -10,6 +10,7 @@ import type {
   CreateClinicRequest,
   UpdateClinicRequest,
 } from '../types/clinic';
+import type { ClinicAdherenceResponse } from '../types/clinic-adherence';
 
 const CLINICS_BASE = '/clinics';
 
@@ -61,6 +62,15 @@ export const clinicService = {
   async getPatients(clinicId: string, doctorId?: string): Promise<ClinicPatientDto[]> {
     const { data } = await httpClient.get<ClinicPatientDto[]>(
       `${CLINICS_BASE}/${clinicId}/patients`,
+      { params: doctorId ? { doctorId } : undefined },
+    );
+
+    return data;
+  },
+
+  async getAdherence(clinicId: string, doctorId?: string): Promise<ClinicAdherenceResponse> {
+    const { data } = await httpClient.get<ClinicAdherenceResponse>(
+      `${CLINICS_BASE}/${clinicId}/adherence`,
       { params: doctorId ? { doctorId } : undefined },
     );
 

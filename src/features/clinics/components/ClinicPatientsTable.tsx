@@ -2,12 +2,16 @@ import type { ColumnsType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 
 import { AppEmpty, AppTable } from '@/components/ui';
-import type { ClinicPatientDto } from '@/features/clinics/types/clinic';
-import { formatDisplayPhone } from '@/utils/persian-format';
+import {
+  patientCareKey,
+  type ClinicPatientTableRow,
+} from '@/features/clinics/utils/clinic-patient-adherence';
+import { formatDisplayPhone, formatPersianNumber } from '@/utils/persian-format';
 
 interface ClinicPatientsTableProps {
-  patients: ClinicPatientDto[];
+  patients: ClinicPatientTableRow[];
   hideDoctorColumn?: boolean;
+  showAdherenceColumn?: boolean;
 }
 
 function formatAssignedAt(value: string): string {
@@ -22,10 +26,11 @@ function formatAssignedAt(value: string): string {
 export function ClinicPatientsTable({
   patients,
   hideDoctorColumn = false,
+  showAdherenceColumn = false,
 }: ClinicPatientsTableProps) {
   const { t } = useTranslation();
 
-  const columns: ColumnsType<ClinicPatientDto> = [
+  const columns: ColumnsType<ClinicPatientTableRow> = [
     {
       title: t('clinics.patients.columns.name'),
       dataIndex: 'patientName',
@@ -49,8 +54,20 @@ export function ClinicPatientsTable({
             key: 'doctorName',
             ellipsis: true,
             render: (name: string) => <bdi style={{ unicodeBidi: 'plaintext' }}>{name}</bdi>,
-          } satisfies ColumnsType<ClinicPatientDto>[number],
+          } satisfies ColumnsType<ClinicPatientTableRow>[number],
         ]),
+    ...(showAdherenceColumn
+      ? [
+          {
+            title: t('clinics.patients.columns.adherence'),
+            dataIndex: 'adherencePercentage',
+            key: 'adherencePercentage',
+            width: 120,
+            render: (value: number | null | undefined) =>
+              value == null ? t('clinics.notSet') : `${formatPersianNumber(value)}%`,
+          } satisfies ColumnsType<ClinicPatientTableRow>[number],
+        ]
+      : []),
     {
       title: t('clinics.patients.columns.assignedAt'),
       dataIndex: 'assignedAt',
@@ -66,7 +83,7 @@ export function ClinicPatientsTable({
 
   return (
     <AppTable
-      rowKey={(row) => `${row.patientId}-${row.doctorId}-${row.clinicId}`}
+      rowKey={(row) => patientCareKey(row)}
       columns={columns}
       dataSource={patients}
       pagination={{ pageSize: 10, showSizeChanger: true }}

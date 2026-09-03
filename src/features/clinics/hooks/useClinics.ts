@@ -46,6 +46,14 @@ export function useClinicPatients(clinicId: string | undefined, doctorId?: strin
   });
 }
 
+export function useClinicAdherence(clinicId: string | undefined, doctorId?: string) {
+  return useQuery({
+    queryKey: clinicQueryKeys.adherence(clinicId ?? '', doctorId),
+    queryFn: () => clinicService.getAdherence(clinicId!, doctorId),
+    enabled: Boolean(clinicId),
+  });
+}
+
 export function useClinicDoctorCandidates(enabled: boolean) {
   return useQuery({
     queryKey: clinicQueryKeys.doctorCandidates(),

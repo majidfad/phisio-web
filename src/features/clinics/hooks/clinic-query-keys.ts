@@ -14,5 +14,8 @@ export const clinicQueryKeys = {
   patients: (clinicId: string, doctorId?: string) =>
     [...clinicQueryKeys.detail(clinicId), 'patients', { doctorId: doctorId ?? null }] as const,
 
+  adherence: (clinicId: string, doctorId?: string) =>
+    [...clinicQueryKeys.detail(clinicId), 'adherence', { doctorId: doctorId ?? null }] as const,
+
   doctorCandidates: () => [...clinicQueryKeys.all, 'doctor-candidates'] as const,
 };

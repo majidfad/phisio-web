@@ -34,6 +34,49 @@ vi.mock('@/features/clinics/hooks/useClinics', () => ({
     error: null,
     refetch: vi.fn(),
   }),
+  useClinicAdherence: () => ({
+    data: {
+      today: {
+        from: '2026-09-03',
+        to: '2026-09-03',
+        scheduledDays: 1,
+        completedDays: 1,
+        missedDays: 0,
+        adherencePercentage: 100,
+      },
+      last7Days: {
+        from: '2026-08-28',
+        to: '2026-09-03',
+        scheduledDays: 2,
+        completedDays: 1,
+        missedDays: 1,
+        adherencePercentage: 50,
+      },
+      last30Days: {
+        from: '2026-08-05',
+        to: '2026-09-03',
+        scheduledDays: 4,
+        completedDays: 2,
+        missedDays: 2,
+        adherencePercentage: 50,
+      },
+      patients: [
+        {
+          patientId: '33333333-3333-3333-3333-333333333333',
+          patientName: 'Reza Patient',
+          doctorId: doctor.doctorId,
+          doctorName: doctor.name,
+          scheduledDays: 2,
+          completedDays: 1,
+          adherencePercentage: 50,
+        },
+      ],
+    },
+    isLoading: false,
+    isError: false,
+    error: null,
+    refetch: vi.fn(),
+  }),
 }));
 
 describe('ClinicDoctorDetailsModal', () => {
@@ -41,7 +84,7 @@ describe('ClinicDoctorDetailsModal', () => {
     vi.clearAllMocks();
   });
 
-  it('shows doctor fields and clinic patients', async () => {
+  it('shows doctor fields, adherence, and clinic patients', async () => {
     const onClose = vi.fn();
     renderWithProviders(
       <ClinicDoctorDetailsModal
@@ -57,7 +100,9 @@ describe('ClinicDoctorDetailsModal', () => {
     expect(within(dialog).getByText('Manager User')).toBeInTheDocument();
     expect(within(dialog).getByText('MD-100')).toBeInTheDocument();
     expect(within(dialog).getByText('Physio')).toBeInTheDocument();
+    expect(within(dialog).getByText('Patient adherence')).toBeInTheDocument();
     expect(within(dialog).getByText('Reza Patient')).toBeInTheDocument();
+    expect(within(dialog).getAllByText('7-day adherence').length).toBeGreaterThan(0);
 
     const closeButtons = within(dialog).getAllByRole('button', { name: 'Close' });
     await userEvent.click(closeButtons[closeButtons.length - 1]!);
